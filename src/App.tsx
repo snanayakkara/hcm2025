@@ -6,6 +6,7 @@ import Services from './components/Services';
 import Doctors from './components/Doctors';
 import ReceptionTeam from './components/ReceptionTeam';
 import PatientInfo from './components/PatientInfo';
+import PatientEducation from './components/PatientEducation';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
@@ -66,6 +67,7 @@ function App() {
         <Doctors />
         <ReceptionTeam />
         <PatientInfo />
+        <PatientEducation />
         <Contact />
       </main>
       <Footer />

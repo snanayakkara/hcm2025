@@ -16,6 +16,7 @@ const Footer: React.FC = () => {
     { id: 'doctors', label: 'Our Doctors' },
     { id: 'reception-team', label: 'Reception Team' },
     { id: 'patients', label: 'Patient Info' },
+    { id: 'education', label: 'Learning Library' },
     { id: 'contact', label: 'Contact' },
   ];
 

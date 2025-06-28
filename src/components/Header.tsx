@@ -11,7 +11,7 @@ const Header: React.FC = () => {
       setIsScrolled(window.scrollY > 50);
       
       // Update active section based on scroll position
-      const sections = ['home', 'about', 'services', 'doctors', 'reception-team', 'patients', 'contact'];
+      const sections = ['home', 'about', 'services', 'doctors', 'reception-team', 'patients', 'education', 'contact'];
       const currentSection = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
@@ -50,6 +50,7 @@ const Header: React.FC = () => {
     { id: 'doctors', label: 'Doctors' },
     { id: 'reception-team', label: 'Our Team' },
     { id: 'patients', label: 'Patients' },
+    { id: 'education', label: 'Learning Library' },
     { id: 'contact', label: 'Contact' },
   ];
 
