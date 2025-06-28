@@ -54,9 +54,9 @@ const Header: React.FC = () => {
       hasSubmenu: true,
       submenu: [
         { id: 'services', label: 'All Services', description: 'Complete range of cardiac services' },
-        { id: 'consultation', label: 'Consultations', description: 'Expert cardiac assessments' },
-        { id: 'imaging', label: 'Cardiac Imaging', description: 'Advanced diagnostic imaging' },
-        { id: 'procedures', label: 'Procedures', description: 'Interventional treatments' }
+        { id: 'services', label: 'Consultations', description: 'Expert cardiac assessments', filter: 'consultation' },
+        { id: 'services', label: 'Cardiac Imaging', description: 'Advanced diagnostic imaging', filter: 'imaging' },
+        { id: 'services', label: 'Procedures', description: 'Interventional treatments', filter: 'interventional' }
       ]
     },
     { id: 'doctors', label: 'Doctors' },
@@ -65,6 +65,17 @@ const Header: React.FC = () => {
     { id: 'education', label: 'Resources' },
     { id: 'contact', label: 'Contact' },
   ];
+
+  const handleSubmenuClick = (subItem: any) => {
+    scrollToSection('services');
+    // Trigger filter change after navigation
+    setTimeout(() => {
+      if (subItem.filter) {
+        const event = new CustomEvent('filterServices', { detail: subItem.filter });
+        window.dispatchEvent(event);
+      }
+    }, 500);
+  };
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 px-4 pt-4">
@@ -145,10 +156,10 @@ const Header: React.FC = () => {
                         transition={{ duration: 0.15 }}
                       >
                         <div className="space-y-2">
-                          {item.submenu?.map((subItem) => (
+                          {item.submenu?.map((subItem, idx) => (
                             <motion.button
-                              key={subItem.id}
-                              onClick={() => scrollToSection(subItem.id)}
+                              key={idx}
+                              onClick={() => handleSubmenuClick(subItem)}
                               className="w-full text-left p-3 rounded-lg hover:bg-rose-50/80 transition-all duration-200 group"
                               whileHover={{ x: 4 }}
                             >
@@ -172,7 +183,7 @@ const Header: React.FC = () => {
             <div className="hidden lg:flex items-center space-x-3">
               <motion.button
                 onClick={handleReferralClick}
-                className="flex items-center space-x-2 text-slate-600 hover:text-rose-600 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+                className="flex items-center space-x-2 text-pink-600 hover:text-pink-700 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -259,7 +270,7 @@ const Header: React.FC = () => {
                   <div className="pt-4 space-y-2 border-t border-slate-200/50">
                     <motion.button
                       onClick={handleReferralClick}
-                      className="w-full flex items-center justify-center space-x-2 text-slate-600 hover:text-rose-600 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200"
+                      className="w-full flex items-center justify-center space-x-2 text-pink-600 hover:text-pink-700 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
