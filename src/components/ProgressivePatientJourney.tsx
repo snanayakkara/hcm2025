@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { 
   Phone, 
   Calendar, 
@@ -6,10 +7,8 @@ import {
   Stethoscope, 
   Activity, 
   Heart, 
-  CheckCircle, 
-  ArrowRight,
-  Clock,
-  ChevronRight
+  CheckCircle,
+  Clock
 } from 'lucide-react';
 
 const ProgressivePatientJourney: React.FC = () => {
@@ -17,90 +16,91 @@ const ProgressivePatientJourney: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   const journeySteps = [
     {
       id: 1,
-      title: "Contact",
-      subtitle: "Your journey begins",
-      description: "Reach out to our reception team who will guide you through scheduling and answer any questions.",
+      title: "Initial Contact",
+      subtitle: "Professional consultation begins",
+      description: "Contact our medical reception team for appointment scheduling and initial consultation guidance.",
       icon: <Phone className="w-6 h-6" />,
       duration: "5 minutes",
       details: [
-        "Friendly reception team",
-        "Flexible scheduling",
-        "Insurance guidance",
-        "Immediate confirmation"
+        "Professional reception service",
+        "Flexible appointment scheduling",
+        "Insurance verification assistance",
+        "Immediate appointment confirmation"
       ]
     },
     {
       id: 2,
-      title: "Preparation",
-      subtitle: "Getting ready",
-      description: "We provide everything you need to prepare for your consultation for a smooth appointment.",
+      title: "Pre-Visit Preparation",
+      subtitle: "Comprehensive preparation support",
+      description: "Receive detailed preparation instructions and complete necessary documentation for your consultation.",
       icon: <FileText className="w-6 h-6" />,
       duration: "1-2 days",
       details: [
-        "Preparation checklist",
-        "Digital forms",
-        "Clear directions",
-        "What to expect"
+        "Detailed preparation guidelines",
+        "Digital patient forms",
+        "Clear facility directions",
+        "Consultation expectations overview"
       ]
     },
     {
       id: 3,
-      title: "Consultation",
-      subtitle: "Expert assessment",
-      description: "Meet with our cardiologists for comprehensive evaluation and personalized care planning.",
+      title: "Medical Consultation",
+      subtitle: "Expert cardiovascular assessment",
+      description: "Comprehensive evaluation by our qualified cardiologists with personalized treatment planning.",
       icon: <Stethoscope className="w-6 h-6" />,
       duration: "45-60 minutes",
       details: [
-        "Medical history review",
-        "Physical examination",
-        "Risk assessment",
-        "Clear explanations"
+        "Comprehensive medical history review",
+        "Thorough cardiovascular examination",
+        "Risk factor assessment",
+        "Clear medical explanations"
       ]
     },
     {
       id: 4,
-      title: "Diagnostics",
-      subtitle: "Advanced testing",
-      description: "State-of-the-art testing to provide detailed insights into your heart function.",
+      title: "Diagnostic Testing",
+      subtitle: "Advanced cardiac diagnostics",
+      description: "State-of-the-art diagnostic testing to provide comprehensive insights into cardiovascular function.",
       icon: <Activity className="w-6 h-6" />,
       duration: "30-90 minutes",
       details: [
-        "ECG monitoring",
-        "Echocardiography",
-        "Stress testing",
-        "Same-day results"
+        "Electrocardiogram monitoring",
+        "Echocardiography imaging",
+        "Exercise stress testing",
+        "Same-day results discussion"
       ]
     },
     {
       id: 5,
-      title: "Treatment",
-      subtitle: "Personalized care",
-      description: "Comprehensive treatment plan tailored to your specific needs and health goals.",
+      title: "Treatment Planning",
+      subtitle: "Personalized medical care",
+      description: "Evidence-based treatment recommendations tailored to your specific cardiovascular health needs.",
       icon: <Heart className="w-6 h-6" />,
       duration: "Ongoing",
       details: [
-        "Treatment recommendations",
-        "Lifestyle guidance",
-        "Medication management",
-        "Follow-up scheduling"
+        "Evidence-based treatment recommendations",
+        "Lifestyle modification guidance",
+        "Medication management protocols",
+        "Follow-up care scheduling"
       ]
     },
     {
       id: 6,
-      title: "Ongoing Care",
-      subtitle: "Long-term partnership",
-      description: "Continuous support and monitoring for optimal heart health throughout your journey.",
+      title: "Continuing Care",
+      subtitle: "Long-term health partnership",
+      description: "Ongoing cardiovascular monitoring and support for optimal long-term heart health outcomes.",
       icon: <CheckCircle className="w-6 h-6" />,
       duration: "Lifelong",
       details: [
-        "Health monitoring",
-        "Preventive strategies",
-        "Emergency support",
-        "Education resources"
+        "Regular health monitoring",
+        "Preventive care strategies",
+        "Emergency consultation access",
+        "Patient education resources"
       ]
     }
   ];
@@ -130,48 +130,108 @@ const ProgressivePatientJourney: React.FC = () => {
     return () => observer.disconnect();
   }, [visibleSteps]);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const stepVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
     <section id="patient-journey" className="py-32 bg-gray-50" ref={sectionRef}>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Ultra Minimal Header */}
-        <div className="text-center mb-24">
-          <h2 className="text-6xl lg:text-7xl font-bold text-gray-900 mb-6 tracking-tight">
-            Six Simple
+        {/* Professional Header */}
+        <motion.div 
+          className="text-center mb-24"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          <motion.h2 
+            className="text-6xl lg:text-7xl font-bold text-gray-900 mb-6 tracking-tight"
+            variants={stepVariants}
+          >
+            Patient Care
             <span className="block text-gray-400">
-              Steps
+              Process
             </span>
-          </h2>
-          <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light">
-            A carefully designed journey that puts your comfort first
-          </p>
-        </div>
+          </motion.h2>
+          <motion.p 
+            className="text-xl text-gray-500 max-w-2xl mx-auto font-light"
+            variants={stepVariants}
+          >
+            A systematic approach to cardiovascular care designed for optimal patient outcomes
+          </motion.p>
+        </motion.div>
 
-        {/* Minimal Journey Steps */}
+        {/* Care Process Steps */}
         <div className="space-y-24">
           {journeySteps.map((step, index) => (
-            <div
+            <motion.div
               key={step.id}
               ref={el => stepRefs.current[index] = el}
-              className={`transition-all duration-1000 ${
-                visibleSteps.includes(index) 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-16'
-              }`}
+              variants={stepVariants}
+              initial="hidden"
+              animate={visibleSteps.includes(index) ? "visible" : "hidden"}
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
             >
               <div className="grid lg:grid-cols-12 gap-12 items-center">
                 
-                {/* Step Number - Large and Minimal */}
-                <div className="lg:col-span-2">
+                {/* Step Number */}
+                <motion.div 
+                  className="lg:col-span-2"
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={visibleSteps.includes(index) ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
                   <div className="text-8xl font-bold text-gray-200 leading-none">
                     {step.id.toString().padStart(2, '0')}
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Content */}
-                <div className="lg:col-span-6 space-y-6">
+                <motion.div 
+                  className="lg:col-span-6 space-y-6"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={visibleSteps.includes(index) ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
                   <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
+                    <motion.div 
+                      className="flex items-center space-x-3"
+                      whileHover={{ x: 5 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
                       <div className="bg-gray-900 text-white w-10 h-10 rounded-lg flex items-center justify-center">
                         {step.icon}
                       </div>
@@ -179,11 +239,11 @@ const ProgressivePatientJourney: React.FC = () => {
                         <h3 className="text-3xl font-bold text-gray-900">{step.title}</h3>
                         <p className="text-gray-500 font-medium">{step.subtitle}</p>
                       </div>
-                    </div>
+                    </motion.div>
                     
                     <div className="flex items-center space-x-2 text-sm text-gray-400">
                       <Clock className="w-4 h-4" />
-                      <span>{step.duration}</span>
+                      <span>Duration: {step.duration}</span>
                     </div>
                   </div>
 
@@ -191,68 +251,143 @@ const ProgressivePatientJourney: React.FC = () => {
                     {step.description}
                   </p>
 
-                  <div className="grid sm:grid-cols-2 gap-3">
+                  <motion.div 
+                    className="grid sm:grid-cols-2 gap-3"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate={visibleSteps.includes(index) ? "visible" : "hidden"}
+                  >
                     {step.details.map((detail, idx) => (
-                      <div key={idx} className="flex items-center space-x-2">
+                      <motion.div 
+                        key={idx} 
+                        className="flex items-center space-x-2"
+                        variants={{
+                          hidden: { opacity: 0, x: -20 },
+                          visible: { 
+                            opacity: 1, 
+                            x: 0,
+                            transition: { delay: idx * 0.1 }
+                          }
+                        }}
+                        whileHover={{ x: 5 }}
+                      >
                         <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
                         <span className="text-gray-600 text-sm">{detail}</span>
-                      </div>
+                      </motion.div>
                     ))}
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
 
-                {/* Visual Element - Minimal */}
-                <div className="lg:col-span-4">
+                {/* Visual Element */}
+                <motion.div 
+                  className="lg:col-span-4"
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate={visibleSteps.includes(index) ? "visible" : "hidden"}
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+                  }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <div className={`bg-white rounded-2xl p-8 border border-gray-200 transition-all duration-500 ${
-                    activeStep === index ? 'shadow-lg scale-105' : 'shadow-sm hover:shadow-md'
+                    activeStep === index ? 'shadow-lg' : 'shadow-sm'
                   }`}>
                     <div className="text-center space-y-4">
-                      <div className="bg-gray-50 w-16 h-16 rounded-xl flex items-center justify-center mx-auto">
+                      <motion.div 
+                        className="bg-gray-50 w-16 h-16 rounded-xl flex items-center justify-center mx-auto"
+                        whileHover={{ rotate: 360 }}
+                        transition={{ duration: 0.5 }}
+                      >
                         {step.icon}
-                      </div>
+                      </motion.div>
                       <div>
                         <div className="text-xl font-bold text-gray-900">Step {step.id}</div>
                         <div className="text-gray-500">{step.subtitle}</div>
                       </div>
                       
-                      {/* Progress */}
+                      {/* Progress Indicator */}
                       <div className="flex justify-center space-x-1">
                         {journeySteps.map((_, stepIdx) => (
-                          <div
+                          <motion.div
                             key={stepIdx}
                             className={`h-1 rounded-full transition-all duration-500 ${
                               stepIdx <= index ? 'bg-gray-900 w-6' : 'bg-gray-200 w-2'
                             }`}
+                            initial={{ scaleX: 0 }}
+                            animate={{ scaleX: stepIdx <= index ? 1 : 0.3 }}
+                            transition={{ duration: 0.5, delay: stepIdx * 0.1 }}
                           />
                         ))}
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* Minimal CTA */}
-        <div className="mt-32 text-center">
-          <div className="bg-gray-900 rounded-3xl p-16 text-white">
+        {/* Professional Call-to-Action */}
+        <motion.div 
+          className="mt-32 text-center"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.div 
+            className="bg-gray-900 rounded-3xl p-16 text-white"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
             <div className="space-y-8">
-              <h3 className="text-4xl lg:text-5xl font-bold">Ready to Begin?</h3>
-              <p className="text-xl text-gray-300 max-w-2xl mx-auto font-light">
-                Take the first step towards better heart health
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-white text-gray-900 px-8 py-4 rounded-2xl hover:bg-gray-100 transition-all duration-200 font-medium text-lg">
+              <motion.h3 
+                className="text-4xl lg:text-5xl font-bold"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                Begin Your Care Journey
+              </motion.h3>
+              <motion.p 
+                className="text-xl text-gray-300 max-w-2xl mx-auto font-light"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                Schedule your consultation with our cardiovascular specialists
+              </motion.p>
+              <motion.div 
+                className="flex flex-col sm:flex-row gap-4 justify-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <motion.button 
+                  className="bg-white text-gray-900 px-8 py-4 rounded-2xl font-medium text-lg"
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: "#f3f4f6"
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   Call (03) 9509 5009
-                </button>
-                <button className="border border-gray-600 text-white px-8 py-4 rounded-2xl hover:bg-gray-800 transition-all duration-200 font-medium text-lg">
-                  Book Online
-                </button>
-              </div>
+                </motion.button>
+                <motion.button 
+                  className="border border-gray-600 text-white px-8 py-4 rounded-2xl font-medium text-lg"
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: "#374151"
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Schedule Online
+                </motion.button>
+              </motion.div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
