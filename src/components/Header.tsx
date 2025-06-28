@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Heart } from 'lucide-react';
+import { Menu, X, Heart, FileText } from 'lucide-react';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,6 +38,11 @@ const Header: React.FC = () => {
     }
   };
 
+  const handleReferralClick = () => {
+    // This could open a modal, navigate to a form, or open an email
+    window.open('mailto:referrals@heartclinicmelbourne.com.au?subject=Patient Referral&body=Dear Heart Clinic Melbourne Team,%0D%0A%0D%0AI would like to refer a patient for cardiac consultation.%0D%0A%0D%0APatient Details:%0D%0AName: %0D%0ADate of Birth: %0D%0AMedicare Number: %0D%0AContact Number: %0D%0A%0D%0AReason for Referral:%0D%0A%0D%0AClinical History:%0D%0A%0D%0ACurrent Medications:%0D%0A%0D%0AUrgency: [ ] Routine [ ] Semi-urgent [ ] Urgent%0D%0A%0D%0APreferred Location: [ ] Malvern [ ] Pakenham [ ] Clyde [ ] Berwick%0D%0A%0D%0AThank you,%0D%0A%0D%0ADr. [Your Name]%0D%0A[Practice Name]%0D%0A[Contact Details]');
+  };
+
   const navItems = [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
@@ -68,7 +73,7 @@ const Header: React.FC = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6">
             {navItems.map((item) => (
               <button
                 key={item.id}
@@ -85,9 +90,20 @@ const Header: React.FC = () => {
                 )}
               </button>
             ))}
+            
+            {/* GP Referral Button */}
+            <button
+              onClick={handleReferralClick}
+              className="flex items-center space-x-2 bg-emerald-600 text-white px-5 py-2 rounded-lg hover:bg-emerald-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl font-medium"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Send Referral</span>
+            </button>
+            
+            {/* Book Appointment Button */}
             <button
               onClick={() => scrollToSection('contact')}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl font-medium"
             >
               Book Appointment
             </button>
@@ -124,9 +140,20 @@ const Header: React.FC = () => {
                   {item.label}
                 </button>
               ))}
+              
+              {/* Mobile GP Referral Button */}
+              <button
+                onClick={handleReferralClick}
+                className="w-full flex items-center justify-center space-x-2 bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-all duration-200 mt-4 font-semibold"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Send Referral</span>
+              </button>
+              
+              {/* Mobile Book Appointment Button */}
               <button
                 onClick={() => scrollToSection('contact')}
-                className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-200 mt-4 font-semibold"
+                className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-200 font-semibold"
               >
                 Book Appointment
               </button>
