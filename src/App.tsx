@@ -8,6 +8,7 @@ import Doctors from './components/Doctors';
 import ReceptionTeam from './components/ReceptionTeam';
 import PatientInfo from './components/PatientInfo';
 import PatientEducation from './components/PatientEducation';
+import InteractiveJourneyMaps from './components/InteractiveJourneyMaps';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
@@ -113,6 +114,7 @@ function App() {
         <ReceptionTeam />
         <PatientInfo />
         <PatientEducation />
+        <InteractiveJourneyMaps />
         <Contact />
       </main>
       <Footer />

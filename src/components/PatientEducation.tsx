@@ -17,11 +17,12 @@ import {
   CheckCircle,
   PlayCircle,
   Download,
-  ExternalLink
+  ExternalLink,
+  MapPin
 } from 'lucide-react';
 
 const PatientEducation: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('faq');
+  const [activeTab, setActiveTab] = useState('journey-maps');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
@@ -46,6 +47,7 @@ const PatientEducation: React.FC = () => {
   }, []);
 
   const tabs = [
+    { id: 'journey-maps', label: 'Patient Journey Maps', icon: <MapPin className="w-5 h-5" /> },
     { id: 'faq', label: 'FAQs', icon: <FileText className="w-5 h-5" /> },
     { id: 'videos', label: 'Educational Videos', icon: <PlayCircle className="w-5 h-5" /> },
     { id: 'conditions', label: 'Heart Conditions', icon: <Heart className="w-5 h-5" /> },
@@ -243,6 +245,13 @@ const PatientEducation: React.FC = () => {
     }
   };
 
+  const scrollToJourneyMaps = () => {
+    const journeyMapsElement = document.getElementById('journey-maps');
+    if (journeyMapsElement) {
+      journeyMapsElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="education" className="py-20 bg-gradient-to-br from-blue-50 to-purple-50" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -267,7 +276,13 @@ const PatientEducation: React.FC = () => {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  if (tab.id === 'journey-maps') {
+                    scrollToJourneyMaps();
+                  } else {
+                    setActiveTab(tab.id);
+                  }
+                }}
                 className={`flex items-center space-x-2 px-6 py-3 rounded-lg transition-all duration-200 font-medium ${
                   activeTab === tab.id
                     ? 'bg-blue-600 text-white shadow-lg'
@@ -280,116 +295,142 @@ const PatientEducation: React.FC = () => {
             ))}
           </div>
 
-          {/* Search and Filter */}
-          <div className="max-w-2xl mx-auto space-y-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder={`Search ${tabs.find(t => t.id === activeTab)?.label.toLowerCase()}...`}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
-            {(activeTab === 'faq' || activeTab === 'videos') && (
-              <div className="flex flex-wrap justify-center gap-2">
-                <button
-                  onClick={() => setSelectedCategory('all')}
-                  className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                    selectedCategory === 'all'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
-                  }`}
-                >
-                  All Categories
-                </button>
-                {activeTab === 'faq' && (
-                  <>
-                    <button
-                      onClick={() => setSelectedCategory('general')}
-                      className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                        selectedCategory === 'general'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
-                      }`}
-                    >
-                      General
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('billing')}
-                      className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                        selectedCategory === 'billing'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
-                      }`}
-                    >
-                      Billing
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('symptoms')}
-                      className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                        selectedCategory === 'symptoms'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
-                      }`}
-                    >
-                      Symptoms
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('conditions')}
-                      className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                        selectedCategory === 'conditions'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
-                      }`}
-                    >
-                      Conditions
-                    </button>
-                  </>
-                )}
-                {activeTab === 'videos' && (
-                  <>
-                    <button
-                      onClick={() => setSelectedCategory('heart-basics')}
-                      className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                        selectedCategory === 'heart-basics'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
-                      }`}
-                    >
-                      Heart Basics
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('tests')}
-                      className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                        selectedCategory === 'tests'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
-                      }`}
-                    >
-                      Tests
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('lifestyle')}
-                      className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                        selectedCategory === 'lifestyle'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
-                      }`}
-                    >
-                      Lifestyle
-                    </button>
-                  </>
-                )}
+          {/* Search and Filter - Only show for non-journey-maps tabs */}
+          {activeTab !== 'journey-maps' && (
+            <div className="max-w-2xl mx-auto space-y-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder={`Search ${tabs.find(t => t.id === activeTab)?.label.toLowerCase()}...`}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
               </div>
-            )}
-          </div>
+
+              {(activeTab === 'faq' || activeTab === 'videos') && (
+                <div className="flex flex-wrap justify-center gap-2">
+                  <button
+                    onClick={() => setSelectedCategory('all')}
+                    className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                      selectedCategory === 'all'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                    }`}
+                  >
+                    All Categories
+                  </button>
+                  {activeTab === 'faq' && (
+                    <>
+                      <button
+                        onClick={() => setSelectedCategory('general')}
+                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                          selectedCategory === 'general'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                        }`}
+                      >
+                        General
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('billing')}
+                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                          selectedCategory === 'billing'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                        }`}
+                      >
+                        Billing
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('symptoms')}
+                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                          selectedCategory === 'symptoms'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                        }`}
+                      >
+                        Symptoms
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('conditions')}
+                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                          selectedCategory === 'conditions'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                        }`}
+                      >
+                        Conditions
+                      </button>
+                    </>
+                  )}
+                  {activeTab === 'videos' && (
+                    <>
+                      <button
+                        onClick={() => setSelectedCategory('heart-basics')}
+                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                          selectedCategory === 'heart-basics'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                        }`}
+                      >
+                        Heart Basics
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('tests')}
+                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                          selectedCategory === 'tests'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                        }`}
+                      >
+                        Tests
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('lifestyle')}
+                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                          selectedCategory === 'lifestyle'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                        }`}
+                      >
+                        Lifestyle
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Content */}
         <div className={`transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          {/* Journey Maps Redirect */}
+          {activeTab === 'journey-maps' && (
+            <div className="text-center py-16">
+              <div className="bg-white rounded-2xl shadow-lg p-12 max-w-2xl mx-auto">
+                <div className="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <MapPin className="w-10 h-10 text-blue-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Interactive Patient Journey Maps
+                </h3>
+                <p className="text-gray-600 mb-8">
+                  Explore detailed, step-by-step guides for each medical procedure, from initial consultation to full recovery.
+                </p>
+                <button
+                  onClick={scrollToJourneyMaps}
+                  className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold mx-auto"
+                >
+                  <span>View Journey Maps</span>
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* FAQ Tab */}
           {activeTab === 'faq' && (
             <div className="max-w-4xl mx-auto space-y-4">
