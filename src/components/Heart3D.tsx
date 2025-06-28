@@ -13,22 +13,28 @@ import {
   VolumeX,
   Settings,
   Eye,
-  EyeOff
+  EyeOff,
+  Download,
+  Upload
 } from 'lucide-react';
 
 interface Heart3DProps {
   className?: string;
+  modelUrl?: string; // URL to external heart model
 }
 
 interface HeartPart {
   name: string;
   description: string;
-  mesh?: THREE.Mesh;
-  originalColor: THREE.Color;
-  highlightColor: THREE.Color;
+  mesh?: THREE.Mesh | THREE.Group;
+  originalMaterial?: THREE.Material | THREE.Material[];
+  highlightMaterial?: THREE.Material;
 }
 
-const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
+const Heart3D: React.FC<Heart3DProps> = ({ 
+  className = '', 
+  modelUrl = null // Can be set to load external models
+}) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene>();
   const rendererRef = useRef<THREE.WebGLRenderer>();
@@ -40,9 +46,11 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
   const previousMouseRef = useRef({ x: 0, y: 0 });
   const raycasterRef = useRef<THREE.Raycaster>();
   const clockRef = useRef<THREE.Clock>();
+  const mixerRef = useRef<THREE.AnimationMixer>();
 
   // State management
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(true);
   const [selectedPart, setSelectedPart] = useState<string | null>(null);
@@ -51,10 +59,12 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
   const [showBloodFlow, setShowBloodFlow] = useState(true);
   const [animationSpeed, setAnimationSpeed] = useState(1);
   const [cameraDistance, setCameraDistance] = useState(8);
+  const [modelLoaded, setModelLoaded] = useState(false);
 
   // Heart parts data
   const heartParts = useRef<Map<string, HeartPart>>(new Map());
   const bloodParticles = useRef<THREE.Points>();
+  const loadedModel = useRef<THREE.Group>();
 
   /**
    * Initialize Three.js scene with proper configuration
@@ -89,6 +99,8 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.2;
       rendererRef.current = renderer;
 
       // Lighting setup
@@ -103,19 +115,22 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
       // Mount renderer
       mountRef.current.appendChild(renderer.domElement);
 
-      // Create heart geometry
-      createHeartGeometry(scene);
+      // Load heart model or create procedural one
+      if (modelUrl) {
+        loadExternalModel(scene, modelUrl);
+      } else {
+        createProceduralHeart(scene);
+      }
 
       // Setup event listeners
       setupEventListeners();
 
-      setIsLoading(false);
     } catch (err) {
       console.error('Failed to initialize 3D scene:', err);
       setError('Failed to initialize 3D visualization. Please check WebGL support.');
       setIsLoading(false);
     }
-  }, [cameraDistance]);
+  }, [cameraDistance, modelUrl]);
 
   /**
    * Setup comprehensive lighting for realistic rendering
@@ -125,14 +140,18 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
 
-    // Main directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    // Main directional light (key light)
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
     directionalLight.position.set(10, 10, 5);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 2048;
     directionalLight.shadow.mapSize.height = 2048;
     directionalLight.shadow.camera.near = 0.5;
     directionalLight.shadow.camera.far = 50;
+    directionalLight.shadow.camera.left = -10;
+    directionalLight.shadow.camera.right = 10;
+    directionalLight.shadow.camera.top = 10;
+    directionalLight.shadow.camera.bottom = -10;
     scene.add(directionalLight);
 
     // Fill light from the opposite side
@@ -144,27 +163,151 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
     const rimLight = new THREE.DirectionalLight(0xff6b6b, 0.2);
     rimLight.position.set(0, 10, -10);
     scene.add(rimLight);
+
+    // Point light for additional warmth
+    const pointLight = new THREE.PointLight(0xffa500, 0.5, 20);
+    pointLight.position.set(5, 5, 5);
+    scene.add(pointLight);
   };
 
   /**
-   * Create detailed heart geometry with anatomical accuracy
+   * Load external 3D model (GLTF, GLB, OBJ, etc.)
    */
-  const createHeartGeometry = (scene: THREE.Scene) => {
+  const loadExternalModel = async (scene: THREE.Scene, url: string) => {
+    try {
+      // Dynamic import of GLTFLoader to avoid bundle size issues
+      const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
+      const { DRACOLoader } = await import('three/examples/jsm/loaders/DRACOLoader.js');
+      
+      const loader = new GLTFLoader();
+      
+      // Setup DRACO compression support
+      const dracoLoader = new DRACOLoader();
+      dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+      loader.setDRACOLoader(dracoLoader);
+
+      // Load the model with progress tracking
+      loader.load(
+        url,
+        (gltf) => {
+          const model = gltf.scene;
+          loadedModel.current = model;
+
+          // Scale and position the model appropriately
+          const box = new THREE.Box3().setFromObject(model);
+          const center = box.getCenter(new THREE.Vector3());
+          const size = box.getSize(new THREE.Vector3());
+          
+          // Scale to fit in view
+          const maxDim = Math.max(size.x, size.y, size.z);
+          const scale = 3 / maxDim;
+          model.scale.setScalar(scale);
+          
+          // Center the model
+          model.position.sub(center.multiplyScalar(scale));
+
+          // Setup materials and shadows
+          model.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+              
+              // Enhance materials for better rendering
+              if (child.material) {
+                if (Array.isArray(child.material)) {
+                  child.material.forEach(mat => {
+                    if (mat instanceof THREE.MeshStandardMaterial) {
+                      mat.envMapIntensity = 0.5;
+                      mat.roughness = 0.4;
+                      mat.metalness = 0.1;
+                    }
+                  });
+                } else if (child.material instanceof THREE.MeshStandardMaterial) {
+                  child.material.envMapIntensity = 0.5;
+                  child.material.roughness = 0.4;
+                  child.material.metalness = 0.1;
+                }
+              }
+
+              // Register as selectable heart part
+              if (child.name) {
+                heartParts.current.set(child.name, {
+                  name: child.name.replace(/[_-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                  description: `Part of the heart anatomy: ${child.name}`,
+                  mesh: child,
+                  originalMaterial: child.material,
+                  highlightMaterial: new THREE.MeshStandardMaterial({
+                    color: 0xff4444,
+                    emissive: 0x222222,
+                    roughness: 0.3,
+                    metalness: 0.2
+                  })
+                });
+              }
+            }
+          });
+
+          // Setup animations if available
+          if (gltf.animations && gltf.animations.length > 0) {
+            mixerRef.current = new THREE.AnimationMixer(model);
+            gltf.animations.forEach((clip) => {
+              const action = mixerRef.current!.clipAction(clip);
+              action.play();
+            });
+          }
+
+          // Add to heart group
+          const heartGroup = new THREE.Group();
+          heartGroup.add(model);
+          heartGroupRef.current = heartGroup;
+          scene.add(heartGroup);
+
+          // Add blood flow if enabled
+          if (showBloodFlow) {
+            createBloodFlowParticles(heartGroup);
+          }
+
+          setModelLoaded(true);
+          setIsLoading(false);
+        },
+        (progress) => {
+          const percentComplete = (progress.loaded / progress.total) * 100;
+          setLoadingProgress(percentComplete);
+        },
+        (error) => {
+          console.error('Error loading 3D model:', error);
+          setError('Failed to load 3D heart model. Creating procedural model instead.');
+          createProceduralHeart(scene);
+        }
+      );
+    } catch (err) {
+      console.error('Error setting up model loader:', err);
+      setError('Failed to setup model loader. Creating procedural model instead.');
+      createProceduralHeart(scene);
+    }
+  };
+
+  /**
+   * Create procedural heart geometry as fallback
+   */
+  const createProceduralHeart = (scene: THREE.Scene) => {
     const heartGroup = new THREE.Group();
     heartGroupRef.current = heartGroup;
 
-    // Heart chambers geometry
+    // Create heart chambers
     createHeartChambers(heartGroup);
     
-    // Blood vessels
+    // Create blood vessels
     createBloodVessels(heartGroup);
     
-    // Blood flow particles
+    // Add blood flow particles
     if (showBloodFlow) {
       createBloodFlowParticles(heartGroup);
     }
 
     scene.add(heartGroup);
+    setModelLoaded(true);
+    setIsLoading(false);
   };
 
   /**
@@ -174,9 +317,10 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
     // Left ventricle (main pumping chamber)
     const leftVentricleGeometry = new THREE.SphereGeometry(1.2, 32, 32);
     leftVentricleGeometry.scale(1, 1.3, 0.8);
-    const leftVentricleMaterial = new THREE.MeshPhongMaterial({ 
+    const leftVentricleMaterial = new THREE.MeshStandardMaterial({ 
       color: 0xdc2626,
-      shininess: 30,
+      roughness: 0.4,
+      metalness: 0.1,
       transparent: true,
       opacity: 0.9
     });
@@ -191,16 +335,22 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
       name: 'Left Ventricle',
       description: 'The main pumping chamber that sends oxygen-rich blood to the body',
       mesh: leftVentricle,
-      originalColor: new THREE.Color(0xdc2626),
-      highlightColor: new THREE.Color(0xff4444)
+      originalMaterial: leftVentricleMaterial,
+      highlightMaterial: new THREE.MeshStandardMaterial({
+        color: 0xff4444,
+        emissive: 0x222222,
+        roughness: 0.3,
+        metalness: 0.2
+      })
     });
 
     // Right ventricle
     const rightVentricleGeometry = new THREE.SphereGeometry(1, 32, 32);
     rightVentricleGeometry.scale(1, 1.2, 0.7);
-    const rightVentricleMaterial = new THREE.MeshPhongMaterial({ 
+    const rightVentricleMaterial = new THREE.MeshStandardMaterial({ 
       color: 0x7c2d12,
-      shininess: 30,
+      roughness: 0.4,
+      metalness: 0.1,
       transparent: true,
       opacity: 0.9
     });
@@ -215,15 +365,21 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
       name: 'Right Ventricle',
       description: 'Pumps deoxygenated blood to the lungs for oxygenation',
       mesh: rightVentricle,
-      originalColor: new THREE.Color(0x7c2d12),
-      highlightColor: new THREE.Color(0xa84532)
+      originalMaterial: rightVentricleMaterial,
+      highlightMaterial: new THREE.MeshStandardMaterial({
+        color: 0xa84532,
+        emissive: 0x222222,
+        roughness: 0.3,
+        metalness: 0.2
+      })
     });
 
     // Left atrium
     const leftAtriumGeometry = new THREE.SphereGeometry(0.8, 32, 32);
-    const leftAtriumMaterial = new THREE.MeshPhongMaterial({ 
+    const leftAtriumMaterial = new THREE.MeshStandardMaterial({ 
       color: 0xef4444,
-      shininess: 30,
+      roughness: 0.4,
+      metalness: 0.1,
       transparent: true,
       opacity: 0.8
     });
@@ -238,15 +394,21 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
       name: 'Left Atrium',
       description: 'Receives oxygen-rich blood from the lungs',
       mesh: leftAtrium,
-      originalColor: new THREE.Color(0xef4444),
-      highlightColor: new THREE.Color(0xff6666)
+      originalMaterial: leftAtriumMaterial,
+      highlightMaterial: new THREE.MeshStandardMaterial({
+        color: 0xff6666,
+        emissive: 0x222222,
+        roughness: 0.3,
+        metalness: 0.2
+      })
     });
 
     // Right atrium
     const rightAtriumGeometry = new THREE.SphereGeometry(0.8, 32, 32);
-    const rightAtriumMaterial = new THREE.MeshPhongMaterial({ 
+    const rightAtriumMaterial = new THREE.MeshStandardMaterial({ 
       color: 0x991b1b,
-      shininess: 30,
+      roughness: 0.4,
+      metalness: 0.1,
       transparent: true,
       opacity: 0.8
     });
@@ -261,8 +423,13 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
       name: 'Right Atrium',
       description: 'Receives deoxygenated blood from the body',
       mesh: rightAtrium,
-      originalColor: new THREE.Color(0x991b1b),
-      highlightColor: new THREE.Color(0xcc3333)
+      originalMaterial: rightAtriumMaterial,
+      highlightMaterial: new THREE.MeshStandardMaterial({
+        color: 0xcc3333,
+        emissive: 0x222222,
+        roughness: 0.3,
+        metalness: 0.2
+      })
     });
   };
 
@@ -272,9 +439,10 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
   const createBloodVessels = (group: THREE.Group) => {
     // Aorta
     const aortaGeometry = new THREE.CylinderGeometry(0.15, 0.2, 2, 16);
-    const aortaMaterial = new THREE.MeshPhongMaterial({ 
+    const aortaMaterial = new THREE.MeshStandardMaterial({ 
       color: 0xdc2626,
-      shininess: 50
+      roughness: 0.3,
+      metalness: 0.2
     });
     const aorta = new THREE.Mesh(aortaGeometry, aortaMaterial);
     aorta.position.set(-0.3, 1.5, 0);
@@ -287,15 +455,21 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
       name: 'Aorta',
       description: 'The largest artery that carries oxygen-rich blood from the heart to the body',
       mesh: aorta,
-      originalColor: new THREE.Color(0xdc2626),
-      highlightColor: new THREE.Color(0xff4444)
+      originalMaterial: aortaMaterial,
+      highlightMaterial: new THREE.MeshStandardMaterial({
+        color: 0xff4444,
+        emissive: 0x222222,
+        roughness: 0.3,
+        metalness: 0.2
+      })
     });
 
     // Pulmonary artery
     const pulmonaryGeometry = new THREE.CylinderGeometry(0.12, 0.15, 1.5, 16);
-    const pulmonaryMaterial = new THREE.MeshPhongMaterial({ 
+    const pulmonaryMaterial = new THREE.MeshStandardMaterial({ 
       color: 0x1e40af,
-      shininess: 50
+      roughness: 0.3,
+      metalness: 0.2
     });
     const pulmonaryArtery = new THREE.Mesh(pulmonaryGeometry, pulmonaryMaterial);
     pulmonaryArtery.position.set(0.4, 1.3, 0.2);
@@ -308,8 +482,13 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
       name: 'Pulmonary Artery',
       description: 'Carries deoxygenated blood from the heart to the lungs',
       mesh: pulmonaryArtery,
-      originalColor: new THREE.Color(0x1e40af),
-      highlightColor: new THREE.Color(0x3b82f6)
+      originalMaterial: pulmonaryMaterial,
+      highlightMaterial: new THREE.MeshStandardMaterial({
+        color: 0x3b82f6,
+        emissive: 0x222222,
+        roughness: 0.3,
+        metalness: 0.2
+      })
     });
   };
 
@@ -317,16 +496,22 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
    * Create animated blood flow particles
    */
   const createBloodFlowParticles = (group: THREE.Group) => {
-    const particleCount = 200;
+    const particleCount = 300;
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     const sizes = new Float32Array(particleCount);
+    const velocities = new Float32Array(particleCount * 3);
 
     for (let i = 0; i < particleCount; i++) {
       // Random positions within heart area
       positions[i * 3] = (Math.random() - 0.5) * 4;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 4;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 2;
+
+      // Random velocities for flow simulation
+      velocities[i * 3] = (Math.random() - 0.5) * 0.02;
+      velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.02;
+      velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.02;
 
       // Red color for arterial blood, blue for venous
       const isArterial = Math.random() > 0.5;
@@ -347,10 +532,12 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
       vertexColors: true,
       transparent: true,
       opacity: 0.8,
-      blending: THREE.AdditiveBlending
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true
     });
 
     const particles = new THREE.Points(particleGeometry, particleMaterial);
+    particles.userData = { velocities };
     bloodParticles.current = particles;
     group.add(particles);
   };
@@ -429,7 +616,7 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
 
     if (intersects.length > 0) {
       const clickedObject = intersects[0].object;
-      const partName = clickedObject.userData.name;
+      const partName = clickedObject.userData.name || clickedObject.name;
       if (partName) {
         setSelectedPart(selectedPart === partName ? null : partName);
         highlightPart(partName);
@@ -474,9 +661,10 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
   const highlightPart = (partName: string) => {
     clearHighlights();
     const part = heartParts.current.get(partName);
-    if (part?.mesh) {
-      (part.mesh.material as THREE.MeshPhongMaterial).color = part.highlightColor;
-      (part.mesh.material as THREE.MeshPhongMaterial).emissive = new THREE.Color(0x222222);
+    if (part?.mesh && part.highlightMaterial) {
+      if (part.mesh instanceof THREE.Mesh) {
+        part.mesh.material = part.highlightMaterial;
+      }
     }
   };
 
@@ -485,9 +673,10 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
    */
   const clearHighlights = () => {
     heartParts.current.forEach(part => {
-      if (part.mesh) {
-        (part.mesh.material as THREE.MeshPhongMaterial).color = part.originalColor;
-        (part.mesh.material as THREE.MeshPhongMaterial).emissive = new THREE.Color(0x000000);
+      if (part.mesh && part.originalMaterial) {
+        if (part.mesh instanceof THREE.Mesh) {
+          part.mesh.material = part.originalMaterial;
+        }
       }
     });
   };
@@ -502,9 +691,15 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
     if (!clock) return;
 
     const elapsedTime = clock.getElapsedTime();
+    const deltaTime = clock.getDelta();
 
-    // Heart beating animation
-    if (isAnimating && heartGroupRef.current) {
+    // Update animation mixer for loaded models
+    if (mixerRef.current && isAnimating) {
+      mixerRef.current.update(deltaTime * animationSpeed);
+    }
+
+    // Heart beating animation for procedural model
+    if (isAnimating && heartGroupRef.current && !modelLoaded) {
       const beatScale = 1 + Math.sin(elapsedTime * 2 * animationSpeed) * 0.05;
       heartGroupRef.current.scale.setScalar(beatScale);
 
@@ -515,12 +710,22 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
     // Blood flow animation
     if (showBloodFlow && bloodParticles.current) {
       const positions = bloodParticles.current.geometry.attributes.position.array as Float32Array;
+      const velocities = bloodParticles.current.userData.velocities as Float32Array;
+      
       for (let i = 0; i < positions.length; i += 3) {
+        // Update positions based on velocities
+        positions[i] += velocities[i] * animationSpeed;
+        positions[i + 1] += velocities[i + 1] * animationSpeed;
+        positions[i + 2] += velocities[i + 2] * animationSpeed;
+        
+        // Add some turbulence
         positions[i + 1] += Math.sin(elapsedTime + i) * 0.01 * animationSpeed;
         
         // Reset particles that go too far
-        if (positions[i + 1] > 3) {
-          positions[i + 1] = -3;
+        if (Math.abs(positions[i]) > 3 || Math.abs(positions[i + 1]) > 3 || Math.abs(positions[i + 2]) > 2) {
+          positions[i] = (Math.random() - 0.5) * 2;
+          positions[i + 1] = (Math.random() - 0.5) * 2;
+          positions[i + 2] = (Math.random() - 0.5) * 1;
         }
       }
       bloodParticles.current.geometry.attributes.position.needsUpdate = true;
@@ -533,7 +738,7 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
 
     rendererRef.current.render(sceneRef.current, cameraRef.current);
     animationIdRef.current = requestAnimationFrame(animate);
-  }, [isAnimating, showBloodFlow, animationSpeed, cameraDistance]);
+  }, [isAnimating, showBloodFlow, animationSpeed, cameraDistance, modelLoaded]);
 
   /**
    * Handle window resize with proper aspect ratio
@@ -566,6 +771,17 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
   const zoomIn = () => setCameraDistance(Math.max(3, cameraDistance - 1));
   const zoomOut = () => setCameraDistance(Math.min(15, cameraDistance + 1));
 
+  // File upload handler for custom models
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && sceneRef.current) {
+      const url = URL.createObjectURL(file);
+      setIsLoading(true);
+      setError(null);
+      loadExternalModel(sceneRef.current, url);
+    }
+  };
+
   // Initialize scene on mount
   useEffect(() => {
     initializeScene();
@@ -576,6 +792,9 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
       if (rendererRef.current && mountRef.current) {
         mountRef.current.removeChild(rendererRef.current.domElement);
         rendererRef.current.dispose();
+      }
+      if (mixerRef.current) {
+        mixerRef.current.stopAllAction();
       }
     };
   }, [initializeScene]);
@@ -625,7 +844,17 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
         <div className="absolute inset-0 bg-white/90 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="text-center space-y-4">
             <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p className="text-gray-600 font-medium">Loading 3D Heart Model...</p>
+            <p className="text-gray-600 font-medium">
+              {modelUrl ? 'Loading 3D Heart Model...' : 'Creating 3D Heart Model...'}
+            </p>
+            {loadingProgress > 0 && (
+              <div className="w-64 bg-gray-200 rounded-full h-2 mx-auto">
+                <div 
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${loadingProgress}%` }}
+                ></div>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -699,6 +928,22 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
           </button>
         </div>
 
+        {/* File Upload for Custom Models */}
+        <div className="border-t pt-3">
+          <label className="block">
+            <input
+              type="file"
+              accept=".gltf,.glb,.obj"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            <button className="w-full p-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center space-x-2">
+              <Upload className="w-4 h-4" />
+              <span className="text-xs">Load Model</span>
+            </button>
+          </label>
+        </div>
+
         {/* Animation Speed Control */}
         <div className="space-y-2">
           <label className="text-xs text-gray-600 font-medium">Speed</label>
@@ -734,12 +979,13 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
           ) : (
             <div className="space-y-2">
               <p className="text-sm text-gray-600">
-                Click on different parts of the heart to learn more about their function.
+                {modelUrl ? 'Exploring external heart model.' : 'Click on different parts of the heart to learn more about their function.'}
               </p>
               <div className="text-xs text-gray-500 space-y-1">
                 <p>• Drag to rotate</p>
                 <p>• Scroll to zoom</p>
                 <p>• Click parts for info</p>
+                <p>• Upload custom models</p>
               </div>
             </div>
           )}
@@ -751,10 +997,12 @@ const Heart3D: React.FC<Heart3DProps> = ({ className = '' }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Heart className="w-5 h-5 text-red-600" />
-            <span className="font-medium text-gray-900">Interactive 3D Heart Model</span>
+            <span className="font-medium text-gray-900">
+              {modelLoaded && modelUrl ? 'External Heart Model' : 'Interactive 3D Heart Model'}
+            </span>
           </div>
           <div className="text-sm text-gray-600">
-            Drag to rotate • Scroll to zoom • Click parts to explore
+            Drag to rotate • Scroll to zoom • Upload custom models
           </div>
         </div>
       </div>
