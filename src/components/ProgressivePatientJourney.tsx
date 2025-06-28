@@ -9,9 +9,6 @@ import {
   CheckCircle, 
   ArrowRight,
   Clock,
-  User,
-  MapPin,
-  Star,
   ChevronRight
 } from 'lucide-react';
 
@@ -24,111 +21,93 @@ const ProgressivePatientJourney: React.FC = () => {
   const journeySteps = [
     {
       id: 1,
-      title: "Initial Contact",
+      title: "Contact",
       subtitle: "Your journey begins",
-      description: "Reach out to our caring reception team who will guide you through scheduling your appointment and answer any initial questions.",
-      icon: <Phone className="w-8 h-8" />,
+      description: "Reach out to our reception team who will guide you through scheduling and answer any questions.",
+      icon: <Phone className="w-6 h-6" />,
       duration: "5 minutes",
       details: [
-        "Friendly, professional reception team",
-        "Flexible scheduling across 4 locations",
-        "Insurance and Medicare guidance",
-        "Immediate appointment confirmation"
-      ],
-      color: "from-blue-500 to-blue-600",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-200"
+        "Friendly reception team",
+        "Flexible scheduling",
+        "Insurance guidance",
+        "Immediate confirmation"
+      ]
     },
     {
       id: 2,
       title: "Preparation",
-      subtitle: "Getting ready for your visit",
-      description: "We'll provide you with everything you need to prepare for your consultation, ensuring a smooth and efficient appointment.",
-      icon: <FileText className="w-8 h-8" />,
+      subtitle: "Getting ready",
+      description: "We provide everything you need to prepare for your consultation for a smooth appointment.",
+      icon: <FileText className="w-6 h-6" />,
       duration: "1-2 days",
       details: [
-        "Pre-visit preparation checklist",
-        "Digital forms for convenience",
-        "Clear directions to your chosen location",
-        "What to bring and expect"
-      ],
-      color: "from-emerald-500 to-emerald-600",
-      bgColor: "bg-emerald-50",
-      borderColor: "border-emerald-200"
+        "Preparation checklist",
+        "Digital forms",
+        "Clear directions",
+        "What to expect"
+      ]
     },
     {
       id: 3,
       title: "Consultation",
-      subtitle: "Expert cardiac assessment",
-      description: "Meet with our experienced cardiologists for a comprehensive evaluation of your heart health and personalized care plan.",
-      icon: <Stethoscope className="w-8 h-8" />,
+      subtitle: "Expert assessment",
+      description: "Meet with our cardiologists for comprehensive evaluation and personalized care planning.",
+      icon: <Stethoscope className="w-6 h-6" />,
       duration: "45-60 minutes",
       details: [
-        "Thorough medical history review",
-        "Comprehensive physical examination",
-        "Personalized risk assessment",
-        "Clear explanation of findings"
-      ],
-      color: "from-purple-500 to-purple-600",
-      bgColor: "bg-purple-50",
-      borderColor: "border-purple-200"
+        "Medical history review",
+        "Physical examination",
+        "Risk assessment",
+        "Clear explanations"
+      ]
     },
     {
       id: 4,
       title: "Diagnostics",
-      subtitle: "Advanced cardiac testing",
-      description: "State-of-the-art diagnostic testing to provide detailed insights into your heart function and overall cardiovascular health.",
-      icon: <Activity className="w-8 h-8" />,
+      subtitle: "Advanced testing",
+      description: "State-of-the-art testing to provide detailed insights into your heart function.",
+      icon: <Activity className="w-6 h-6" />,
       duration: "30-90 minutes",
       details: [
-        "ECG and rhythm monitoring",
-        "Echocardiography imaging",
-        "Stress testing when needed",
-        "Same-day results discussion"
-      ],
-      color: "from-amber-500 to-amber-600",
-      bgColor: "bg-amber-50",
-      borderColor: "border-amber-200"
+        "ECG monitoring",
+        "Echocardiography",
+        "Stress testing",
+        "Same-day results"
+      ]
     },
     {
       id: 5,
-      title: "Treatment Plan",
-      subtitle: "Your personalized care strategy",
-      description: "Receive a comprehensive treatment plan tailored to your specific needs, lifestyle, and health goals.",
-      icon: <Heart className="w-8 h-8" />,
+      title: "Treatment",
+      subtitle: "Personalized care",
+      description: "Comprehensive treatment plan tailored to your specific needs and health goals.",
+      icon: <Heart className="w-6 h-6" />,
       duration: "Ongoing",
       details: [
-        "Personalized treatment recommendations",
-        "Lifestyle modification guidance",
+        "Treatment recommendations",
+        "Lifestyle guidance",
         "Medication management",
-        "Regular follow-up scheduling"
-      ],
-      color: "from-rose-500 to-rose-600",
-      bgColor: "bg-rose-50",
-      borderColor: "border-rose-200"
+        "Follow-up scheduling"
+      ]
     },
     {
       id: 6,
       title: "Ongoing Care",
-      subtitle: "Long-term heart health partnership",
-      description: "Continuous support and monitoring to ensure optimal heart health and quality of life throughout your journey.",
-      icon: <Star className="w-8 h-8" />,
+      subtitle: "Long-term partnership",
+      description: "Continuous support and monitoring for optimal heart health throughout your journey.",
+      icon: <CheckCircle className="w-6 h-6" />,
       duration: "Lifelong",
       details: [
-        "Regular health monitoring",
-        "Preventive care strategies",
-        "Emergency support access",
-        "Health education resources"
-      ],
-      color: "from-indigo-500 to-indigo-600",
-      bgColor: "bg-indigo-50",
-      borderColor: "border-indigo-200"
+        "Health monitoring",
+        "Preventive strategies",
+        "Emergency support",
+        "Education resources"
+      ]
     }
   ];
 
   useEffect(() => {
     const observerOptions = {
-      threshold: 0.3,
+      threshold: 0.4,
       rootMargin: '0px 0px -100px 0px'
     };
 
@@ -152,33 +131,24 @@ const ProgressivePatientJourney: React.FC = () => {
   }, [visibleSteps]);
 
   return (
-    <section id="patient-journey" className="py-20 bg-white relative overflow-hidden" ref={sectionRef}>
-      {/* Subtle Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-48 h-48 bg-purple-500 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Minimal Header */}
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center space-x-2 bg-gray-100 px-4 py-2 rounded-full text-gray-600 font-medium mb-8">
-            <Heart className="w-4 h-4" />
-            <span>Your Patient Journey</span>
-          </div>
-          <h2 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
-            Six Steps to
-            <span className="block bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
-              Better Heart Health
+    <section id="patient-journey" className="py-32 bg-gray-50" ref={sectionRef}>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Ultra Minimal Header */}
+        <div className="text-center mb-24">
+          <h2 className="text-6xl lg:text-7xl font-bold text-gray-900 mb-6 tracking-tight">
+            Six Simple
+            <span className="block text-gray-400">
+              Steps
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
-            A carefully designed journey that puts your comfort and health at the center of everything we do.
+          <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light">
+            A carefully designed journey that puts your comfort first
           </p>
         </div>
 
-        {/* Progressive Journey Steps */}
-        <div className="space-y-32">
+        {/* Minimal Journey Steps */}
+        <div className="space-y-24">
           {journeySteps.map((step, index) => (
             <div
               key={step.id}
@@ -186,97 +156,77 @@ const ProgressivePatientJourney: React.FC = () => {
               className={`transition-all duration-1000 ${
                 visibleSteps.includes(index) 
                   ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-20'
+                  : 'opacity-0 translate-y-16'
               }`}
-              style={{ transitionDelay: `${index * 100}ms` }}
             >
-              <div className={`grid lg:grid-cols-2 gap-16 items-center ${
-                index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
-              }`}>
+              <div className="grid lg:grid-cols-12 gap-12 items-center">
                 
-                {/* Content Side */}
-                <div className={`space-y-8 ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
-                  {/* Step Number and Title */}
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-4">
-                      <div className={`bg-gradient-to-r ${step.color} text-white w-16 h-16 rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg`}>
-                        {step.id}
+                {/* Step Number - Large and Minimal */}
+                <div className="lg:col-span-2">
+                  <div className="text-8xl font-bold text-gray-200 leading-none">
+                    {step.id.toString().padStart(2, '0')}
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="lg:col-span-6 space-y-6">
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <div className="bg-gray-900 text-white w-10 h-10 rounded-lg flex items-center justify-center">
+                        {step.icon}
                       </div>
                       <div>
                         <h3 className="text-3xl font-bold text-gray-900">{step.title}</h3>
-                        <p className="text-lg text-gray-600 font-medium">{step.subtitle}</p>
+                        <p className="text-gray-500 font-medium">{step.subtitle}</p>
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-2 text-sm text-gray-500">
+                    <div className="flex items-center space-x-2 text-sm text-gray-400">
                       <Clock className="w-4 h-4" />
                       <span>{step.duration}</span>
                     </div>
                   </div>
 
-                  {/* Description */}
                   <p className="text-lg text-gray-600 leading-relaxed">
                     {step.description}
                   </p>
 
-                  {/* Details List */}
-                  <div className="space-y-3">
+                  <div className="grid sm:grid-cols-2 gap-3">
                     {step.details.map((detail, idx) => (
-                      <div 
-                        key={idx} 
-                        className={`flex items-center space-x-3 transition-all duration-500`}
-                        style={{ transitionDelay: `${(index * 100) + (idx * 100)}ms` }}
-                      >
-                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                        <span className="text-gray-700">{detail}</span>
+                      <div key={idx} className="flex items-center space-x-2">
+                        <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
+                        <span className="text-gray-600 text-sm">{detail}</span>
                       </div>
                     ))}
                   </div>
-
-                  {/* CTA Button */}
-                  <button className={`inline-flex items-center space-x-2 bg-gradient-to-r ${step.color} text-white px-6 py-3 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 font-medium`}>
-                    <span>Learn More</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
                 </div>
 
-                {/* Visual Side */}
-                <div className={`${index % 2 === 1 ? 'lg:col-start-1' : ''}`}>
-                  <div className={`relative ${step.bgColor} ${step.borderColor} border-2 rounded-3xl p-12 shadow-xl transform ${
-                    activeStep === index ? 'scale-105' : 'hover:scale-102'
-                  } transition-all duration-500`}>
-                    
-                    {/* Icon */}
-                    <div className={`bg-gradient-to-r ${step.color} text-white w-24 h-24 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg`}>
-                      {step.icon}
-                    </div>
-                    
-                    {/* Step Info */}
+                {/* Visual Element - Minimal */}
+                <div className="lg:col-span-4">
+                  <div className={`bg-white rounded-2xl p-8 border border-gray-200 transition-all duration-500 ${
+                    activeStep === index ? 'shadow-lg scale-105' : 'shadow-sm hover:shadow-md'
+                  }`}>
                     <div className="text-center space-y-4">
-                      <h4 className="text-2xl font-bold text-gray-900">Step {step.id}</h4>
-                      <p className="text-gray-600 font-medium">{step.subtitle}</p>
+                      <div className="bg-gray-50 w-16 h-16 rounded-xl flex items-center justify-center mx-auto">
+                        {step.icon}
+                      </div>
+                      <div>
+                        <div className="text-xl font-bold text-gray-900">Step {step.id}</div>
+                        <div className="text-gray-500">{step.subtitle}</div>
+                      </div>
                       
-                      {/* Progress Indicator */}
-                      <div className="flex justify-center space-x-2 pt-4">
+                      {/* Progress */}
+                      <div className="flex justify-center space-x-1">
                         {journeySteps.map((_, stepIdx) => (
                           <div
                             key={stepIdx}
-                            className={`h-2 rounded-full transition-all duration-500 ${
-                              stepIdx <= index 
-                                ? `bg-gradient-to-r ${step.color} w-8` 
-                                : 'bg-gray-200 w-2'
+                            className={`h-1 rounded-full transition-all duration-500 ${
+                              stepIdx <= index ? 'bg-gray-900 w-6' : 'bg-gray-200 w-2'
                             }`}
                           />
                         ))}
                       </div>
                     </div>
-
-                    {/* Active Step Indicator */}
-                    {activeStep === index && (
-                      <div className="absolute -top-3 -right-3 bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center animate-pulse">
-                        <CheckCircle className="w-5 h-5" />
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
@@ -284,25 +234,19 @@ const ProgressivePatientJourney: React.FC = () => {
           ))}
         </div>
 
-        {/* Final CTA */}
+        {/* Minimal CTA */}
         <div className="mt-32 text-center">
-          <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-3xl p-12 text-white relative overflow-hidden">
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute top-10 left-10 w-20 h-20 border-2 border-white rounded-full"></div>
-              <div className="absolute bottom-10 right-10 w-16 h-16 border-2 border-white rounded-full"></div>
-            </div>
-            
-            <div className="relative space-y-6">
-              <h3 className="text-3xl lg:text-4xl font-bold">Ready to Begin Your Journey?</h3>
-              <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                Take the first step towards better heart health. Our expert team is here to guide you every step of the way.
+          <div className="bg-gray-900 rounded-3xl p-16 text-white">
+            <div className="space-y-8">
+              <h3 className="text-4xl lg:text-5xl font-bold">Ready to Begin?</h3>
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto font-light">
+                Take the first step towards better heart health
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-white text-blue-600 px-8 py-4 rounded-2xl hover:bg-blue-50 transition-all duration-200 flex items-center justify-center space-x-2 font-bold text-lg transform hover:-translate-y-1 shadow-lg">
-                  <Phone className="w-5 h-5" />
-                  <span>Call (03) 9509 5009</span>
+                <button className="bg-white text-gray-900 px-8 py-4 rounded-2xl hover:bg-gray-100 transition-all duration-200 font-medium text-lg">
+                  Call (03) 9509 5009
                 </button>
-                <button className="border-2 border-white text-white px-8 py-4 rounded-2xl hover:bg-white hover:text-blue-600 transition-all duration-200 font-bold text-lg transform hover:-translate-y-1">
+                <button className="border border-gray-600 text-white px-8 py-4 rounded-2xl hover:bg-gray-800 transition-all duration-200 font-medium text-lg">
                   Book Online
                 </button>
               </div>
