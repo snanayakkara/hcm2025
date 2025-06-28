@@ -24,7 +24,7 @@ const ProgressivePatientJourney: React.FC = () => {
       title: "Initial Contact",
       subtitle: "Professional consultation begins",
       description: "Contact our medical reception team for appointment scheduling and initial consultation guidance.",
-      icon: <Phone className="w-6 h-6" />,
+      icon: <Phone className="w-5 h-5" />,
       duration: "5 minutes",
       details: [
         "Professional reception service",
@@ -38,7 +38,7 @@ const ProgressivePatientJourney: React.FC = () => {
       title: "Pre-Visit Preparation",
       subtitle: "Comprehensive preparation support",
       description: "Receive detailed preparation instructions and complete necessary documentation for your consultation.",
-      icon: <FileText className="w-6 h-6" />,
+      icon: <FileText className="w-5 h-5" />,
       duration: "1-2 days",
       details: [
         "Detailed preparation guidelines",
@@ -52,7 +52,7 @@ const ProgressivePatientJourney: React.FC = () => {
       title: "Medical Consultation",
       subtitle: "Expert cardiovascular assessment",
       description: "Comprehensive evaluation by our qualified cardiologists with personalized treatment planning.",
-      icon: <Stethoscope className="w-6 h-6" />,
+      icon: <Stethoscope className="w-5 h-5" />,
       duration: "45-60 minutes",
       details: [
         "Comprehensive medical history review",
@@ -66,7 +66,7 @@ const ProgressivePatientJourney: React.FC = () => {
       title: "Diagnostic Testing",
       subtitle: "Advanced cardiac diagnostics",
       description: "State-of-the-art diagnostic testing to provide comprehensive insights into cardiovascular function.",
-      icon: <Activity className="w-6 h-6" />,
+      icon: <Activity className="w-5 h-5" />,
       duration: "30-90 minutes",
       details: [
         "Electrocardiogram monitoring",
@@ -80,7 +80,7 @@ const ProgressivePatientJourney: React.FC = () => {
       title: "Treatment Planning",
       subtitle: "Personalized medical care",
       description: "Evidence-based treatment recommendations tailored to your specific cardiovascular health needs.",
-      icon: <Heart className="w-6 h-6" />,
+      icon: <Heart className="w-5 h-5" />,
       duration: "Ongoing",
       details: [
         "Evidence-based treatment recommendations",
@@ -94,7 +94,7 @@ const ProgressivePatientJourney: React.FC = () => {
       title: "Continuing Care",
       subtitle: "Long-term health partnership",
       description: "Ongoing cardiovascular monitoring and support for optimal long-term heart health outcomes.",
-      icon: <CheckCircle className="w-6 h-6" />,
+      icon: <CheckCircle className="w-5 h-5" />,
       duration: "Lifelong",
       details: [
         "Regular health monitoring",
@@ -142,7 +142,7 @@ const ProgressivePatientJourney: React.FC = () => {
   };
 
   const stepVariants = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
@@ -154,7 +154,7 @@ const ProgressivePatientJourney: React.FC = () => {
   };
 
   const cardVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
+    hidden: { opacity: 0, scale: 0.9 },
     visible: {
       opacity: 1,
       scale: 1,
@@ -166,10 +166,10 @@ const ProgressivePatientJourney: React.FC = () => {
   };
 
   return (
-    <section id="patient-journey" className="py-32 bg-gray-50" ref={sectionRef}>
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="patient-journey" className="py-32 bg-gradient-to-br from-slate-50 via-white to-blue-50/30" ref={sectionRef}>
+      <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12">
         
-        {/* Professional Header */}
+        {/* Header */}
         <motion.div 
           className="text-center mb-24"
           variants={containerVariants}
@@ -177,16 +177,16 @@ const ProgressivePatientJourney: React.FC = () => {
           animate={isInView ? "visible" : "hidden"}
         >
           <motion.h2 
-            className="text-6xl lg:text-7xl font-bold text-gray-900 mb-6 tracking-tight"
+            className="text-5xl lg:text-6xl font-bold text-slate-800 mb-6 tracking-tight leading-tight"
             variants={stepVariants}
           >
             Patient Care
-            <span className="block text-gray-400">
+            <span className="block text-slate-400">
               Process
             </span>
           </motion.h2>
           <motion.p 
-            className="text-xl text-gray-500 max-w-2xl mx-auto font-light"
+            className="text-xl text-slate-500 max-w-2xl mx-auto font-light leading-relaxed"
             variants={stepVariants}
           >
             A systematic approach to cardiovascular care designed for optimal patient outcomes
@@ -210,11 +210,11 @@ const ProgressivePatientJourney: React.FC = () => {
                 {/* Step Number */}
                 <motion.div 
                   className="lg:col-span-2"
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={visibleSteps.includes(index) ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={visibleSteps.includes(index) ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                  <div className="text-8xl font-bold text-gray-200 leading-none">
+                  <div className="text-7xl font-bold text-slate-200 leading-none">
                     {step.id.toString().padStart(2, '0')}
                   </div>
                 </motion.div>
@@ -222,32 +222,32 @@ const ProgressivePatientJourney: React.FC = () => {
                 {/* Content */}
                 <motion.div 
                   className="lg:col-span-6 space-y-6"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={visibleSteps.includes(index) ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={visibleSteps.includes(index) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
                 >
                   <div className="space-y-3">
                     <motion.div 
                       className="flex items-center space-x-3"
-                      whileHover={{ x: 5 }}
+                      whileHover={{ x: 3 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
-                      <div className="bg-gray-900 text-white w-10 h-10 rounded-lg flex items-center justify-center">
+                      <div className="bg-slate-800 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-sm">
                         {step.icon}
                       </div>
                       <div>
-                        <h3 className="text-3xl font-bold text-gray-900">{step.title}</h3>
-                        <p className="text-gray-500 font-medium">{step.subtitle}</p>
+                        <h3 className="text-2xl font-bold text-slate-800">{step.title}</h3>
+                        <p className="text-slate-500 font-medium">{step.subtitle}</p>
                       </div>
                     </motion.div>
                     
-                    <div className="flex items-center space-x-2 text-sm text-gray-400">
+                    <div className="flex items-center space-x-2 text-sm text-slate-400">
                       <Clock className="w-4 h-4" />
                       <span>Duration: {step.duration}</span>
                     </div>
                   </div>
 
-                  <p className="text-lg text-gray-600 leading-relaxed">
+                  <p className="text-lg text-slate-600 leading-relaxed">
                     {step.description}
                   </p>
 
@@ -262,17 +262,17 @@ const ProgressivePatientJourney: React.FC = () => {
                         key={idx} 
                         className="flex items-center space-x-2"
                         variants={{
-                          hidden: { opacity: 0, x: -20 },
+                          hidden: { opacity: 0, x: -15 },
                           visible: { 
                             opacity: 1, 
                             x: 0,
                             transition: { delay: idx * 0.1 }
                           }
                         }}
-                        whileHover={{ x: 5 }}
+                        whileHover={{ x: 3 }}
                       >
-                        <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                        <span className="text-gray-600 text-sm">{detail}</span>
+                        <div className="w-1.5 h-1.5 bg-slate-400 rounded-full"></div>
+                        <span className="text-slate-600 text-sm">{detail}</span>
                       </motion.div>
                     ))}
                   </motion.div>
@@ -285,25 +285,25 @@ const ProgressivePatientJourney: React.FC = () => {
                   initial="hidden"
                   animate={visibleSteps.includes(index) ? "visible" : "hidden"}
                   whileHover={{ 
-                    scale: 1.05,
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+                    scale: 1.02,
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.08)"
                   }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <div className={`bg-white rounded-2xl p-8 border border-gray-200 transition-all duration-500 ${
+                  <div className={`bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-slate-200/50 transition-all duration-500 ${
                     activeStep === index ? 'shadow-lg' : 'shadow-sm'
                   }`}>
                     <div className="text-center space-y-4">
                       <motion.div 
-                        className="bg-gray-50 w-16 h-16 rounded-xl flex items-center justify-center mx-auto"
+                        className="bg-slate-50/80 w-14 h-14 rounded-xl flex items-center justify-center mx-auto"
                         whileHover={{ rotate: 360 }}
                         transition={{ duration: 0.5 }}
                       >
                         {step.icon}
                       </motion.div>
                       <div>
-                        <div className="text-xl font-bold text-gray-900">Step {step.id}</div>
-                        <div className="text-gray-500">{step.subtitle}</div>
+                        <div className="text-xl font-bold text-slate-800">Step {step.id}</div>
+                        <div className="text-slate-500 text-sm">{step.subtitle}</div>
                       </div>
                       
                       {/* Progress Indicator */}
@@ -312,7 +312,7 @@ const ProgressivePatientJourney: React.FC = () => {
                           <motion.div
                             key={stepIdx}
                             className={`h-1 rounded-full transition-all duration-500 ${
-                              stepIdx <= index ? 'bg-gray-900 w-6' : 'bg-gray-200 w-2'
+                              stepIdx <= index ? 'bg-slate-800 w-6' : 'bg-slate-200 w-2'
                             }`}
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: stepIdx <= index ? 1 : 0.3 }}
@@ -328,17 +328,17 @@ const ProgressivePatientJourney: React.FC = () => {
           ))}
         </div>
 
-        {/* Professional Call-to-Action */}
+        {/* Call-to-Action */}
         <motion.div 
           className="mt-32 text-center"
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
           <motion.div 
-            className="bg-gray-900 rounded-3xl p-16 text-white"
-            whileHover={{ scale: 1.02 }}
+            className="bg-slate-800 rounded-3xl p-16 text-white"
+            whileHover={{ scale: 1.01 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
             <div className="space-y-8">
@@ -351,7 +351,7 @@ const ProgressivePatientJourney: React.FC = () => {
                 Begin Your Care Journey
               </motion.h3>
               <motion.p 
-                className="text-xl text-gray-300 max-w-2xl mx-auto font-light"
+                className="text-xl text-slate-300 max-w-2xl mx-auto font-light"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
@@ -365,22 +365,21 @@ const ProgressivePatientJourney: React.FC = () => {
                 transition={{ delay: 0.6 }}
               >
                 <motion.button 
-                  className="bg-white text-gray-900 px-8 py-4 rounded-2xl font-medium text-lg"
+                  className="bg-white text-slate-800 px-8 py-4 rounded-2xl font-medium text-lg shadow-sm"
                   whileHover={{ 
-                    scale: 1.05,
-                    backgroundColor: "#f3f4f6"
+                    scale: 1.02,
+                    backgroundColor: "#f8fafc"
                   }}
-                  whileTap={{ scale: 0.95 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   Call (03) 9509 5009
                 </motion.button>
                 <motion.button 
-                  className="border border-gray-600 text-white px-8 py-4 rounded-2xl font-medium text-lg"
+                  className="border border-slate-600 text-white px-8 py-4 rounded-2xl font-medium text-lg hover:bg-slate-700/50"
                   whileHover={{ 
-                    scale: 1.05,
-                    backgroundColor: "#374151"
+                    scale: 1.02
                   }}
-                  whileTap={{ scale: 0.95 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   Schedule Online
                 </motion.button>
