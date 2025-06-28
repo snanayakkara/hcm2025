@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import Header from './components/Header';
-import Hero from './components/Hero';
+import MinimalistHero from './components/MinimalistHero';
+import ProgressivePatientJourney from './components/ProgressivePatientJourney';
 import About from './components/About';
 import Services from './components/Services';
 import Doctors from './components/Doctors';
-import PatientJourney from './components/PatientJourney';
 import Heart3DSection from './components/Heart3DSection';
 import ReceptionTeam from './components/ReceptionTeam';
 import PatientInfo from './components/PatientInfo';
@@ -106,11 +106,11 @@ function App() {
     <div className="min-h-screen bg-white overflow-x-hidden">
       <Header />
       <main>
-        <Hero />
+        <MinimalistHero />
+        <ProgressivePatientJourney />
         <About />
         <Services />
         <Doctors />
-        <PatientJourney />
         <Heart3DSection />
         <ReceptionTeam />
         <PatientInfo />

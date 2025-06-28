@@ -94,6 +94,27 @@
   }
 }
 
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes parallaxFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(-1deg);
+  }
+}
+
 /* Animation classes */
 .animate-fade-in-up {
   animation: fadeInUp 0.8s ease-out forwards;
@@ -131,6 +152,14 @@
 
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-heartbeat {
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+.animate-parallax-float {
+  animation: parallaxFloat 8s ease-in-out infinite;
 }
 
 /* Enhanced smooth transitions for all interactive elements */
@@ -291,6 +320,17 @@ button:focus {
   transform: translateY(-2px);
 }
 
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scroll snap for sections */
+.scroll-snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
 /* Text selection styling */
 ::selection {
   background: rgba(59, 130, 246, 0.2);
@@ -325,5 +365,29 @@ button:focus {
     background: white !important;
     color: black !important;
     box-shadow: none !important;
+  }
+}
+
+/* Progressive enhancement for 3D transforms */
+@supports (transform-style: preserve-3d) {
+  .transform-3d {
+    transform-style: preserve-3d;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glass,
+  .glass-dark {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #000;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .auto-dark {
+    background-color: #1f2937;
+    color: #f9fafb;
   }
 }
