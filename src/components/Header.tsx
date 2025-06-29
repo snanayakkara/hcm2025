@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, FileText, ChevronDown, Video, Search, BookOpen, Mic, Camera } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Heart3D from './Heart3D';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,7 +9,6 @@ const Header: React.FC = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [scrollY, setScrollY] = useState(0);
   const [showTelehealthTooltip, setShowTelehealthTooltip] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,7 +17,6 @@ const Header: React.FC = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setIsScrolled(currentScrollY > 20);
-      setScrollY(currentScrollY);
       
       // Update active section based on scroll position (only on homepage)
       if (location.pathname === '/') {
@@ -259,7 +256,7 @@ const Header: React.FC = () => {
         >
           <div className="px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 lg:h-18">
-              {/* Logo with 3D Heart */}
+              {/* Logo with Simple Heart */}
               <motion.div 
                 className="flex items-center space-x-3 group cursor-pointer" 
                 onClick={() => navigate('/')}
@@ -275,7 +272,25 @@ const Header: React.FC = () => {
                     }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <Heart3D scrollY={scrollY} />
+                    <motion.img
+                      src="/images/hcm3d2.png"
+                      alt="Heart Clinic Melbourne Logo"
+                      className="w-8 h-8"
+                      animate={{
+                        scale: [1, 1.05, 1],
+                        rotate: [0, 2, -2, 0]
+                      }}
+                      transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      whileHover={{
+                        scale: 1.1,
+                        rotate: [0, 5, -5, 0],
+                        transition: { duration: 0.5, repeat: Infinity }
+                      }}
+                    />
                   </motion.div>
                 </div>
                 <div>
