@@ -29,17 +29,17 @@ const Footer: React.FC = () => {
     {
       name: "Heart Clinic Pakenham", 
       address: "44 Main Street, Pakenham",
-      phone: "(03) 5941 4777"
+      phone: "(03) 9509 5009"
     },
     {
       name: "Casey Medical Centre, Clyde",
       address: "1s Morison Rd, Clyde",
-      phone: "(03) 5991 0777"
+      phone: "(03) 9509 5009"
     },
     {
       name: "SJOG Hospital Berwick",
       address: "75 Kangan Dv, Berwick", 
-      phone: "(03) 8768 1200"
+      phone: "(03) 9509 5009"
     }
   ];
 

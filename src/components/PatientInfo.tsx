@@ -66,14 +66,14 @@ const PatientInfo: React.FC = () => {
       icon: <Clock className="w-6 h-6 text-blue-600" />,
       title: "What to Expect",
       description: "Prepare for your appointment with us",
-      items: ["Initial Consultation (60 min)", "Diagnostic Tests if needed", "Treatment Plan Discussion", "Follow-up Scheduling"],
+      items: ["Initial Consultation (20 min)", "Diagnostic Tests if needed", "Treatment Plan Discussion", "Follow-up Scheduling"],
       color: "from-emerald-100 to-teal-100"
     },
     {
       icon: <Shield className="w-6 h-6 text-blue-600" />,
       title: "Insurance & Billing",
-      description: "We accept most major insurance plans",
-      items: ["Medicare & Private Health", "Direct Billing Available", "Payment Plans", "Insurance Verification"],
+      description: "We will sort the Medicare rebate for you",
+      items: ["Medicare & Private Health", "Medicare Rebate", "Payment Plans", "Insurance Verification"],
       color: "from-purple-100 to-pink-100"
     },
     {

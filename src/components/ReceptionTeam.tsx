@@ -54,7 +54,7 @@ const ReceptionTeam: React.FC = () => {
       name: "Georgie Kerr",
       title: "Reception Coordinator",
       experience: "Front Office Management",
-      description: "Georgie coordinates our front office operations with enthusiasm and professionalism. She ensures that every patient interaction is positive and that our reception area runs smoothly throughout the day.",
+      description: "The newest member of our team, Georgie coordinates our front office operations with enthusiasm and professionalism. She ensures that every patient interaction is positive and that our reception area runs smoothly throughout the day.",
       qualities: ["Enthusiastic", "Coordinated", "Professional", "Team Player"],
       image: "https://images.pexels.com/photos/5327647/pexels-photo-5327647.jpeg?auto=compress&cs=tinysrgb&w=400",
       specialties: ["Front Office Management", "Patient Flow", "Team Coordination", "Quality Assurance"],

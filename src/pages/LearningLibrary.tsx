@@ -88,7 +88,7 @@ const LearningLibrary: React.FC = () => {
           activities: [
             'Comprehensive cardiac assessment and imaging',
             'Blood tests and pre-operative workup',
-            'Anesthesia consultation and risk assessment',
+            'Anaesthesia consultation and risk assessment',
             'Medication review and adjustment',
             'Pre-procedure education session',
             'Consent process and question answering',
