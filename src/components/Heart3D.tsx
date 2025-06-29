@@ -1,43 +1,42 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Sphere, MeshDistortMaterial } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
+
+import heartModelUrl from '../../heartmodel.glb';
 
 interface Heart3DProps {
   scrollY: number;
 }
 
-const HeartGeometry: React.FC<{ scrollY: number }> = ({ scrollY }) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  
+const HeartModel: React.FC<{ scrollY: number }> = ({ scrollY }) => {
+  const groupRef = useRef<THREE.Group>(null);
+  const gltf = useGLTF(heartModelUrl);
+
+  useEffect(() => {
+    gltf.scene.traverse((child) => {
+      const mesh = child as THREE.Mesh;
+      if (mesh.isMesh && mesh.material) {
+        const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        materials.forEach((mat) => {
+          (mat as THREE.MeshStandardMaterial).color = new THREE.Color('#14b8a6');
+        });
+      }
+    });
+  }, [gltf.scene]);
+
   useFrame((state) => {
-    if (meshRef.current) {
-      // Base rotation
-      meshRef.current.rotation.y += 0.01;
-      
-      // Additional rotation based on scroll
+    if (groupRef.current) {
+      groupRef.current.rotation.y += 0.01;
       const scrollRotation = scrollY * 0.01;
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.5) * 0.2 + scrollRotation * 0.5;
-      meshRef.current.rotation.z = Math.cos(state.clock.elapsedTime * 0.3) * 0.1;
-      
-      // Pulsing effect
+      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.5) * 0.2 + scrollRotation * 0.5;
+      groupRef.current.rotation.z = Math.cos(state.clock.elapsedTime * 0.3) * 0.1;
       const scale = 1 + Math.sin(state.clock.elapsedTime * 2) * 0.1;
-      meshRef.current.scale.setScalar(scale);
+      groupRef.current.scale.setScalar(scale);
     }
   });
 
-  return (
-    <Sphere ref={meshRef} args={[1, 32, 32]} scale={0.8}>
-      <MeshDistortMaterial
-        color="#f43f5e"
-        attach="material"
-        distort={0.3}
-        speed={2}
-        roughness={0.2}
-        metalness={0.1}
-      />
-    </Sphere>
-  );
+  return <primitive ref={groupRef} object={gltf.scene} scale={0.8} />;
 };
 
 const Heart3D: React.FC<Heart3DProps> = ({ scrollY }) => {
@@ -47,7 +46,9 @@ const Heart3D: React.FC<Heart3DProps> = ({ scrollY }) => {
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
         <pointLight position={[-10, -10, -10]} intensity={0.5} color="#3b82f6" />
-        <HeartGeometry scrollY={scrollY} />
+        <Suspense fallback={null}>
+          <HeartModel scrollY={scrollY} />
+        </Suspense>
       </Canvas>
     </div>
   );
