@@ -22,6 +22,20 @@ const MinimalistHero: React.FC = () => {
     }
   };
 
+  const scrollToLocations = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToConsultation = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -166,6 +180,7 @@ const MinimalistHero: React.FC = () => {
                 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 300 }}
+                onClick={scrollToConsultation}
               >
                 Schedule Consultation
               </motion.button>
@@ -176,6 +191,7 @@ const MinimalistHero: React.FC = () => {
                 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 300 }}
+                onClick={scrollToLocations}
               >
                 View Locations
               </motion.button>

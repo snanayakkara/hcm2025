@@ -162,31 +162,6 @@ const About: React.FC = () => {
                 transition={{ duration: 0.8 }}
               />
             </motion.div>
-            
-            {/* Achievement Card */}
-            <motion.div 
-              className="absolute -top-6 -right-6 bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-secondary-200/50"
-              initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-              animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : { opacity: 0, scale: 0.8, rotate: -5 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              whileHover={{ 
-                scale: 1.05,
-                rotate: 2,
-                boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
-              }}
-            >
-              <div className="text-center">
-                <motion.div 
-                  className="bg-gradient-to-br from-primary-500 to-accent-500 text-white w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-sm"
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <Award className="w-7 h-7" />
-                </motion.div>
-                <p className="font-semibold text-secondary-800 text-lg">Clinical Excellence</p>
-                <p className="text-secondary-500">Healthcare Leadership</p>
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </div>

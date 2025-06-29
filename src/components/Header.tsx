@@ -265,7 +265,7 @@ const Header: React.FC = () => {
               >
                 <div className="relative">
                   <motion.div 
-                    className="bg-gradient-to-br from-primary-400 to-primary-500 p-2.5 rounded-xl shadow-sm overflow-hidden"
+                    className="bg-white p-2.5 rounded-xl shadow-sm overflow-hidden"
                     whileHover={{ 
                       scale: 1.1,
                       boxShadow: "0 8px 25px rgba(100, 116, 139, 0.25)"

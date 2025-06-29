@@ -654,19 +654,6 @@ const Services: React.FC = () => {
                   </div>
                 )}
 
-                {/* Learn More / Educational Links */}
-                {educationalLinks[services[activeService].id as keyof typeof educationalLinks]?.hasContent && (
-                  <div className="mt-8">
-                    <button
-                      onClick={() => handleLearnMore(services[activeService].id)}
-                      className="flex items-center space-x-2 px-6 py-3 bg-primary-500 text-white rounded-2xl hover:bg-primary-600 transition-all duration-200 shadow-sm"
-                    >
-                      <BookOpen className="w-5 h-5" />
-                      <span className="font-medium">Learn More About This Service</span>
-                      <ExternalLink className="w-4 h-4" />
-                    </button>
-                  </div>
-                )}
               </div>
 
               <div className="h-64 lg:h-full">
