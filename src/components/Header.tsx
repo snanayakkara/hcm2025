@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Heart, FileText, ChevronDown, Video, Search, BookOpen } from 'lucide-react';
+import { Menu, X, FileText, ChevronDown, Video, Search, BookOpen, Mic, Camera } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Heart3D from './Heart3D';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,12 +10,16 @@ const Header: React.FC = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [scrollY, setScrollY] = useState(0);
+  const [showTelehealthTooltip, setShowTelehealthTooltip] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 20);
+      setScrollY(currentScrollY);
       
       // Update active section based on scroll position (only on homepage)
       if (location.pathname === '/') {
@@ -98,25 +103,112 @@ const Header: React.FC = () => {
 
   return (
     <>
-      {/* Floating Telehealth Button */}
+      {/* Enhanced Floating Telehealth Button */}
       <motion.div
         className="fixed top-6 right-6 z-50"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1, duration: 0.5 }}
       >
-        <motion.button
-          onClick={handleTelehealthClick}
-          className="bg-sage-500 hover:bg-sage-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 group"
-          whileHover={{ 
-            scale: 1.05,
-            boxShadow: "0 10px 30px rgba(122, 138, 122, 0.3)"
-          }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Video className="w-5 h-5" />
-          <span className="font-medium">Join Telehealth</span>
-        </motion.button>
+        <div className="relative">
+          <motion.button
+            onClick={handleTelehealthClick}
+            onMouseEnter={() => setShowTelehealthTooltip(true)}
+            onMouseLeave={() => setShowTelehealthTooltip(false)}
+            className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 group relative overflow-hidden"
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: "0 15px 35px rgba(16, 185, 129, 0.4)"
+            }}
+            whileTap={{ scale: 0.95 }}
+            animate={{
+              boxShadow: [
+                "0 8px 25px rgba(16, 185, 129, 0.3)",
+                "0 12px 30px rgba(16, 185, 129, 0.4)",
+                "0 8px 25px rgba(16, 185, 129, 0.3)"
+              ]
+            }}
+            transition={{
+              boxShadow: {
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }
+            }}
+          >
+            {/* Animated background pulse */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full"
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.5, 0.8, 0.5]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            
+            {/* Content */}
+            <div className="relative z-10 flex items-center space-x-2">
+              <motion.div
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Video className="w-5 h-5" />
+              </motion.div>
+              <span className="font-semibold">Join Telehealth</span>
+            </div>
+
+            {/* Shimmer effect */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              animate={{
+                x: ['-100%', '100%']
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            />
+          </motion.button>
+
+          {/* Enhanced Tooltip */}
+          <AnimatePresence>
+            {showTelehealthTooltip && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                className="absolute bottom-full right-0 mb-3 w-72 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl border border-gray-200/50 p-4 z-60"
+              >
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-800 flex items-center space-x-2">
+                    <Video className="w-4 h-4 text-emerald-600" />
+                    <span>Telehealth Consultation</span>
+                  </h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Please ensure your device has permission to use microphone and camera for the best consultation experience.
+                  </p>
+                  <div className="flex items-center space-x-4 text-xs text-gray-500">
+                    <div className="flex items-center space-x-1">
+                      <Mic className="w-3 h-3" />
+                      <span>Microphone</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Camera className="w-3 h-3" />
+                      <span>Camera</span>
+                    </div>
+                  </div>
+                </div>
+                {/* Arrow */}
+                <div className="absolute top-full right-6 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white/95"></div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </motion.div>
 
       <div className="fixed top-0 left-0 right-0 z-40 px-4 pt-4">
@@ -132,7 +224,7 @@ const Header: React.FC = () => {
         >
           <div className="px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 lg:h-18">
-              {/* Logo */}
+              {/* Logo with 3D Heart */}
               <motion.div 
                 className="flex items-center space-x-3 group cursor-pointer" 
                 onClick={() => navigate('/')}
@@ -141,14 +233,14 @@ const Header: React.FC = () => {
               >
                 <div className="relative">
                   <motion.div 
-                    className="bg-gradient-to-br from-primary-400 to-primary-500 p-2.5 rounded-xl shadow-sm"
+                    className="bg-gradient-to-br from-primary-400 to-primary-500 p-2.5 rounded-xl shadow-sm overflow-hidden"
                     whileHover={{ 
                       scale: 1.1,
                       boxShadow: "0 8px 25px rgba(100, 116, 139, 0.25)"
                     }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <Heart className="w-5 h-5 text-white" />
+                    <Heart3D scrollY={scrollY} />
                   </motion.div>
                 </div>
                 <div>
@@ -374,7 +466,7 @@ const Header: React.FC = () => {
                     <div className="pt-4 space-y-2 border-t border-secondary-200/50">
                       <motion.button
                         onClick={handleTelehealthClick}
-                        className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-sage-400 to-sage-500 text-white px-4 py-3 rounded-lg font-semibold shadow-sm"
+                        className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-3 rounded-lg font-semibold shadow-sm"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.15 }}
