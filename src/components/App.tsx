@@ -102,7 +102,7 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#fcdfbe] to-[#ffd3c2] overflow-x-hidden">
       <Header />
       <main>
         <MinimalistHero />
