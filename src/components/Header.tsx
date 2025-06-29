@@ -10,8 +10,113 @@ const Header: React.FC = () => {
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showTelehealthTooltip, setShowTelehealthTooltip] = useState(false);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Search data - all searchable content
+  const searchData = [
+    // Services
+    { type: 'service', title: 'Cardiac Consultation', description: 'Expert cardiac assessments and consultations', section: 'services', keywords: ['doctor', 'appointment', 'consultation', 'assessment'] },
+    { type: 'service', title: 'Echocardiography', description: 'Heart ultrasound imaging', section: 'services', keywords: ['echo', 'ultrasound', 'imaging', 'heart scan'] },
+    { type: 'service', title: 'Stress Testing', description: 'Exercise and pharmacological stress tests', section: 'services', keywords: ['stress test', 'exercise', 'treadmill', 'cardiac stress'] },
+    { type: 'service', title: 'Holter Monitoring', description: '24-48 hour heart rhythm monitoring', section: 'services', keywords: ['holter', 'monitor', 'rhythm', 'arrhythmia', '24 hour'] },
+    { type: 'service', title: 'Coronary Angiography', description: 'Coronary artery imaging and intervention', section: 'services', keywords: ['angiogram', 'catheter', 'coronary', 'arteries', 'stent'] },
+    { type: 'service', title: 'Pacemaker Insertion', description: 'Device implantation and follow-up', section: 'services', keywords: ['pacemaker', 'device', 'implant', 'bradycardia'] },
+    
+    // Doctors
+    { type: 'doctor', title: 'Dr Mark Freilich', description: 'Interventional Cardiologist', section: 'doctors', keywords: ['freilich', 'interventional', 'cardiologist', 'angioplasty'] },
+    { type: 'doctor', title: 'Dr Phillip Ngu', description: 'General Cardiologist', section: 'doctors', keywords: ['ngu', 'general', 'cardiologist', 'heart failure'] },
+    { type: 'doctor', title: 'A/Prof Alex Voskoboinik', description: 'Electrophysiologist', section: 'doctors', keywords: ['voskoboinik', 'electrophysiology', 'arrhythmia', 'ablation'] },
+    { type: 'doctor', title: 'Dr Shane Nanayakkara', description: 'Heart Failure Specialist', section: 'doctors', keywords: ['nanayakkara', 'heart failure', 'cardiomyopathy'] },
+    
+    // Locations
+    { type: 'location', title: 'Cabrini Hospital, Malvern', description: 'Main clinic location', section: 'contact', keywords: ['malvern', 'cabrini', 'location', 'address', 'clinic'] },
+    { type: 'location', title: 'Heart Clinic Pakenham', description: 'Southeastern location', section: 'contact', keywords: ['pakenham', 'location', 'address', 'clinic'] },
+    { type: 'location', title: 'Casey Medical Centre, Clyde', description: 'Southeastern location', section: 'contact', keywords: ['clyde', 'casey', 'location', 'address', 'clinic'] },
+    { type: 'location', title: 'SJOG Hospital Berwick', description: 'Southeastern location', section: 'contact', keywords: ['berwick', 'sjog', 'location', 'address', 'clinic'] },
+    
+    // General pages
+    { type: 'page', title: 'About Us', description: 'Learn about Heart Clinic Melbourne', section: 'about', keywords: ['about', 'history', 'team', 'mission'] },
+    { type: 'page', title: 'Book Appointment', description: 'Schedule your consultation', section: 'contact', keywords: ['book', 'appointment', 'schedule', 'consultation'] },
+    { type: 'page', title: 'Patient Information', description: 'Important information for patients', section: 'patients', keywords: ['patient', 'information', 'preparation', 'what to bring'] },
+    { type: 'page', title: 'Emergency Contact', description: 'Emergency cardiac care information', section: 'patients', keywords: ['emergency', 'urgent', 'after hours', 'contact'] },
+    { type: 'page', title: 'Telehealth', description: 'Virtual consultations', section: 'services', keywords: ['telehealth', 'video', 'online', 'virtual', 'remote'] },
+    { type: 'page', title: 'Referrals', description: 'Information for referring doctors', section: 'contact', keywords: ['referral', 'referring', 'doctor', 'GP'] }
+  ];
+
+  // Search function
+  const performSearch = (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    const searchTerms = query.toLowerCase().split(' ');
+    const results = searchData.filter(item => {
+      const searchableText = [
+        item.title.toLowerCase(),
+        item.description.toLowerCase(),
+        ...item.keywords
+      ].join(' ');
+
+      return searchTerms.some(term => 
+        searchableText.includes(term) && term.length > 1
+      );
+    });
+
+    // Sort by relevance (exact title matches first, then description matches)
+    results.sort((a, b) => {
+      const aTitle = a.title.toLowerCase().includes(query.toLowerCase()) ? 1 : 0;
+      const bTitle = b.title.toLowerCase().includes(query.toLowerCase()) ? 1 : 0;
+      return bTitle - aTitle;
+    });
+
+    setSearchResults(results.slice(0, 6)); // Limit to 6 results
+    setShowSearchResults(true);
+  };
+
+  // Handle search input
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    performSearch(query);
+  };
+
+  // Handle search result click
+  const handleSearchResultClick = (result: any) => {
+    scrollToSection(result.section);
+    setSearchQuery('');
+    setShowSearchResults(false);
+    setIsMenuOpen(false);
+  };
+
+  // Handle search input focus/blur
+  const handleSearchFocus = () => {
+    if (searchQuery.trim()) {
+      setShowSearchResults(true);
+    }
+  };
+
+  const handleSearchBlur = () => {
+    // Delay hiding to allow clicking on results
+    setTimeout(() => {
+      setShowSearchResults(false);
+    }, 200);
+  };
+
+  // Get icon for search result type
+  const getResultIcon = (type: string) => {
+    switch (type) {
+      case 'doctor': return '👨‍⚕️';
+      case 'service': return '🏥';
+      case 'location': return '📍';
+      case 'page': return '📄';
+      default: return '🔍';
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -170,7 +275,7 @@ const Header: React.FC = () => {
                   transition: { duration: 0.5, repeat: Infinity }
                 }}
               >
-                <Video className="w-5 h-5" />
+                <Video className="w-4 h-4" />
               </motion.div>
               <motion.span 
                 className="font-semibold"
@@ -301,7 +406,7 @@ const Header: React.FC = () => {
                 </div>
               </motion.div>
 
-              {/* Search Bar - Desktop */}
+              {/* Enhanced Search Bar - Desktop */}
               <div className="hidden lg:flex flex-1 max-w-md mx-8">
                 <div className="relative w-full">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400 w-4 h-4" />
@@ -309,9 +414,59 @@ const Header: React.FC = () => {
                     type="text"
                     placeholder="Search services, doctors, or information..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={handleSearchChange}
+                    onFocus={handleSearchFocus}
+                    onBlur={handleSearchBlur}
                     className="w-full pl-10 pr-4 py-2 bg-secondary-50/80 border border-secondary-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
                   />
+                  
+                  {/* Search Results Dropdown */}
+                  <AnimatePresence>
+                    {showSearchResults && searchResults.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl rounded-xl shadow-xl border border-secondary-200/50 py-2 z-50 max-h-80 overflow-y-auto"
+                      >
+                        {searchResults.map((result, index) => (
+                          <motion.button
+                            key={index}
+                            onClick={() => handleSearchResultClick(result)}
+                            className="w-full text-left px-4 py-3 hover:bg-primary-50/80 transition-all duration-200 flex items-start space-x-3 group"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                            whileHover={{ x: 4 }}
+                          >
+                            <span className="text-lg mt-0.5 flex-shrink-0">
+                              {getResultIcon(result.type)}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-secondary-800 group-hover:text-primary-600 transition-colors text-sm truncate">
+                                {result.title}
+                              </div>
+                              <div className="text-xs text-secondary-500 mt-1 line-clamp-1">
+                                {result.description}
+                              </div>
+                              <div className="text-xs text-primary-600 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                Go to {result.type} →
+                              </div>
+                            </div>
+                          </motion.button>
+                        ))}
+                        
+                        {searchQuery && searchResults.length === 0 && (
+                          <div className="px-4 py-6 text-center text-secondary-500">
+                            <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                            <p className="text-sm">No results found for "{searchQuery}"</p>
+                            <p className="text-xs mt-1">Try searching for services, doctors, or locations</p>
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
 
@@ -460,7 +615,7 @@ const Header: React.FC = () => {
                   className="lg:hidden overflow-hidden border-t border-secondary-200/50 mt-4"
                 >
                   <nav className="py-4 space-y-1">
-                    {/* Mobile Search */}
+                    {/* Enhanced Mobile Search */}
                     <div className="px-4 pb-4">
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400 w-4 h-4" />
@@ -468,9 +623,49 @@ const Header: React.FC = () => {
                           type="text"
                           placeholder="Search..."
                           value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onChange={handleSearchChange}
+                          onFocus={handleSearchFocus}
+                          onBlur={handleSearchBlur}
                           className="w-full pl-10 pr-4 py-2 bg-secondary-50/80 border border-secondary-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         />
+                        
+                        {/* Mobile Search Results */}
+                        <AnimatePresence>
+                          {showSearchResults && searchResults.length > 0 && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -10 }}
+                              className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl rounded-xl shadow-xl border border-secondary-200/50 py-2 z-50 max-h-60 overflow-y-auto"
+                            >
+                              {searchResults.map((result, index) => (
+                                <button
+                                  key={index}
+                                  onClick={() => handleSearchResultClick(result)}
+                                  className="w-full text-left px-3 py-2 hover:bg-primary-50/80 transition-all duration-200 flex items-center space-x-2"
+                                >
+                                  <span className="text-sm">{getResultIcon(result.type)}</span>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="font-medium text-secondary-800 text-sm truncate">
+                                      {result.title}
+                                    </div>
+                                    <div className="text-xs text-secondary-500 truncate">
+                                      {result.description}
+                                    </div>
+                                  </div>
+                                </button>
+                              ))}
+                              
+                              {searchQuery && searchResults.length === 0 && (
+                                <div className="px-3 py-4 text-center text-secondary-500">
+                                  <Search className="w-6 h-6 mx-auto mb-2 opacity-50" />
+                                  <p className="text-sm">No results found</p>
+                                  <p className="text-xs mt-1">Try different keywords</p>
+                                </div>
+                              )}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     </div>
 

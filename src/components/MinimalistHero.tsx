@@ -129,7 +129,7 @@ const MinimalistHero: React.FC = () => {
                 <div 
                   className="relative inline-block bg-gradient-to-br from-primary-500 via-accent-500 to-primary-600 bg-clip-text text-transparent"
                   style={{
-                    backgroundImage: `url('/images/hcmback3d.png')`,
+                    backgroundImage: `url('/images/hcmplainback.png')`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundClip: 'text',
@@ -142,7 +142,7 @@ const MinimalistHero: React.FC = () => {
                   <div 
                     className="absolute inset-0 bg-gradient-to-br from-primary-500 via-accent-500 to-primary-600 bg-clip-text text-transparent opacity-80"
                     style={{
-                      backgroundImage: `url('/images/hcmback3d.png')`,
+                      backgroundImage: `url('/images/hcmplainback.png')`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       backgroundClip: 'text',
@@ -182,7 +182,7 @@ const MinimalistHero: React.FC = () => {
                 transition={{ type: "spring", stiffness: 300 }}
                 onClick={scrollToConsultation}
               >
-                Schedule Consultation
+                Book An Appointment
               </motion.button>
               <motion.button 
                 className="border-2 border-secondary-200 text-secondary-600 px-10 py-4 rounded-2xl font-medium text-lg hover:border-secondary-300 hover:bg-secondary-50/50"

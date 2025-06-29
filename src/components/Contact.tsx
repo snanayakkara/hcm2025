@@ -21,7 +21,7 @@ const Contact: React.FC = () => {
     {
       name: "Heart Clinic Pakenham", 
       address: "44 Main Street, Pakenham VIC 3810",
-      phone: "(03) 5941 4777",
+      phone: "(03) 9509 5009",
       hours: ["Mon-Fri: 9:00 AM - 5:00 PM", "Sat: 9:00 AM - 1:00 PM"],
       services: ["Cardiac Consultation", "Echocardiography (resting and stress echo)", "24 Hour Holter Monitoring"],
       transport: ["Pakenham Station", "Bus routes available", "Street parking"],
@@ -31,7 +31,7 @@ const Contact: React.FC = () => {
     {
       name: "Casey Medical Centre, Clyde",
       address: "1s Morison Rd, Clyde VIC 3978",
-      phone: "(03) 5991 0777", 
+      phone: "(03) 9509 5009", 
       hours: ["Mon-Fri: 8:30 AM - 5:00 PM", "Sat: By appointment"],
       services: ["Cardiac Consultation", "Echocardiography (resting and stress echo)", "24 Hour Holter Monitoring"],
       transport: ["Cranbourne Line nearby", "Local bus services", "Free parking available"],
@@ -41,7 +41,7 @@ const Contact: React.FC = () => {
     {
       name: "SJOG Hospital Berwick",
       address: "75 Kangan Dv, Berwick VIC 3806", 
-      phone: "(03) 8768 1200",
+      phone: "(03) 9509 5009",
       hours: ["Mon-Fri: 8:00 AM - 6:00 PM", "Emergency services 24/7"],
       services: ["Coronary angiography", "Transoesophageal echocardiography", "Direct cardioversion", "Inpatient services"],
       transport: ["Berwick Station", "Hospital shuttle", "Multi-level parking"],
