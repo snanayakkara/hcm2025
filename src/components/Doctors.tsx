@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Award, GraduationCap, Clock, Star, MapPin, Stethoscope, ChevronLeft, ChevronRight, Calendar, Users, Heart } from 'lucide-react';
+import { Award, GraduationCap, Clock, MapPin, Stethoscope, ChevronLeft, ChevronRight, Calendar, Users, Heart } from 'lucide-react';
 
 const Doctors: React.FC = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(0);
@@ -15,9 +15,8 @@ const Doctors: React.FC = () => {
       education: "MBBS (Hons) Monash University 1999, Fellowship Lahey Clinic Medical Centre Boston",
       expertise: ["Radial (wrist) approach coronary angiography", "Interventional cardiology", "Coronary angiograms", "General cardiology"],
       image: "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=400",
-      rating: 4.9,
       patients: "2000+",
-      locations: ["Cabrini Hospital Malvern", "St John of God Berwick", "Pakenham"],
+      locations: ["Cabrini Hospital Malvern"],
       appointments: ["Alfred Hospital", "Frankston Hospital"],
       description: "Dr Freilich is a pioneer in radial approach coronary angiography in Melbourne, having trained in this advanced technique in the United States. He specializes in interventional cardiac procedures with extensive experience in coronary interventions.",
       gradient: "from-blue-500 via-blue-600 to-indigo-700",
@@ -31,9 +30,8 @@ const Doctors: React.FC = () => {
       education: "MBBS (Hons) Monash University 2007, Cardiac Imaging Fellowship Alfred Hospital 2017",
       expertise: ["Echocardiography (resting, stress, TOE)", "CT coronary angiography", "Cardiac MRI", "Multi-modality imaging"],
       image: "https://images.pexels.com/photos/5327921/pexels-photo-5327921.jpeg?auto=compress&cs=tinysrgb&w=400",
-      rating: 4.8,
       patients: "1500+",
-      locations: ["St John of God Berwick", "Cabrini Hospital Malvern"],
+      locations: ["St John of God Berwick", "The Alfred Hospital"],
       appointments: ["Alfred Hospital"],
       description: "Dr Ngu specializes in advanced cardiac imaging and uses multi-modality imaging techniques to better understand cardiac disease and improve patient outcomes. His expertise spans all forms of non-invasive cardiac assessment.",
       gradient: "from-emerald-500 via-emerald-600 to-teal-700",
@@ -47,9 +45,8 @@ const Doctors: React.FC = () => {
       education: "MBBS (Hons) Monash University 2008, PhD Baker Heart Institute 2019, Fellowship UCSF 2019",
       expertise: ["Pacemaker implantation", "Defibrillator implantation", "Catheter ablation", "Atrial fibrillation treatment"],
       image: "https://images.pexels.com/photos/5214030/pexels-photo-5214030.jpeg?auto=compress&cs=tinysrgb&w=400",
-      rating: 4.9,
       patients: "1200+",
-      locations: ["Cabrini Hospital Malvern"],
+      locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
       appointments: ["Western Health", "Alfred Health"],
       description: "Associate Professor Voskoboinik is a leading electrophysiologist specializing in rhythm disorders. He has extensive research experience and has won prestigious awards including the Ralph Reader Prize for top young investigator.",
       gradient: "from-rose-500 via-rose-600 to-pink-700",
@@ -63,9 +60,8 @@ const Doctors: React.FC = () => {
       education: "MBBS Monash University, PhD Heart Failure, Advanced Fellowships in Intervention",
       expertise: ["Coronary angiography", "Coronary stenting", "Transcatheter valve procedures", "Structural heart interventions"],
       image: "https://images.pexels.com/photos/6129967/pexels-photo-6129967.jpeg?auto=compress&cs=tinysrgb&w=400",
-      rating: 4.8,
       patients: "1000+",
-      locations: ["Alfred Hospital", "Cabrini Hospital Malvern", "Shepparton"],
+      locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
       appointments: ["Alfred Hospital"],
       description: "Dr Nanayakkara is an interventional and structural cardiologist with expertise in advanced procedures including transcatheter valve interventions. He combines clinical excellence with research innovation and has a passion for both face-to-face and telemedicine care.",
       gradient: "from-amber-500 via-orange-600 to-red-700",
@@ -135,8 +131,8 @@ const Doctors: React.FC = () => {
                         className="w-full h-full object-cover rounded-3xl shadow-2xl"
                       />
                       <div className="absolute -top-4 -right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full flex items-center space-x-2 shadow-lg">
-                        <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                        <span className="font-bold text-gray-900">{doctors[selectedDoctor].rating}</span>
+                        <MapPin className="w-5 h-5 text-blue-600" />
+                        <span className="font-bold text-gray-900 text-sm">{doctors[selectedDoctor].locations.length} Location{doctors[selectedDoctor].locations.length > 1 ? 's' : ''}</span>
                       </div>
                     </div>
                   </div>
@@ -217,11 +213,14 @@ const Doctors: React.FC = () => {
                     <div className="bg-emerald-100 p-2 rounded-lg">
                       <MapPin className="w-6 h-6 text-emerald-600" />
                     </div>
-                    <span className="font-bold text-gray-900 text-lg">Consulting Locations</span>
+                    <span className="font-bold text-gray-900 text-lg">Primary Locations</span>
                   </div>
                   <div className="space-y-2 pl-11">
                     {doctors[selectedDoctor].locations.map((location, idx) => (
-                      <p key={idx} className="text-gray-600 font-medium">{location}</p>
+                      <div key={idx} className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                        <span className="text-gray-600 font-medium">{location}</span>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -290,10 +289,24 @@ const Doctors: React.FC = () => {
                   <p className="text-sm text-blue-600 font-semibold">{doctor.specialization}</p>
                   <p className="text-xs text-gray-600">{doctor.experience}</p>
                   
-                  {/* Rating */}
-                  <div className="flex items-center justify-center space-x-1">
-                    <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                    <span className="text-sm font-bold text-gray-900">{doctor.rating}</span>
+                  {/* Locations */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-center space-x-1 text-xs text-gray-500">
+                      <MapPin className="w-3 h-3" />
+                      <span>Primary Locations:</span>
+                    </div>
+                    <div className="space-y-1">
+                      {doctor.locations.slice(0, 2).map((location, idx) => (
+                        <div key={idx} className="text-xs text-gray-600 font-medium">
+                          {location}
+                        </div>
+                      ))}
+                      {doctor.locations.length > 2 && (
+                        <div className="text-xs text-blue-600 font-medium">
+                          +{doctor.locations.length - 2} more
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -334,8 +347,8 @@ const Doctors: React.FC = () => {
               <div className="text-white/80 font-medium">Patients Treated</div>
             </div>
             <div className="space-y-3">
-              <div className="text-4xl lg:text-5xl font-bold">4</div>
-              <div className="text-white/80 font-medium">Convenient Locations</div>
+              <div className="text-4xl lg:text-5xl font-bold">6</div>
+              <div className="text-white/80 font-medium">Hospital Locations</div>
             </div>
           </div>
         </div>
