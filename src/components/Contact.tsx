@@ -16,7 +16,7 @@ const Contact: React.FC = () => {
       services: ["Cardiac Consultation", "Coronary angiography", "24 Hour Holter monitoring", "Transoesophageal echocardiography", "Direct cardioversion", "Inpatient services"],
       transport: ["Tram Route 6", "Malvern Station nearby", "On-site parking available"],
       coordinates: { lat: -37.8606, lng: 145.0261 },
-      googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8234567890123!2d145.0261!3d-37.8606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad668d1b5b6b6b1%3A0x1234567890abcdef!2s183%20Wattletree%20Rd%2C%20Malvern%20VIC%203144!5e0!3m2!1sen!2sau!4v1234567890123!5m2!1sen!2sau"
+      googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8!2d145.026!3d-37.8606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad668d1b5b6b6b1%3A0x5017d681632ccc53!2s183%20Wattletree%20Rd%2C%20Malvern%20VIC%203144%2C%20Australia!5e0!3m2!1sen!2sau!4v1640995200000!5m2!1sen!2sau"
     },
     {
       name: "Heart Clinic Pakenham", 
@@ -26,7 +26,7 @@ const Contact: React.FC = () => {
       services: ["Cardiac Consultation", "Echocardiography (resting and stress echo)", "24 Hour Holter Monitoring"],
       transport: ["Pakenham Station", "Bus routes available", "Street parking"],
       coordinates: { lat: -38.0773, lng: 145.4847 },
-      googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8234567890123!2d145.4847!3d-38.0773!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad7a9b1b5b6b6b1%3A0x1234567890abcdef!2s44%20Main%20St%2C%20Pakenham%20VIC%203810!5e0!3m2!1sen!2sau!4v1234567890123!5m2!1sen!2sau"
+      googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8!2d145.4847!3d-38.0773!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad7a9b1b5b6b6b1%3A0x5017d681632ccc54!2s44%20Main%20St%2C%20Pakenham%20VIC%203810%2C%20Australia!5e0!3m2!1sen!2sau!4v1640995200000!5m2!1sen!2sau"
     },
     {
       name: "Casey Medical Centre, Clyde",
@@ -36,7 +36,7 @@ const Contact: React.FC = () => {
       services: ["Cardiac Consultation", "Echocardiography (resting and stress echo)", "24 Hour Holter Monitoring"],
       transport: ["Cranbourne Line nearby", "Local bus services", "Free parking available"],
       coordinates: { lat: -38.1234, lng: 145.3456 },
-      googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8234567890123!2d145.3456!3d-38.1234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad7b9b1b5b6b6b1%3A0x1234567890abcdef!2s1%20Morison%20Rd%2C%20Clyde%20VIC%203978!5e0!3m2!1sen!2sau!4v1234567890123!5m2!1sen!2sau"
+      googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8!2d145.3456!3d-38.1234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad7b9b1b5b6b6b1%3A0x5017d681632ccc55!2s1%20Morison%20Rd%2C%20Clyde%20VIC%203978%2C%20Australia!5e0!3m2!1sen!2sau!4v1640995200000!5m2!1sen!2sau"
     },
     {
       name: "SJOG Hospital Berwick",
@@ -46,7 +46,7 @@ const Contact: React.FC = () => {
       services: ["Coronary angiography", "Transoesophageal echocardiography", "Direct cardioversion", "Inpatient services"],
       transport: ["Berwick Station", "Hospital shuttle", "Multi-level parking"],
       coordinates: { lat: -38.0321, lng: 145.3567 },
-      googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8234567890123!2d145.3567!3d-38.0321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad7c9b1b5b6b6b1%3A0x1234567890abcdef!2s75%20Kangan%20Dr%2C%20Berwick%20VIC%203806!5e0!3m2!1sen!2sau!4v1234567890123!5m2!1sen!2sau"
+      googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8!2d145.3567!3d-38.0321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad7c9b1b5b6b6b1%3A0x5017d681632ccc56!2s75%20Kangan%20Dr%2C%20Berwick%20VIC%203806%2C%20Australia!5e0!3m2!1sen!2sau!4v1640995200000!5m2!1sen!2sau"
     }
   ];
 
@@ -141,8 +141,9 @@ const Contact: React.FC = () => {
               </div>
 
               {/* Interactive Map */}
-              <div className="lg:col-span-2 h-96 lg:h-auto">
+              <div className="lg:col-span-2 h-96 lg:h-auto relative">
                 <iframe
+                  key={selectedLocation} // Force re-render when location changes
                   src={locations[selectedLocation].googleMapsEmbed}
                   width="100%"
                   height="100%"
@@ -151,8 +152,29 @@ const Contact: React.FC = () => {
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title={`Map of ${locations[selectedLocation].name}`}
-                  className="w-full h-full"
+                  className="w-full h-full rounded-r-3xl lg:rounded-r-none"
+                  onError={(e) => {
+                    console.error('Map failed to load:', e);
+                    // Fallback: show a placeholder or alternative map
+                  }}
                 ></iframe>
+                
+                {/* Fallback content if map fails to load */}
+                <div className="absolute inset-0 bg-secondary-100 flex items-center justify-center opacity-0 pointer-events-none" id="map-fallback">
+                  <div className="text-center p-8">
+                    <MapPin className="w-16 h-16 text-secondary-400 mx-auto mb-4" />
+                    <h4 className="text-lg font-semibold text-secondary-700 mb-2">Map Loading...</h4>
+                    <p className="text-secondary-600">
+                      {locations[selectedLocation].address}
+                    </p>
+                    <button
+                      onClick={() => window.open(`https://www.google.com/maps/search/${encodeURIComponent(locations[selectedLocation].address)}`, '_blank')}
+                      className="mt-4 bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition-colors"
+                    >
+                      Open in Google Maps
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -168,6 +190,11 @@ const Contact: React.FC = () => {
                       placeholder="Enter your address (e.g., 123 Collins St, Melbourne VIC)"
                       value={userAddress}
                       onChange={(e) => setUserAddress(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          handleGetDirections();
+                        }
+                      }}
                       className="w-full pl-10 pr-4 py-3 border border-secondary-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
                     />
                   </div>
@@ -238,7 +265,10 @@ const Contact: React.FC = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-8 border-t border-secondary-200">
-                <button className="flex-1 bg-primary-500 text-white px-8 py-4 rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold">
+                <button 
+                  onClick={() => window.open(`tel:${locations[selectedLocation].phone}`, '_self')}
+                  className="flex-1 bg-primary-500 text-white px-8 py-4 rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold"
+                >
                   <Phone className="w-4 h-4" />
                   <span>Call {locations[selectedLocation].phone}</span>
                 </button>
@@ -318,11 +348,17 @@ const Contact: React.FC = () => {
                 Emma and our reception team are here to help you schedule appointments, answer questions, and ensure your visit goes smoothly.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="flex-1 bg-primary-500 text-white px-8 py-4 rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold">
+                <button 
+                  onClick={() => window.open('tel:(03) 9509 5009', '_self')}
+                  className="flex-1 bg-primary-500 text-white px-8 py-4 rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold"
+                >
                   <Phone className="w-4 h-4" />
                   <span>Call Now</span>
                 </button>
-                <button className="flex-1 border border-primary-500 text-primary-600 px-8 py-4 rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold">
+                <button 
+                  onClick={() => window.open('mailto:reception@heartclinicmelbourne.com.au', '_self')}
+                  className="flex-1 border border-primary-500 text-primary-600 px-8 py-4 rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold"
+                >
                   <Mail className="w-4 h-4" />
                   <span>Send Email</span>
                 </button>
