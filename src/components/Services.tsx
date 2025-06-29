@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, ArrowRight, Clock, User, FileText, AlertCircle, CheckCircle, Info, Search, Filter, ChevronDown, Calendar, Users, BookOpen, ExternalLink } from 'lucide-react';
+import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, AlertCircle, CheckCircle, Info, BookOpen, ExternalLink, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Services: React.FC = () => {
-  const [activeService, setActiveService] = useState(0);
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
+  const [selectedService, setSelectedService] = useState(0);
   const navigate = useNavigate();
+
+  // Check for reduced motion preference
+  const prefersReducedMotion = typeof window !== 'undefined' && 
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Educational content mapping for services that have learning library content
   const educationalLinks = {
@@ -59,33 +60,51 @@ const Services: React.FC = () => {
   const handleLearnMore = (serviceId: string) => {
     const linkInfo = educationalLinks[serviceId as keyof typeof educationalLinks];
     if (linkInfo?.hasContent) {
-      // Navigate to learning library with specific tab and content
       const focusParam = ('procedure' in linkInfo) ? linkInfo.procedure : 
                         ('section' in linkInfo) ? linkInfo.section : serviceId;
       navigate(`/learning-library?tab=${linkInfo.learningPath}&focus=${focusParam}`);
     }
   };
 
-  // Listen for filter events from header
-  useEffect(() => {
-    const handleFilterServices = (event: CustomEvent) => {
-      setActiveCategory(event.detail);
-      setShowFilters(true);
-    };
+  // Animation variants
+  const cardVariants = {
+    rest: { 
+      scale: 1, 
+      y: 0,
+      backgroundColor: prefersReducedMotion ? '#ffffff' : '#ffffff',
+      transition: { duration: prefersReducedMotion ? 0 : 0.2, type: "spring", stiffness: 300 }
+    },
+    hover: { 
+      scale: prefersReducedMotion ? 1 : 1.05, 
+      y: prefersReducedMotion ? 0 : -2,
+      backgroundColor: prefersReducedMotion ? '#f8fafc' : '#f1f5f9',
+      transition: { duration: prefersReducedMotion ? 0 : 0.2, type: "spring", stiffness: 400 }
+    },
+    active: { 
+      scale: prefersReducedMotion ? 1 : 1.02, 
+      y: 0,
+      backgroundColor: prefersReducedMotion ? '#3b82f6' : '#3b82f6',
+      transition: { duration: prefersReducedMotion ? 0 : 0.25, type: "spring", stiffness: 300 }
+    }
+  };
 
-    window.addEventListener('filterServices', handleFilterServices as EventListener);
-    return () => window.removeEventListener('filterServices', handleFilterServices as EventListener);
-  }, []);
-
-  const serviceCategories = [
-    { id: 'all', name: 'All Services', icon: <Heart className="w-4 h-4" /> },
-    { id: 'consultation', name: 'Consultations', icon: <Stethoscope className="w-4 h-4" /> },
-    { id: 'imaging', name: 'Cardiac Imaging', icon: <Activity className="w-4 h-4" /> },
-    { id: 'monitoring', name: 'Monitoring', icon: <Clock className="w-4 h-4" /> },
-    { id: 'interventional', name: 'Interventional', icon: <Heart className="w-4 h-4" /> },
-    { id: 'electrophysiology', name: 'Electrophysiology', icon: <Zap className="w-4 h-4" /> },
-    { id: 'procedures', name: 'Procedures', icon: <FileText className="w-4 h-4" /> }
-  ];
+  const panelVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: prefersReducedMotion ? 0 : 20,
+      transition: { duration: prefersReducedMotion ? 0.1 : 0.2 }
+    },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: prefersReducedMotion ? 0.1 : 0.25, type: "spring", stiffness: 300 }
+    },
+    exit: { 
+      opacity: 0, 
+      y: prefersReducedMotion ? 0 : -10,
+      transition: { duration: prefersReducedMotion ? 0.1 : 0.2 }
+    }
+  };
 
   const services = [
     {
@@ -418,7 +437,7 @@ const Services: React.FC = () => {
       preparation: "Day procedure or overnight stay",
       locations: ["Malvern", "Berwick"],
       description: "Pacemaker insertion is a procedure to implant a small electronic device that helps regulate your heart rhythm. The pacemaker monitors your heart rate and delivers electrical impulses when needed to maintain a normal rhythm.",
-      whatToExpected: [
+      whatToExpect: [
         "Local anaesthetic at implantation site",
         "Small incision below the collarbone",
         "Pacemaker leads threaded through veins to heart",
@@ -441,14 +460,6 @@ const Services: React.FC = () => {
       image: "/images/pacemaker.png"
     }
   ];
-
-  // Filter services based on category and search term
-  const filteredServices = services.filter(service => {
-    const matchesCategory = activeCategory === 'all' || service.category === activeCategory;
-    const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         service.shortDescription.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
 
   return (
     <section id="services" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20">
@@ -474,283 +485,215 @@ const Services: React.FC = () => {
           </motion.p>
         </div>
 
-        {/* Search and Filter */}
-        <div className="mb-16 space-y-8">
-          {/* Search Bar */}
-          <div className="max-w-md mx-auto">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search services..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border border-secondary-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
-              />
+        {/* Master-Detail Layout */}
+        <div className="grid lg:grid-cols-12 gap-12 mb-20">
+          {/* Mini-Cards Row (Master) */}
+          <div className="lg:col-span-4">
+            <h3 className="text-xl font-semibold text-secondary-800 mb-6">Select a Service</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-4 lg:max-h-[600px] lg:overflow-y-auto lg:pr-4 lg:scrollbar-thin lg:scrollbar-thumb-secondary-300 lg:scrollbar-track-secondary-100">
+              {services.map((service, index) => (
+                <motion.button
+                  key={service.id}
+                  onClick={() => setSelectedService(index)}
+                  aria-pressed={selectedService === index}
+                  className={`
+                    relative w-full aspect-square rounded-2xl border-2 transition-all duration-200 
+                    focus:outline-none focus:ring-4 focus:ring-primary-200/50 focus:ring-offset-2
+                    ${selectedService === index 
+                      ? 'border-primary-500 text-white shadow-lg' 
+                      : 'border-secondary-200 text-secondary-700 hover:border-primary-300 hover:shadow-md'
+                    }
+                  `}
+                  variants={cardVariants}
+                  initial="rest"
+                  whileHover={selectedService === index ? "active" : "hover"}
+                  animate={selectedService === index ? "active" : "rest"}
+                  layout={!prefersReducedMotion}
+                  layoutId={!prefersReducedMotion ? `service-card-${service.id}` : undefined}
+                >
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-3 space-y-2">
+                    <div className={`
+                      p-2 rounded-xl transition-colors duration-200
+                      ${selectedService === index ? 'bg-white/20' : 'bg-primary-50'}
+                    `}>
+                      <div className={selectedService === index ? 'text-white' : 'text-primary-600'}>
+                        {service.icon}
+                      </div>
+                    </div>
+                    <span className={`
+                      text-xs font-medium text-center leading-tight
+                      ${selectedService === index ? 'text-white' : 'text-secondary-700'}
+                    `}>
+                      {service.name}
+                    </span>
+                    {service.duration && (
+                      <span className={`
+                        text-xs opacity-75
+                        ${selectedService === index ? 'text-primary-100' : 'text-secondary-500'}
+                      `}>
+                        {service.duration}
+                      </span>
+                    )}
+                  </div>
+                </motion.button>
+              ))}
             </div>
           </div>
 
-          {/* Filter Toggle */}
-          <div className="text-center">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center space-x-2 px-8 py-4 bg-white border border-secondary-300 rounded-2xl hover:bg-secondary-50 transition-all duration-200 shadow-sm"
-            >
-              <Filter className="w-4 h-4 text-secondary-600" />
-              <span className="text-secondary-700 font-medium">Filter by Category</span>
-              <ChevronDown className={`w-4 h-4 text-secondary-600 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
-            </button>
-          </div>
-
-          {/* Category Filter */}
-          <AnimatePresence>
-            {showFilters && (
+          {/* Detail Panel */}
+          <div className="lg:col-span-8">
+            <AnimatePresence mode="wait">
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
+                key={selectedService}
+                className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden border border-secondary-200/50"
+                variants={panelVariants}
+                initial="hidden"
+                animate="show"
+                exit="exit"
+                layout={!prefersReducedMotion}
+                role="region"
+                aria-labelledby="service-detail-heading"
               >
-                <div className="flex flex-wrap justify-center gap-4 pt-6">
-                  {serviceCategories.map((category) => (
-                    <button
-                      key={category.id}
-                      onClick={() => setActiveCategory(category.id)}
-                      className={`flex items-center space-x-2 px-6 py-3 rounded-2xl transition-all duration-200 ${
-                        activeCategory === category.id
-                          ? 'bg-primary-500 text-white shadow-sm'
-                          : 'bg-white text-secondary-700 hover:bg-primary-50 shadow-sm border border-secondary-200'
-                      }`}
-                    >
-                      {category.icon}
-                      <span className="font-medium">{category.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+                <div className="grid lg:grid-cols-2">
+                  <div className="p-8 lg:p-12 space-y-8">
+                    <div className="flex items-start space-x-4">
+                      <div className="bg-primary-500 text-white w-14 h-14 rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+                        {services[selectedService].icon}
+                      </div>
+                      <div className="min-w-0">
+                        <h3 id="service-detail-heading" className="text-2xl lg:text-3xl font-bold text-secondary-800 leading-tight">
+                          {services[selectedService].name}
+                        </h3>
+                        <p className="text-secondary-600 text-lg mt-2">{services[selectedService].shortDescription}</p>
+                      </div>
+                    </div>
+                    
+                    <p className="text-lg text-secondary-600 leading-relaxed">
+                      {services[selectedService].description}
+                    </p>
 
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
-          {filteredServices.map((service, index) => (
-            <motion.button
-              key={service.id}
-              onClick={() => setActiveService(services.findIndex(s => s.id === service.id))}
-              className={`p-8 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
-                services[activeService]?.id === service.id
-                  ? 'bg-primary-500 text-white shadow-xl scale-105 border-primary-500' 
-                  : 'bg-white/80 backdrop-blur-sm text-secondary-900 shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-200'
-              }`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <div className="space-y-6">
-                <div className={`p-3 rounded-xl w-fit ${
-                  services[activeService]?.id === service.id ? 'bg-white/20' : 'bg-primary-50'
-                }`}>
-                  <div className={services[activeService]?.id === service.id ? 'text-white' : 'text-primary-600'}>
-                    {service.icon}
-                  </div>
-                </div>
-                
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-lg leading-tight">{service.name}</h3>
-                  <p className={`text-sm ${
-                    services[activeService]?.id === service.id ? 'text-primary-100' : 'text-secondary-600'
-                  }`}>
-                    {service.duration}
-                  </p>
-                  <p className={`text-sm ${
-                    services[activeService]?.id === service.id ? 'text-primary-100' : 'text-secondary-600'
-                  }`}>
-                    {service.shortDescription}
-                  </p>
-                </div>
+                    {/* Quick Info */}
+                    <div className="grid sm:grid-cols-3 gap-4 p-6 bg-secondary-50/50 rounded-xl">
+                      <div className="text-center">
+                        <Clock className="w-5 h-5 text-primary-600 mx-auto mb-2" />
+                        <p className="font-semibold text-secondary-800 text-sm">Duration</p>
+                        <p className="text-xs text-secondary-600">{services[selectedService].duration}</p>
+                      </div>
+                      <div className="text-center">
+                        <MapPin className="w-5 h-5 text-primary-600 mx-auto mb-2" />
+                        <p className="font-semibold text-secondary-800 text-sm">Locations</p>
+                        <p className="text-xs text-secondary-600">{services[selectedService].locations.join(', ')}</p>
+                      </div>
+                      <div className="text-center">
+                        <FileText className="w-5 h-5 text-primary-600 mx-auto mb-2" />
+                        <p className="font-semibold text-secondary-800 text-sm">Cost</p>
+                        <p className="text-xs text-secondary-600">{services[selectedService].cost}</p>
+                      </div>
+                    </div>
 
-                {/* Location badges */}
-                <div className="flex flex-wrap gap-2">
-                  {service.locations.slice(0, 2).map((location, idx) => (
-                    <span
-                      key={idx}
-                      className={`px-3 py-1 text-xs rounded-full ${
-                        services[activeService]?.id === service.id 
-                          ? 'bg-white/20 text-white' 
-                          : 'bg-secondary-100 text-secondary-600'
-                      }`}
-                    >
-                      {location}
-                    </span>
-                  ))}
-                  {service.locations.length > 2 && (
-                    <span className={`px-3 py-1 text-xs rounded-full ${
-                      services[activeService]?.id === service.id 
-                        ? 'bg-white/20 text-white' 
-                        : 'bg-secondary-100 text-secondary-600'
-                    }`}>
-                      +{service.locations.length - 2}
-                    </span>
-                  )}
-                </div>
-
-                {/* Learn More Badge */}
-                {educationalLinks[service.id as keyof typeof educationalLinks]?.hasContent && (
-                  <div className="pt-2">
-                    <span className={`inline-flex items-center space-x-1 px-3 py-1 text-xs rounded-full transition-all duration-200 ${
-                      services[activeService]?.id === service.id 
-                        ? 'bg-white/20 text-white border border-white/30' 
-                        : 'bg-sage-100 text-sage-700 border border-sage-200 hover:bg-sage-200'
-                    }`}>
-                      <BookOpen className="w-3 h-3" />
-                      <span className="font-medium">Learn More</span>
-                    </span>
-                  </div>
-                )}
-              </div>
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Active Service Detail */}
-        {services[activeService] && (
-          <motion.div 
-            className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden mb-20 border border-secondary-200/50"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="grid lg:grid-cols-2">
-              <div className="p-12 lg:p-16 space-y-10">
-                <div className="flex items-center space-x-4">
-                  <div className="bg-primary-500 text-white w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm">
-                    {services[activeService].icon}
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-bold text-secondary-800">
-                      {services[activeService].name}
-                    </h3>
-                    <p className="text-secondary-600 text-lg">{services[activeService].shortDescription}</p>
-                  </div>
-                </div>
-                
-                <p className="text-lg text-secondary-600 leading-relaxed">
-                  {services[activeService].description}
-                </p>
-
-                {/* Quick Info */}
-                <div className="grid sm:grid-cols-3 gap-6 p-8 bg-secondary-50/50 rounded-2xl">
-                  <div className="text-center">
-                    <Clock className="w-5 h-5 text-primary-600 mx-auto mb-3" />
-                    <p className="font-semibold text-secondary-800">Duration</p>
-                    <p className="text-sm text-secondary-600">{services[activeService].duration}</p>
-                  </div>
-                  <div className="text-center">
-                    <MapPin className="w-5 h-5 text-primary-600 mx-auto mb-3" />
-                    <p className="font-semibold text-secondary-800">Locations</p>
-                    <p className="text-sm text-secondary-600">{services[activeService].locations.join(', ')}</p>
-                  </div>
-                  <div className="text-center">
-                    <FileText className="w-5 h-5 text-primary-600 mx-auto mb-3" />
-                    <p className="font-semibold text-secondary-800">Cost</p>
-                    <p className="text-sm text-secondary-600">{services[activeService].cost}</p>
-                  </div>
-                </div>
-
-                {/* Educational Link */}
-                {educationalLinks[services[activeService].id as keyof typeof educationalLinks]?.hasContent && (
-                  <div className="bg-gradient-to-r from-sage-50 to-primary-50 rounded-2xl p-6 border border-sage-200/50">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="bg-sage-500 text-white p-2 rounded-lg">
-                          <BookOpen className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-secondary-800">Want to Learn More?</h4>
-                          <p className="text-sm text-secondary-600">
-                            {educationalLinks[services[activeService].id as keyof typeof educationalLinks]?.title}
-                          </p>
+                    {/* Educational Link */}
+                    {educationalLinks[services[selectedService].id as keyof typeof educationalLinks]?.hasContent && (
+                      <div className="bg-gradient-to-r from-sage-50 to-primary-50 rounded-xl p-4 border border-sage-200/50">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className="bg-sage-500 text-white p-2 rounded-lg">
+                              <BookOpen className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-secondary-800 text-sm">Want to Learn More?</h4>
+                              <p className="text-xs text-secondary-600">
+                                {educationalLinks[services[selectedService].id as keyof typeof educationalLinks]?.title}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => handleLearnMore(services[selectedService].id)}
+                            className="bg-sage-500 text-white px-4 py-2 rounded-lg hover:bg-sage-600 transition-all duration-200 flex items-center space-x-2 transform hover:scale-105 shadow-sm hover:shadow-md text-sm"
+                          >
+                            <span className="font-medium">Learning Library</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </button>
                         </div>
                       </div>
-                      <button
-                        onClick={() => handleLearnMore(services[activeService].id)}
-                        className="bg-sage-500 text-white px-6 py-3 rounded-xl hover:bg-sage-600 transition-all duration-200 flex items-center space-x-2 transform hover:scale-105 shadow-sm hover:shadow-md"
-                      >
-                        <span className="font-medium">Learning Library</span>
-                        <ExternalLink className="w-4 h-4" />
+                    )}
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <button className="flex-1 bg-primary-500 text-white px-6 py-3 rounded-xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold">
+                        <Phone className="w-4 h-4" />
+                        <span>Book Now</span>
+                      </button>
+                      <button className="flex-1 border border-primary-500 text-primary-600 px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors duration-200 font-semibold">
+                        Learn More
                       </button>
                     </div>
                   </div>
-                )}
 
-              </div>
-
-              <div className="h-64 lg:h-full">
-                <img
-                  src={services[activeService].image}
-                  alt={`${services[activeService].name} procedure`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            {/* Detailed Information Tabs */}
-            <div className="border-t border-secondary-200 bg-secondary-50/30">
-              <div className="grid md:grid-cols-3 gap-10 p-12">
-                {/* What to Expect */}
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-2">
-                    <Info className="w-5 h-5 text-sage-600" />
-                    <h4 className="font-semibold text-secondary-800">What to Expect</h4>
+                  <div className="h-64 lg:h-full">
+                    <img
+                      src={services[selectedService].image}
+                      alt={`${services[selectedService].name} procedure`}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <ul className="space-y-3">
-                    {services[activeService].whatToExpect?.map((item, idx) => (
-                      <li key={idx} className="flex items-start space-x-2">
-                        <CheckCircle className="w-4 h-4 text-sage-500 mt-1 flex-shrink-0" />
-                        <span className="text-sm text-secondary-700">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
 
-                {/* Preparation */}
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-2">
-                    <AlertCircle className="w-5 h-5 text-cream-600" />
-                    <h4 className="font-semibold text-secondary-800">Preparation</h4>
-                  </div>
-                  <ul className="space-y-3">
-                    {services[activeService].preparationSteps?.map((item, idx) => (
-                      <li key={idx} className="flex items-start space-x-2">
-                        <div className="w-2 h-2 bg-cream-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-sm text-secondary-700">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {/* Detailed Information Tabs */}
+                <div className="border-t border-secondary-200 bg-secondary-50/30">
+                  <div className="grid md:grid-cols-3 gap-8 p-8">
+                    {/* What to Expect */}
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <Info className="w-4 h-4 text-sage-600" />
+                        <h4 className="font-semibold text-secondary-800">What to Expect</h4>
+                      </div>
+                      <ul className="space-y-2">
+                        {services[selectedService].whatToExpect?.map((item, idx) => (
+                          <li key={idx} className="flex items-start space-x-2">
+                            <CheckCircle className="w-3 h-3 text-sage-500 mt-1 flex-shrink-0" />
+                            <span className="text-sm text-secondary-700">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
 
-                {/* After Care */}
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-2">
-                    <Heart className="w-5 h-5 text-accent-600" />
-                    <h4 className="font-semibold text-secondary-800">After Care</h4>
+                    {/* Preparation */}
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <AlertCircle className="w-4 h-4 text-cream-600" />
+                        <h4 className="font-semibold text-secondary-800">Preparation</h4>
+                      </div>
+                      <ul className="space-y-2">
+                        {services[selectedService].preparationSteps?.map((item, idx) => (
+                          <li key={idx} className="flex items-start space-x-2">
+                            <div className="w-2 h-2 bg-cream-500 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-sm text-secondary-700">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* After Care */}
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <Heart className="w-4 h-4 text-accent-600" />
+                        <h4 className="font-semibold text-secondary-800">After Care</h4>
+                      </div>
+                      <ul className="space-y-2">
+                        {services[selectedService].afterCare?.map((item, idx) => (
+                          <li key={idx} className="flex items-start space-x-2">
+                            <div className="w-2 h-2 bg-accent-500 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-sm text-secondary-700">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  <ul className="space-y-3">
-                    {services[activeService].afterCare?.map((item, idx) => (
-                      <li key={idx} className="flex items-start space-x-2">
-                        <div className="w-2 h-2 bg-accent-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-sm text-secondary-700">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
 
         {/* Call to Action */}
         <motion.div 
