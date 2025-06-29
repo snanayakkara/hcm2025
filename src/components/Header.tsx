@@ -43,7 +43,8 @@ const Header: React.FC = () => {
     { type: 'page', title: 'Patient Information', description: 'Important information for patients', section: 'patients', keywords: ['patient', 'information', 'preparation', 'what to bring'] },
     { type: 'page', title: 'Emergency Contact', description: 'Emergency cardiac care information', section: 'patients', keywords: ['emergency', 'urgent', 'after hours', 'contact'] },
     { type: 'page', title: 'Telehealth', description: 'Virtual consultations', section: 'services', keywords: ['telehealth', 'video', 'online', 'virtual', 'remote'] },
-    { type: 'page', title: 'Referrals', description: 'Information for referring doctors', section: 'contact', keywords: ['referral', 'referring', 'doctor', 'GP'] }
+    { type: 'page', title: 'Referrals', description: 'Information for referring doctors', section: 'contact', keywords: ['referral', 'referring', 'doctor', 'GP'] },
+    { type: 'page', title: 'FAQ', description: 'Frequently asked questions', section: 'faq', keywords: ['faq', 'questions', 'answers', 'help', 'frequently asked'] }
   ];
 
   // Search function
@@ -190,6 +191,7 @@ const Header: React.FC = () => {
     },
     { id: 'doctors', label: 'Doctors' },
     { id: 'contact', label: 'Contact' },
+    { id: 'faq', label: 'FAQ' },
   ];
 
   const handleSubmenuClick = (subItem: any) => {

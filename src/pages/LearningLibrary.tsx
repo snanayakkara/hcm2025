@@ -5,33 +5,21 @@ import {
   Heart, 
   Activity, 
   Stethoscope, 
-  FileText, 
   Search, 
-  Filter, 
-  ChevronDown, 
-  ChevronRight,
   Clock,
-  User,
   AlertCircle,
   Info,
   CheckCircle,
   PlayCircle,
-  Download,
   ExternalLink,
   MapPin,
   ArrowLeft,
-  Zap,
-  Calendar,
-  Users,
   Phone,
-  Home,
-  Building,
-  UserCheck,
-  Shield,
   Clipboard,
   Monitor,
   Bed,
-  ArrowRight
+  ArrowRight,
+  UserCheck
 } from 'lucide-react';
 import ProgressivePatientJourney from '../components/ProgressivePatientJourney';
 
@@ -39,7 +27,6 @@ const LearningLibrary: React.FC = () => {
   const [activeTab, setActiveTab] = useState('journey-maps');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [selectedProcedure, setSelectedProcedure] = useState('general');
   const [activePhase, setActivePhase] = useState('pre-procedure');
@@ -78,7 +65,6 @@ const LearningLibrary: React.FC = () => {
 
   const tabs = [
     { id: 'journey-maps', label: 'Patient Journey Maps', icon: <MapPin className="w-5 h-5" /> },
-    { id: 'faq', label: 'FAQs', icon: <FileText className="w-5 h-5" /> },
     { id: 'videos', label: 'Educational Videos', icon: <PlayCircle className="w-5 h-5" /> },
     { id: 'conditions', label: 'Heart Conditions', icon: <Heart className="w-5 h-5" /> },
     { id: 'tests', label: 'Tests & Procedures', icon: <Activity className="w-5 h-5" /> }
@@ -434,69 +420,6 @@ const LearningLibrary: React.FC = () => {
     { id: 'post-procedure', label: 'Post-Procedure', icon: <UserCheck className="w-4 h-4" /> }
   ];
 
-  const faqData = [
-    {
-      category: 'general',
-      question: 'What are your operating hours?',
-      answer: 'Our main clinic at Cabrini Hospital Malvern is open Monday-Friday 8:30am-5:00pm. Other locations have varying hours - Pakenham is open Monday-Friday 9:00am-5:00pm and Saturday 9:00am-1:00pm. Please call your preferred location to confirm specific hours.'
-    },
-    {
-      category: 'general',
-      question: 'Do I need a referral to see a cardiologist?',
-      answer: 'Yes, you need a referral from your GP or another specialist to see our cardiologists. This ensures Medicare rebates are available and helps us understand your medical history and the reason for your visit.'
-    },
-    {
-      category: 'general',
-      question: 'What should I bring to my first appointment?',
-      answer: 'Please bring your Medicare card, private health insurance details, referral letter from your GP, a list of current medications, and any previous cardiac test results or reports.'
-    },
-    {
-      category: 'billing',
-      question: 'Do you accept Medicare?',
-      answer: 'Yes, we accept Medicare and offer bulk billing for eligible patients. We also work with most private health insurance funds for gap-free or reduced gap consultations.'
-    },
-    {
-      category: 'billing',
-      question: 'What are the consultation fees?',
-      answer: 'Consultation fees vary depending on the type and length of appointment. We offer Medicare rebates and work with private health insurers. Our reception team can provide specific fee information when booking.'
-    },
-    {
-      category: 'symptoms',
-      question: 'When should I be concerned about chest pain?',
-      answer: 'Seek immediate medical attention (call 000) if you experience severe chest pain, especially if accompanied by shortness of breath, nausea, sweating, or pain radiating to your arm, neck, or jaw. For persistent or recurring chest discomfort, consult your GP for evaluation.'
-    },
-    {
-      category: 'symptoms',
-      question: 'What are common symptoms of heart disease?',
-      answer: 'Common symptoms include chest pain or discomfort, shortness of breath, fatigue, irregular heartbeat, swelling in legs or ankles, and dizziness. However, some people may have no symptoms, which is why regular check-ups are important.'
-    },
-    {
-      category: 'conditions',
-      question: 'What is atrial fibrillation?',
-      answer: 'Atrial fibrillation (AF) is an irregular heart rhythm where the upper chambers of the heart beat chaotically. This can cause symptoms like palpitations, fatigue, and shortness of breath, and increases the risk of stroke.'
-    },
-    {
-      category: 'conditions',
-      question: 'What is coronary artery disease?',
-      answer: 'Coronary artery disease occurs when the major blood vessels that supply your heart become damaged or diseased. It\'s usually caused by plaque buildup in the arteries, which can reduce blood flow to the heart muscle.'
-    },
-    {
-      category: 'procedures',
-      question: 'What happens during an echocardiogram?',
-      answer: 'An echocardiogram is a painless test that uses sound waves to create pictures of your heart. A technician will apply gel to your chest and move a probe around to capture images of your heart\'s chambers, valves, and blood flow.'
-    },
-    {
-      category: 'procedures',
-      question: 'How should I prepare for a stress test?',
-      answer: 'Wear comfortable exercise clothing and shoes. Avoid eating, drinking caffeine, or smoking for 3 hours before the test. Continue taking your medications unless specifically told otherwise by your doctor.'
-    },
-    {
-      category: 'procedures',
-      question: 'What is a Holter monitor?',
-      answer: 'A Holter monitor is a small, portable device that records your heart\'s electrical activity for 24-48 hours. You wear it while going about your normal daily activities to detect irregular heart rhythms that might not show up during a short ECG.'
-    }
-  ];
-
   const videoData = [
     {
       category: 'heart-basics',
@@ -673,13 +596,6 @@ const LearningLibrary: React.FC = () => {
     }
   ];
 
-  const filteredFAQs = faqData.filter(faq => {
-    const matchesCategory = selectedCategory === 'all' || faq.category === selectedCategory;
-    const matchesSearch = faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         faq.answer.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
-
   const filteredVideos = videoData.filter(video => {
     const matchesCategory = selectedCategory === 'all' || video.category === selectedCategory;
     const matchesSearch = video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -771,7 +687,7 @@ const LearningLibrary: React.FC = () => {
                 />
               </div>
 
-              {(activeTab === 'faq' || activeTab === 'videos') && (
+              {activeTab === 'videos' && (
                 <div className="flex flex-wrap justify-center gap-3">
                   <button
                     onClick={() => setSelectedCategory('all')}
@@ -783,60 +699,6 @@ const LearningLibrary: React.FC = () => {
                   >
                     All Categories
                   </button>
-                  {activeTab === 'faq' && (
-                    <>
-                      <button
-                        onClick={() => setSelectedCategory('general')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'general'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        General
-                      </button>
-                      <button
-                        onClick={() => setSelectedCategory('billing')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'billing'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        Billing
-                      </button>
-                      <button
-                        onClick={() => setSelectedCategory('symptoms')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'symptoms'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        Symptoms
-                      </button>
-                      <button
-                        onClick={() => setSelectedCategory('conditions')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'conditions'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        Conditions
-                      </button>
-                      <button
-                        onClick={() => setSelectedCategory('procedures')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'procedures'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        Procedures
-                      </button>
-                    </>
-                  )}
                   {activeTab === 'videos' && (
                     <>
                       <button
@@ -1076,30 +938,6 @@ const LearningLibrary: React.FC = () => {
                   <ProgressivePatientJourney />
                 </div>
               )}
-            </div>
-          )}
-
-          {/* FAQ Tab */}
-          {activeTab === 'faq' && (
-            <div className="max-w-4xl mx-auto space-y-6">
-              {filteredFAQs.map((faq, index) => (
-                <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-secondary-200/50 overflow-hidden">
-                  <button
-                    onClick={() => setExpandedFAQ(expandedFAQ === index ? null : index)}
-                    className="w-full p-8 text-left flex items-center justify-between hover:bg-secondary-50/50 transition-colors duration-200"
-                  >
-                    <h3 className="text-lg font-semibold text-secondary-800 pr-4">{faq.question}</h3>
-                    <ChevronDown className={`w-5 h-5 text-secondary-500 transition-transform duration-200 ${
-                      expandedFAQ === index ? 'rotate-180' : ''
-                    }`} />
-                  </button>
-                  {expandedFAQ === index && (
-                    <div className="px-8 pb-8 border-t border-secondary-100">
-                      <p className="text-secondary-600 leading-relaxed pt-6">{faq.answer}</p>
-                    </div>
-                  )}
-                </div>
-              ))}
             </div>
           )}
 
