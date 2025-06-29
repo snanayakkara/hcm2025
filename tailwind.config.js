@@ -4,66 +4,66 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Calming color palette from https://www.color-hex.com/color-palette/82211
+        // Muted, calming color palette
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9', // Main blue
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-        },
-        secondary: {
           50: '#f8fafc',
           100: '#f1f5f9',
           200: '#e2e8f0',
           300: '#cbd5e1',
           400: '#94a3b8',
-          500: '#64748b', // Soft gray
+          500: '#64748b', // Muted slate blue
           600: '#475569',
           700: '#334155',
           800: '#1e293b',
           900: '#0f172a',
         },
+        secondary: {
+          50: '#f9fafb',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280', // Muted gray
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937',
+          900: '#111827',
+        },
         accent: {
-          50: '#fdf4ff',
-          100: '#fae8ff',
-          200: '#f5d0fe',
-          300: '#f0abfc',
-          400: '#e879f9',
-          500: '#d946ef', // Soft purple
-          600: '#c026d3',
-          700: '#a21caf',
-          800: '#86198f',
-          900: '#701a75',
+          50: '#fdf2f8',
+          100: '#fce7f3',
+          200: '#fbcfe8',
+          300: '#f9a8d4',
+          400: '#f472b6',
+          500: '#d1a3a4', // Muted dusty rose
+          600: '#be7a7b',
+          700: '#a85859',
+          800: '#8b4142',
+          900: '#6f2d2e',
         },
         sage: {
           50: '#f6f7f6',
-          100: '#e3e7e3',
-          200: '#c7d2c7',
-          300: '#a3b5a3',
-          400: '#7a927a', // Sage green
-          500: '#5a7a5a',
-          600: '#4a6b4a',
-          700: '#3d5a3d',
-          800: '#334a33',
-          900: '#2d3f2d',
+          100: '#e8ebe8',
+          200: '#d1d7d1',
+          300: '#a8b5a8',
+          400: '#7a8a7a', // Muted sage green
+          500: '#5a6b5a',
+          600: '#4a5a4a',
+          700: '#3d4a3d',
+          800: '#333d33',
+          900: '#2a332a',
         },
         cream: {
           50: '#fefefe',
-          100: '#fefcf8',
-          200: '#fdf8f0',
-          300: '#fbf2e8',
-          400: '#f8ead8', // Warm cream
-          500: '#f5e2c8',
-          600: '#f0d5a8',
-          700: '#e8c088',
-          800: '#dfa968',
-          900: '#d69248',
+          100: '#fdfcf8',
+          200: '#faf7f0',
+          300: '#f5f0e8',
+          400: '#e8ddd0', // Muted warm cream
+          500: '#d4c4b0',
+          600: '#bfa890',
+          700: '#a68d70',
+          800: '#8b7355',
+          900: '#6f5a3f',
         }
       },
       fontFamily: {

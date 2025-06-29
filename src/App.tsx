@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Header from './components/Header';
 import MinimalistHero from './components/MinimalistHero';
-import ProgressivePatientJourney from './components/ProgressivePatientJourney';
 import About from './components/About';
 import Services from './components/Services';
 import Doctors from './components/Doctors';
@@ -107,7 +106,6 @@ function App() {
       <Header />
       <main>
         <MinimalistHero />
-        <ProgressivePatientJourney />
         <About />
         <Services />
         <Doctors />
