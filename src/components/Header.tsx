@@ -117,8 +117,9 @@ const Header: React.FC = () => {
             onMouseLeave={() => setShowTelehealthTooltip(false)}
             className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 group relative overflow-hidden"
             whileHover={{ 
-              scale: 1.05,
-              boxShadow: "0 15px 35px rgba(16, 185, 129, 0.4)"
+              scale: 1.1,
+              rotate: [0, -2, 2, 0],
+              boxShadow: "0 20px 40px rgba(16, 185, 129, 0.5)"
             }}
             whileTap={{ scale: 0.95 }}
             animate={{
@@ -133,6 +134,10 @@ const Header: React.FC = () => {
                 duration: 2,
                 repeat: Infinity,
                 ease: "easeInOut"
+              },
+              hover: {
+                duration: 0.3,
+                ease: "easeOut"
               }
             }}
           >
@@ -140,7 +145,7 @@ const Header: React.FC = () => {
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full"
               animate={{
-                scale: [1, 1.1, 1],
+                scale: [1, 1.2, 1],
                 opacity: [0.5, 0.8, 0.5]
               }}
               transition={{
@@ -153,17 +158,37 @@ const Header: React.FC = () => {
             {/* Content */}
             <div className="relative z-10 flex items-center space-x-2">
               <motion.div
-                animate={{ rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+                animate={{ 
+                  rotate: [0, 5, -5, 0],
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                whileHover={{
+                  rotate: [0, 10, -10, 0],
+                  scale: 1.2,
+                  transition: { duration: 0.5, repeat: Infinity }
+                }}
               >
                 <Video className="w-5 h-5" />
               </motion.div>
-              <span className="font-semibold">Join Telehealth</span>
+              <motion.span 
+                className="font-semibold"
+                whileHover={{
+                  x: [0, 2, -2, 0],
+                  transition: { duration: 0.3, repeat: Infinity }
+                }}
+              >
+                Join Telehealth
+              </motion.span>
             </div>
 
-            {/* Shimmer effect */}
+            {/* Enhanced shimmer effect */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
               animate={{
                 x: ['-100%', '100%']
               }}
@@ -173,16 +198,26 @@ const Header: React.FC = () => {
                 ease: "linear"
               }}
             />
+
+            {/* Hover glow effect */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-emerald-300 to-teal-300 rounded-full opacity-0"
+              whileHover={{
+                opacity: [0, 0.3, 0],
+                scale: [1, 1.1, 1],
+                transition: { duration: 0.6, repeat: Infinity }
+              }}
+            />
           </motion.button>
 
-          {/* Enhanced Tooltip */}
+          {/* Enhanced Tooltip - Now positioned below */}
           <AnimatePresence>
             {showTelehealthTooltip && (
               <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                initial={{ opacity: 0, y: -10, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                className="absolute bottom-full right-0 mb-3 w-72 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl border border-gray-200/50 p-4 z-60"
+                exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                className="absolute top-full right-0 mt-3 w-72 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl border border-gray-200/50 p-4 z-60"
               >
                 <div className="space-y-3">
                   <h4 className="font-semibold text-gray-800 flex items-center space-x-2">
@@ -203,8 +238,8 @@ const Header: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {/* Arrow */}
-                <div className="absolute top-full right-6 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white/95"></div>
+                {/* Arrow pointing up */}
+                <div className="absolute bottom-full right-6 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-white/95"></div>
               </motion.div>
             )}
           </AnimatePresence>
