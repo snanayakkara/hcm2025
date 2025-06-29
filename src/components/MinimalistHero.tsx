@@ -1,17 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Activity, Users, Award, ArrowDown } from 'lucide-react';
+import { Heart, ArrowDown } from 'lucide-react';
 
 const MinimalistHero: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
-
-  const stats = [
-    { icon: <Users className="w-4 h-4" />, number: "5700+", label: "Patients Treated", delay: 0 },
-    { icon: <Award className="w-4 h-4" />, number: "36+", label: "Years Experience", delay: 0.1 },
-    { icon: <Heart className="w-4 h-4" />, number: "4", label: "Specialist Doctors", delay: 0.2 },
-    { icon: <Activity className="w-4 h-4" />, number: "6", label: "Hospital Locations", delay: 0.3 }
-  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,19 +43,6 @@ const MinimalistHero: React.FC = () => {
         ease: "easeOut"
       }
     }
-  };
-
-  const statsVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (delay: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        delay: delay + 0.8,
-        ease: "easeOut"
-      }
-    })
   };
 
   return (
@@ -139,43 +119,6 @@ const MinimalistHero: React.FC = () => {
             <p className="text-xl lg:text-2xl text-secondary-500 max-w-3xl mx-auto leading-relaxed font-light">
               Comprehensive cardiovascular services across Melbourne's southeast with a focus on personalized, compassionate care
             </p>
-          </motion.div>
-
-          {/* Statistics */}
-          <motion.div 
-            className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-4xl mx-auto"
-            variants={itemVariants}
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                className="bg-white/70 backdrop-blur-sm p-8 rounded-2xl border border-secondary-200/50 shadow-sm"
-                variants={statsVariants}
-                custom={stat.delay}
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 10px 25px rgba(0,0,0,0.08)"
-                }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <div className="space-y-4">
-                  <div className="bg-secondary-100/80 text-secondary-600 w-10 h-10 rounded-xl flex items-center justify-center mx-auto">
-                    {stat.icon}
-                  </div>
-                  <div className="text-center">
-                    <motion.div 
-                      className="text-3xl font-bold text-secondary-800"
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: stat.delay + 1.2, duration: 0.5 }}
-                    >
-                      {stat.number}
-                    </motion.div>
-                    <div className="text-sm text-secondary-500 font-medium">{stat.label}</div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
           </motion.div>
 
           {/* Call-to-Action */}
