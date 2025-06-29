@@ -19,8 +19,8 @@ const Doctors: React.FC = () => {
       locations: ["Cabrini Hospital Malvern"],
       appointments: ["Alfred Hospital", "Frankston Hospital"],
       description: "Dr Freilich is a pioneer in radial approach coronary angiography in Melbourne, having trained in this advanced technique in the United States. He specializes in interventional cardiac procedures with extensive experience in coronary interventions.",
-      gradient: "from-blue-500 via-blue-600 to-indigo-700",
-      accentColor: "blue"
+      gradient: "from-primary-500 via-primary-600 to-sage-700",
+      accentColor: "primary"
     },
     {
       name: "Dr Phillip Ngu",
@@ -34,8 +34,8 @@ const Doctors: React.FC = () => {
       locations: ["St John of God Berwick", "The Alfred Hospital"],
       appointments: ["Alfred Hospital"],
       description: "Dr Ngu specializes in advanced cardiac imaging and uses multi-modality imaging techniques to better understand cardiac disease and improve patient outcomes. His expertise spans all forms of non-invasive cardiac assessment.",
-      gradient: "from-emerald-500 via-emerald-600 to-teal-700",
-      accentColor: "emerald"
+      gradient: "from-sage-500 via-sage-600 to-accent-700",
+      accentColor: "sage"
     },
     {
       name: "Associate Professor Alex Voskoboinik",
@@ -49,8 +49,8 @@ const Doctors: React.FC = () => {
       locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
       appointments: ["Western Health", "Alfred Health"],
       description: "Associate Professor Voskoboinik is a leading electrophysiologist specializing in rhythm disorders. He has extensive research experience and has won prestigious awards including the Ralph Reader Prize for top young investigator.",
-      gradient: "from-rose-500 via-rose-600 to-pink-700",
-      accentColor: "rose"
+      gradient: "from-accent-500 via-accent-600 to-cream-700",
+      accentColor: "accent"
     },
     {
       name: "Dr Shane Nanayakkara",
@@ -64,8 +64,8 @@ const Doctors: React.FC = () => {
       locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
       appointments: ["Alfred Hospital"],
       description: "Dr Nanayakkara is an interventional and structural cardiologist with expertise in advanced procedures including transcatheter valve interventions. He combines clinical excellence with research innovation and has a passion for both face-to-face and telemedicine care.",
-      gradient: "from-amber-500 via-orange-600 to-red-700",
-      accentColor: "amber"
+      gradient: "from-cream-500 via-cream-600 to-primary-700",
+      accentColor: "cream"
     }
   ];
 
@@ -89,35 +89,117 @@ const Doctors: React.FC = () => {
   };
 
   return (
-    <section id="doctors" className="py-20 bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 relative overflow-hidden">
+    <section id="doctors" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20 relative overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-blue-200 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-24 h-24 bg-purple-200 rounded-full animate-bounce"></div>
-        <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-emerald-200 rounded-full animate-pulse"></div>
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-20 left-10 w-32 h-32 bg-primary-200 rounded-full animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-24 h-24 bg-accent-200 rounded-full animate-bounce"></div>
+        <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-sage-200 rounded-full animate-pulse"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Enhanced Header */}
         <div className="text-center mb-20">
-          <div className="inline-flex items-center space-x-2 bg-blue-100/80 backdrop-blur-sm px-4 py-2 rounded-full text-blue-700 font-medium mb-6">
+          <div className="inline-flex items-center space-x-2 bg-primary-100/80 backdrop-blur-sm px-4 py-2 rounded-full text-primary-700 font-medium mb-6">
             <Stethoscope className="w-4 h-4" />
             <span>Meet Our Expert Team</span>
           </div>
-          <h2 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
+          <h2 className="text-5xl lg:text-6xl font-bold text-secondary-800 mb-6 tracking-tight leading-tight">
             Our Expert
-            <span className="block bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-primary-600 via-accent-600 to-primary-800 bg-clip-text text-transparent">
               Cardiologists
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-secondary-600 max-w-4xl mx-auto leading-relaxed">
             Our team of highly qualified cardiologists brings extensive experience and specialized expertise in all aspects of cardiovascular care, from general cardiology to advanced interventional procedures.
           </p>
         </div>
 
-        {/* Premium Doctor Showcase */}
+        {/* Doctor Selection Cards - Above the main showcase */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          {doctors.map((doctor, index) => (
+            <button
+              key={index}
+              onMouseEnter={() => setHoveredCard(index)}
+              onMouseLeave={() => setHoveredCard(null)}
+              onClick={() => {
+                setSelectedDoctor(index);
+                setIsAutoPlaying(false);
+              }}
+              className={`group relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-lg transition-all duration-500 transform hover:-translate-y-2 cursor-pointer overflow-hidden border-2 ${
+                selectedDoctor === index 
+                  ? `border-${doctor.accentColor}-500 scale-105 shadow-xl` 
+                  : 'border-secondary-200/50 hover:border-primary-300'
+              }`}
+            >
+              {/* Card Background Gradient */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${doctor.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
+              
+              <div className="relative p-6 space-y-4">
+                {/* Doctor Image */}
+                <div className="relative">
+                  <img
+                    src={doctor.image}
+                    alt={doctor.name}
+                    className="w-16 h-16 object-cover rounded-xl mx-auto shadow-md group-hover:shadow-lg transition-shadow duration-300"
+                  />
+                  <div className={`absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r ${doctor.gradient} rounded-full flex items-center justify-center`}>
+                    <Heart className="w-2.5 h-2.5 text-white" />
+                  </div>
+                </div>
+                
+                {/* Doctor Info */}
+                <div className="text-center space-y-2">
+                  <h4 className="font-bold text-secondary-800 text-sm leading-tight">{doctor.name}</h4>
+                  <p className="text-xs text-primary-600 font-semibold">{doctor.specialization}</p>
+                  <p className="text-xs text-secondary-500">{doctor.experience}</p>
+                  
+                  {/* Locations */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-center space-x-1 text-xs text-secondary-500">
+                      <MapPin className="w-3 h-3" />
+                      <span>Primary Locations:</span>
+                    </div>
+                    <div className="space-y-1">
+                      {doctor.locations.slice(0, 2).map((location, idx) => (
+                        <div key={idx} className="text-xs text-secondary-600 font-medium">
+                          {location}
+                        </div>
+                      ))}
+                      {doctor.locations.length > 2 && (
+                        <div className="text-xs text-primary-600 font-medium">
+                          +{doctor.locations.length - 2} more
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Selection Indicator */}
+                {selectedDoctor === index && (
+                  <div className="absolute top-2 right-2">
+                    <div className={`w-3 h-3 bg-${doctor.accentColor}-500 rounded-full animate-pulse`}></div>
+                  </div>
+                )}
+
+                {/* Hover Effect */}
+                {hoveredCard === index && selectedDoctor !== index && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/95 to-white/90 backdrop-blur-sm flex items-center justify-center rounded-2xl transition-all duration-300">
+                    <div className="text-center space-y-2">
+                      <Calendar className={`w-6 h-6 mx-auto text-${doctor.accentColor}-600`} />
+                      <p className="font-bold text-secondary-800 text-sm">View Details</p>
+                      <p className="text-xs text-secondary-600">Click to learn more</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* Main Doctor Showcase - Below the selection cards */}
         <div className="mb-20">
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-secondary-100">
             <div className="grid lg:grid-cols-2">
               {/* Doctor Image and Info */}
               <div className={`relative bg-gradient-to-br ${doctors[selectedDoctor].gradient} p-12 lg:p-16`}>
@@ -131,8 +213,8 @@ const Doctors: React.FC = () => {
                         className="w-full h-full object-cover rounded-3xl shadow-2xl"
                       />
                       <div className="absolute -top-4 -right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full flex items-center space-x-2 shadow-lg">
-                        <MapPin className="w-5 h-5 text-blue-600" />
-                        <span className="font-bold text-gray-900 text-sm">{doctors[selectedDoctor].locations.length} Location{doctors[selectedDoctor].locations.length > 1 ? 's' : ''}</span>
+                        <MapPin className="w-5 h-5 text-primary-600" />
+                        <span className="font-bold text-secondary-900 text-sm">{doctors[selectedDoctor].locations.length} Location{doctors[selectedDoctor].locations.length > 1 ? 's' : ''}</span>
                       </div>
                     </div>
                   </div>
@@ -171,37 +253,37 @@ const Doctors: React.FC = () => {
               <div className="p-12 lg:p-16 space-y-8">
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 gap-6">
-                  <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl">
-                    <Clock className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-                    <p className="text-2xl font-bold text-gray-900">{doctors[selectedDoctor].experience}</p>
-                    <p className="text-sm text-gray-600 font-medium">Experience</p>
+                  <div className="text-center p-6 bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl">
+                    <Clock className="w-8 h-8 text-primary-600 mx-auto mb-3" />
+                    <p className="text-2xl font-bold text-secondary-900">{doctors[selectedDoctor].experience}</p>
+                    <p className="text-sm text-secondary-600 font-medium">Experience</p>
                   </div>
-                  <div className="text-center p-6 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl">
-                    <Users className="w-8 h-8 text-emerald-600 mx-auto mb-3" />
-                    <p className="text-2xl font-bold text-gray-900">{doctors[selectedDoctor].patients}</p>
-                    <p className="text-sm text-gray-600 font-medium">Patients</p>
+                  <div className="text-center p-6 bg-gradient-to-br from-sage-50 to-sage-100 rounded-2xl">
+                    <Users className="w-8 h-8 text-sage-600 mx-auto mb-3" />
+                    <p className="text-2xl font-bold text-secondary-900">{doctors[selectedDoctor].patients}</p>
+                    <p className="text-sm text-secondary-600 font-medium">Patients</p>
                   </div>
                 </div>
 
                 {/* Education */}
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
-                    <div className="bg-purple-100 p-2 rounded-lg">
-                      <GraduationCap className="w-6 h-6 text-purple-600" />
+                    <div className="bg-accent-100 p-2 rounded-lg">
+                      <GraduationCap className="w-6 h-6 text-accent-600" />
                     </div>
-                    <span className="font-bold text-gray-900 text-lg">Education & Training</span>
+                    <span className="font-bold text-secondary-900 text-lg">Education & Training</span>
                   </div>
-                  <p className="text-gray-600 leading-relaxed pl-11">{doctors[selectedDoctor].education}</p>
+                  <p className="text-secondary-600 leading-relaxed pl-11">{doctors[selectedDoctor].education}</p>
                 </div>
 
                 {/* Expertise */}
                 <div className="space-y-4">
-                  <h4 className="font-bold text-gray-900 text-lg">Areas of Expertise</h4>
+                  <h4 className="font-bold text-secondary-900 text-lg">Areas of Expertise</h4>
                   <div className="grid grid-cols-1 gap-3">
                     {doctors[selectedDoctor].expertise.map((skill, idx) => (
-                      <div key={idx} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                        <span className="text-gray-700 font-medium">{skill}</span>
+                      <div key={idx} className="flex items-center space-x-3 p-3 bg-secondary-50 rounded-xl">
+                        <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
+                        <span className="text-secondary-700 font-medium">{skill}</span>
                       </div>
                     ))}
                   </div>
@@ -210,16 +292,16 @@ const Doctors: React.FC = () => {
                 {/* Locations */}
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
-                    <div className="bg-emerald-100 p-2 rounded-lg">
-                      <MapPin className="w-6 h-6 text-emerald-600" />
+                    <div className="bg-sage-100 p-2 rounded-lg">
+                      <MapPin className="w-6 h-6 text-sage-600" />
                     </div>
-                    <span className="font-bold text-gray-900 text-lg">Primary Locations</span>
+                    <span className="font-bold text-secondary-900 text-lg">Primary Locations</span>
                   </div>
                   <div className="space-y-2 pl-11">
                     {doctors[selectedDoctor].locations.map((location, idx) => (
                       <div key={idx} className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                        <span className="text-gray-600 font-medium">{location}</span>
+                        <div className="w-2 h-2 bg-sage-500 rounded-full"></div>
+                        <span className="text-secondary-600 font-medium">{location}</span>
                       </div>
                     ))}
                   </div>
@@ -233,7 +315,7 @@ const Doctors: React.FC = () => {
             </div>
 
             {/* Enhanced Doctor Selection */}
-            <div className="flex justify-center space-x-4 p-8 bg-gray-50/50">
+            <div className="flex justify-center space-x-4 p-8 bg-secondary-50/50">
               {doctors.map((_, index) => (
                 <button
                   key={index}
@@ -244,7 +326,7 @@ const Doctors: React.FC = () => {
                   className={`transition-all duration-300 ${
                     index === selectedDoctor 
                       ? `bg-gradient-to-r ${doctors[index].gradient} w-12 h-4 rounded-full` 
-                      : 'bg-gray-300 hover:bg-gray-400 w-4 h-4 rounded-full'
+                      : 'bg-secondary-300 hover:bg-secondary-400 w-4 h-4 rounded-full'
                   }`}
                 />
               ))}
@@ -252,81 +334,8 @@ const Doctors: React.FC = () => {
           </div>
         </div>
 
-        {/* Premium Doctor Cards Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          {doctors.map((doctor, index) => (
-            <div
-              key={index}
-              onMouseEnter={() => setHoveredCard(index)}
-              onMouseLeave={() => setHoveredCard(null)}
-              onClick={() => {
-                setSelectedDoctor(index);
-                setIsAutoPlaying(false);
-              }}
-              className={`group relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 cursor-pointer overflow-hidden ${
-                selectedDoctor === index ? 'ring-2 ring-blue-500 scale-105' : ''
-              }`}
-            >
-              {/* Card Background Gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${doctor.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
-              
-              <div className="relative p-8 space-y-6">
-                {/* Doctor Image */}
-                <div className="relative">
-                  <img
-                    src={doctor.image}
-                    alt={doctor.name}
-                    className="w-20 h-20 object-cover rounded-2xl mx-auto shadow-lg group-hover:shadow-xl transition-shadow duration-300"
-                  />
-                  <div className={`absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r ${doctor.gradient} rounded-full flex items-center justify-center`}>
-                    <Heart className="w-3 h-3 text-white" />
-                  </div>
-                </div>
-                
-                {/* Doctor Info */}
-                <div className="text-center space-y-3">
-                  <h4 className="font-bold text-gray-900 text-lg leading-tight">{doctor.name}</h4>
-                  <p className="text-sm text-blue-600 font-semibold">{doctor.specialization}</p>
-                  <p className="text-xs text-gray-600">{doctor.experience}</p>
-                  
-                  {/* Locations */}
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-center space-x-1 text-xs text-gray-500">
-                      <MapPin className="w-3 h-3" />
-                      <span>Primary Locations:</span>
-                    </div>
-                    <div className="space-y-1">
-                      {doctor.locations.slice(0, 2).map((location, idx) => (
-                        <div key={idx} className="text-xs text-gray-600 font-medium">
-                          {location}
-                        </div>
-                      ))}
-                      {doctor.locations.length > 2 && (
-                        <div className="text-xs text-blue-600 font-medium">
-                          +{doctor.locations.length - 2} more
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Hover Effect */}
-                {hoveredCard === index && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/95 to-white/90 backdrop-blur-sm flex items-center justify-center rounded-2xl transition-all duration-300">
-                    <div className="text-center space-y-3">
-                      <Calendar className={`w-8 h-8 mx-auto text-${doctor.accentColor}-600`} />
-                      <p className="font-bold text-gray-900">Book Consultation</p>
-                      <p className="text-sm text-gray-600">Click to learn more</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-
         {/* Enhanced Statistics */}
-        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-3xl p-12 text-white relative overflow-hidden">
+        <div className="bg-gradient-to-r from-primary-600 via-accent-600 to-primary-800 rounded-3xl p-12 text-white relative overflow-hidden">
           <div className="absolute inset-0 opacity-20">
             <div className="absolute top-10 left-10 w-32 h-32 border-2 border-white rounded-full"></div>
             <div className="absolute bottom-10 right-10 w-24 h-24 border-2 border-white rounded-full"></div>
