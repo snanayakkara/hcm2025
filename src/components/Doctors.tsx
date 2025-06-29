@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Award, GraduationCap, Clock, MapPin, Stethoscope, ChevronLeft, ChevronRight, Calendar, Users, Heart } from 'lucide-react';
+import { Award, GraduationCap, MapPin, Stethoscope, ChevronLeft, ChevronRight, Calendar, Users, Heart } from 'lucide-react';
 
 const Doctors: React.FC = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(0);
@@ -11,11 +11,9 @@ const Doctors: React.FC = () => {
       name: "Dr Mark Freilich",
       title: "General & Interventional Cardiologist",
       specialization: "Interventional Cardiac Procedures",
-      experience: "15+ Years",
       education: "MBBS (Hons) Monash University 1999, Fellowship Lahey Clinic Medical Centre Boston",
       expertise: ["Radial (wrist) approach coronary angiography", "Interventional cardiology", "Coronary angiograms", "General cardiology"],
       image: "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=400",
-      patients: "2000+",
       locations: ["Cabrini Hospital Malvern"],
       appointments: ["Alfred Hospital", "Frankston Hospital"],
       description: "Dr Freilich is a pioneer in radial approach coronary angiography in Melbourne, having trained in this advanced technique in the United States. He specializes in interventional cardiac procedures with extensive experience in coronary interventions.",
@@ -26,11 +24,9 @@ const Doctors: React.FC = () => {
       name: "Dr Phillip Ngu",
       title: "General & Non-invasive Imaging Cardiologist",
       specialization: "Cardiac Imaging & General Cardiology",
-      experience: "8+ Years",
       education: "MBBS (Hons) Monash University 2007, Cardiac Imaging Fellowship Alfred Hospital 2017",
       expertise: ["Echocardiography (resting, stress, TOE)", "CT coronary angiography", "Cardiac MRI", "Multi-modality imaging"],
       image: "https://images.pexels.com/photos/5327921/pexels-photo-5327921.jpeg?auto=compress&cs=tinysrgb&w=400",
-      patients: "1500+",
       locations: ["St John of God Berwick", "The Alfred Hospital"],
       appointments: ["Alfred Hospital"],
       description: "Dr Ngu specializes in advanced cardiac imaging and uses multi-modality imaging techniques to better understand cardiac disease and improve patient outcomes. His expertise spans all forms of non-invasive cardiac assessment.",
@@ -41,11 +37,9 @@ const Doctors: React.FC = () => {
       name: "Associate Professor Alex Voskoboinik",
       title: "General Cardiologist & Electrophysiologist",
       specialization: "Cardiac Rhythm Disturbances",
-      experience: "7+ Years",
       education: "MBBS (Hons) Monash University 2008, PhD Baker Heart Institute 2019, Fellowship UCSF 2019",
       expertise: ["Pacemaker implantation", "Defibrillator implantation", "Catheter ablation", "Atrial fibrillation treatment"],
       image: "https://images.pexels.com/photos/5214030/pexels-photo-5214030.jpeg?auto=compress&cs=tinysrgb&w=400",
-      patients: "1200+",
       locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
       appointments: ["Western Health", "Alfred Health"],
       description: "Associate Professor Voskoboinik is a leading electrophysiologist specializing in rhythm disorders. He has extensive research experience and has won prestigious awards including the Ralph Reader Prize for top young investigator.",
@@ -56,11 +50,9 @@ const Doctors: React.FC = () => {
       name: "Dr Shane Nanayakkara",
       title: "Interventional & Structural Cardiologist",
       specialization: "Advanced Interventional Procedures",
-      experience: "6+ Years",
       education: "MBBS Monash University, PhD Heart Failure, Advanced Fellowships in Intervention",
       expertise: ["Coronary angiography", "Coronary stenting", "Transcatheter valve procedures", "Structural heart interventions"],
       image: "https://images.pexels.com/photos/6129967/pexels-photo-6129967.jpeg?auto=compress&cs=tinysrgb&w=400",
-      patients: "1000+",
       locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
       appointments: ["Alfred Hospital"],
       description: "Dr Nanayakkara is an interventional and structural cardiologist with expertise in advanced procedures including transcatheter valve interventions. He combines clinical excellence with research innovation and has a passion for both face-to-face and telemedicine care.",
@@ -152,7 +144,6 @@ const Doctors: React.FC = () => {
                 <div className="text-center space-y-2">
                   <h4 className="font-bold text-secondary-800 text-sm leading-tight">{doctor.name}</h4>
                   <p className="text-xs text-primary-600 font-semibold">{doctor.specialization}</p>
-                  <p className="text-xs text-secondary-500">{doctor.experience}</p>
                   
                   {/* Locations */}
                   <div className="space-y-1">
@@ -251,20 +242,6 @@ const Doctors: React.FC = () => {
 
               {/* Doctor Details */}
               <div className="p-12 lg:p-16 space-y-8">
-                {/* Stats Grid */}
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="text-center p-6 bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl">
-                    <Clock className="w-8 h-8 text-primary-600 mx-auto mb-3" />
-                    <p className="text-2xl font-bold text-secondary-900">{doctors[selectedDoctor].experience}</p>
-                    <p className="text-sm text-secondary-600 font-medium">Experience</p>
-                  </div>
-                  <div className="text-center p-6 bg-gradient-to-br from-sage-50 to-sage-100 rounded-2xl">
-                    <Users className="w-8 h-8 text-sage-600 mx-auto mb-3" />
-                    <p className="text-2xl font-bold text-secondary-900">{doctors[selectedDoctor].patients}</p>
-                    <p className="text-sm text-secondary-600 font-medium">Patients</p>
-                  </div>
-                </div>
-
                 {/* Education */}
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
@@ -305,6 +282,12 @@ const Doctors: React.FC = () => {
                       </div>
                     ))}
                   </div>
+                </div>
+
+                {/* Description */}
+                <div className="space-y-4">
+                  <h4 className="font-bold text-secondary-900 text-lg">About</h4>
+                  <p className="text-secondary-600 leading-relaxed">{doctors[selectedDoctor].description}</p>
                 </div>
 
                 {/* CTA Button */}
