@@ -21,16 +21,6 @@ const ReceptionTeam: React.FC = () => {
   // Reception Team Members
   const receptionTeam = [
     {
-      name: "Michelle Goodier",
-      title: "Patient Care Coordinator",
-      experience: "Extensive Customer Service",
-      description: "Michelle joined our team in 2022. Michelle has a long career in customer service roles including aged care as a personal carer. She is caring, friendly and brings a bright demeanour to the practice.",
-      qualities: ["Caring & Friendly", "Bright Demeanour", "Patient Comfort", "Customer Service"],
-      image: "https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=400",
-      specialties: ["Customer Service", "Aged Care", "Personal Care", "Patient Support"],
-      color: "from-sage-100 to-primary-100"
-    },
-    {
       name: "Louise Georgeson",
       title: "Medical Receptionist",
       experience: "Healthcare Administration",
@@ -39,6 +29,16 @@ const ReceptionTeam: React.FC = () => {
       image: "https://images.pexels.com/photos/5327656/pexels-photo-5327656.jpeg?auto=compress&cs=tinysrgb&w=400",
       specialties: ["Healthcare Administration", "Appointment Scheduling", "Patient Records", "Insurance Processing"],
       color: "from-cream-100 to-sage-100"
+    },
+    {
+      name: "Michelle Goodier",
+      title: "Patient Care Coordinator",
+      experience: "Extensive Customer Service",
+      description: "Michelle joined our team in 2022. Michelle has a long career in customer service roles including aged care as a personal carer. She is caring, friendly and brings a bright demeanour to the practice.",
+      qualities: ["Caring & Friendly", "Bright Demeanour", "Patient Comfort", "Customer Service"],
+      image: "https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=400",
+      specialties: ["Customer Service", "Aged Care", "Personal Care", "Patient Support"],
+      color: "from-sage-100 to-primary-100"
     },
     {
       name: "Jennifer Haywood",
