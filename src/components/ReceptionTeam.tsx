@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Users, Heart, Clock, Phone, Smile, Award, Stethoscope, Activity } from 'lucide-react';
+import { Users, Heart, Phone, Smile, Award, Stethoscope, Activity } from 'lucide-react';
 
 const ReceptionTeam: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -11,7 +11,6 @@ const ReceptionTeam: React.FC = () => {
     name: "Emma Mayne",
     title: "Practice Manager",
     experience: "7+ Years",
-    joinedYear: "2022",
     description: "Emma joined the team in 2022 and has more than 7 years of medical administration experience, both in a hospital and clinical settings. As Practice Manager, she oversees all clinic operations and ensures the highest standards of patient care. Emma is known to be kind, empathetic and professional and always does whatever she can to help patients and her colleagues.",
     qualities: ["Leadership & Management", "Kind & Empathetic", "Professional Excellence", "Operational Oversight"],
     image: "https://images.pexels.com/photos/5327921/pexels-photo-5327921.jpeg?auto=compress&cs=tinysrgb&w=400",
@@ -25,7 +24,6 @@ const ReceptionTeam: React.FC = () => {
       name: "Michelle Goodier",
       title: "Patient Care Coordinator",
       experience: "Extensive Customer Service",
-      joinedYear: "2022",
       description: "Michelle joined our team in 2022. Michelle has a long career in customer service roles including aged care as a personal carer. She is caring, friendly and brings a bright demeanour to the practice.",
       qualities: ["Caring & Friendly", "Bright Demeanour", "Patient Comfort", "Customer Service"],
       image: "https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=400",
@@ -36,7 +34,6 @@ const ReceptionTeam: React.FC = () => {
       name: "Louise Georgeson",
       title: "Medical Receptionist",
       experience: "Healthcare Administration",
-      joinedYear: "2023",
       description: "Louise brings valuable healthcare administration experience to our team. She is dedicated to ensuring smooth clinic operations and providing excellent patient service with attention to detail and professionalism.",
       qualities: ["Detail-Oriented", "Professional", "Reliable", "Patient-Focused"],
       image: "https://images.pexels.com/photos/5327656/pexels-photo-5327656.jpeg?auto=compress&cs=tinysrgb&w=400",
@@ -47,7 +44,6 @@ const ReceptionTeam: React.FC = () => {
       name: "Jennifer Haywood",
       title: "Administrative Assistant",
       experience: "Medical Office Support",
-      joinedYear: "2023",
       description: "Jennifer provides essential administrative support to our clinical team. Her organizational skills and warm personality help create a welcoming environment for all patients visiting our clinic.",
       qualities: ["Organized", "Warm Personality", "Supportive", "Efficient"],
       image: "https://images.pexels.com/photos/5327580/pexels-photo-5327580.jpeg?auto=compress&cs=tinysrgb&w=400",
@@ -58,7 +54,6 @@ const ReceptionTeam: React.FC = () => {
       name: "Georgie Kerr",
       title: "Reception Coordinator",
       experience: "Front Office Management",
-      joinedYear: "2024",
       description: "Georgie coordinates our front office operations with enthusiasm and professionalism. She ensures that every patient interaction is positive and that our reception area runs smoothly throughout the day.",
       qualities: ["Enthusiastic", "Coordinated", "Professional", "Team Player"],
       image: "https://images.pexels.com/photos/5327647/pexels-photo-5327647.jpeg?auto=compress&cs=tinysrgb&w=400",
@@ -69,7 +64,6 @@ const ReceptionTeam: React.FC = () => {
       name: "Alison Hodgens",
       title: "Patient Services Specialist",
       experience: "Healthcare Support",
-      joinedYear: "2024",
       description: "Alison specializes in patient services and support, helping patients navigate their healthcare journey with confidence. Her compassionate approach ensures every patient feels heard and supported.",
       qualities: ["Compassionate", "Supportive", "Knowledgeable", "Patient Advocate"],
       image: "https://images.pexels.com/photos/5327648/pexels-photo-5327648.jpeg?auto=compress&cs=tinysrgb&w=400",
@@ -80,7 +74,6 @@ const ReceptionTeam: React.FC = () => {
       name: "Leanne Marshall",
       title: "Administrative Coordinator",
       experience: "Medical Administration",
-      joinedYear: "2024",
       description: "Leanne coordinates various administrative functions across our multiple locations. Her attention to detail and systematic approach help maintain consistency and quality in all our administrative processes.",
       qualities: ["Systematic", "Detail-Focused", "Multi-Location Coordinator", "Quality-Driven"],
       image: "https://images.pexels.com/photos/5327649/pexels-photo-5327649.jpeg?auto=compress&cs=tinysrgb&w=400",
@@ -95,7 +88,6 @@ const ReceptionTeam: React.FC = () => {
       name: "Janie Puah",
       title: "Senior Cardiac Sonographer",
       experience: "Specialized Cardiac Imaging",
-      joinedYear: "2023",
       description: "Janie is our senior cardiac sonographer with extensive experience in echocardiography and cardiac imaging. She provides high-quality diagnostic imaging services and works closely with our cardiologists to ensure accurate assessments.",
       qualities: ["Technical Excellence", "Patient Care", "Diagnostic Expertise", "Professional Development"],
       image: "https://images.pexels.com/photos/5327921/pexels-photo-5327921.jpeg?auto=compress&cs=tinysrgb&w=400",
@@ -106,7 +98,6 @@ const ReceptionTeam: React.FC = () => {
       name: "Aaron Williams",
       title: "Cardiac Sonographer",
       experience: "Diagnostic Imaging",
-      joinedYear: "2024",
       description: "Aaron brings fresh expertise to our imaging team with a focus on providing comfortable patient experiences during diagnostic procedures. His technical skills and patient-centered approach make him a valuable addition to our team.",
       qualities: ["Technical Proficiency", "Patient Comfort", "Innovation", "Collaborative"],
       image: "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=400",
@@ -190,10 +181,6 @@ const ReceptionTeam: React.FC = () => {
                 <div className="space-y-3">
                   <h3 className="text-3xl font-bold text-secondary-800">{practiceManager.name}</h3>
                   <p className="text-primary-600 font-semibold text-xl">{practiceManager.title}</p>
-                  <div className="flex items-center space-x-2 text-secondary-600">
-                    <Clock className="w-4 h-4" />
-                    <span className="text-sm">Joined our team in {practiceManager.joinedYear}</span>
-                  </div>
                 </div>
 
                 {/* Description */}
@@ -254,11 +241,6 @@ const ReceptionTeam: React.FC = () => {
                     className="w-full h-full object-cover mix-blend-overlay"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                  
-                  {/* Year Badge */}
-                  <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full">
-                    <span className="text-xs font-semibold text-secondary-900">{member.joinedYear}</span>
-                  </div>
                 </div>
 
                 {/* Member Info */}
@@ -336,10 +318,6 @@ const ReceptionTeam: React.FC = () => {
                     <div className="space-y-2">
                       <h4 className="text-xl font-bold text-secondary-800">{tech.name}</h4>
                       <p className="text-sage-600 font-semibold">{tech.title}</p>
-                      <div className="flex items-center space-x-2 text-secondary-600">
-                        <Clock className="w-4 h-4" />
-                        <span className="text-sm">Joined in {tech.joinedYear}</span>
-                      </div>
                     </div>
 
                     {/* Description */}
