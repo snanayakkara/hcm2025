@@ -129,9 +129,9 @@ const MinimalistHero: React.FC = () => {
           {/* Main Headline */}
           <motion.div className="space-y-12" variants={itemVariants}>
             <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold text-secondary-800 leading-[0.9] tracking-tight">
-              Expert Cardiac
+              Welcome to
               <span className="block bg-gradient-to-r from-primary-500 via-accent-500 to-primary-600 bg-clip-text text-transparent">
-                Care
+                Heart Clinic Melbourne
               </span>
             </h1>
             
