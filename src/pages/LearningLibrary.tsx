@@ -22,7 +22,15 @@ import {
   ArrowLeft,
   Zap,
   Calendar,
-  Users
+  Users,
+  Phone,
+  Mail,
+  Shield,
+  Clipboard,
+  Home,
+  Car,
+  Bed,
+  Pill
 } from 'lucide-react';
 import ProgressivePatientJourney from '../components/ProgressivePatientJourney';
 
@@ -31,6 +39,7 @@ const LearningLibrary: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
+  const [selectedProcedure, setSelectedProcedure] = useState('general');
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -57,6 +66,401 @@ const LearningLibrary: React.FC = () => {
     { id: 'videos', label: 'Educational Videos', icon: <PlayCircle className="w-5 h-5" /> },
     { id: 'conditions', label: 'Heart Conditions', icon: <Heart className="w-5 h-5" /> },
     { id: 'tests', label: 'Tests & Procedures', icon: <Activity className="w-5 h-5" /> }
+  ];
+
+  const procedureJourneys = [
+    {
+      id: 'general',
+      name: 'General Patient Journey',
+      description: 'Standard cardiac care pathway for consultations and basic procedures',
+      icon: <Heart className="w-6 h-6" />,
+      color: 'from-primary-500 to-accent-500'
+    },
+    {
+      id: 'tavi',
+      name: 'TAVI (Transcatheter Aortic Valve Implantation)',
+      description: 'Minimally invasive aortic valve replacement procedure',
+      icon: <Heart className="w-6 h-6" />,
+      color: 'from-red-500 to-pink-500',
+      steps: [
+        {
+          phase: 'Pre-Assessment',
+          duration: '2-4 weeks',
+          activities: [
+            'Initial consultation with cardiologist',
+            'Comprehensive cardiac imaging (CT, Echo)',
+            'Blood tests and kidney function assessment',
+            'Anesthesia consultation',
+            'Heart team discussion and planning'
+          ],
+          preparation: [
+            'Bring all current medications list',
+            'Complete pre-operative questionnaires',
+            'Arrange transport for procedure day',
+            'Follow fasting instructions'
+          ]
+        },
+        {
+          phase: 'Procedure Day',
+          duration: '2-4 hours',
+          activities: [
+            'Admission and pre-procedure checks',
+            'Anesthesia (conscious sedation or general)',
+            'Catheter insertion via groin or wrist',
+            'Valve deployment under X-ray guidance',
+            'Post-procedure monitoring'
+          ],
+          preparation: [
+            'Fast from midnight before procedure',
+            'Take prescribed medications as directed',
+            'Wear comfortable, loose clothing',
+            'Remove jewelry and dentures'
+          ]
+        },
+        {
+          phase: 'Recovery',
+          duration: '2-5 days',
+          activities: [
+            'Intensive monitoring for 24 hours',
+            'Gradual mobilization',
+            'Echocardiogram to check valve function',
+            'Medication adjustments',
+            'Discharge planning and education'
+          ],
+          preparation: [
+            'Arrange home support for first week',
+            'Prepare comfortable recovery area at home',
+            'Organize follow-up appointments',
+            'Understand activity restrictions'
+          ]
+        },
+        {
+          phase: 'Follow-up Care',
+          duration: 'Ongoing',
+          activities: [
+            '30-day follow-up appointment',
+            '6-month and annual check-ups',
+            'Regular echocardiograms',
+            'Blood thinner management if required',
+            'Lifestyle counseling and support'
+          ],
+          preparation: [
+            'Keep medication diary',
+            'Monitor for any concerning symptoms',
+            'Maintain regular exercise as advised',
+            'Attend all scheduled appointments'
+          ]
+        }
+      ]
+    },
+    {
+      id: 'toe-dcr',
+      name: 'TOE +/- DCR (Transesophageal Echo +/- Cardioversion)',
+      description: 'Advanced cardiac imaging with possible rhythm correction',
+      icon: <Activity className="w-6 h-6" />,
+      color: 'from-blue-500 to-cyan-500',
+      steps: [
+        {
+          phase: 'Pre-Procedure',
+          duration: '1-2 weeks',
+          activities: [
+            'Consultation and procedure explanation',
+            'Blood tests including clotting studies',
+            'Medication review and adjustments',
+            'Consent process and risk discussion',
+            'Pre-procedure instructions provided'
+          ],
+          preparation: [
+            'Fast for 6 hours before procedure',
+            'Continue blood thinners as directed',
+            'Arrange transport home',
+            'Bring current medication list'
+          ]
+        },
+        {
+          phase: 'Procedure',
+          duration: '30-60 minutes',
+          activities: [
+            'IV line insertion and monitoring setup',
+            'Conscious sedation administration',
+            'TOE probe insertion and imaging',
+            'Cardioversion if indicated and safe',
+            'Post-procedure monitoring'
+          ],
+          preparation: [
+            'Remove dentures and jewelry',
+            'Wear comfortable clothing',
+            'Inform staff of any allergies',
+            'Relax and follow staff instructions'
+          ]
+        },
+        {
+          phase: 'Recovery',
+          duration: '2-4 hours',
+          activities: [
+            'Monitoring in recovery area',
+            'Gradual return to normal swallowing',
+            'Heart rhythm monitoring',
+            'Discharge when stable',
+            'Results discussion with doctor'
+          ],
+          preparation: [
+            'Rest quietly during recovery',
+            'Avoid eating until swallowing returns to normal',
+            'Have someone available to drive you home',
+            'Follow post-procedure instructions'
+          ]
+        },
+        {
+          phase: 'Post-Procedure',
+          duration: '1-2 weeks',
+          activities: [
+            'Follow-up appointment scheduling',
+            'Medication adjustments if needed',
+            'Activity recommendations',
+            'Symptom monitoring',
+            'Results integration into care plan'
+          ],
+          preparation: [
+            'Monitor for any unusual symptoms',
+            'Take medications as prescribed',
+            'Gradually return to normal activities',
+            'Contact clinic with any concerns'
+          ]
+        }
+      ]
+    },
+    {
+      id: 'angiogram-pci',
+      name: 'Coronary Angiogram & PCI',
+      description: 'Diagnostic imaging and treatment of coronary artery blockages',
+      icon: <Zap className="w-6 h-6" />,
+      color: 'from-orange-500 to-red-500',
+      steps: [
+        {
+          phase: 'Pre-Procedure',
+          duration: '1-2 weeks',
+          activities: [
+            'Pre-procedure consultation',
+            'Blood tests and kidney function check',
+            'Medication review and adjustments',
+            'Allergy assessment (contrast dye)',
+            'Consent and risk discussion'
+          ],
+          preparation: [
+            'Fast for 6 hours before procedure',
+            'Continue heart medications unless advised otherwise',
+            'Arrange transport and overnight stay if needed',
+            'Bring insurance and identification'
+          ]
+        },
+        {
+          phase: 'Procedure',
+          duration: '30-90 minutes',
+          activities: [
+            'Local anesthetic at catheter site',
+            'Catheter insertion (wrist or groin)',
+            'Contrast injection and X-ray imaging',
+            'PCI (stent placement) if blockages found',
+            'Catheter removal and pressure application'
+          ],
+          preparation: [
+            'Wear hospital gown',
+            'Remove jewelry and contact lenses',
+            'Inform staff of any discomfort',
+            'Stay still during imaging'
+          ]
+        },
+        {
+          phase: 'Recovery',
+          duration: '4-24 hours',
+          activities: [
+            'Bed rest with pressure on catheter site',
+            'Regular monitoring of vital signs',
+            'Gradual mobilization',
+            'Medication administration',
+            'Discharge planning'
+          ],
+          preparation: [
+            'Rest flat for prescribed time',
+            'Drink plenty of fluids',
+            'Report any chest pain or bleeding',
+            'Follow mobilization instructions'
+          ]
+        },
+        {
+          phase: 'Follow-up',
+          duration: 'Ongoing',
+          activities: [
+            'Follow-up appointment in 1-2 weeks',
+            'Medication optimization',
+            'Cardiac rehabilitation referral',
+            'Lifestyle counseling',
+            'Long-term monitoring plan'
+          ],
+          preparation: [
+            'Take dual antiplatelet therapy as prescribed',
+            'Monitor catheter site for complications',
+            'Gradually increase activity level',
+            'Attend cardiac rehabilitation if recommended'
+          ]
+        }
+      ]
+    },
+    {
+      id: 'pacemaker',
+      name: 'Pacemaker Implantation',
+      description: 'Device implantation for heart rhythm management',
+      icon: <Zap className="w-6 h-6" />,
+      color: 'from-purple-500 to-indigo-500',
+      steps: [
+        {
+          phase: 'Pre-Implantation',
+          duration: '1-2 weeks',
+          activities: [
+            'Comprehensive cardiac evaluation',
+            'Device selection and programming plan',
+            'Pre-operative assessment',
+            'Antibiotic prophylaxis planning',
+            'Patient education about device'
+          ],
+          preparation: [
+            'Complete pre-operative tests',
+            'Arrange post-procedure support at home',
+            'Understand device limitations and benefits',
+            'Prepare questions for medical team'
+          ]
+        },
+        {
+          phase: 'Implantation',
+          duration: '1-2 hours',
+          activities: [
+            'Local anesthesia and sedation',
+            'Small incision below collarbone',
+            'Lead placement in heart chambers',
+            'Device testing and programming',
+            'Incision closure and dressing'
+          ],
+          preparation: [
+            'Fast from midnight before procedure',
+            'Wear comfortable, front-opening clothing',
+            'Remove jewelry from upper body',
+            'Follow pre-procedure medication instructions'
+          ]
+        },
+        {
+          phase: 'Recovery',
+          duration: '1-2 days',
+          activities: [
+            'Overnight monitoring',
+            'Chest X-ray to check lead position',
+            'Device interrogation and programming',
+            'Wound care education',
+            'Activity restriction counseling'
+          ],
+          preparation: [
+            'Keep arm movement limited for 24 hours',
+            'Keep incision site dry and clean',
+            'Report any unusual symptoms',
+            'Understand activity restrictions'
+          ]
+        },
+        {
+          phase: 'Long-term Care',
+          duration: 'Lifelong',
+          activities: [
+            'Regular device checks (3-6 monthly)',
+            'Battery monitoring',
+            'Lead function assessment',
+            'Medication adjustments',
+            'Lifestyle adaptation support'
+          ],
+          preparation: [
+            'Carry device identification card',
+            'Understand electromagnetic interference',
+            'Maintain regular follow-up schedule',
+            'Know when to contact device clinic'
+          ]
+        }
+      ]
+    },
+    {
+      id: 'af-ablation',
+      name: 'Atrial Fibrillation Ablation',
+      description: 'Catheter-based treatment to restore normal heart rhythm',
+      icon: <Activity className="w-6 h-6" />,
+      color: 'from-green-500 to-teal-500',
+      steps: [
+        {
+          phase: 'Pre-Ablation',
+          duration: '2-4 weeks',
+          activities: [
+            'Comprehensive AF evaluation',
+            'TOE to exclude blood clots',
+            'CT or MRI cardiac imaging',
+            'Anticoagulation optimization',
+            'Pre-procedure planning meeting'
+          ],
+          preparation: [
+            'Continue blood thinners as directed',
+            'Complete all pre-procedure tests',
+            'Arrange extended time off work',
+            'Organize support for recovery period'
+          ]
+        },
+        {
+          phase: 'Ablation Procedure',
+          duration: '3-6 hours',
+          activities: [
+            'General anesthesia or deep sedation',
+            'Multiple catheter insertion via groin',
+            '3D mapping of heart chambers',
+            'Radiofrequency or cryoablation',
+            'Testing of ablation effectiveness'
+          ],
+          preparation: [
+            'Fast from midnight before procedure',
+            'Take prescribed medications',
+            'Arrange overnight hospital stay',
+            'Understand procedure risks and benefits'
+          ]
+        },
+        {
+          phase: 'Recovery',
+          duration: '1-3 days',
+          activities: [
+            'Intensive monitoring for complications',
+            'Gradual mobilization',
+            'Heart rhythm monitoring',
+            'Pain management',
+            'Discharge planning and education'
+          ],
+          preparation: [
+            'Rest with limited movement initially',
+            'Monitor for any chest pain or bleeding',
+            'Follow fluid intake recommendations',
+            'Understand activity restrictions'
+          ]
+        },
+        {
+          phase: 'Follow-up',
+          duration: '3-6 months',
+          activities: [
+            'Regular rhythm monitoring',
+            'Medication adjustments',
+            'Activity progression guidance',
+            'Symptom assessment',
+            'Success evaluation at 3 months'
+          ],
+          preparation: [
+            'Continue anticoagulation as directed',
+            'Monitor for AF recurrence',
+            'Gradually increase activity level',
+            'Attend all follow-up appointments'
+          ]
+        }
+      ]
+    }
   ];
 
   const faqData = [
@@ -309,6 +713,30 @@ const LearningLibrary: React.FC = () => {
     window.history.back();
   };
 
+  const getPhaseIcon = (phase: string) => {
+    switch (phase.toLowerCase()) {
+      case 'pre-assessment':
+      case 'pre-procedure':
+      case 'pre-implantation':
+      case 'pre-ablation':
+        return <Clipboard className="w-5 h-5" />;
+      case 'procedure day':
+      case 'procedure':
+      case 'implantation':
+      case 'ablation procedure':
+        return <Stethoscope className="w-5 h-5" />;
+      case 'recovery':
+        return <Bed className="w-5 h-5" />;
+      case 'follow-up care':
+      case 'follow-up':
+      case 'post-procedure':
+      case 'long-term care':
+        return <Calendar className="w-5 h-5" />;
+      default:
+        return <CheckCircle className="w-5 h-5" />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-cream-50 via-white to-primary-50/20">
       {/* Header with Back Button */}
@@ -496,8 +924,149 @@ const LearningLibrary: React.FC = () => {
         <div className={`transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           {/* Journey Maps Tab */}
           {activeTab === 'journey-maps' && (
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200/50 overflow-hidden">
-              <ProgressivePatientJourney />
+            <div className="space-y-16">
+              {/* Procedure Selection */}
+              <div className="text-center mb-12">
+                <h3 className="text-3xl font-bold text-secondary-800 mb-8">Select a Procedure Journey</h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                  {procedureJourneys.map((procedure) => (
+                    <button
+                      key={procedure.id}
+                      onClick={() => setSelectedProcedure(procedure.id)}
+                      className={`p-8 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
+                        selectedProcedure === procedure.id
+                          ? `bg-gradient-to-br ${procedure.color} text-white shadow-xl scale-105 border-transparent` 
+                          : 'bg-white/80 backdrop-blur-sm text-secondary-900 shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-200'
+                      }`}
+                    >
+                      <div className="space-y-4">
+                        <div className={`p-3 rounded-xl w-fit ${
+                          selectedProcedure === procedure.id ? 'bg-white/20' : 'bg-primary-50'
+                        }`}>
+                          <div className={selectedProcedure === procedure.id ? 'text-white' : 'text-primary-600'}>
+                            {procedure.icon}
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <h4 className="font-bold text-lg leading-tight">{procedure.name}</h4>
+                          <p className={`text-sm ${
+                            selectedProcedure === procedure.id ? 'text-white/90' : 'text-secondary-600'
+                          }`}>
+                            {procedure.description}
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Selected Procedure Journey */}
+              {selectedProcedure === 'general' ? (
+                <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200/50 overflow-hidden">
+                  <ProgressivePatientJourney />
+                </div>
+              ) : (
+                <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200/50 overflow-hidden">
+                  {(() => {
+                    const procedure = procedureJourneys.find(p => p.id === selectedProcedure);
+                    if (!procedure || !procedure.steps) return null;
+
+                    return (
+                      <div className="p-12">
+                        {/* Procedure Header */}
+                        <div className={`bg-gradient-to-r ${procedure.color} rounded-2xl p-8 text-white mb-12`}>
+                          <div className="flex items-center space-x-4 mb-4">
+                            {procedure.icon}
+                            <h3 className="text-3xl font-bold">{procedure.name}</h3>
+                          </div>
+                          <p className="text-xl opacity-90">{procedure.description}</p>
+                        </div>
+
+                        {/* Journey Steps */}
+                        <div className="space-y-16">
+                          {procedure.steps.map((step, index) => (
+                            <div key={index} className="relative">
+                              {/* Step Header */}
+                              <div className="flex items-center space-x-4 mb-8">
+                                <div className="bg-secondary-100 p-3 rounded-xl">
+                                  {getPhaseIcon(step.phase)}
+                                </div>
+                                <div>
+                                  <h4 className="text-2xl font-bold text-secondary-800">{step.phase}</h4>
+                                  <p className="text-secondary-600">Duration: {step.duration}</p>
+                                </div>
+                              </div>
+
+                              {/* Step Content */}
+                              <div className="grid lg:grid-cols-2 gap-12">
+                                {/* What Happens */}
+                                <div className="space-y-6">
+                                  <h5 className="font-semibold text-secondary-800 flex items-center space-x-2">
+                                    <Activity className="w-5 h-5 text-primary-600" />
+                                    <span>What Happens</span>
+                                  </h5>
+                                  <ul className="space-y-3">
+                                    {step.activities.map((activity, idx) => (
+                                      <li key={idx} className="flex items-start space-x-3">
+                                        <CheckCircle className="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                                        <span className="text-secondary-700">{activity}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+
+                                {/* How to Prepare */}
+                                <div className="space-y-6">
+                                  <h5 className="font-semibold text-secondary-800 flex items-center space-x-2">
+                                    <Clipboard className="w-5 h-5 text-sage-600" />
+                                    <span>How to Prepare</span>
+                                  </h5>
+                                  <ul className="space-y-3">
+                                    {step.preparation.map((prep, idx) => (
+                                      <li key={idx} className="flex items-start space-x-3">
+                                        <div className="w-2 h-2 bg-sage-500 rounded-full mt-2 flex-shrink-0"></div>
+                                        <span className="text-secondary-700">{prep}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </div>
+
+                              {/* Connector Line */}
+                              {index < procedure.steps.length - 1 && (
+                                <div className="absolute left-6 top-20 w-0.5 h-16 bg-secondary-200"></div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Contact Information */}
+                        <div className="mt-16 bg-secondary-50 rounded-2xl p-8">
+                          <h4 className="text-xl font-bold text-secondary-800 mb-6">Questions About This Procedure?</h4>
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <div className="flex items-center space-x-3">
+                              <Phone className="w-5 h-5 text-primary-600" />
+                              <div>
+                                <p className="font-semibold text-secondary-800">Call Our Team</p>
+                                <p className="text-secondary-600">(03) 9509 5009</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <Mail className="w-5 h-5 text-primary-600" />
+                              <div>
+                                <p className="font-semibold text-secondary-800">Email Us</p>
+                                <p className="text-secondary-600">reception@heartclinicmelbourne.com.au</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
             </div>
           )}
 
