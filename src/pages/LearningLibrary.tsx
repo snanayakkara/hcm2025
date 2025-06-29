@@ -45,6 +45,20 @@ const LearningLibrary: React.FC = () => {
   const [activePhase, setActivePhase] = useState('pre-procedure');
   const sectionRef = useRef<HTMLDivElement>(null);
 
+  // Handle URL parameters from services page
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');
+    const focus = urlParams.get('focus');
+    
+    if (tab) {
+      setActiveTab(tab);
+    }
+    if (focus) {
+      setSelectedProcedure(focus);
+    }
+  }, []);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {

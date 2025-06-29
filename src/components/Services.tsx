@@ -1,12 +1,70 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, ArrowRight, Clock, User, FileText, AlertCircle, CheckCircle, Info, Search, Filter, ChevronDown, Calendar, Users } from 'lucide-react';
+import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, ArrowRight, Clock, User, FileText, AlertCircle, CheckCircle, Info, Search, Filter, ChevronDown, Calendar, Users, BookOpen, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Services: React.FC = () => {
   const [activeService, setActiveService] = useState(0);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const navigate = useNavigate();
+
+  // Educational content mapping for services that have learning library content
+  const educationalLinks = {
+    'angiography': {
+      hasContent: true,
+      learningPath: 'journey-maps',
+      procedure: 'angiogram_pci',
+      title: 'Learn about the complete coronary angiography journey'
+    },
+    'tavi': {
+      hasContent: true,
+      learningPath: 'journey-maps', 
+      procedure: 'tavi',
+      title: 'Explore the TAVI procedure journey and what to expect'
+    },
+    'consultation': {
+      hasContent: true,
+      learningPath: 'faq',
+      section: 'consultation',
+      title: 'Common questions about cardiac consultations'
+    },
+    'toe': {
+      hasContent: true,
+      learningPath: 'tests',
+      procedure: 'toe',
+      title: 'Learn more about TOE procedures and imaging'
+    },
+    'af-ablation': {
+      hasContent: true,
+      learningPath: 'journey-maps',
+      procedure: 'ablation',
+      title: 'Understand the AF ablation procedure journey'
+    },
+    'echocardiography': {
+      hasContent: true,
+      learningPath: 'tests',
+      procedure: 'echo',
+      title: 'Learn about echocardiography and cardiac imaging'
+    },
+    'holter': {
+      hasContent: true,
+      learningPath: 'tests',
+      procedure: 'holter',
+      title: 'Understanding heart rhythm monitoring'
+    }
+  };
+
+  const handleLearnMore = (serviceId: string) => {
+    const linkInfo = educationalLinks[serviceId as keyof typeof educationalLinks];
+    if (linkInfo?.hasContent) {
+      // Navigate to learning library with specific tab and content
+      const focusParam = ('procedure' in linkInfo) ? linkInfo.procedure : 
+                        ('section' in linkInfo) ? linkInfo.section : serviceId;
+      navigate(`/learning-library?tab=${linkInfo.learningPath}&focus=${focusParam}`);
+    }
+  };
 
   // Listen for filter events from header
   useEffect(() => {
@@ -192,14 +250,14 @@ const Services: React.FC = () => {
     },
     {
       id: 'toe',
-      name: "Transesophageal Echocardiography (TOE)",
+      name: "Transoesophageal Echocardiography (TOE)",
       category: 'imaging',
       icon: <Search className="w-5 h-5" />,
       shortDescription: "Advanced cardiac imaging via esophageal probe for detailed assessment",
       duration: "30-45 minutes",
       preparation: "Fasting required, light sedation available",
       locations: ["Malvern", "Berwick"],
-      description: "TOE provides superior cardiac images by placing an ultrasound probe in the esophagus. This advanced technique offers detailed views of heart structures, particularly useful for valve assessment and detecting blood clots.",
+      description: "TOE provides superior cardiac images by placing an ultrasound probe in the oesophagus. This advanced technique offers detailed views of heart structures, particularly useful for valve assessment and detecting blood clots.",
       whatToExpect: [
         "Light sedation for comfort",
         "Flexible probe passed through mouth into esophagus",
@@ -506,6 +564,20 @@ const Services: React.FC = () => {
                     </span>
                   )}
                 </div>
+
+                {/* Learn More Badge */}
+                {educationalLinks[service.id as keyof typeof educationalLinks]?.hasContent && (
+                  <div className="pt-2">
+                    <span className={`inline-flex items-center space-x-1 px-3 py-1 text-xs rounded-full transition-all duration-200 ${
+                      services[activeService]?.id === service.id 
+                        ? 'bg-white/20 text-white border border-white/30' 
+                        : 'bg-sage-100 text-sage-700 border border-sage-200 hover:bg-sage-200'
+                    }`}>
+                      <BookOpen className="w-3 h-3" />
+                      <span className="font-medium">Learn More</span>
+                    </span>
+                  </div>
+                )}
               </div>
             </motion.button>
           ))}
@@ -555,6 +627,46 @@ const Services: React.FC = () => {
                     <p className="text-sm text-secondary-600">{services[activeService].cost}</p>
                   </div>
                 </div>
+
+                {/* Educational Link */}
+                {educationalLinks[services[activeService].id as keyof typeof educationalLinks]?.hasContent && (
+                  <div className="bg-gradient-to-r from-sage-50 to-primary-50 rounded-2xl p-6 border border-sage-200/50">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="bg-sage-500 text-white p-2 rounded-lg">
+                          <BookOpen className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-secondary-800">Want to Learn More?</h4>
+                          <p className="text-sm text-secondary-600">
+                            {educationalLinks[services[activeService].id as keyof typeof educationalLinks]?.title}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleLearnMore(services[activeService].id)}
+                        className="bg-sage-500 text-white px-6 py-3 rounded-xl hover:bg-sage-600 transition-all duration-200 flex items-center space-x-2 transform hover:scale-105 shadow-sm hover:shadow-md"
+                      >
+                        <span className="font-medium">Learning Library</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Learn More / Educational Links */}
+                {educationalLinks[services[activeService].id as keyof typeof educationalLinks]?.hasContent && (
+                  <div className="mt-8">
+                    <button
+                      onClick={() => handleLearnMore(services[activeService].id)}
+                      className="flex items-center space-x-2 px-6 py-3 bg-primary-500 text-white rounded-2xl hover:bg-primary-600 transition-all duration-200 shadow-sm"
+                    >
+                      <BookOpen className="w-5 h-5" />
+                      <span className="font-medium">Learn More About This Service</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="h-64 lg:h-full">
