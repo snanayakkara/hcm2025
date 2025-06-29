@@ -34,7 +34,7 @@ const Doctors: React.FC = () => {
       accentColor: "sage"
     },
     {
-      name: "Associate Professor Alex Voskoboinik",
+      name: "A/Prof Alex Voskoboinik",
       title: "General Cardiologist & Electrophysiologist",
       specialization: "Cardiac Rhythm Disturbances",
       education: "MBBS (Hons) Monash University 2008, PhD Baker Heart Institute 2019, Electrophysiology Fellowship UCSF 2019",
@@ -313,34 +313,6 @@ const Doctors: React.FC = () => {
                   }`}
                 />
               ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Enhanced Statistics */}
-        <div className="bg-gradient-to-r from-primary-600 via-accent-600 to-primary-800 rounded-3xl p-12 text-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-10 left-10 w-32 h-32 border-2 border-white rounded-full"></div>
-            <div className="absolute bottom-10 right-10 w-24 h-24 border-2 border-white rounded-full"></div>
-            <div className="absolute top-1/2 left-1/3 w-16 h-16 border-2 border-white rounded-full"></div>
-          </div>
-          
-          <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            <div className="space-y-3">
-              <div className="text-4xl lg:text-5xl font-bold">4</div>
-              <div className="text-white/80 font-medium">Expert Cardiologists</div>
-            </div>
-            <div className="space-y-3">
-              <div className="text-4xl lg:text-5xl font-bold">36+</div>
-              <div className="text-white/80 font-medium">Years Combined Experience</div>
-            </div>
-            <div className="space-y-3">
-              <div className="text-4xl lg:text-5xl font-bold">5700+</div>
-              <div className="text-white/80 font-medium">Patients Treated</div>
-            </div>
-            <div className="space-y-3">
-              <div className="text-4xl lg:text-5xl font-bold">6</div>
-              <div className="text-white/80 font-medium">Hospital Locations</div>
             </div>
           </div>
         </div>

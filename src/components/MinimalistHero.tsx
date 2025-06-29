@@ -129,7 +129,7 @@ const MinimalistHero: React.FC = () => {
                 <div 
                   className="relative inline-block bg-gradient-to-br from-primary-500 via-accent-500 to-primary-600 bg-clip-text text-transparent"
                   style={{
-                    backgroundImage: `url('https://images.pexels.com/photos/6129967/pexels-photo-6129967.jpeg?auto=compress&cs=tinysrgb&w=1200')`,
+                    backgroundImage: `url('/images/hcmback.jpg')`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundClip: 'text',
@@ -142,7 +142,7 @@ const MinimalistHero: React.FC = () => {
                   <div 
                     className="absolute inset-0 bg-gradient-to-br from-primary-500 via-accent-500 to-primary-600 bg-clip-text text-transparent opacity-80"
                     style={{
-                      backgroundImage: `url('https://images.pexels.com/photos/6129967/pexels-photo-6129967.jpeg?auto=compress&cs=tinysrgb&w=1200')`,
+                      backgroundImage: `url('/images/hcmback.jpg')`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       backgroundClip: 'text',

@@ -13,7 +13,7 @@ const ReceptionTeam: React.FC = () => {
     experience: "7+ Years",
     description: "Emma joined the team in 2022 and has more than 7 years of medical administration experience, both in a hospital and clinical settings. As Practice Manager, she oversees all clinic operations and ensures the highest standards of patient care. Emma is known to be kind, empathetic and professional and always does whatever she can to help patients and her colleagues.",
     qualities: ["Leadership & Management", "Kind & Empathetic", "Professional Excellence", "Operational Oversight"],
-    image: "https://images.pexels.com/photos/5327921/pexels-photo-5327921.jpeg?auto=compress&cs=tinysrgb&w=400",
+    image: "/images/mayne.png",
     specialties: ["Practice Management", "Medical Administration", "Patient Care", "Team Leadership"],
     color: "from-primary-100 to-accent-100"
   };
@@ -26,7 +26,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Healthcare Administration",
       description: "Louise brings valuable healthcare administration experience to our team. She is dedicated to ensuring smooth clinic operations and providing excellent patient service with attention to detail and professionalism.",
       qualities: ["Detail-Oriented", "Professional", "Reliable", "Patient-Focused"],
-      image: "https://images.pexels.com/photos/5327656/pexels-photo-5327656.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "/images/georgeson.png",
       specialties: ["Healthcare Administration", "Appointment Scheduling", "Patient Records", "Insurance Processing"],
       color: "from-cream-100 to-sage-100"
     },
@@ -36,7 +36,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Extensive Customer Service",
       description: "Michelle joined our team in 2022. Michelle has a long career in customer service roles including aged care as a personal carer. She is caring, friendly and brings a bright demeanour to the practice.",
       qualities: ["Caring & Friendly", "Bright Demeanour", "Patient Comfort", "Customer Service"],
-      image: "https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "/images/goodier.png",
       specialties: ["Customer Service", "Aged Care", "Personal Care", "Patient Support"],
       color: "from-sage-100 to-primary-100"
     },

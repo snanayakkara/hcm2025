@@ -150,7 +150,7 @@ const Services: React.FC = () => {
         "Follow-up appointment if abnormalities detected"
       ],
       cost: "Bulk billed for eligible patients",
-      image: "https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?auto=compress&cs=tinysrgb&w=600"
+      image: "/images/echo.png"
     },
     {
       id: 'holter',
@@ -182,7 +182,7 @@ const Services: React.FC = () => {
         "Follow-up appointment if abnormalities found"
       ],
       cost: "Medicare rebates available",
-      image: "https://images.pexels.com/photos/4386476/pexels-photo-4386476.jpeg?auto=compress&cs=tinysrgb&w=600"
+      image: "/images/holter.png"
     },
     {
       id: 'angiography',
