@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FileText, Clock, Shield, CreditCard, Phone, Mail, ArrowRight, CheckCircle } from 'lucide-react';
+import { FileText, Clock, Shield, CreditCard, Phone, Mail, ArrowRight, CheckCircle, Upload, X } from 'lucide-react';
 
 const PatientInfo: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +12,7 @@ const PatientInfo: React.FC = () => {
     preferredDoctor: '',
     localGP: ''
   });
+  const [attachments, setAttachments] = useState<File[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const [activeResource, setActiveResource] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -23,10 +24,30 @@ const PatientInfo: React.FC = () => {
     });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const validFiles = files.filter(file => {
+      const isValidType = file.type.includes('image/') || file.type === 'application/pdf';
+      const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB limit
+      return isValidType && isValidSize;
+    });
+    
+    if (validFiles.length !== files.length) {
+      alert('Some files were not added. Please ensure files are images or PDFs under 10MB.');
+    }
+    
+    setAttachments(prev => [...prev, ...validFiles]);
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission
     console.log('Form submitted:', formData);
+    console.log('Attachments:', attachments);
     alert('Thank you! We will contact you shortly to confirm your appointment.');
   };
 
@@ -291,6 +312,67 @@ const PatientInfo: React.FC = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   placeholder="Enter your GP's name and practice"
                 />
+              </div>
+
+              <div>
+                <label htmlFor="attachments" className="block text-sm font-medium text-gray-700 mb-2">
+                  Attach Your Referral
+                </label>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-center w-full">
+                    <label
+                      htmlFor="attachments"
+                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all duration-200"
+                    >
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <Upload className="w-8 h-8 mb-4 text-gray-500" />
+                        <p className="mb-2 text-sm text-gray-500">
+                          <span className="font-semibold">Click to upload</span> or drag and drop
+                        </p>
+                        <p className="text-xs text-gray-500">PDF or Image files (MAX. 10MB each)</p>
+                      </div>
+                      <input
+                        id="attachments"
+                        name="attachments"
+                        type="file"
+                        multiple
+                        accept="image/*,.pdf"
+                        onChange={handleFileChange}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  
+                  {/* Display selected files */}
+                  {attachments.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-gray-700">Selected files:</p>
+                      {attachments.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-blue-50 border border-blue-200 p-3 rounded-lg"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <FileText className="w-4 h-4 text-blue-600" />
+                            <span className="text-sm text-gray-700 truncate max-w-xs">
+                              {file.name}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              ({(file.size / 1024 / 1024).toFixed(1)} MB)
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeAttachment(index)}
+                            className="text-red-500 hover:text-red-700 transition-colors"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>

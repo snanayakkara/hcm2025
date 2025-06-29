@@ -408,7 +408,7 @@ const ReceptionTeam: React.FC = () => {
         {/* Contact Team */}
         <div className={`mt-16 bg-primary-500 rounded-3xl p-12 text-center transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h3 className="text-3xl font-bold text-white mb-6">
-            Ready to Experience Our Exceptional Care?
+            Would you like to book an appointment?
           </h3>
           <p className="text-primary-100 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
             Our entire team is here to support you through every step of your cardiac care journey. Contact us today to schedule your consultation.

@@ -760,7 +760,7 @@ const Services: React.FC = () => {
           viewport={{ once: true }}
         >
           <h3 className="text-3xl font-bold text-white mb-6">
-            Ready to Schedule Your Cardiac Service?
+            Ready to Schedule Your Appointment?
           </h3>
           <p className="text-primary-100 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
             Our reception team is ready to help you book the right service at the most convenient location for you.
