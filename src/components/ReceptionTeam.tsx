@@ -165,7 +165,7 @@ const ReceptionTeam: React.FC = () => {
                 <img
                   src={practiceManager.image}
                   alt={`${practiceManager.name} - ${practiceManager.title}`}
-                  className="w-full h-80 object-cover mix-blend-overlay"
+                  className="w-full h-80 object-cover mix-blend-soft-light"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                 
@@ -238,7 +238,7 @@ const ReceptionTeam: React.FC = () => {
                   <img
                     src={member.image}
                     alt={`${member.name} - ${member.title}`}
-                    className="w-full h-full object-cover mix-blend-overlay"
+                    className="w-full h-full object-cover mix-blend-soft-light"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                 </div>
@@ -308,7 +308,7 @@ const ReceptionTeam: React.FC = () => {
                     <img
                       src={tech.image}
                       alt={`${tech.name} - ${tech.title}`}
-                      className="w-full h-full object-cover mix-blend-overlay"
+                      className="w-full h-full object-cover mix-blend-soft-light"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                   </div>

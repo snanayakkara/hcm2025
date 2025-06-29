@@ -214,7 +214,7 @@ const Services: React.FC = () => {
         "Detailed results discussion with cardiologist"
       ],
       cost: "Hospital admission may be required",
-      image: "https://images.pexels.com/photos/4386464/pexels-photo-4386464.jpeg?auto=compress&cs=tinysrgb&w=600"
+      image: "/images/angio.png"
     },
     {
       id: 'stress-echo',
@@ -246,7 +246,7 @@ const Services: React.FC = () => {
         "Follow-up appointment if abnormalities detected"
       ],
       cost: "Medicare rebates available",
-      image: "https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?auto=compress&cs=tinysrgb&w=600"
+      image: "/images/stressecho.png"
     },
     {
       id: 'toe',
