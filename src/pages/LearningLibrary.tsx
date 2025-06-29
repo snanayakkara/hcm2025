@@ -19,11 +19,15 @@ import {
   Download,
   ExternalLink,
   MapPin,
-  ArrowLeft
+  ArrowLeft,
+  Zap,
+  Calendar,
+  Users
 } from 'lucide-react';
+import InteractiveJourneyMaps from '../components/InteractiveJourneyMaps';
 
 const LearningLibrary: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('faq');
+  const [activeTab, setActiveTab] = useState('journey-maps');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
@@ -48,6 +52,7 @@ const LearningLibrary: React.FC = () => {
   }, []);
 
   const tabs = [
+    { id: 'journey-maps', label: 'Patient Journey Maps', icon: <MapPin className="w-5 h-5" /> },
     { id: 'faq', label: 'FAQs', icon: <FileText className="w-5 h-5" /> },
     { id: 'videos', label: 'Educational Videos', icon: <PlayCircle className="w-5 h-5" /> },
     { id: 'conditions', label: 'Heart Conditions', icon: <Heart className="w-5 h-5" /> },
@@ -357,136 +362,145 @@ const LearningLibrary: React.FC = () => {
             ))}
           </div>
 
-          {/* Search and Filter */}
-          <div className="max-w-2xl mx-auto space-y-6">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder={`Search ${tabs.find(t => t.id === activeTab)?.label.toLowerCase()}...`}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border border-secondary-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
-              />
-            </div>
-
-            {(activeTab === 'faq' || activeTab === 'videos') && (
-              <div className="flex flex-wrap justify-center gap-3">
-                <button
-                  onClick={() => setSelectedCategory('all')}
-                  className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                    selectedCategory === 'all'
-                      ? 'bg-primary-500 text-white'
-                      : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                  }`}
-                >
-                  All Categories
-                </button>
-                {activeTab === 'faq' && (
-                  <>
-                    <button
-                      onClick={() => setSelectedCategory('general')}
-                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                        selectedCategory === 'general'
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                      }`}
-                    >
-                      General
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('billing')}
-                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                        selectedCategory === 'billing'
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                      }`}
-                    >
-                      Billing
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('symptoms')}
-                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                        selectedCategory === 'symptoms'
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                      }`}
-                    >
-                      Symptoms
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('conditions')}
-                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                        selectedCategory === 'conditions'
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                      }`}
-                    >
-                      Conditions
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('procedures')}
-                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                        selectedCategory === 'procedures'
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                      }`}
-                    >
-                      Procedures
-                    </button>
-                  </>
-                )}
-                {activeTab === 'videos' && (
-                  <>
-                    <button
-                      onClick={() => setSelectedCategory('heart-basics')}
-                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                        selectedCategory === 'heart-basics'
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                      }`}
-                    >
-                      Heart Basics
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('tests')}
-                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                        selectedCategory === 'tests'
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                      }`}
-                    >
-                      Tests
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('lifestyle')}
-                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                        selectedCategory === 'lifestyle'
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                      }`}
-                    >
-                      Lifestyle
-                    </button>
-                    <button
-                      onClick={() => setSelectedCategory('procedures')}
-                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                        selectedCategory === 'procedures'
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                      }`}
-                    >
-                      Procedures
-                    </button>
-                  </>
-                )}
+          {/* Search and Filter - Only show for non-journey-maps tabs */}
+          {activeTab !== 'journey-maps' && (
+            <div className="max-w-2xl mx-auto space-y-6">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder={`Search ${tabs.find(t => t.id === activeTab)?.label.toLowerCase()}...`}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-12 pr-4 py-4 border border-secondary-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
+                />
               </div>
-            )}
-          </div>
+
+              {(activeTab === 'faq' || activeTab === 'videos') && (
+                <div className="flex flex-wrap justify-center gap-3">
+                  <button
+                    onClick={() => setSelectedCategory('all')}
+                    className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                      selectedCategory === 'all'
+                        ? 'bg-primary-500 text-white'
+                        : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                    }`}
+                  >
+                    All Categories
+                  </button>
+                  {activeTab === 'faq' && (
+                    <>
+                      <button
+                        onClick={() => setSelectedCategory('general')}
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                          selectedCategory === 'general'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                        }`}
+                      >
+                        General
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('billing')}
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                          selectedCategory === 'billing'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                        }`}
+                      >
+                        Billing
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('symptoms')}
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                          selectedCategory === 'symptoms'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                        }`}
+                      >
+                        Symptoms
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('conditions')}
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                          selectedCategory === 'conditions'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                        }`}
+                      >
+                        Conditions
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('procedures')}
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                          selectedCategory === 'procedures'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                        }`}
+                      >
+                        Procedures
+                      </button>
+                    </>
+                  )}
+                  {activeTab === 'videos' && (
+                    <>
+                      <button
+                        onClick={() => setSelectedCategory('heart-basics')}
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                          selectedCategory === 'heart-basics'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                        }`}
+                      >
+                        Heart Basics
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('tests')}
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                          selectedCategory === 'tests'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                        }`}
+                      >
+                        Tests
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('lifestyle')}
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                          selectedCategory === 'lifestyle'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                        }`}
+                      >
+                        Lifestyle
+                      </button>
+                      <button
+                        onClick={() => setSelectedCategory('procedures')}
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                          selectedCategory === 'procedures'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                        }`}
+                      >
+                        Procedures
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Content */}
         <div className={`transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          {/* Journey Maps Tab */}
+          {activeTab === 'journey-maps' && (
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200/50 overflow-hidden">
+              <InteractiveJourneyMaps />
+            </div>
+          )}
+
           {/* FAQ Tab */}
           {activeTab === 'faq' && (
             <div className="max-w-4xl mx-auto space-y-6">
