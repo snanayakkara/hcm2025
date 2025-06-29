@@ -490,7 +490,7 @@ const Services: React.FC = () => {
           {/* Mini-Cards Row (Master) */}
           <div className="lg:col-span-4">
             <h3 className="text-xl font-semibold text-secondary-800 mb-6">Select a Service</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-4 lg:max-h-[600px] lg:overflow-y-auto lg:pr-4 lg:scrollbar-thin lg:scrollbar-thumb-secondary-300 lg:scrollbar-track-secondary-100">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-4 lg:max-h-[700px] lg:overflow-y-auto lg:pr-4 lg:scrollbar-thin lg:scrollbar-thumb-secondary-300 lg:scrollbar-track-secondary-100">
               {services.map((service, index) => (
                 <motion.button
                   key={service.id}
