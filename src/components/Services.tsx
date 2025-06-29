@@ -7,7 +7,6 @@ const Services: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-  const [activeJourneyStep, setActiveJourneyStep] = useState(0);
 
   // Listen for filter events from header
   useEffect(() => {
@@ -28,41 +27,6 @@ const Services: React.FC = () => {
     { id: 'interventional', name: 'Interventional', icon: <Heart className="w-4 h-4" /> },
     { id: 'electrophysiology', name: 'Electrophysiology', icon: <Zap className="w-4 h-4" /> },
     { id: 'procedures', name: 'Procedures', icon: <FileText className="w-4 h-4" /> }
-  ];
-
-  const journeySteps = [
-    {
-      id: 1,
-      title: "Initial Consultation",
-      description: "Comprehensive cardiac assessment with our specialists",
-      icon: <Stethoscope className="w-5 h-5" />,
-      duration: "45-60 minutes",
-      color: "from-blue-500 to-blue-600"
-    },
-    {
-      id: 2,
-      title: "Diagnostic Testing",
-      description: "Advanced cardiac imaging and monitoring procedures",
-      icon: <Activity className="w-5 h-5" />,
-      duration: "30-90 minutes",
-      color: "from-emerald-500 to-emerald-600"
-    },
-    {
-      id: 3,
-      title: "Treatment Planning",
-      description: "Personalized treatment recommendations and planning",
-      icon: <Heart className="w-5 h-5" />,
-      duration: "30-45 minutes",
-      color: "from-rose-500 to-rose-600"
-    },
-    {
-      id: 4,
-      title: "Follow-up Care",
-      description: "Ongoing monitoring and support for optimal outcomes",
-      icon: <Calendar className="w-5 h-5" />,
-      duration: "Ongoing",
-      color: "from-purple-500 to-purple-600"
-    }
   ];
 
   const services = [
@@ -204,20 +168,13 @@ const Services: React.FC = () => {
     return matchesCategory && matchesSearch;
   });
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveJourneyStep((prev) => (prev + 1) % journeySteps.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <section id="services" className="py-20 bg-white">
+    <section id="services" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-20">
           <motion.h2 
-            className="text-5xl lg:text-6xl font-bold text-slate-800 mb-6 leading-tight"
+            className="text-5xl lg:text-6xl font-bold text-secondary-800 mb-8 leading-tight"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -225,7 +182,7 @@ const Services: React.FC = () => {
             Our Cardiac Services
           </motion.h2>
           <motion.p 
-            className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed"
+            className="text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -235,75 +192,18 @@ const Services: React.FC = () => {
           </motion.p>
         </div>
 
-        {/* Patient Journey Integration */}
-        <motion.div 
-          className="mb-20"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className="bg-gradient-to-br from-slate-50 to-blue-50/30 rounded-3xl p-8 lg:p-12">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold text-slate-800 mb-4">Your Care Journey</h3>
-              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                From initial consultation to ongoing care, we guide you through every step of your cardiac health journey.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {journeySteps.map((step, index) => (
-                <motion.div
-                  key={step.id}
-                  className={`bg-white rounded-2xl p-6 shadow-sm border border-slate-200/50 transition-all duration-500 ${
-                    activeJourneyStep === index ? 'scale-105 shadow-lg' : 'hover:scale-102'
-                  }`}
-                  whileHover={{ y: -5 }}
-                  onClick={() => setActiveJourneyStep(index)}
-                >
-                  <div className="space-y-4">
-                    <div className={`bg-gradient-to-r ${step.color} w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-sm`}>
-                      {step.icon}
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-slate-800 mb-2">{step.title}</h4>
-                      <p className="text-sm text-slate-600 leading-relaxed">{step.description}</p>
-                    </div>
-                    <div className="flex items-center space-x-2 text-xs text-slate-500">
-                      <Clock className="w-3 h-3" />
-                      <span>{step.duration}</span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Journey Progress */}
-            <div className="flex justify-center mt-8 space-x-2">
-              {journeySteps.map((_, index) => (
-                <motion.div
-                  key={index}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    index === activeJourneyStep ? 'w-8 bg-rose-500' : 'w-2 bg-slate-300'
-                  }`}
-                  onClick={() => setActiveJourneyStep(index)}
-                />
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
         {/* Search and Filter */}
-        <div className="mb-12 space-y-6">
+        <div className="mb-16 space-y-8">
           {/* Search Bar */}
           <div className="max-w-md mx-auto">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search services..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-rose-500 focus:border-transparent bg-white shadow-sm"
+                className="w-full pl-12 pr-4 py-4 border border-secondary-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
               />
             </div>
           </div>
@@ -312,11 +212,11 @@ const Services: React.FC = () => {
           <div className="text-center">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center space-x-2 px-6 py-3 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-all duration-200 shadow-sm"
+              className="inline-flex items-center space-x-2 px-8 py-4 bg-white border border-secondary-300 rounded-2xl hover:bg-secondary-50 transition-all duration-200 shadow-sm"
             >
-              <Filter className="w-4 h-4 text-slate-600" />
-              <span className="text-slate-700 font-medium">Filter by Category</span>
-              <ChevronDown className={`w-4 h-4 text-slate-600 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
+              <Filter className="w-4 h-4 text-secondary-600" />
+              <span className="text-secondary-700 font-medium">Filter by Category</span>
+              <ChevronDown className={`w-4 h-4 text-secondary-600 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
             </button>
           </div>
 
@@ -330,19 +230,19 @@ const Services: React.FC = () => {
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden"
               >
-                <div className="flex flex-wrap justify-center gap-3 pt-4">
+                <div className="flex flex-wrap justify-center gap-4 pt-6">
                   {serviceCategories.map((category) => (
                     <button
                       key={category.id}
                       onClick={() => setActiveCategory(category.id)}
-                      className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-200 ${
+                      className={`flex items-center space-x-2 px-6 py-3 rounded-2xl transition-all duration-200 ${
                         activeCategory === category.id
-                          ? 'bg-rose-500 text-white shadow-sm'
-                          : 'bg-white text-slate-700 hover:bg-rose-50 shadow-sm border border-slate-200'
+                          ? 'bg-primary-500 text-white shadow-sm'
+                          : 'bg-white text-secondary-700 hover:bg-primary-50 shadow-sm border border-secondary-200'
                       }`}
                     >
                       {category.icon}
-                      <span className="font-medium text-sm">{category.name}</span>
+                      <span className="font-medium">{category.name}</span>
                     </button>
                   ))}
                 </div>
@@ -352,63 +252,63 @@ const Services: React.FC = () => {
         </div>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
           {filteredServices.map((service, index) => (
             <motion.button
               key={service.id}
               onClick={() => setActiveService(services.findIndex(s => s.id === service.id))}
-              className={`p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
+              className={`p-8 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
                 services[activeService]?.id === service.id
-                  ? 'bg-rose-500 text-white shadow-xl scale-105 border-rose-500' 
-                  : 'bg-white text-slate-900 shadow-sm hover:shadow-lg border-slate-200 hover:border-rose-200'
+                  ? 'bg-primary-500 text-white shadow-xl scale-105 border-primary-500' 
+                  : 'bg-white/80 backdrop-blur-sm text-secondary-900 shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-200'
               }`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
             >
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div className={`p-3 rounded-xl w-fit ${
-                  services[activeService]?.id === service.id ? 'bg-white/20' : 'bg-rose-50'
+                  services[activeService]?.id === service.id ? 'bg-white/20' : 'bg-primary-50'
                 }`}>
-                  <div className={services[activeService]?.id === service.id ? 'text-white' : 'text-rose-600'}>
+                  <div className={services[activeService]?.id === service.id ? 'text-white' : 'text-primary-600'}>
                     {service.icon}
                   </div>
                 </div>
                 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <h3 className="font-semibold text-lg leading-tight">{service.name}</h3>
                   <p className={`text-sm ${
-                    services[activeService]?.id === service.id ? 'text-rose-100' : 'text-slate-600'
+                    services[activeService]?.id === service.id ? 'text-primary-100' : 'text-secondary-600'
                   }`}>
                     {service.duration}
                   </p>
                   <p className={`text-sm ${
-                    services[activeService]?.id === service.id ? 'text-rose-100' : 'text-slate-600'
+                    services[activeService]?.id === service.id ? 'text-primary-100' : 'text-secondary-600'
                   }`}>
                     {service.shortDescription}
                   </p>
                 </div>
 
                 {/* Location badges */}
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-2">
                   {service.locations.slice(0, 2).map((location, idx) => (
                     <span
                       key={idx}
-                      className={`px-2 py-1 text-xs rounded-full ${
+                      className={`px-3 py-1 text-xs rounded-full ${
                         services[activeService]?.id === service.id 
                           ? 'bg-white/20 text-white' 
-                          : 'bg-slate-100 text-slate-600'
+                          : 'bg-secondary-100 text-secondary-600'
                       }`}
                     >
                       {location}
                     </span>
                   ))}
                   {service.locations.length > 2 && (
-                    <span className={`px-2 py-1 text-xs rounded-full ${
+                    <span className={`px-3 py-1 text-xs rounded-full ${
                       services[activeService]?.id === service.id 
                         ? 'bg-white/20 text-white' 
-                        : 'bg-slate-100 text-slate-600'
+                        : 'bg-secondary-100 text-secondary-600'
                     }`}>
                       +{service.locations.length - 2}
                     </span>
@@ -422,45 +322,45 @@ const Services: React.FC = () => {
         {/* Active Service Detail */}
         {services[activeService] && (
           <motion.div 
-            className="bg-white rounded-3xl shadow-xl overflow-hidden mb-16 border border-slate-200"
+            className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden mb-20 border border-secondary-200/50"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             <div className="grid lg:grid-cols-2">
-              <div className="p-8 lg:p-12 space-y-8">
+              <div className="p-12 lg:p-16 space-y-10">
                 <div className="flex items-center space-x-4">
-                  <div className="bg-rose-500 text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm">
+                  <div className="bg-primary-500 text-white w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm">
                     {services[activeService].icon}
                   </div>
                   <div>
-                    <h3 className="text-3xl font-bold text-slate-800">
+                    <h3 className="text-3xl font-bold text-secondary-800">
                       {services[activeService].name}
                     </h3>
-                    <p className="text-slate-600 text-lg">{services[activeService].shortDescription}</p>
+                    <p className="text-secondary-600 text-lg">{services[activeService].shortDescription}</p>
                   </div>
                 </div>
                 
-                <p className="text-lg text-slate-600 leading-relaxed">
+                <p className="text-lg text-secondary-600 leading-relaxed">
                   {services[activeService].description}
                 </p>
 
                 {/* Quick Info */}
-                <div className="grid sm:grid-cols-3 gap-4 p-6 bg-slate-50 rounded-2xl">
+                <div className="grid sm:grid-cols-3 gap-6 p-8 bg-secondary-50/50 rounded-2xl">
                   <div className="text-center">
-                    <Clock className="w-5 h-5 text-rose-600 mx-auto mb-2" />
-                    <p className="font-semibold text-slate-800">Duration</p>
-                    <p className="text-sm text-slate-600">{services[activeService].duration}</p>
+                    <Clock className="w-5 h-5 text-primary-600 mx-auto mb-3" />
+                    <p className="font-semibold text-secondary-800">Duration</p>
+                    <p className="text-sm text-secondary-600">{services[activeService].duration}</p>
                   </div>
                   <div className="text-center">
-                    <MapPin className="w-5 h-5 text-rose-600 mx-auto mb-2" />
-                    <p className="font-semibold text-slate-800">Locations</p>
-                    <p className="text-sm text-slate-600">{services[activeService].locations.join(', ')}</p>
+                    <MapPin className="w-5 h-5 text-primary-600 mx-auto mb-3" />
+                    <p className="font-semibold text-secondary-800">Locations</p>
+                    <p className="text-sm text-secondary-600">{services[activeService].locations.join(', ')}</p>
                   </div>
                   <div className="text-center">
-                    <FileText className="w-5 h-5 text-rose-600 mx-auto mb-2" />
-                    <p className="font-semibold text-slate-800">Cost</p>
-                    <p className="text-sm text-slate-600">{services[activeService].cost}</p>
+                    <FileText className="w-5 h-5 text-primary-600 mx-auto mb-3" />
+                    <p className="font-semibold text-secondary-800">Cost</p>
+                    <p className="text-sm text-secondary-600">{services[activeService].cost}</p>
                   </div>
                 </div>
               </div>
@@ -475,51 +375,51 @@ const Services: React.FC = () => {
             </div>
 
             {/* Detailed Information Tabs */}
-            <div className="border-t border-slate-200 bg-slate-50/50">
-              <div className="grid md:grid-cols-3 gap-8 p-8">
+            <div className="border-t border-secondary-200 bg-secondary-50/30">
+              <div className="grid md:grid-cols-3 gap-10 p-12">
                 {/* What to Expect */}
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div className="flex items-center space-x-2">
-                    <Info className="w-5 h-5 text-blue-600" />
-                    <h4 className="font-semibold text-slate-800">What to Expect</h4>
+                    <Info className="w-5 h-5 text-sage-600" />
+                    <h4 className="font-semibold text-secondary-800">What to Expect</h4>
                   </div>
-                  <ul className="space-y-2">
-                    {services[activeService].whatToExpected?.map((item, idx) => (
+                  <ul className="space-y-3">
+                    {services[activeService].whatToExpect?.map((item, idx) => (
                       <li key={idx} className="flex items-start space-x-2">
-                        <CheckCircle className="w-4 h-4 text-emerald-500 mt-1 flex-shrink-0" />
-                        <span className="text-sm text-slate-700">{item}</span>
+                        <CheckCircle className="w-4 h-4 text-sage-500 mt-1 flex-shrink-0" />
+                        <span className="text-sm text-secondary-700">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 {/* Preparation */}
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div className="flex items-center space-x-2">
-                    <AlertCircle className="w-5 h-5 text-amber-600" />
-                    <h4 className="font-semibold text-slate-800">Preparation</h4>
+                    <AlertCircle className="w-5 h-5 text-cream-600" />
+                    <h4 className="font-semibold text-secondary-800">Preparation</h4>
                   </div>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {services[activeService].preparationSteps?.map((item, idx) => (
                       <li key={idx} className="flex items-start space-x-2">
-                        <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-sm text-slate-700">{item}</span>
+                        <div className="w-2 h-2 bg-cream-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-sm text-secondary-700">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 {/* After Care */}
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div className="flex items-center space-x-2">
-                    <Heart className="w-5 h-5 text-rose-600" />
-                    <h4 className="font-semibold text-slate-800">After Care</h4>
+                    <Heart className="w-5 h-5 text-accent-600" />
+                    <h4 className="font-semibold text-secondary-800">After Care</h4>
                   </div>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {services[activeService].afterCare?.map((item, idx) => (
                       <li key={idx} className="flex items-start space-x-2">
-                        <div className="w-2 h-2 bg-rose-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-sm text-slate-700">{item}</span>
+                        <div className="w-2 h-2 bg-accent-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-sm text-secondary-700">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -531,23 +431,23 @@ const Services: React.FC = () => {
 
         {/* Call to Action */}
         <motion.div 
-          className="bg-gradient-to-r from-rose-500 to-pink-500 rounded-3xl p-8 text-center"
+          className="bg-gradient-to-r from-primary-500 to-accent-500 rounded-3xl p-12 text-center"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h3 className="text-2xl font-bold text-white mb-4">
+          <h3 className="text-3xl font-bold text-white mb-6">
             Ready to Schedule Your Cardiac Service?
           </h3>
-          <p className="text-rose-100 mb-6 max-w-2xl mx-auto">
+          <p className="text-primary-100 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
             Our reception team is ready to help you book the right service at the most convenient location for you.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-rose-600 px-8 py-3 rounded-xl hover:bg-rose-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <button className="bg-white text-primary-600 px-10 py-4 rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold text-lg">
               <Phone className="w-5 h-5" />
               <span>Call (03) 9509 5009</span>
             </button>
-            <button className="border-2 border-white text-white px-8 py-3 rounded-xl hover:bg-white hover:text-rose-600 transition-colors duration-200 font-semibold">
+            <button className="border-2 border-white text-white px-10 py-4 rounded-2xl hover:bg-white hover:text-primary-600 transition-colors duration-200 font-semibold text-lg">
               Book Online
             </button>
           </div>

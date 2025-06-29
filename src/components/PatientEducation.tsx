@@ -149,7 +149,7 @@ const PatientEducation: React.FC = () => {
       symptoms: ['Chest pain or discomfort', 'Shortness of breath', 'Fatigue', 'Heart palpitations'],
       causes: ['High cholesterol', 'High blood pressure', 'Smoking', 'Diabetes', 'Family history'],
       treatments: ['Lifestyle changes', 'Medications', 'Angioplasty', 'Bypass surgery'],
-      icon: <Heart className="w-6 h-6 text-red-500" />
+      icon: <Heart className="w-6 h-6 text-primary-500" />
     },
     {
       name: 'Heart Failure',
@@ -157,7 +157,7 @@ const PatientEducation: React.FC = () => {
       symptoms: ['Shortness of breath', 'Swelling in legs/ankles', 'Fatigue', 'Rapid heartbeat'],
       causes: ['Coronary artery disease', 'High blood pressure', 'Previous heart attack', 'Valve disease'],
       treatments: ['Medications', 'Lifestyle changes', 'Device therapy', 'Surgery in severe cases'],
-      icon: <Activity className="w-6 h-6 text-blue-500" />
+      icon: <Activity className="w-6 h-6 text-sage-500" />
     },
     {
       name: 'Atrial Fibrillation',
@@ -165,7 +165,7 @@ const PatientEducation: React.FC = () => {
       symptoms: ['Irregular heartbeat', 'Palpitations', 'Fatigue', 'Shortness of breath'],
       causes: ['Age', 'High blood pressure', 'Heart disease', 'Thyroid problems', 'Alcohol'],
       treatments: ['Blood thinners', 'Rate control medications', 'Cardioversion', 'Ablation'],
-      icon: <Activity className="w-6 h-6 text-purple-500" />
+      icon: <Activity className="w-6 h-6 text-accent-500" />
     },
     {
       name: 'Hypertension (High Blood Pressure)',
@@ -173,7 +173,7 @@ const PatientEducation: React.FC = () => {
       symptoms: ['Often no symptoms', 'Headaches', 'Shortness of breath', 'Nosebleeds (severe cases)'],
       causes: ['Genetics', 'Poor diet', 'Lack of exercise', 'Stress', 'Obesity'],
       treatments: ['Lifestyle changes', 'Blood pressure medications', 'Regular monitoring', 'Dietary modifications'],
-      icon: <AlertCircle className="w-6 h-6 text-orange-500" />
+      icon: <AlertCircle className="w-6 h-6 text-cream-600" />
     }
   ];
 
@@ -253,26 +253,26 @@ const PatientEducation: React.FC = () => {
   };
 
   return (
-    <section id="education" className="py-20 bg-gradient-to-br from-blue-50 to-purple-50" ref={sectionRef}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="education" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20" ref={sectionRef}>
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="bg-blue-600 p-3 rounded-lg">
+        <div className={`text-center mb-20 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="flex items-center justify-center space-x-3 mb-6">
+            <div className="bg-primary-500 p-3 rounded-xl">
               <BookOpen className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-4xl font-bold text-gray-900">
-              Patient Learning Library
+            <h2 className="text-5xl font-bold text-secondary-800">
+              Learning Library
             </h2>
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed">
             Comprehensive educational resources to help you understand your heart health, our procedures, and what to expect during your care.
           </p>
         </div>
 
         {/* Tab Navigation */}
-        <div className={`mb-12 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
+        <div className={`mb-16 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -283,10 +283,10 @@ const PatientEducation: React.FC = () => {
                     setActiveTab(tab.id);
                   }
                 }}
-                className={`flex items-center space-x-2 px-6 py-3 rounded-lg transition-all duration-200 font-medium ${
+                className={`flex items-center space-x-2 px-8 py-4 rounded-2xl transition-all duration-200 font-medium ${
                   activeTab === tab.id
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-white text-gray-700 hover:bg-blue-50 shadow-md border border-gray-200'
+                    ? 'bg-primary-500 text-white shadow-lg'
+                    : 'bg-white text-secondary-700 hover:bg-primary-50 shadow-sm border border-secondary-200'
                 }`}
               >
                 {tab.icon}
@@ -297,26 +297,26 @@ const PatientEducation: React.FC = () => {
 
           {/* Search and Filter - Only show for non-journey-maps tabs */}
           {activeTab !== 'journey-maps' && (
-            <div className="max-w-2xl mx-auto space-y-4">
+            <div className="max-w-2xl mx-auto space-y-6">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary-400 w-5 h-5" />
                 <input
                   type="text"
                   placeholder={`Search ${tabs.find(t => t.id === activeTab)?.label.toLowerCase()}...`}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-12 pr-4 py-4 border border-secondary-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
                 />
               </div>
 
               {(activeTab === 'faq' || activeTab === 'videos') && (
-                <div className="flex flex-wrap justify-center gap-2">
+                <div className="flex flex-wrap justify-center gap-3">
                   <button
                     onClick={() => setSelectedCategory('all')}
-                    className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                    className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
                       selectedCategory === 'all'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                        ? 'bg-primary-500 text-white'
+                        : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
                     }`}
                   >
                     All Categories
@@ -325,40 +325,40 @@ const PatientEducation: React.FC = () => {
                     <>
                       <button
                         onClick={() => setSelectedCategory('general')}
-                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
                           selectedCategory === 'general'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
                         }`}
                       >
                         General
                       </button>
                       <button
                         onClick={() => setSelectedCategory('billing')}
-                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
                           selectedCategory === 'billing'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
                         }`}
                       >
                         Billing
                       </button>
                       <button
                         onClick={() => setSelectedCategory('symptoms')}
-                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
                           selectedCategory === 'symptoms'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
                         }`}
                       >
                         Symptoms
                       </button>
                       <button
                         onClick={() => setSelectedCategory('conditions')}
-                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
                           selectedCategory === 'conditions'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
                         }`}
                       >
                         Conditions
@@ -369,30 +369,30 @@ const PatientEducation: React.FC = () => {
                     <>
                       <button
                         onClick={() => setSelectedCategory('heart-basics')}
-                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
                           selectedCategory === 'heart-basics'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
                         }`}
                       >
                         Heart Basics
                       </button>
                       <button
                         onClick={() => setSelectedCategory('tests')}
-                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
                           selectedCategory === 'tests'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
                         }`}
                       >
                         Tests
                       </button>
                       <button
                         onClick={() => setSelectedCategory('lifestyle')}
-                        className={`px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
                           selectedCategory === 'lifestyle'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white text-gray-600 hover:bg-blue-50 border border-gray-200'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
                         }`}
                       >
                         Lifestyle
@@ -409,20 +409,20 @@ const PatientEducation: React.FC = () => {
         <div className={`transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           {/* Journey Maps Redirect */}
           {activeTab === 'journey-maps' && (
-            <div className="text-center py-16">
-              <div className="bg-white rounded-2xl shadow-lg p-12 max-w-2xl mx-auto">
-                <div className="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <MapPin className="w-10 h-10 text-blue-600" />
+            <div className="text-center py-20">
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg p-16 max-w-2xl mx-auto border border-secondary-200/50">
+                <div className="bg-primary-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8">
+                  <MapPin className="w-12 h-12 text-primary-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                <h3 className="text-3xl font-bold text-secondary-800 mb-6">
                   Interactive Patient Journey Maps
                 </h3>
-                <p className="text-gray-600 mb-8">
+                <p className="text-secondary-600 mb-10 text-lg leading-relaxed">
                   Explore detailed, step-by-step guides for each medical procedure, from initial consultation to full recovery.
                 </p>
                 <button
                   onClick={scrollToJourneyMaps}
-                  className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold mx-auto"
+                  className="bg-primary-500 text-white px-10 py-4 rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold mx-auto text-lg"
                 >
                   <span>View Journey Maps</span>
                   <ChevronRight className="w-5 h-5" />
@@ -433,21 +433,21 @@ const PatientEducation: React.FC = () => {
 
           {/* FAQ Tab */}
           {activeTab === 'faq' && (
-            <div className="max-w-4xl mx-auto space-y-4">
+            <div className="max-w-4xl mx-auto space-y-6">
               {filteredFAQs.map((faq, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-secondary-200/50 overflow-hidden">
                   <button
                     onClick={() => setExpandedFAQ(expandedFAQ === index ? null : index)}
-                    className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
+                    className="w-full p-8 text-left flex items-center justify-between hover:bg-secondary-50/50 transition-colors duration-200"
                   >
-                    <h3 className="text-lg font-semibold text-gray-900 pr-4">{faq.question}</h3>
-                    <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
+                    <h3 className="text-lg font-semibold text-secondary-800 pr-4">{faq.question}</h3>
+                    <ChevronDown className={`w-5 h-5 text-secondary-500 transition-transform duration-200 ${
                       expandedFAQ === index ? 'rotate-180' : ''
                     }`} />
                   </button>
                   {expandedFAQ === index && (
-                    <div className="px-6 pb-6 border-t border-gray-100">
-                      <p className="text-gray-600 leading-relaxed pt-4">{faq.answer}</p>
+                    <div className="px-8 pb-8 border-t border-secondary-100">
+                      <p className="text-secondary-600 leading-relaxed pt-6">{faq.answer}</p>
                     </div>
                   )}
                 </div>
@@ -457,9 +457,9 @@ const PatientEducation: React.FC = () => {
 
           {/* Videos Tab */}
           {activeTab === 'videos' && (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredVideos.map((video, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-secondary-200/50">
                   <div className="relative">
                     <img
                       src={video.thumbnail}
@@ -468,17 +468,17 @@ const PatientEducation: React.FC = () => {
                     />
                     <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                       <div className="bg-white/90 p-3 rounded-full">
-                        <Play className="w-6 h-6 text-blue-600" />
+                        <Play className="w-6 h-6 text-primary-600" />
                       </div>
                     </div>
                     <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
                       {video.duration}
                     </div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{video.title}</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">{video.description}</p>
-                    <button className="mt-4 flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium">
+                  <div className="p-8">
+                    <h3 className="text-lg font-semibold text-secondary-800 mb-3">{video.title}</h3>
+                    <p className="text-secondary-600 text-sm leading-relaxed mb-6">{video.description}</p>
+                    <button className="flex items-center space-x-2 text-primary-600 hover:text-primary-700 font-medium">
                       <PlayCircle className="w-4 h-4" />
                       <span>Watch Video</span>
                     </button>
@@ -490,57 +490,57 @@ const PatientEducation: React.FC = () => {
 
           {/* Conditions Tab */}
           {activeTab === 'conditions' && (
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-10">
               {conditionsData.map((condition, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all duration-300">
-                  <div className="flex items-center space-x-3 mb-4">
+                <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm p-10 hover:shadow-lg transition-all duration-300 border border-secondary-200/50">
+                  <div className="flex items-center space-x-3 mb-6">
                     {condition.icon}
-                    <h3 className="text-xl font-bold text-gray-900">{condition.name}</h3>
+                    <h3 className="text-xl font-bold text-secondary-800">{condition.name}</h3>
                   </div>
                   
-                  <p className="text-gray-600 mb-6 leading-relaxed">{condition.description}</p>
+                  <p className="text-secondary-600 mb-8 leading-relaxed">{condition.description}</p>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-2 flex items-center space-x-2">
-                        <AlertCircle className="w-4 h-4 text-orange-500" />
+                      <h4 className="font-semibold text-secondary-800 mb-3 flex items-center space-x-2">
+                        <AlertCircle className="w-4 h-4 text-cream-500" />
                         <span>Common Symptoms</span>
                       </h4>
-                      <ul className="space-y-1">
+                      <ul className="space-y-2">
                         {condition.symptoms.map((symptom, idx) => (
                           <li key={idx} className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-                            <span className="text-sm text-gray-600">{symptom}</span>
+                            <div className="w-1.5 h-1.5 bg-cream-500 rounded-full"></div>
+                            <span className="text-sm text-secondary-600">{symptom}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                     
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-2 flex items-center space-x-2">
-                        <Info className="w-4 h-4 text-blue-500" />
+                      <h4 className="font-semibold text-secondary-800 mb-3 flex items-center space-x-2">
+                        <Info className="w-4 h-4 text-sage-500" />
                         <span>Common Causes</span>
                       </h4>
-                      <ul className="space-y-1">
+                      <ul className="space-y-2">
                         {condition.causes.map((cause, idx) => (
                           <li key={idx} className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
-                            <span className="text-sm text-gray-600">{cause}</span>
+                            <div className="w-1.5 h-1.5 bg-sage-500 rounded-full"></div>
+                            <span className="text-sm text-secondary-600">{cause}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                     
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-2 flex items-center space-x-2">
-                        <CheckCircle className="w-4 h-4 text-green-500" />
+                      <h4 className="font-semibold text-secondary-800 mb-3 flex items-center space-x-2">
+                        <CheckCircle className="w-4 h-4 text-primary-500" />
                         <span>Treatment Options</span>
                       </h4>
-                      <ul className="space-y-1">
+                      <ul className="space-y-2">
                         {condition.treatments.map((treatment, idx) => (
                           <li key={idx} className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                            <span className="text-sm text-gray-600">{treatment}</span>
+                            <div className="w-1.5 h-1.5 bg-primary-500 rounded-full"></div>
+                            <span className="text-sm text-secondary-600">{treatment}</span>
                           </li>
                         ))}
                       </ul>
@@ -553,33 +553,33 @@ const PatientEducation: React.FC = () => {
 
           {/* Tests Tab */}
           {activeTab === 'tests' && (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testsData.map((test, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                  <div className="space-y-4">
+                <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-secondary-200/50">
+                  <div className="space-y-6">
                     <div className="flex items-center space-x-3">
-                      <div className="bg-blue-100 p-2 rounded-lg">
-                        <Stethoscope className="w-5 h-5 text-blue-600" />
+                      <div className="bg-primary-100 p-2 rounded-xl">
+                        <Stethoscope className="w-5 h-5 text-primary-600" />
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-900">{test.name}</h3>
+                      <h3 className="text-lg font-semibold text-secondary-800">{test.name}</h3>
                     </div>
                     
-                    <p className="text-gray-600 text-sm leading-relaxed">{test.description}</p>
+                    <p className="text-secondary-600 text-sm leading-relaxed">{test.description}</p>
                     
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       <div className="flex items-center space-x-2">
-                        <Clock className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm text-gray-600">Duration: {test.duration}</span>
+                        <Clock className="w-4 h-4 text-secondary-500" />
+                        <span className="text-sm text-secondary-600">Duration: {test.duration}</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Info className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm text-gray-600">Preparation: {test.preparation}</span>
+                        <Info className="w-4 h-4 text-secondary-500" />
+                        <span className="text-sm text-secondary-600">Preparation: {test.preparation}</span>
                       </div>
                     </div>
                     
                     <button
                       onClick={() => scrollToService(test.link)}
-                      className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
+                      className="w-full flex items-center justify-center space-x-2 bg-primary-500 text-white py-3 rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium"
                     >
                       <span>Learn More</span>
                       <ExternalLink className="w-4 h-4" />
@@ -592,19 +592,19 @@ const PatientEducation: React.FC = () => {
         </div>
 
         {/* Call to Action */}
-        <div className={`mt-16 bg-white rounded-2xl shadow-lg p-8 text-center transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">
+        <div className={`mt-20 bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg p-12 text-center transition-all duration-1000 delay-600 border border-secondary-200/50 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h3 className="text-3xl font-bold text-secondary-800 mb-6">
             Still Have Questions?
           </h3>
-          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+          <p className="text-secondary-600 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
             Our team is here to help. Contact us directly for personalized answers about your heart health or to schedule a consultation.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <button className="bg-primary-500 text-white px-10 py-4 rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold text-lg">
               <span>Contact Our Team</span>
               <ChevronRight className="w-4 h-4" />
             </button>
-            <button className="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors duration-200 font-semibold">
+            <button className="border-2 border-primary-500 text-primary-600 px-10 py-4 rounded-2xl hover:bg-primary-50 transition-colors duration-200 font-semibold text-lg">
               Download Patient Guide
             </button>
           </div>

@@ -9,32 +9,32 @@ const About: React.FC = () => {
 
   const features = [
     {
-      icon: <Award className="w-6 h-6 text-rose-600" />,
+      icon: <Award className="w-6 h-6 text-primary-600" />,
       title: "Clinical Excellence",
       description: "Recognized expertise in cardiovascular medicine with evidence-based treatment protocols.",
-      color: "bg-rose-50/80",
-      hoverColor: "hover:bg-rose-100/80"
+      color: "bg-primary-50/80",
+      hoverColor: "hover:bg-primary-100/80"
     },
     {
-      icon: <Users className="w-6 h-6 text-blue-600" />,
+      icon: <Users className="w-6 h-6 text-sage-600" />,
       title: "Specialist Team",
       description: "Board-certified cardiologists with advanced training from leading medical institutions.",
-      color: "bg-blue-50/80",
-      hoverColor: "hover:bg-blue-100/80"
+      color: "bg-sage-50/80",
+      hoverColor: "hover:bg-sage-100/80"
     },
     {
-      icon: <Heart className="w-6 h-6 text-pink-600" />,
+      icon: <Heart className="w-6 h-6 text-accent-600" />,
       title: "Comprehensive Services",
       description: "Complete range of cardiovascular services from preventive care to advanced interventions.",
-      color: "bg-pink-50/80",
-      hoverColor: "hover:bg-pink-100/80"
+      color: "bg-accent-50/80",
+      hoverColor: "hover:bg-accent-100/80"
     },
     {
-      icon: <Shield className="w-6 h-6 text-indigo-600" />,
+      icon: <Shield className="w-6 h-6 text-cream-600" />,
       title: "Advanced Technology",
       description: "State-of-the-art diagnostic equipment and treatment technologies for optimal patient outcomes.",
-      color: "bg-indigo-50/80",
-      hoverColor: "hover:bg-indigo-100/80"
+      color: "bg-cream-50/80",
+      hoverColor: "hover:bg-cream-100/80"
     }
   ];
 
@@ -71,40 +71,40 @@ const About: React.FC = () => {
   return (
     <section id="about" className="py-32 bg-white" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
+        <div className="grid lg:grid-cols-2 gap-24 items-center">
           {/* Content */}
           <motion.div 
-            className="space-y-12"
+            className="space-y-16"
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
           >
-            <motion.div className="space-y-6" variants={itemVariants}>
-              <h2 className="text-5xl lg:text-6xl font-bold text-slate-800 leading-tight">
+            <motion.div className="space-y-8" variants={itemVariants}>
+              <h2 className="text-5xl lg:text-6xl font-bold text-secondary-800 leading-tight">
                 Melbourne's Leading
-                <span className="text-rose-600 block">
+                <span className="text-primary-600 block">
                   Cardiovascular Specialists
                 </span>
               </h2>
-              <div className="space-y-4">
-                <p className="text-lg text-slate-600 leading-relaxed">
-                  Heart Clinic Melbourne provides comprehensive cardiovascular care with over two decades of clinical experience. Our multidisciplinary team delivers evidence-based treatment using advanced diagnostic and therapeutic technologies.
+              <div className="space-y-6">
+                <p className="text-xl text-secondary-600 leading-relaxed">
+                  Heart Clinic Melbourne provides comprehensive cardiovascular care with over two decades of clinical experience.
                 </p>
-                <p className="text-lg text-slate-600 leading-relaxed">
-                  We specialize in personalized treatment plans that address individual patient needs, ensuring optimal cardiovascular health outcomes through collaborative care approaches.
+                <p className="text-lg text-secondary-600 leading-relaxed">
+                  Our multidisciplinary team delivers evidence-based treatment using advanced diagnostic and therapeutic technologies, ensuring optimal cardiovascular health outcomes through collaborative care approaches.
                 </p>
               </div>
             </motion.div>
 
             <motion.div 
-              className="grid sm:grid-cols-2 gap-6"
+              className="grid sm:grid-cols-2 gap-8"
               variants={containerVariants}
             >
               {features.map((feature, index) => (
                 <motion.div
                   key={index}
-                  className={`${feature.color} ${feature.hoverColor} p-6 rounded-2xl transition-all duration-500 cursor-pointer border border-slate-200/50 ${
-                    activeFeature === index ? 'scale-105 shadow-lg ring-2 ring-rose-200/50' : 'hover:scale-102'
+                  className={`${feature.color} ${feature.hoverColor} p-8 rounded-2xl transition-all duration-500 cursor-pointer border border-secondary-200/50 ${
+                    activeFeature === index ? 'scale-105 shadow-lg ring-2 ring-primary-200/50' : 'hover:scale-102'
                   }`}
                   onClick={() => setActiveFeature(index)}
                   variants={itemVariants}
@@ -114,19 +114,19 @@ const About: React.FC = () => {
                   }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     <motion.div 
-                      className="bg-white/80 backdrop-blur-sm w-12 h-12 rounded-xl flex items-center justify-center shadow-sm"
+                      className="bg-white/80 backdrop-blur-sm w-14 h-14 rounded-xl flex items-center justify-center shadow-sm"
                       whileHover={{ rotate: 5 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
                       {feature.icon}
                     </motion.div>
-                    <h3 className="text-lg font-semibold text-slate-800">{feature.title}</h3>
-                    <p className="text-slate-600 text-sm leading-relaxed">{feature.description}</p>
+                    <h3 className="text-xl font-semibold text-secondary-800">{feature.title}</h3>
+                    <p className="text-secondary-600 leading-relaxed">{feature.description}</p>
                     {activeFeature === index && (
                       <motion.div 
-                        className="flex items-center text-rose-600 font-medium text-sm"
+                        className="flex items-center text-primary-600 font-medium"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.3 }}
@@ -165,7 +165,7 @@ const About: React.FC = () => {
             
             {/* Achievement Card */}
             <motion.div 
-              className="absolute -top-6 -right-6 bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-slate-200/50"
+              className="absolute -top-6 -right-6 bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-secondary-200/50"
               initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
               animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : { opacity: 0, scale: 0.8, rotate: -5 }}
               transition={{ duration: 0.6, delay: 0.8 }}
@@ -177,14 +177,14 @@ const About: React.FC = () => {
             >
               <div className="text-center">
                 <motion.div 
-                  className="bg-gradient-to-br from-rose-500 to-pink-500 text-white w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-sm"
+                  className="bg-gradient-to-br from-primary-500 to-accent-500 text-white w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-sm"
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Award className="w-6 h-6" />
+                  <Award className="w-7 h-7" />
                 </motion.div>
-                <p className="font-semibold text-slate-800">Clinical Excellence</p>
-                <p className="text-sm text-slate-500">Healthcare Leadership</p>
+                <p className="font-semibold text-secondary-800 text-lg">Clinical Excellence</p>
+                <p className="text-secondary-500">Healthcare Leadership</p>
               </div>
             </motion.div>
           </motion.div>
