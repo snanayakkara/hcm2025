@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, FileText, Search } from 'lucide-react';
+import { ChevronDown, FileText, Search, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const FAQ: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
+  const navigate = useNavigate();
+
+  const handleLearningLibraryClick = () => {
+    navigate('/learning-library');
+  };
 
   const faqData = [
     {
@@ -34,39 +40,24 @@ const FAQ: React.FC = () => {
       answer: 'Consultation fees vary depending on the type and length of appointment. We offer Medicare rebates for the consultations, and work with private health insurers for our procedures. Our reception team can provide specific fee information when booking.'
     },
     {
-      category: 'symptoms',
-      question: 'When should I be concerned about chest pain?',
-      answer: 'Seek immediate medical attention (call 000) if you experience  chest pain, especially if accompanied by shortness of breath, nausea, sweating, or pain radiating to your arm, neck, or jaw. For persistent or recurring chest discomfort, consult your GP for evaluation.'
+      category: 'general',
+      question: 'Where can I learn more about heart conditions and procedures?',
+      answer: 'Our comprehensive Learning Library contains detailed information about heart conditions, procedures, and patient journey maps. You can access educational videos, procedure guides, and step-by-step explanations of what to expect during your care. Visit our Learning Library for in-depth medical information and educational resources.'
     },
     {
-      category: 'symptoms',
-      question: 'What are common symptoms of heart disease?',
-      answer: 'Common symptoms include chest pain or discomfort, shortness of breath, fatigue, irregular heartbeat, swelling in legs or ankles, and dizziness. However, some people may have no symptoms, which is why regular check-ups are important.'
+      category: 'general',
+      question: 'How do I book an appointment?',
+      answer: 'You can book an appointment by calling our reception team at (03) 9509 5009. We have locations at Malvern, Pakenham, Clyde, and Berwick. Our team will help you choose the most convenient location and time slot that suits your needs.'
     },
     {
-      category: 'conditions',
-      question: 'What is atrial fibrillation?',
-      answer: 'Atrial fibrillation (AF) is an irregular heart rhythm where the upper chambers of the heart beat chaotically. This can cause symptoms like palpitations, fatigue, and shortness of breath, and increases the risk of stroke.'
+      category: 'general',
+      question: 'What locations do you have?',
+      answer: 'We have four convenient locations: Cabrini Hospital Malvern (our main clinic), Heart Clinic Pakenham, Casey Medical Centre Clyde, and SJOG Hospital Berwick. Each location offers different services, and our reception team can advise which location is best for your specific needs.'
     },
     {
-      category: 'conditions',
-      question: 'What is coronary artery disease?',
-      answer: 'Coronary artery disease occurs when the major blood vessels that supply your heart become damaged or diseased. It\'s usually caused by plaque buildup in the arteries, which can reduce blood flow to the heart muscle.'
-    },
-    {
-      category: 'procedures',
-      question: 'What happens during an echocardiogram?',
-      answer: 'An echocardiogram is a painless test that uses sound waves to create pictures of your heart. A technician will apply gel to your chest and move a probe around to capture images of your heart\'s chambers, valves, and blood flow.'
-    },
-    {
-      category: 'procedures',
-      question: 'How should I prepare for a stress test?',
-      answer: 'Wear comfortable exercise clothing and shoes. Avoid eating, drinking caffeine, or smoking for 3 hours before the test. Continue taking your medications unless specifically told otherwise by your doctor.'
-    },
-    {
-      category: 'procedures',
-      question: 'What is a Holter monitor?',
-      answer: 'A Holter monitor is a small, portable device that records your heart\'s electrical activity for 24-48 hours. You wear it while going about your normal daily activities to detect irregular heart rhythms that might not show up during a short ECG.'
+      category: 'general',
+      question: 'Do you offer telehealth consultations?',
+      answer: 'Yes, we offer telehealth consultations for suitable cases. This is particularly useful for follow-up appointments, medication reviews, and certain consultations. Please discuss with our reception team when booking to determine if telehealth is appropriate for your appointment.'
     }
   ];
 
@@ -161,36 +152,6 @@ const FAQ: React.FC = () => {
             >
               Billing
             </button>
-            <button
-              onClick={() => setSelectedCategory('symptoms')}
-              className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                selectedCategory === 'symptoms'
-                  ? 'bg-primary-500 text-white shadow-md'
-                  : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-              }`}
-            >
-              Symptoms
-            </button>
-            <button
-              onClick={() => setSelectedCategory('conditions')}
-              className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                selectedCategory === 'conditions'
-                  ? 'bg-primary-500 text-white shadow-md'
-                  : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-              }`}
-            >
-              Conditions
-            </button>
-            <button
-              onClick={() => setSelectedCategory('procedures')}
-              className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                selectedCategory === 'procedures'
-                  ? 'bg-primary-500 text-white shadow-md'
-                  : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-              }`}
-            >
-              Procedures
-            </button>
           </div>
         </motion.div>
 
@@ -228,7 +189,20 @@ const FAQ: React.FC = () => {
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <p className="text-secondary-600 leading-relaxed pt-6">{faq.answer}</p>
+                  {faq.question.includes('Where can I learn more') ? (
+                    <div className="pt-6 space-y-4">
+                      <p className="text-secondary-600 leading-relaxed">{faq.answer}</p>
+                      <button
+                        onClick={handleLearningLibraryClick}
+                        className="inline-flex items-center space-x-2 bg-primary-500 text-white px-6 py-3 rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium"
+                      >
+                        <span>Visit Learning Library</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-secondary-600 leading-relaxed pt-6">{faq.answer}</p>
+                  )}
                 </motion.div>
               )}
             </motion.div>
