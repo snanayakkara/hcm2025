@@ -9,7 +9,8 @@ const PatientInfo: React.FC = () => {
     preferredDate: '',
     preferredTime: '',
     reason: '',
-    insurance: ''
+    preferredDoctor: '',
+    localGP: ''
   });
   const [isVisible, setIsVisible] = useState(false);
   const [activeResource, setActiveResource] = useState(0);
@@ -82,6 +83,14 @@ const PatientInfo: React.FC = () => {
       items: ["All Major Credit Cards", "EFTPOS & Bank Transfer", "Insurance Claims", "Interest-Free Options"],
       color: "from-amber-100 to-orange-100"
     }
+  ];
+
+  const doctors = [
+    "Dr Mark Freilich",
+    "Dr Phillip Ngu", 
+    "Associate Professor Alex Voskoboinik",
+    "Dr Shane Nanayakkara",
+    "No preference"
   ];
 
   return (
@@ -252,25 +261,36 @@ const PatientInfo: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="insurance" className="block text-sm font-medium text-gray-700 mb-2">
-                  Insurance Provider
+                <label htmlFor="preferredDoctor" className="block text-sm font-medium text-gray-700 mb-2">
+                  Preferred Doctor
                 </label>
                 <select
-                  id="insurance"
-                  name="insurance"
-                  value={formData.insurance}
+                  id="preferredDoctor"
+                  name="preferredDoctor"
+                  value={formData.preferredDoctor}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 >
-                  <option value="">Select insurance</option>
-                  <option value="medicare">Medicare</option>
-                  <option value="bupa">Bupa</option>
-                  <option value="medibank">Medibank</option>
-                  <option value="hcf">HCF</option>
-                  <option value="ahm">AHM</option>
-                  <option value="other">Other</option>
-                  <option value="none">No Insurance</option>
+                  <option value="">Select preferred doctor</option>
+                  {doctors.map((doctor) => (
+                    <option key={doctor} value={doctor}>{doctor}</option>
+                  ))}
                 </select>
+              </div>
+
+              <div>
+                <label htmlFor="localGP" className="block text-sm font-medium text-gray-700 mb-2">
+                  Local GP
+                </label>
+                <input
+                  type="text"
+                  id="localGP"
+                  name="localGP"
+                  value={formData.localGP}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  placeholder="Enter your GP's name and practice"
+                />
               </div>
 
               <div>
