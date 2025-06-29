@@ -3,7 +3,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
-import heartModelUrl from '../../heartmodel.glb';
+// Use public path for GLB file
+const heartModelUrl = '/heartmodel.glb';
 
 interface Heart3DProps {
   scrollY: number;
