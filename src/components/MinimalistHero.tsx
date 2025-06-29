@@ -110,8 +110,38 @@ const MinimalistHero: React.FC = () => {
           <motion.div className="space-y-12" variants={itemVariants}>
             <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold text-secondary-800 leading-[0.9] tracking-tight">
               Welcome to
-              <span className="block bg-gradient-to-r from-primary-500 via-accent-500 to-primary-600 bg-clip-text text-transparent">
-                Heart Clinic Melbourne
+              <span className="block relative">
+                {/* Image background container for text */}
+                <div 
+                  className="relative inline-block bg-gradient-to-br from-primary-500 via-accent-500 to-primary-600 bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage: `url('https://images.pexels.com/photos/6129967/pexels-photo-6129967.jpeg?auto=compress&cs=tinysrgb&w=1200')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    filter: 'drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3))',
+                  }}
+                >
+                  {/* Inner shadow overlay */}
+                  <div 
+                    className="absolute inset-0 bg-gradient-to-br from-primary-500 via-accent-500 to-primary-600 bg-clip-text text-transparent opacity-80"
+                    style={{
+                      backgroundImage: `url('https://images.pexels.com/photos/6129967/pexels-photo-6129967.jpeg?auto=compress&cs=tinysrgb&w=1200')`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      textShadow: 'inset 0 4px 8px rgba(0, 0, 0, 0.4)',
+                      filter: 'drop-shadow(inset 0 4px 8px rgba(0, 0, 0, 0.4))',
+                    }}
+                  >
+                    Heart Clinic Melbourne
+                  </div>
+                  Heart Clinic Melbourne
+                </div>
               </span>
             </h1>
             
