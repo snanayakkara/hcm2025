@@ -102,7 +102,7 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#fcdfbe] to-[#ffd3c2] overflow-x-hidden">
       <main>
         <MinimalistHero />
         <About />
@@ -119,7 +119,7 @@ function HomePage() {
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-white overflow-x-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-[#fcdfbe] to-[#ffd3c2] overflow-x-hidden">
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
