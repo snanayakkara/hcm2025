@@ -18,11 +18,12 @@ import {
   PlayCircle,
   Download,
   ExternalLink,
-  MapPin
+  MapPin,
+  ArrowLeft
 } from 'lucide-react';
 
-const PatientEducation: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('journey-maps');
+const LearningLibrary: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('faq');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
@@ -47,7 +48,6 @@ const PatientEducation: React.FC = () => {
   }, []);
 
   const tabs = [
-    { id: 'journey-maps', label: 'Patient Journey Maps', icon: <MapPin className="w-5 h-5" /> },
     { id: 'faq', label: 'FAQs', icon: <FileText className="w-5 h-5" /> },
     { id: 'videos', label: 'Educational Videos', icon: <PlayCircle className="w-5 h-5" /> },
     { id: 'conditions', label: 'Heart Conditions', icon: <Heart className="w-5 h-5" /> },
@@ -94,6 +94,26 @@ const PatientEducation: React.FC = () => {
       category: 'conditions',
       question: 'What is atrial fibrillation?',
       answer: 'Atrial fibrillation (AF) is an irregular heart rhythm where the upper chambers of the heart beat chaotically. This can cause symptoms like palpitations, fatigue, and shortness of breath, and increases the risk of stroke.'
+    },
+    {
+      category: 'conditions',
+      question: 'What is coronary artery disease?',
+      answer: 'Coronary artery disease occurs when the major blood vessels that supply your heart become damaged or diseased. It\'s usually caused by plaque buildup in the arteries, which can reduce blood flow to the heart muscle.'
+    },
+    {
+      category: 'procedures',
+      question: 'What happens during an echocardiogram?',
+      answer: 'An echocardiogram is a painless test that uses sound waves to create pictures of your heart. A technician will apply gel to your chest and move a probe around to capture images of your heart\'s chambers, valves, and blood flow.'
+    },
+    {
+      category: 'procedures',
+      question: 'How should I prepare for a stress test?',
+      answer: 'Wear comfortable exercise clothing and shoes. Avoid eating, drinking caffeine, or smoking for 3 hours before the test. Continue taking your medications unless specifically told otherwise by your doctor.'
+    },
+    {
+      category: 'procedures',
+      question: 'What is a Holter monitor?',
+      answer: 'A Holter monitor is a small, portable device that records your heart\'s electrical activity for 24-48 hours. You wear it while going about your normal daily activities to detect irregular heart rhythms that might not show up during a short ECG.'
     }
   ];
 
@@ -139,6 +159,20 @@ const PatientEducation: React.FC = () => {
       duration: '8:15',
       description: 'Safe exercise guidelines for people with heart conditions and how to get started.',
       thumbnail: 'https://images.pexels.com/photos/4386476/pexels-photo-4386476.jpeg?auto=compress&cs=tinysrgb&w=400'
+    },
+    {
+      category: 'procedures',
+      title: 'Preparing for Your Cardiac Catheterization',
+      duration: '5:45',
+      description: 'Everything you need to know before your cardiac catheterization procedure.',
+      thumbnail: 'https://images.pexels.com/photos/4386464/pexels-photo-4386464.jpeg?auto=compress&cs=tinysrgb&w=400'
+    },
+    {
+      category: 'procedures',
+      title: 'Understanding Your Stress Test Results',
+      duration: '4:20',
+      description: 'Learn how to interpret your stress test results and what they mean for your heart health.',
+      thumbnail: 'https://images.pexels.com/photos/4173251/pexels-photo-4173251.jpeg?auto=compress&cs=tinysrgb&w=400'
     }
   ];
 
@@ -174,6 +208,22 @@ const PatientEducation: React.FC = () => {
       causes: ['Genetics', 'Poor diet', 'Lack of exercise', 'Stress', 'Obesity'],
       treatments: ['Lifestyle changes', 'Blood pressure medications', 'Regular monitoring', 'Dietary modifications'],
       icon: <AlertCircle className="w-6 h-6 text-cream-600" />
+    },
+    {
+      name: 'Heart Valve Disease',
+      description: 'A condition where one or more of the heart\'s valves don\'t work properly, affecting blood flow through the heart.',
+      symptoms: ['Shortness of breath', 'Chest pain', 'Fatigue', 'Swelling', 'Heart murmur'],
+      causes: ['Age-related wear', 'Congenital defects', 'Rheumatic fever', 'Infections', 'Heart attack'],
+      treatments: ['Monitoring', 'Medications', 'Valve repair', 'Valve replacement'],
+      icon: <Heart className="w-6 h-6 text-accent-500" />
+    },
+    {
+      name: 'Arrhythmias',
+      description: 'Abnormal heart rhythms that can cause the heart to beat too fast, too slow, or irregularly.',
+      symptoms: ['Palpitations', 'Dizziness', 'Shortness of breath', 'Chest pain', 'Fainting'],
+      causes: ['Heart disease', 'Electrolyte imbalances', 'Medications', 'Stress', 'Caffeine'],
+      treatments: ['Lifestyle changes', 'Medications', 'Cardioversion', 'Ablation', 'Pacemaker'],
+      icon: <Activity className="w-6 h-6 text-primary-500" />
     }
   ];
 
@@ -219,6 +269,20 @@ const PatientEducation: React.FC = () => {
       duration: '30-45 minutes',
       preparation: 'Heart rate control may be needed',
       link: 'ct-angiography'
+    },
+    {
+      name: 'Cardiac MRI',
+      description: 'Detailed magnetic resonance imaging of the heart',
+      duration: '45-90 minutes',
+      preparation: 'Remove metal objects',
+      link: 'cardiac-mri'
+    },
+    {
+      name: 'Nuclear Stress Test',
+      description: 'Stress test combined with radioactive tracer imaging',
+      duration: '3-4 hours',
+      preparation: 'Fasting and medication adjustments',
+      link: 'nuclear-stress'
     }
   ];
 
@@ -236,35 +300,39 @@ const PatientEducation: React.FC = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const scrollToService = (serviceId: string) => {
-    // First navigate to services section
-    const servicesElement = document.getElementById('services');
-    if (servicesElement) {
-      servicesElement.scrollIntoView({ behavior: 'smooth' });
-      // You could also trigger the service selection here if needed
-    }
-  };
-
-  const scrollToJourneyMaps = () => {
-    const journeyMapsElement = document.getElementById('journey-maps');
-    if (journeyMapsElement) {
-      journeyMapsElement.scrollIntoView({ behavior: 'smooth' });
-    }
+  const goBack = () => {
+    window.history.back();
   };
 
   return (
-    <section id="education" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20" ref={sectionRef}>
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+    <div className="min-h-screen bg-gradient-to-br from-cream-50 via-white to-primary-50/20">
+      {/* Header with Back Button */}
+      <div className="bg-white/80 backdrop-blur-sm border-b border-secondary-200/50 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-6">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={goBack}
+              className="flex items-center space-x-2 text-secondary-600 hover:text-primary-600 transition-colors duration-200"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span className="font-medium">Back</span>
+            </button>
+            <div className="flex items-center space-x-3">
+              <div className="bg-primary-500 p-2 rounded-lg">
+                <BookOpen className="w-6 h-6 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-secondary-800">Learning Library</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16" ref={sectionRef}>
         {/* Header */}
         <div className={`text-center mb-20 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <div className="flex items-center justify-center space-x-3 mb-6">
-            <div className="bg-primary-500 p-3 rounded-xl">
-              <BookOpen className="w-8 h-8 text-white" />
-            </div>
-            <h2 className="text-5xl font-bold text-secondary-800">
-              Learning Library
-            </h2>
-          </div>
+          <h2 className="text-5xl font-bold text-secondary-800 mb-6">
+            Patient Education Resources
+          </h2>
           <p className="text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed">
             Comprehensive educational resources to help you understand your heart health, our procedures, and what to expect during your care.
           </p>
@@ -276,13 +344,7 @@ const PatientEducation: React.FC = () => {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => {
-                  if (tab.id === 'journey-maps') {
-                    scrollToJourneyMaps();
-                  } else {
-                    setActiveTab(tab.id);
-                  }
-                }}
+                onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center space-x-2 px-8 py-4 rounded-2xl transition-all duration-200 font-medium ${
                   activeTab === tab.id
                     ? 'bg-primary-500 text-white shadow-lg'
@@ -295,142 +357,136 @@ const PatientEducation: React.FC = () => {
             ))}
           </div>
 
-          {/* Search and Filter - Only show for non-journey-maps tabs */}
-          {activeTab !== 'journey-maps' && (
-            <div className="max-w-2xl mx-auto space-y-6">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder={`Search ${tabs.find(t => t.id === activeTab)?.label.toLowerCase()}...`}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 border border-secondary-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
-                />
-              </div>
-
-              {(activeTab === 'faq' || activeTab === 'videos') && (
-                <div className="flex flex-wrap justify-center gap-3">
-                  <button
-                    onClick={() => setSelectedCategory('all')}
-                    className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                      selectedCategory === 'all'
-                        ? 'bg-primary-500 text-white'
-                        : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                    }`}
-                  >
-                    All Categories
-                  </button>
-                  {activeTab === 'faq' && (
-                    <>
-                      <button
-                        onClick={() => setSelectedCategory('general')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'general'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        General
-                      </button>
-                      <button
-                        onClick={() => setSelectedCategory('billing')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'billing'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        Billing
-                      </button>
-                      <button
-                        onClick={() => setSelectedCategory('symptoms')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'symptoms'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        Symptoms
-                      </button>
-                      <button
-                        onClick={() => setSelectedCategory('conditions')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'conditions'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        Conditions
-                      </button>
-                    </>
-                  )}
-                  {activeTab === 'videos' && (
-                    <>
-                      <button
-                        onClick={() => setSelectedCategory('heart-basics')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'heart-basics'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        Heart Basics
-                      </button>
-                      <button
-                        onClick={() => setSelectedCategory('tests')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'tests'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        Tests
-                      </button>
-                      <button
-                        onClick={() => setSelectedCategory('lifestyle')}
-                        className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
-                          selectedCategory === 'lifestyle'
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
-                        }`}
-                      >
-                        Lifestyle
-                      </button>
-                    </>
-                  )}
-                </div>
-              )}
+          {/* Search and Filter */}
+          <div className="max-w-2xl mx-auto space-y-6">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder={`Search ${tabs.find(t => t.id === activeTab)?.label.toLowerCase()}...`}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 border border-secondary-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
+              />
             </div>
-          )}
+
+            {(activeTab === 'faq' || activeTab === 'videos') && (
+              <div className="flex flex-wrap justify-center gap-3">
+                <button
+                  onClick={() => setSelectedCategory('all')}
+                  className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                    selectedCategory === 'all'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                  }`}
+                >
+                  All Categories
+                </button>
+                {activeTab === 'faq' && (
+                  <>
+                    <button
+                      onClick={() => setSelectedCategory('general')}
+                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                        selectedCategory === 'general'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                      }`}
+                    >
+                      General
+                    </button>
+                    <button
+                      onClick={() => setSelectedCategory('billing')}
+                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                        selectedCategory === 'billing'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                      }`}
+                    >
+                      Billing
+                    </button>
+                    <button
+                      onClick={() => setSelectedCategory('symptoms')}
+                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                        selectedCategory === 'symptoms'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                      }`}
+                    >
+                      Symptoms
+                    </button>
+                    <button
+                      onClick={() => setSelectedCategory('conditions')}
+                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                        selectedCategory === 'conditions'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                      }`}
+                    >
+                      Conditions
+                    </button>
+                    <button
+                      onClick={() => setSelectedCategory('procedures')}
+                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                        selectedCategory === 'procedures'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                      }`}
+                    >
+                      Procedures
+                    </button>
+                  </>
+                )}
+                {activeTab === 'videos' && (
+                  <>
+                    <button
+                      onClick={() => setSelectedCategory('heart-basics')}
+                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                        selectedCategory === 'heart-basics'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                      }`}
+                    >
+                      Heart Basics
+                    </button>
+                    <button
+                      onClick={() => setSelectedCategory('tests')}
+                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                        selectedCategory === 'tests'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                      }`}
+                    >
+                      Tests
+                    </button>
+                    <button
+                      onClick={() => setSelectedCategory('lifestyle')}
+                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                        selectedCategory === 'lifestyle'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                      }`}
+                    >
+                      Lifestyle
+                    </button>
+                    <button
+                      onClick={() => setSelectedCategory('procedures')}
+                      className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+                        selectedCategory === 'procedures'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
+                      }`}
+                    >
+                      Procedures
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Content */}
         <div className={`transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          {/* Journey Maps Redirect */}
-          {activeTab === 'journey-maps' && (
-            <div className="text-center py-20">
-              <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg p-16 max-w-2xl mx-auto border border-secondary-200/50">
-                <div className="bg-primary-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8">
-                  <MapPin className="w-12 h-12 text-primary-600" />
-                </div>
-                <h3 className="text-3xl font-bold text-secondary-800 mb-6">
-                  Interactive Patient Journey Maps
-                </h3>
-                <p className="text-secondary-600 mb-10 text-lg leading-relaxed">
-                  Explore detailed, step-by-step guides for each medical procedure, from initial consultation to full recovery.
-                </p>
-                <button
-                  onClick={scrollToJourneyMaps}
-                  className="bg-primary-500 text-white px-10 py-4 rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold mx-auto text-lg"
-                >
-                  <span>View Journey Maps</span>
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* FAQ Tab */}
           {activeTab === 'faq' && (
             <div className="max-w-4xl mx-auto space-y-6">
@@ -577,10 +633,7 @@ const PatientEducation: React.FC = () => {
                       </div>
                     </div>
                     
-                    <button
-                      onClick={() => scrollToService(test.link)}
-                      className="w-full flex items-center justify-center space-x-2 bg-primary-500 text-white py-3 rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium"
-                    >
+                    <button className="w-full flex items-center justify-center space-x-2 bg-primary-500 text-white py-3 rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium">
                       <span>Learn More</span>
                       <ExternalLink className="w-4 h-4" />
                     </button>
@@ -610,8 +663,8 @@ const PatientEducation: React.FC = () => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
-export default PatientEducation;
+export default LearningLibrary;

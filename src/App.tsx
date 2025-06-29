@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import MinimalistHero from './components/MinimalistHero';
 import About from './components/About';
@@ -6,12 +7,12 @@ import Services from './components/Services';
 import Doctors from './components/Doctors';
 import ReceptionTeam from './components/ReceptionTeam';
 import PatientInfo from './components/PatientInfo';
-import PatientEducation from './components/PatientEducation';
 import InteractiveJourneyMaps from './components/InteractiveJourneyMaps';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import LearningLibrary from './pages/LearningLibrary';
 
-function App() {
+function HomePage() {
   useEffect(() => {
     // Enhanced smooth scrolling for the entire page
     document.documentElement.style.scrollBehavior = 'smooth';
@@ -103,7 +104,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      <Header />
       <main>
         <MinimalistHero />
         <About />
@@ -111,12 +111,25 @@ function App() {
         <Doctors />
         <ReceptionTeam />
         <PatientInfo />
-        <PatientEducation />
         <InteractiveJourneyMaps />
         <Contact />
       </main>
-      <Footer />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <div className="min-h-screen bg-white overflow-x-hidden">
+        <Header />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/learning-library" element={<LearningLibrary />} />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

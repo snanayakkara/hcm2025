@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Heart, FileText, ChevronDown, Video, Search } from 'lucide-react';
+import { Menu, X, Heart, FileText, ChevronDown, Video, Search, BookOpen } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -8,38 +9,54 @@ const Header: React.FC = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
       
-      // Update active section based on scroll position
-      const sections = ['home', 'about', 'services', 'doctors', 'reception-team', 'patients', 'education', 'contact'];
-      const currentSection = sections.find(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
+      // Update active section based on scroll position (only on homepage)
+      if (location.pathname === '/') {
+        const sections = ['home', 'about', 'services', 'doctors', 'reception-team', 'patients', 'education', 'contact'];
+        const currentSection = sections.find(section => {
+          const element = document.getElementById(section);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            return rect.top <= 100 && rect.bottom >= 100;
+          }
+          return false;
+        });
+        
+        if (currentSection) {
+          setActiveSection(currentSection);
         }
-        return false;
-      });
-      
-      if (currentSection) {
-        setActiveSection(currentSection);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMenuOpen(false);
-      setShowMegaMenu(false);
+    // If we're not on the homepage, navigate there first
+    if (location.pathname !== '/') {
+      navigate('/');
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
+    setIsMenuOpen(false);
+    setShowMegaMenu(false);
   };
 
   const handleReferralClick = () => {
@@ -118,7 +135,7 @@ const Header: React.FC = () => {
               {/* Logo */}
               <motion.div 
                 className="flex items-center space-x-3 group cursor-pointer" 
-                onClick={() => scrollToSection('home')}
+                onClick={() => navigate('/')}
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
@@ -164,7 +181,7 @@ const Header: React.FC = () => {
                       onClick={() => item.hasSubmenu ? setShowMegaMenu(!showMegaMenu) : scrollToSection(item.id)}
                       onMouseEnter={() => item.hasSubmenu && setShowMegaMenu(true)}
                       className={`flex items-center space-x-1 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 relative ${
-                        activeSection === item.id
+                        activeSection === item.id && location.pathname === '/'
                           ? 'text-primary-600 bg-primary-50/80'
                           : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50/50'
                       }`}
@@ -215,6 +232,21 @@ const Header: React.FC = () => {
                     </AnimatePresence>
                   </div>
                 ))}
+
+                {/* Learning Library Link */}
+                <motion.button
+                  onClick={() => navigate('/learning-library')}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    location.pathname === '/learning-library'
+                      ? 'text-primary-600 bg-primary-50/80'
+                      : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50/50'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span>Learning Library</span>
+                </motion.button>
               </nav>
               
               {/* Action Buttons */}
@@ -305,7 +337,7 @@ const Header: React.FC = () => {
                         key={item.id}
                         onClick={() => scrollToSection(item.id)}
                         className={`block w-full text-left py-3 px-4 rounded-lg text-sm font-medium transition-all duration-200 ${
-                          activeSection === item.id
+                          activeSection === item.id && location.pathname === '/'
                             ? 'bg-primary-50/80 text-primary-600'
                             : 'text-secondary-600 hover:bg-primary-50/50 hover:text-primary-600'
                         }`}
@@ -317,6 +349,26 @@ const Header: React.FC = () => {
                         {item.label}
                       </motion.button>
                     ))}
+
+                    {/* Mobile Learning Library Link */}
+                    <motion.button
+                      onClick={() => {
+                        navigate('/learning-library');
+                        setIsMenuOpen(false);
+                      }}
+                      className={`flex items-center space-x-2 w-full text-left py-3 px-4 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        location.pathname === '/learning-library'
+                          ? 'bg-primary-50/80 text-primary-600'
+                          : 'text-secondary-600 hover:bg-primary-50/50 hover:text-primary-600'
+                      }`}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: navItems.length * 0.05 }}
+                      whileHover={{ x: 4 }}
+                    >
+                      <BookOpen className="w-4 h-4" />
+                      <span>Learning Library</span>
+                    </motion.button>
                     
                     {/* Mobile Action Buttons */}
                     <div className="pt-4 space-y-2 border-t border-secondary-200/50">
