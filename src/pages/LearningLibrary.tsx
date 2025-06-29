@@ -663,6 +663,13 @@ const LearningLibrary: React.FC = () => {
       duration: '3-4 hours',
       preparation: 'Fasting and medication adjustments',
       link: 'nuclear-stress'
+    },
+    {
+      name: 'PYP Scan (Pyrophosphate)',
+      description: 'Nuclear imaging test to detect cardiac amyloidosis',
+      duration: '2-3 hours',
+      preparation: 'No special preparation required',
+      link: 'pyp-scan'
     }
   ];
 

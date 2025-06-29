@@ -407,6 +407,38 @@ const Services: React.FC = () => {
       ],
       cost: "Private health insurance recommended",
       image: "https://images.pexels.com/photos/4386464/pexels-photo-4386464.jpeg?auto=compress&cs=tinysrgb&w=600"
+    },
+    {
+      id: 'pacemaker',
+      name: "Pacemaker Insertion",
+      category: 'electrophysiology',
+      icon: <Zap className="w-5 h-5" />,
+      shortDescription: "Permanent pacemaker implantation for heart rhythm disorders",
+      duration: "1-2 hours",
+      preparation: "Day procedure or overnight stay",
+      locations: ["Malvern", "Berwick"],
+      description: "Pacemaker insertion is a procedure to implant a small electronic device that helps regulate your heart rhythm. The pacemaker monitors your heart rate and delivers electrical impulses when needed to maintain a normal rhythm.",
+      whatToExpected: [
+        "Local anaesthetic at implantation site",
+        "Small incision below the collarbone",
+        "Pacemaker leads threaded through veins to heart",
+        "Device testing to ensure proper function",
+        "Wound closure and dressing application"
+      ],
+      preparationSteps: [
+        "Fast for 8 hours before procedure",
+        "Continue heart medications unless advised otherwise",
+        "Arrange transport home",
+        "Bring comfortable, loose-fitting clothing"
+      ],
+      afterCare: [
+        "Rest with limited arm movement for 24 hours",
+        "Keep wound dry for 48 hours",
+        "Avoid heavy lifting for 6 weeks",
+        "Follow-up appointment for wound check and device interrogation"
+      ],
+      cost: "Private health insurance recommended",
+      image: "/images/pacemaker.png"
     }
   ];
 
