@@ -24,7 +24,7 @@ import {
   Calendar,
   Users
 } from 'lucide-react';
-import InteractiveJourneyMaps from '../components/InteractiveJourneyMaps';
+import ProgressivePatientJourney from '../components/ProgressivePatientJourney';
 
 const LearningLibrary: React.FC = () => {
   const [activeTab, setActiveTab] = useState('journey-maps');
@@ -497,7 +497,7 @@ const LearningLibrary: React.FC = () => {
           {/* Journey Maps Tab */}
           {activeTab === 'journey-maps' && (
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200/50 overflow-hidden">
-              <InteractiveJourneyMaps />
+              <ProgressivePatientJourney />
             </div>
           )}
 
