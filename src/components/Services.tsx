@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
-import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, AlertCircle, CheckCircle, Info, BookOpen, ExternalLink, Search } from 'lucide-react';
+import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, BookOpen, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Services: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string | null>(null);
+  // Lock body scroll while overlay is open
+  useEffect(() => {
+    document.body.style.overflow = selectedService ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedService]);
   const navigate = useNavigate();
 
   // Check for reduced motion preference
@@ -66,11 +73,27 @@ const Services: React.FC = () => {
     }
   };
 
+  /** Small fact cell used in the expanded card */
+  const QuickFact = ({
+    icon: Icon,
+    title,
+    value,
+  }: {
+    icon: React.FC<any>;
+    title: string;
+    value: string;
+  }) => (
+    <div className="text-center">
+      <Icon className="w-5 h-5 text-primary-600 mx-auto mb-1" />
+      <p className="font-semibold text-secondary-800 text-sm">{title}</p>
+      <p className="text-xs text-secondary-600">{value}</p>
+    </div>
+  );
 
   const services = [
     {
       id: 'consultation',
-      name: "Cardiac Consultation",
+      name: "Consultation",
       category: 'consultation',
       icon: <Stethoscope className="w-5 h-5" />,
       shortDescription: "Comprehensive cardiac assessment and specialist consultation",
@@ -448,64 +471,78 @@ const Services: React.FC = () => {
 
         {/* Services Card Grid */}
         <LayoutGroup id="services-cards">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-            {services.map((service) => {
-              const isOpen = selectedService === service.id;
-              return (
+          {/* Collapsed service cards */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((s) => (
+              <motion.div
+                key={s.id}
+                layout
+                layoutId={s.id}
+                onClick={() => setSelectedService(s.id)}
+                style={{
+                  backgroundImage: `url(${s.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+                className="relative h-28 cursor-pointer rounded-3xl shadow-md overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] transition-colors duration-300 hover:bg-white/50" />
+                <div className="relative z-10 flex items-center h-full px-6 space-x-4">
+                  <div className="p-3 rounded-xl bg-primary-100 text-primary-600">{s.icon}</div>
+                  <div>
+                    <h4 className="font-semibold text-secondary-800 leading-snug">{s.name}</h4>
+                    <p className="text-xs text-secondary-600">{s.duration}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Overlay + expanded card */}
+          <AnimatePresence>
+            {selectedService && (
+              <>
+                {/* dimmed background */}
                 <motion.div
-                  key={service.id}
-                  layout
-                  onClick={() => setSelectedService(isOpen ? null : service.id)}
-                  className={`cursor-pointer bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200 overflow-hidden transition-all ${isOpen ? 'sm:col-span-2 lg:col-span-3' : ''}`}
+                  key="overlay"
+                  className="fixed inset-0 bg-secondary-900/60 backdrop-blur-sm z-40"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setSelectedService(null)}
+                />
+
+                {/* expanded content */}
+                <motion.div
+                  key="expanded"
+                  layoutId={selectedService}
+                  className="fixed inset-x-4 sm:left-1/2 sm:-translate-x-1/2 top-24 z-50 max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden"
                 >
-                  {/* Collapsed header */}
-                  <motion.div layout className="p-6 flex items-start space-x-4">
-                    <div className="p-3 rounded-xl bg-primary-100 text-primary-600">
-                      {service.icon}
-                    </div>
-                    <div className="min-w-0">
-                      <h4 className="text-lg font-bold text-secondary-800 leading-snug">
-                        {service.name}
-                      </h4>
-                      <p className="text-sm text-secondary-600">{service.duration}</p>
-                    </div>
-                  </motion.div>
-
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        layout
-                        key="content"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="space-y-8 px-6 pb-8"
-                      >
-                        <p className="text-secondary-700">{service.description}</p>
-
-                        {/* Quick info */}
-                        <div className="grid sm:grid-cols-3 gap-4 p-4 bg-secondary-50 rounded-xl">
-                          <div className="text-center">
-                            <Clock className="w-5 h-5 text-primary-600 mx-auto mb-1" />
-                            <p className="font-semibold text-secondary-800 text-sm">Duration</p>
-                            <p className="text-xs text-secondary-600">{service.duration}</p>
+                  {(() => {
+                    const s = services.find((x) => x.id === selectedService)!;
+                    return (
+                      <div className="space-y-8 p-8">
+                        <div className="flex items-start space-x-4">
+                          <div className="p-3 rounded-xl bg-primary-100 text-primary-600">
+                            {s.icon}
                           </div>
-                          <div className="text-center">
-                            <MapPin className="w-5 h-5 text-primary-600 mx-auto mb-1" />
-                            <p className="font-semibold text-secondary-800 text-sm">Locations</p>
-                            <p className="text-xs text-secondary-600">{service.locations.join(', ')}</p>
-                          </div>
-                          <div className="text-center">
-                            <FileText className="w-5 h-5 text-primary-600 mx-auto mb-1" />
-                            <p className="font-semibold text-secondary-800 text-sm">Cost</p>
-                            <p className="text-xs text-secondary-600">{service.cost}</p>
+                          <div>
+                            <h3 className="text-2xl font-bold text-secondary-800">{s.name}</h3>
+                            <p className="text-secondary-600">{s.shortDescription}</p>
                           </div>
                         </div>
 
-                        {/* Learning‑library link */}
-                        {educationalLinks[service.id as keyof typeof educationalLinks]?.hasContent && (
+                        <p className="text-secondary-700">{s.description}</p>
+
+                        <div className="grid sm:grid-cols-3 gap-4 p-4 bg-secondary-50 rounded-xl">
+                          <QuickFact icon={Clock} title="Duration" value={s.duration} />
+                          <QuickFact icon={MapPin} title="Locations" value={s.locations.join(', ')} />
+                          <QuickFact icon={FileText} title="Cost" value={s.cost} />
+                        </div>
+
+                        {educationalLinks[s.id as keyof typeof educationalLinks]?.hasContent && (
                           <button
-                            onClick={() => handleLearnMore(service.id)}
+                            onClick={() => handleLearnMore(s.id)}
                             className="w-full bg-sage-500 text-white py-3 rounded-xl flex items-center justify-center space-x-2 hover:bg-sage-600"
                           >
                             <BookOpen className="w-4 h-4" />
@@ -513,21 +550,20 @@ const Services: React.FC = () => {
                           </button>
                         )}
 
-                        {/* Image */}
                         <div className="w-full h-64 rounded-xl overflow-hidden">
                           <img
-                            src={service.image}
-                            alt={service.name}
+                            src={s.image}
+                            alt={s.name}
                             className="w-full h-full object-cover"
                           />
                         </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                      </div>
+                    );
+                  })()}
                 </motion.div>
-              );
-            })}
-          </div>
+              </>
+            )}
+          </AnimatePresence>
         </LayoutGroup>
 
         {/* Call to Action */}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, ArrowDown } from 'lucide-react';
 import SplitText from './SplitText';
 
 const MinimalistHero: React.FC = () => {
@@ -109,17 +108,6 @@ const MinimalistHero: React.FC = () => {
           initial="hidden"
           animate="visible"
         >
-          
-          {/* Professional Brand Indicator */}
-          <motion.div 
-            className="inline-flex items-center space-x-2 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full border border-secondary-200/50 shadow-sm"
-            variants={itemVariants}
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <Heart className="w-4 h-4 text-primary-500" />
-            <span className="text-secondary-600 font-medium text-sm">Heart Clinic Melbourne</span>
-          </motion.div>
           
           {/* Main Headline */}
           <motion.div className="space-y-12" variants={itemVariants}>
