@@ -18,7 +18,8 @@ const Doctors: React.FC = () => {
       appointments: ["Alfred Hospital", "Frankston Hospital"],
       description: "Dr Freilich is a pioneer in radial approach coronary angiography in Melbourne, having trained in this advanced technique in the United States. He specializes in interventional cardiac procedures with extensive experience in coronary interventions.",
       gradient: "from-primary-500 via-primary-600 to-sage-700",
-      accentColor: "primary"
+      accentColor: "primary",
+      accentHex: '#148792',
     },
     {
       name: "Dr Phillip Ngu",
@@ -31,7 +32,8 @@ const Doctors: React.FC = () => {
       appointments: ["Alfred Hospital"],
       description: "Dr Ngu specializes in advanced cardiac imaging and uses multi-modality imaging techniques to better understand cardiac disease and improve patient outcomes. His expertise spans all forms of non-invasive cardiac assessment.",
       gradient: "from-sage-500 via-sage-600 to-accent-700",
-      accentColor: "sage"
+      accentColor: "sage",
+      accentHex: '#4a787d',
     },
     {
       name: "A/Prof Alex Voskoboinik",
@@ -44,7 +46,8 @@ const Doctors: React.FC = () => {
       appointments: ["Cabrini Hospital Malvern", "Alfred Health"],
       description: "Associate Professor Voskoboinik is a leading electrophysiologist specializing in rhythm disorders. He has extensive research experience and has won prestigious awards including the Ralph Reader Prize for top young investigator.",
       gradient: "from-accent-500 via-accent-600 to-cream-700",
-      accentColor: "accent"
+      accentColor: "accent",
+      accentHex: '#3bd7d6',
     },
     {
       name: "Dr Shane Nanayakkara",
@@ -57,7 +60,8 @@ const Doctors: React.FC = () => {
       appointments: ["Cabrini Hospital Malvern", "Alfred Hospital"],
       description: "Dr Nanayakkara is an interventional and structural cardiologist with expertise in advanced procedures including transcatheter valve interventions. He combines clinical excellence with research innovation and has a passion for both face-to-face and telemedicine care.",
       gradient: "from-cream-500 via-cream-600 to-primary-700",
-      accentColor: "cream"
+      accentColor: "cream",
+      accentHex: '#79e7e1',
     }
   ];
 
@@ -125,7 +129,7 @@ const Doctors: React.FC = () => {
               }`}
             >
               {/* Card Background Gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${doctor.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500 bg-white" />
               
               <div className="relative p-6 space-y-4">
                 {/* Doctor Image */}
@@ -133,11 +137,8 @@ const Doctors: React.FC = () => {
                   <img
                     src={doctor.image}
                     alt={doctor.name}
-                    className="w-16 h-16 object-cover rounded-xl mx-auto shadow-md group-hover:shadow-lg transition-shadow duration-300"
+                    className="w-20 h-20 object-cover rounded-xl mx-auto shadow-md group-hover:shadow-lg transition-shadow duration-300"
                   />
-                  <div className={`absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r ${doctor.gradient} rounded-full flex items-center justify-center`}>
-                    <Heart className="w-2.5 h-2.5 text-white" />
-                  </div>
                 </div>
                 
                 {/* Doctor Info */}
@@ -193,19 +194,18 @@ const Doctors: React.FC = () => {
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-secondary-100">
             <div className="grid lg:grid-cols-2">
               {/* Doctor Image and Info */}
-              <div className={`relative bg-gradient-to-br ${doctors[selectedDoctor].gradient} p-12 lg:p-16`}>
-                <div className="relative z-10">
+              <div className="relative">
+                <div className="relative z-10 h-full w-full p-12 lg:p-16">
                   {/* Doctor Image */}
-                  <div className="relative mb-8">
-                    <div className="w-80 h-80 mx-auto relative">
+                  <div className="relative mb-8 h-full w-full">
+                    <div className="w-full h-full relative">
                       <img
                         src={doctors[selectedDoctor].image}
                         alt={`${doctors[selectedDoctor].name} - ${doctors[selectedDoctor].title}`}
                         className="w-full h-full object-cover rounded-3xl shadow-2xl"
                       />
                       <div className="absolute -top-4 -right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full flex items-center space-x-2 shadow-lg">
-                        <MapPin className="w-5 h-5 text-primary-600" />
-                        <span className="font-bold text-secondary-900 text-sm">{doctors[selectedDoctor].locations.length} Location{doctors[selectedDoctor].locations.length > 1 ? 's' : ''}</span>
+                        <span className="font-bold text-secondary-900 text-sm line-clamp-1">{doctors[selectedDoctor].specialization}</span>
                       </div>
                     </div>
                   </div>
@@ -219,7 +219,7 @@ const Doctors: React.FC = () => {
                 </div>
 
                 {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-10">
+                <div className="absolute inset-0 opacity-10 pointer-events-none">
                   <div className="absolute top-10 left-10 w-20 h-20 border-2 border-white rounded-full"></div>
                   <div className="absolute bottom-10 right-10 w-16 h-16 border-2 border-white rounded-full"></div>
                   <div className="absolute top-1/2 right-20 w-12 h-12 border-2 border-white rounded-full"></div>
@@ -291,7 +291,10 @@ const Doctors: React.FC = () => {
                 </div>
 
                 {/* CTA Button */}
-                <button className={`w-full bg-gradient-to-r ${doctors[selectedDoctor].gradient} text-white py-4 rounded-2xl hover:shadow-xl transition-all duration-300 font-bold text-lg transform hover:-translate-y-1`}>
+                <button
+                  className="w-full text-white py-4 rounded-2xl hover:shadow-xl transition-all duration-300 font-bold text-lg transform hover:-translate-y-1"
+                  style={{ backgroundColor: doctors[selectedDoctor].accentHex }}
+                >
                   Book with {doctors[selectedDoctor].name.split(' ')[1]}
                 </button>
               </div>
@@ -306,11 +309,13 @@ const Doctors: React.FC = () => {
                     setSelectedDoctor(index);
                     setIsAutoPlaying(false);
                   }}
-                  className={`transition-all duration-300 ${
-                    index === selectedDoctor 
-                      ? `bg-gradient-to-r ${doctors[index].gradient} w-12 h-4 rounded-full` 
-                      : 'bg-secondary-300 hover:bg-secondary-400 w-4 h-4 rounded-full'
-                  }`}
+                  style={{
+                    backgroundColor: index === selectedDoctor ? doctors[index].accentHex : '#d1d5db',
+                    width: index === selectedDoctor ? '48px' : '16px',
+                    height: '16px',
+                    borderRadius: '9999px',
+                    transition: 'all 0.3s',
+                  }}
                 />
               ))}
             </div>

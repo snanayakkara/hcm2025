@@ -165,9 +165,8 @@ const ReceptionTeam: React.FC = () => {
                 <img
                   src={practiceManager.image}
                   alt={`${practiceManager.name} - ${practiceManager.title}`}
-                  className="w-full h-80 object-cover mix-blend-soft-light"
+                  className="w-full h-80 object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                 
                 {/* Experience Badge */}
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center space-x-1">
@@ -238,9 +237,8 @@ const ReceptionTeam: React.FC = () => {
                   <img
                     src={member.image}
                     alt={`${member.name} - ${member.title}`}
-                    className="w-full h-full object-cover mix-blend-soft-light"
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                 </div>
 
                 {/* Member Info */}
@@ -308,9 +306,8 @@ const ReceptionTeam: React.FC = () => {
                     <img
                       src={tech.image}
                       alt={`${tech.name} - ${tech.title}`}
-                      className="w-full h-full object-cover mix-blend-soft-light"
+                      className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                   </div>
 
                   {/* Tech Info */}

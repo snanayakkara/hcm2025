@@ -4,6 +4,7 @@ import SplitText from './SplitText';
 
 const MinimalistHero: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -13,6 +14,13 @@ const MinimalistHero: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Preload the background image
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => setImageLoaded(true);
+    img.src = '/images/hcmheartback.png';
   }, []);
 
   const scrollToNext = () => {
@@ -118,18 +126,20 @@ const MinimalistHero: React.FC = () => {
                 <div 
                   className="relative inline-block bg-gradient-to-br from-primary-500 via-accent-500 to-primary-600 bg-clip-text text-transparent"
                   style={{
-                    backgroundImage: `url('/images/hcmheartback.png')`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
+                    ...(imageLoaded && {
+                      backgroundImage: `url('/images/hcmheartback.png')`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                    }),
                     filter: 'drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3))',
                   }}
                 >
                   <SplitText 
-                    delay={0.8}
-                    duration={0.08}
+                    delay={0.5}
+                    duration={0.04}
                   >
                     Heart Clinic Melbourne.
                   </SplitText>
