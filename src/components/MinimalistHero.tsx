@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, ArrowDown } from 'lucide-react';
+import SplitText from './SplitText';
 
 const MinimalistHero: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -138,23 +139,12 @@ const MinimalistHero: React.FC = () => {
                     filter: 'drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3))',
                   }}
                 >
-                  {/* Inner shadow overlay */}
-                  <div 
-                    className="absolute inset-0 bg-gradient-to-br from-primary-500 via-accent-500 to-primary-600 bg-clip-text text-transparent opacity-80"
-                    style={{
-                      backgroundImage: `url('/images/hcmheartback.png')`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      backgroundClip: 'text',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      textShadow: 'inset 0 4px 8px rgba(0, 0, 0, 0.4)',
-                      filter: 'drop-shadow(inset 0 4px 8px rgba(0, 0, 0, 0.4))',
-                    }}
+                  <SplitText 
+                    delay={0.8}
+                    duration={0.08}
                   >
-                    Heart Clinic Melbourne
-                  </div>
-                  Heart Clinic Melbourne
+                    Heart Clinic Melbourne.
+                  </SplitText>
                 </div>
               </span>
             </h1>

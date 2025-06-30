@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, AlertCircle, CheckCircle, Info, BookOpen, ExternalLink, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Services: React.FC = () => {
-  const [selectedService, setSelectedService] = useState(0);
+  const [selectedService, setSelectedService] = useState<string | null>(null);
   const navigate = useNavigate();
 
   // Check for reduced motion preference
@@ -66,45 +66,6 @@ const Services: React.FC = () => {
     }
   };
 
-  // Animation variants
-  const cardVariants = {
-    rest: { 
-      scale: 1, 
-      y: 0,
-      backgroundColor: prefersReducedMotion ? '#ffffff' : '#ffffff',
-      transition: { duration: prefersReducedMotion ? 0 : 0.2, type: "spring", stiffness: 300 }
-    },
-    hover: { 
-      scale: prefersReducedMotion ? 1 : 1.05, 
-      y: prefersReducedMotion ? 0 : -2,
-      backgroundColor: prefersReducedMotion ? '#f8fafc' : '#f1f5f9',
-      transition: { duration: prefersReducedMotion ? 0 : 0.2, type: "spring", stiffness: 400 }
-    },
-    active: { 
-      scale: prefersReducedMotion ? 1 : 1.02, 
-      y: 0,
-      backgroundColor: prefersReducedMotion ? '#3b82f6' : '#3b82f6',
-      transition: { duration: prefersReducedMotion ? 0 : 0.25, type: "spring", stiffness: 300 }
-    }
-  };
-
-  const panelVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: prefersReducedMotion ? 0 : 20,
-      transition: { duration: prefersReducedMotion ? 0.1 : 0.2 }
-    },
-    show: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: prefersReducedMotion ? 0.1 : 0.25, type: "spring", stiffness: 300 }
-    },
-    exit: { 
-      opacity: 0, 
-      y: prefersReducedMotion ? 0 : -10,
-      transition: { duration: prefersReducedMotion ? 0.1 : 0.2 }
-    }
-  };
 
   const services = [
     {
@@ -485,215 +446,89 @@ const Services: React.FC = () => {
           </motion.p>
         </div>
 
-        {/* Master-Detail Layout */}
-        <div className="grid lg:grid-cols-12 gap-12 mb-20">
-          {/* Mini-Cards Row (Master) */}
-          <div className="lg:col-span-4">
-            <h3 className="text-xl font-semibold text-secondary-800 mb-6">Select a Service</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-4 lg:max-h-[700px] lg:overflow-y-auto lg:pr-4 lg:scrollbar-thin lg:scrollbar-thumb-secondary-300 lg:scrollbar-track-secondary-100">
-              {services.map((service, index) => (
-                <motion.button
+        {/* Services Card Grid */}
+        <LayoutGroup id="services-cards">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+            {services.map((service) => {
+              const isOpen = selectedService === service.id;
+              return (
+                <motion.div
                   key={service.id}
-                  onClick={() => setSelectedService(index)}
-                  aria-pressed={selectedService === index}
-                  className={`
-                    relative w-full aspect-square rounded-2xl border-2 transition-all duration-200 
-                    focus:outline-none focus:ring-4 focus:ring-primary-200/50 focus:ring-offset-2
-                    ${selectedService === index 
-                      ? 'border-primary-500 text-white shadow-lg' 
-                      : 'border-secondary-200 text-secondary-700 hover:border-primary-300 hover:shadow-md'
-                    }
-                  `}
-                  variants={cardVariants}
-                  initial="rest"
-                  whileHover={selectedService === index ? "active" : "hover"}
-                  animate={selectedService === index ? "active" : "rest"}
-                  layout={!prefersReducedMotion}
-                  layoutId={!prefersReducedMotion ? `service-card-${service.id}` : undefined}
+                  layout
+                  onClick={() => setSelectedService(isOpen ? null : service.id)}
+                  className={`cursor-pointer bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200 overflow-hidden transition-all ${isOpen ? 'sm:col-span-2 lg:col-span-3' : ''}`}
                 >
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-3 space-y-2">
-                    <div className={`
-                      p-2 rounded-xl transition-colors duration-200
-                      ${selectedService === index ? 'bg-white/20' : 'bg-primary-50'}
-                    `}>
-                      <div className={selectedService === index ? 'text-white' : 'text-primary-600'}>
-                        {service.icon}
-                      </div>
+                  {/* Collapsed header */}
+                  <motion.div layout className="p-6 flex items-start space-x-4">
+                    <div className="p-3 rounded-xl bg-primary-100 text-primary-600">
+                      {service.icon}
                     </div>
-                    <span className={`
-                      text-xs font-medium text-center leading-tight
-                      ${selectedService === index ? 'text-white' : 'text-secondary-700'}
-                    `}>
-                      {service.name}
-                    </span>
-                    {service.duration && (
-                      <span className={`
-                        text-xs opacity-75
-                        ${selectedService === index ? 'text-primary-100' : 'text-secondary-500'}
-                      `}>
-                        {service.duration}
-                      </span>
-                    )}
-                  </div>
-                </motion.button>
-              ))}
-            </div>
-          </div>
-
-          {/* Detail Panel */}
-          <div className="lg:col-span-8">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedService}
-                className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden border border-secondary-200/50"
-                variants={panelVariants}
-                initial="hidden"
-                animate="show"
-                exit="exit"
-                layout={!prefersReducedMotion}
-                role="region"
-                aria-labelledby="service-detail-heading"
-              >
-                <div className="grid lg:grid-cols-2">
-                  <div className="p-8 lg:p-12 space-y-8">
-                    <div className="flex items-start space-x-4">
-                      <div className="bg-primary-500 text-white w-14 h-14 rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
-                        {services[selectedService].icon}
-                      </div>
-                      <div className="min-w-0">
-                        <h3 id="service-detail-heading" className="text-2xl lg:text-3xl font-bold text-secondary-800 leading-tight">
-                          {services[selectedService].name}
-                        </h3>
-                        <p className="text-secondary-600 text-lg mt-2">{services[selectedService].shortDescription}</p>
-                      </div>
+                    <div className="min-w-0">
+                      <h4 className="text-lg font-bold text-secondary-800 leading-snug">
+                        {service.name}
+                      </h4>
+                      <p className="text-sm text-secondary-600">{service.duration}</p>
                     </div>
-                    
-                    <p className="text-lg text-secondary-600 leading-relaxed">
-                      {services[selectedService].description}
-                    </p>
+                  </motion.div>
 
-                    {/* Quick Info */}
-                    <div className="grid sm:grid-cols-3 gap-4 p-6 bg-secondary-50/50 rounded-xl">
-                      <div className="text-center">
-                        <Clock className="w-5 h-5 text-primary-600 mx-auto mb-2" />
-                        <p className="font-semibold text-secondary-800 text-sm">Duration</p>
-                        <p className="text-xs text-secondary-600">{services[selectedService].duration}</p>
-                      </div>
-                      <div className="text-center">
-                        <MapPin className="w-5 h-5 text-primary-600 mx-auto mb-2" />
-                        <p className="font-semibold text-secondary-800 text-sm">Locations</p>
-                        <p className="text-xs text-secondary-600">{services[selectedService].locations.join(', ')}</p>
-                      </div>
-                      <div className="text-center">
-                        <FileText className="w-5 h-5 text-primary-600 mx-auto mb-2" />
-                        <p className="font-semibold text-secondary-800 text-sm">Cost</p>
-                        <p className="text-xs text-secondary-600">{services[selectedService].cost}</p>
-                      </div>
-                    </div>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        layout
+                        key="content"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="space-y-8 px-6 pb-8"
+                      >
+                        <p className="text-secondary-700">{service.description}</p>
 
-                    {/* Educational Link */}
-                    {educationalLinks[services[selectedService].id as keyof typeof educationalLinks]?.hasContent && (
-                      <div className="bg-gradient-to-r from-sage-50 to-primary-50 rounded-xl p-4 border border-sage-200/50">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className="bg-sage-500 text-white p-2 rounded-lg">
-                              <BookOpen className="w-4 h-4" />
-                            </div>
-                            <div>
-                              <h4 className="font-semibold text-secondary-800 text-sm">Want to Learn More?</h4>
-                              <p className="text-xs text-secondary-600">
-                                {educationalLinks[services[selectedService].id as keyof typeof educationalLinks]?.title}
-                              </p>
-                            </div>
+                        {/* Quick info */}
+                        <div className="grid sm:grid-cols-3 gap-4 p-4 bg-secondary-50 rounded-xl">
+                          <div className="text-center">
+                            <Clock className="w-5 h-5 text-primary-600 mx-auto mb-1" />
+                            <p className="font-semibold text-secondary-800 text-sm">Duration</p>
+                            <p className="text-xs text-secondary-600">{service.duration}</p>
                           </div>
-                          <button
-                            onClick={() => handleLearnMore(services[selectedService].id)}
-                            className="bg-sage-500 text-white px-4 py-2 rounded-lg hover:bg-sage-600 transition-all duration-200 flex items-center space-x-2 transform hover:scale-105 shadow-sm hover:shadow-md text-sm"
-                          >
-                            <span className="font-medium">Learning Library</span>
-                            <ExternalLink className="w-3 h-3" />
-                          </button>
+                          <div className="text-center">
+                            <MapPin className="w-5 h-5 text-primary-600 mx-auto mb-1" />
+                            <p className="font-semibold text-secondary-800 text-sm">Locations</p>
+                            <p className="text-xs text-secondary-600">{service.locations.join(', ')}</p>
+                          </div>
+                          <div className="text-center">
+                            <FileText className="w-5 h-5 text-primary-600 mx-auto mb-1" />
+                            <p className="font-semibold text-secondary-800 text-sm">Cost</p>
+                            <p className="text-xs text-secondary-600">{service.cost}</p>
+                          </div>
                         </div>
-                      </div>
+
+                        {/* Learning‑library link */}
+                        {educationalLinks[service.id as keyof typeof educationalLinks]?.hasContent && (
+                          <button
+                            onClick={() => handleLearnMore(service.id)}
+                            className="w-full bg-sage-500 text-white py-3 rounded-xl flex items-center justify-center space-x-2 hover:bg-sage-600"
+                          >
+                            <BookOpen className="w-4 h-4" />
+                            <span>Learning Library</span>
+                          </button>
+                        )}
+
+                        {/* Image */}
+                        <div className="w-full h-64 rounded-xl overflow-hidden">
+                          <img
+                            src={service.image}
+                            alt={service.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </motion.div>
                     )}
-
-                    {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <button className="flex-1 bg-primary-500 text-white px-6 py-3 rounded-xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold">
-                        <Phone className="w-4 h-4" />
-                        <span>Book Now</span>
-                      </button>
-                      <button className="flex-1 border border-primary-500 text-primary-600 px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors duration-200 font-semibold">
-                        Learn More
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="h-64 lg:h-full">
-                    <img
-                      src={services[selectedService].image}
-                      alt={`${services[selectedService].name} procedure`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-
-                {/* Detailed Information Tabs */}
-                <div className="border-t border-secondary-200 bg-secondary-50/30">
-                  <div className="grid md:grid-cols-3 gap-8 p-8">
-                    {/* What to Expect */}
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-2">
-                        <Info className="w-4 h-4 text-sage-600" />
-                        <h4 className="font-semibold text-secondary-800">What to Expect</h4>
-                      </div>
-                      <ul className="space-y-2">
-                        {services[selectedService].whatToExpect?.map((item, idx) => (
-                          <li key={idx} className="flex items-start space-x-2">
-                            <CheckCircle className="w-3 h-3 text-sage-500 mt-1 flex-shrink-0" />
-                            <span className="text-sm text-secondary-700">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Preparation */}
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-2">
-                        <AlertCircle className="w-4 h-4 text-cream-600" />
-                        <h4 className="font-semibold text-secondary-800">Preparation</h4>
-                      </div>
-                      <ul className="space-y-2">
-                        {services[selectedService].preparationSteps?.map((item, idx) => (
-                          <li key={idx} className="flex items-start space-x-2">
-                            <div className="w-2 h-2 bg-cream-500 rounded-full mt-2 flex-shrink-0"></div>
-                            <span className="text-sm text-secondary-700">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* After Care */}
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-2">
-                        <Heart className="w-4 h-4 text-accent-600" />
-                        <h4 className="font-semibold text-secondary-800">After Care</h4>
-                      </div>
-                      <ul className="space-y-2">
-                        {services[selectedService].afterCare?.map((item, idx) => (
-                          <li key={idx} className="flex items-start space-x-2">
-                            <div className="w-2 h-2 bg-accent-500 rounded-full mt-2 flex-shrink-0"></div>
-                            <span className="text-sm text-secondary-700">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
           </div>
-        </div>
+        </LayoutGroup>
 
         {/* Call to Action */}
         <motion.div 
