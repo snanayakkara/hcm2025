@@ -10,7 +10,7 @@ const Doctors: React.FC = () => {
     {
       name: "Dr Mark Freilich",
       title: "General & Interventional Cardiologist",
-      specialization: "Interventional Cardiac Procedures",
+      specialization: "Coronary Interventions",
       education: "MBBS (Hons) Monash University 1999, Fellowship Lahey Clinic Medical Centre Boston",
       expertise: ["Radial (wrist) approach coronary angiography", "Interventional cardiology", "Coronary angiograms", "General cardiology"],
       image: "/images/freilich.png",
@@ -23,12 +23,12 @@ const Doctors: React.FC = () => {
     },
     {
       name: "Dr Phillip Ngu",
-      title: "General & Non-invasive Imaging Cardiologist",
+      title: "Non-invasive Imaging",
       specialization: "Cardiac Imaging & General Cardiology",
       education: "MBBS (Hons) Monash University 2007, Cardiac Imaging Fellowship Alfred Hospital 2017",
       expertise: ["Echocardiography (resting, stress, TOE)", "CT coronary angiography", "Cardiac MRI", "Multi-modality imaging"],
       image: "/images/ngu.png",
-      locations: ["St John of God Berwick", "The Alfred Hospital"],
+      locations: ["The Alfred Hospital"],
       appointments: ["Alfred Hospital"],
       description: "Dr Ngu specializes in advanced cardiac imaging and uses multi-modality imaging techniques to better understand cardiac disease and improve patient outcomes. His expertise spans all forms of non-invasive cardiac assessment.",
       gradient: "from-sage-500 via-sage-600 to-accent-700",
@@ -52,7 +52,7 @@ const Doctors: React.FC = () => {
     {
       name: "Dr Shane Nanayakkara",
       title: "Interventional & Structural Cardiologist",
-      specialization: "Advanced Interventional Procedures",
+      specialization: "Coronary and Structural Heart Interventions, Heart Failure",
       education: "MBBS Monash University, PhD Heart Failure, Advanced Fellowships in Coronary Intervention and Structural Intervention",
       expertise: ["Coronary angiography", "Coronary stenting", "Transcatheter valve procedures", "Structural heart interventions"],
       image: "/images/nanayakkara.png",
@@ -217,32 +217,59 @@ const Doctors: React.FC = () => {
         {/* Main Doctor Showcase - Below the selection cards */}
         <div className="mb-20">
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-secondary-100">
-            <div className="md:grid md:grid-cols-[minmax(0,220px)_1fr]">
+            <div className="md:grid md:grid-cols-[minmax(0,280px)_1fr]">
               {/* ─ Portrait ─ */}
-              <div className="relative">
-                <img
-                  src={doctors[selectedDoctor].image}
-                  alt={doctors[selectedDoctor].name}
-                  className="w-full aspect-[3/4] object-cover object-top md:h-full md:aspect-auto md:max-h-96"
-                />
-
-                {/* Badge */}
-                <span className="absolute top-4 left-4 md:bottom-4 md:left-auto md:right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-secondary-900">
-                  {doctors[selectedDoctor].specialization}
-                </span>
+              <div className="relative flex items-center justify-center p-12">
+                {/* Portrait Circle */}
+                <div className="relative z-10 group cursor-pointer">
+                  <div 
+                    className="w-48 h-48 rounded-full overflow-hidden border-4 shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-3xl"
+                    style={{ 
+                      borderColor: doctors[selectedDoctor].accentHex,
+                      boxShadow: `0 0 0 4px ${doctors[selectedDoctor].accentHex}20, 0 25px 50px -12px rgba(0, 0, 0, 0.25)`
+                    }}
+                  >
+                    <img
+                      src={doctors[selectedDoctor].image}
+                      alt={doctors[selectedDoctor].name}
+                      className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                      style={{ objectFit: 'cover', objectPosition: 'center top' }}
+                    />
+                  </div>
+                  
+                  {/* Subtle pulse animation ring */}
+                  <div 
+                    className="absolute inset-0 rounded-full animate-pulse opacity-30"
+                    style={{ 
+                      border: `2px solid ${doctors[selectedDoctor].accentHex}`,
+                      transform: 'scale(1.1)'
+                    }}
+                  ></div>
+                  
+                  {/* Hover overlay with doctor info */}
+                  <div className="absolute inset-0 bg-black/70 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="text-center text-white p-4">
+                      <p className="font-semibold text-sm leading-tight">
+                        {doctors[selectedDoctor].specialization}
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
                 {/* Navigation */}
                 <button
                   onClick={prevDoctor}
-                  className="absolute top-1/2 -translate-y-1/2 -left-3 md:-left-6 bg-white/70 hover:bg-white p-2 rounded-full shadow"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 z-20"
+                  style={{ color: doctors[selectedDoctor].accentHex }}
                 >
-                  <ChevronLeft className="w-5 h-5 text-secondary-700" />
+                  <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
                   onClick={nextDoctor}
-                  className="absolute top-1/2 -translate-y-1/2 -right-3 md:-right-6 bg-white/70 hover:bg-white p-2 rounded-full shadow"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 z-20"
+                  style={{ color: doctors[selectedDoctor].accentHex }}
                 >
-                  <ChevronRight className="w-5 h-5 text-secondary-700" />
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
 

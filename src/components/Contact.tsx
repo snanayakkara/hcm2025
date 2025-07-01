@@ -38,16 +38,6 @@ const Contact: React.FC = () => {
       coordinates: { lat: -38.1234, lng: 145.3456 },
       googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8!2d145.3456!3d-38.1234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad7b9b1b5b6b6b1%3A0x5017d681632ccc55!2s1%20Morison%20Rd%2C%20Clyde%20VIC%203978%2C%20Australia!5e0!3m2!1sen!2sau!4v1640995200000!5m2!1sen!2sau"
     },
-    {
-      name: "SJOG Hospital Berwick",
-      address: "75 Kangan Dv, Berwick VIC 3806", 
-      phone: "(03) 9509 5009",
-      hours: ["Mon-Fri: 8:00 AM - 6:00 PM", "Emergency services 24/7"],
-      services: ["Coronary angiography", "Transoesophageal echocardiography", "Direct cardioversion", "Inpatient services"],
-      transport: ["Berwick Station", "Hospital shuttle", "Multi-level parking"],
-      coordinates: { lat: -38.0321, lng: 145.3567 },
-      googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8!2d145.3567!3d-38.0321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad7c9b1b5b6b6b1%3A0x5017d681632ccc56!2s75%20Kangan%20Dr%2C%20Berwick%20VIC%203806%2C%20Australia!5e0!3m2!1sen!2sau!4v1640995200000!5m2!1sen!2sau"
-    }
   ];
 
   const handleGetDirections = () => {
@@ -86,7 +76,7 @@ const Contact: React.FC = () => {
             Visit Our Clinics
           </h2>
           <p className="text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed">
-            Heart Clinic Melbourne operates across four convenient locations in Melbourne's southeast, making expert cardiac care accessible close to home.
+            Heart Clinic Melbourne operates across three convenient locations in Melbourne's southeast, making expert cardiac care accessible close to home.
           </p>
         </div>
 

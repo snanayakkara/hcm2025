@@ -11,7 +11,6 @@ import {
   Info,
   CheckCircle,
   PlayCircle,
-  ExternalLink,
   MapPin,
   ArrowLeft,
   Phone,
@@ -19,7 +18,11 @@ import {
   Monitor,
   Bed,
   ArrowRight,
-  UserCheck
+  UserCheck,
+  ChevronDown,
+  ChevronUp,
+  FileText,
+  Calendar
 } from 'lucide-react';
 import ProgressivePatientJourney from '../components/ProgressivePatientJourney';
 
@@ -30,6 +33,7 @@ const LearningLibrary: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedProcedure, setSelectedProcedure] = useState('general');
   const [activePhase, setActivePhase] = useState('pre-procedure');
+  const [expandedTestCard, setExpandedTestCard] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   // Handle URL parameters from services page
@@ -64,10 +68,10 @@ const LearningLibrary: React.FC = () => {
   }, []);
 
   const tabs = [
-    { id: 'journey-maps', label: 'Patient Journey Maps', icon: <MapPin className="w-5 h-5" /> },
     { id: 'videos', label: 'Educational Videos', icon: <PlayCircle className="w-5 h-5" /> },
     { id: 'conditions', label: 'Heart Conditions', icon: <Heart className="w-5 h-5" /> },
-    { id: 'tests', label: 'Tests & Procedures', icon: <Activity className="w-5 h-5" /> }
+    { id: 'tests', label: 'Tests & Procedures', icon: <Activity className="w-5 h-5" /> },
+    { id: 'journey-maps', label: 'Patient Journey Maps', icon: <MapPin className="w-5 h-5" /> }
   ];
 
   const procedureJourneys = {
@@ -82,18 +86,19 @@ const LearningLibrary: React.FC = () => {
       color: 'from-primary-500 to-sage-500',
       phases: {
         'pre-procedure': {
-          title: 'Pre-Procedure Preparation',
-          duration: '1-2 weeks before',
+          title: 'Assessment & Pre‑Procedure Preparation',
+          duration: 'Overnight stay or split visits',
           icon: <Clipboard className="w-5 h-5" />,
           activities: [
-            'Comprehensive cardiac assessment and imaging',
-            'Blood tests and pre-operative workup',
-            'Anaesthesia consultation and risk assessment',
-            'Medication review and adjustment',
-            'Pre-procedure education session',
-            'Consent process and question answering',
-            'Fasting instructions (12 hours before procedure)',
-            'Arrival instructions and parking information'
+            "Echocardiogram (heart ultrasound) – usually already completed before your stay",
+            "Coronary angiogram (30\u202Fmin procedure, wrist or groin access) with overnight monitoring",
+            "CT scan of chest‑to‑thigh the next morning (or separate appointment) to size the valve and map blood vessels",
+            "Blood tests and general pre‑operative work‑up",
+            "Anaesthesia consultation and risk discussion",
+            "Medication review and adjustment (bring your list)",
+            "Education session, consent and chance to ask questions",
+            "Fasting from midnight prior to admission",
+            "Arrival instructions, parking and what to bring"
           ]
         },
         'procedure-day': {
@@ -497,7 +502,7 @@ const LearningLibrary: React.FC = () => {
       icon: <Activity className="w-6 h-6 text-sage-500" />
     },
     {
-      name: 'Atrial Fibrillation',
+      name: 'Atrial Fibrillation (AF)',
       description: 'An irregular heart rhythm where the upper chambers beat chaotically, potentially causing blood clots and stroke.',
       symptoms: ['Irregular heartbeat', 'Palpitations', 'Fatigue', 'Shortness of breath'],
       causes: ['Age', 'High blood pressure', 'Heart disease', 'Thyroid problems', 'Alcohol'],
@@ -513,11 +518,59 @@ const LearningLibrary: React.FC = () => {
       icon: <AlertCircle className="w-6 h-6 text-cream-600" />
     },
     {
-      name: 'Heart Valve Disease',
-      description: 'A condition where one or more of the heart\'s valves don\'t work properly, affecting blood flow through the heart.',
-      symptoms: ['Shortness of breath', 'Chest pain', 'Fatigue', 'Swelling', 'Heart murmur'],
-      causes: ['Age-related wear', 'Congenital defects', 'Rheumatic fever', 'Infections', 'Heart attack'],
-      treatments: ['Monitoring', 'Medications', 'Valve repair', 'Valve replacement'],
+      name: 'Aortic Stenosis',
+      description: 'A narrowing of the aortic valve that restricts blood flow from the heart to the rest of the body, making the heart work harder.',
+      symptoms: ['Chest pain with exertion', 'Shortness of breath', 'Dizziness or fainting', 'Fatigue', 'Heart murmur'],
+      causes: ['Age-related calcification', 'Congenital bicuspid valve', 'Rheumatic heart disease', 'Calcium buildup'],
+      treatments: ['Monitoring', 'Valve replacement (TAVI or surgical)', 'Medications for symptoms', 'Activity modification'],
+      icon: <Heart className="w-6 h-6 text-primary-500" />
+    },
+    {
+      name: 'Mitral Regurgitation',
+      description: 'A condition where the mitral valve doesn\'t close properly, allowing blood to leak backward into the left atrium.',
+      symptoms: ['Shortness of breath', 'Fatigue', 'Heart palpitations', 'Swelling in feet/ankles', 'Heart murmur'],
+      causes: ['Mitral valve prolapse', 'Heart attack', 'Infection', 'Age-related wear', 'Rheumatic heart disease'],
+      treatments: ['Monitoring', 'Medications', 'Valve repair', 'Valve replacement', 'MitraClip procedure'],
+      icon: <Heart className="w-6 h-6 text-sage-500" />
+    },
+    {
+      name: 'Hyperlipidaemia (High Cholesterol)',
+      description: 'Elevated levels of cholesterol and other fats in the blood that can lead to atherosclerosis and increased cardiovascular risk.',
+      symptoms: ['Usually no symptoms', 'Yellowish deposits around eyes (xanthelasma)', 'Chest pain if complications develop'],
+      causes: ['Diet high in saturated fats', 'Genetics', 'Lack of exercise', 'Obesity', 'Diabetes'],
+      treatments: ['Statin medications', 'Dietary changes', 'Exercise', 'Weight management', 'Other lipid-lowering drugs'],
+      icon: <AlertCircle className="w-6 h-6 text-cream-600" />
+    },
+    {
+      name: 'Coronary Artery Bypass Grafting (CABG)',
+      description: 'A surgical procedure that creates new pathways around blocked coronary arteries using grafts from other blood vessels.',
+      symptoms: ['Procedure treats: severe chest pain', 'Shortness of breath', 'Poor exercise tolerance', 'Multiple blocked arteries'],
+      causes: ['Severe coronary artery disease', 'Multiple vessel blockages', 'Left main artery disease', 'Failed angioplasty'],
+      treatments: ['Open-heart surgery', 'Minimally invasive techniques', 'Off-pump surgery', 'Robotic-assisted surgery'],
+      icon: <Stethoscope className="w-6 h-6 text-accent-500" />
+    },
+    {
+      name: 'Percutaneous Coronary Intervention (PCI)',
+      description: 'A minimally invasive procedure that opens blocked coronary arteries using balloon angioplasty and stent placement.',
+      symptoms: ['Procedure treats: chest pain', 'Shortness of breath', 'Heart attack', 'Abnormal stress test results'],
+      causes: ['Coronary artery blockages', 'Acute heart attack', 'Unstable angina', 'Restenosis of previous stents'],
+      treatments: ['Balloon angioplasty', 'Stent placement', 'Drug-eluting stents', 'Rotational atherectomy'],
+      icon: <Monitor className="w-6 h-6 text-primary-500" />
+    },
+    {
+      name: 'Heart Attack (Myocardial Infarction)',
+      description: 'Occurs when blood flow to part of the heart muscle is blocked, causing tissue damage or death from lack of oxygen.',
+      symptoms: ['Severe chest pain', 'Pain radiating to arm/jaw', 'Shortness of breath', 'Sweating', 'Nausea'],
+      causes: ['Coronary artery blockage', 'Blood clot', 'Plaque rupture', 'Coronary spasm', 'Drug use'],
+      treatments: ['Emergency angioplasty', 'Clot-busting medications', 'Bypass surgery', 'Cardiac rehabilitation'],
+      icon: <AlertCircle className="w-6 h-6 text-red-500" />
+    },
+    {
+      name: 'Angina',
+      description: 'Chest pain or discomfort that occurs when the heart muscle doesn\'t receive enough oxygen-rich blood.',
+      symptoms: ['Chest pain or pressure', 'Pain in arms/neck/jaw', 'Shortness of breath', 'Fatigue', 'Triggered by exertion'],
+      causes: ['Coronary artery disease', 'Coronary spasm', 'Anemia', 'Heart valve disease', 'High blood pressure'],
+      treatments: ['Nitrate medications', 'Beta-blockers', 'Calcium channel blockers', 'Angioplasty', 'Lifestyle changes'],
       icon: <Heart className="w-6 h-6 text-accent-500" />
     },
     {
@@ -534,65 +587,377 @@ const LearningLibrary: React.FC = () => {
     {
       name: 'Echocardiography (Echo)',
       description: 'Ultrasound imaging of the heart to assess structure and function',
+      detailedDescription: 'An echocardiogram uses sound waves to create detailed pictures of your heart\'s chambers, valves, and blood flow. This non-invasive test helps evaluate heart function, valve problems, and structural abnormalities.',
       duration: '30-45 minutes',
-      preparation: 'No special preparation required',
+      preparation: [
+        'No special preparation required',
+        'Wear comfortable clothing that can be easily removed from the waist up',
+        'Continue taking all medications as normal',
+        'Arrive 15 minutes early for check-in'
+      ],
+      whatToExpect: [
+        'You\'ll be asked to undress from the waist up and wear a hospital gown',
+        'Lie on your left side on an examination table',
+        'A clear gel is applied to your chest',
+        'The technologist moves a transducer across your chest',
+        'You may be asked to change positions or hold your breath briefly',
+        'The test is painless and you can return to normal activities immediately'
+      ],
+      followUp: [
+        'Results are typically available within 24-48 hours',
+        'Your cardiologist will review the images and measurements',
+        'A follow-up appointment will be scheduled to discuss results',
+        'Further testing may be recommended based on findings'
+      ],
       link: 'echocardiography'
     },
     {
       name: 'Electrocardiogram (ECG)',
       description: 'Recording of the heart\'s electrical activity',
+      detailedDescription: 'An ECG records the electrical signals from your heart to check for different heart conditions. It\'s a quick, painless test that can detect irregular heart rhythms, heart attacks, and other heart problems.',
       duration: '5-10 minutes',
-      preparation: 'No special preparation required',
+      preparation: [
+        'No special preparation required',
+        'Avoid using lotions or oils on your chest',
+        'Wear clothing that allows easy access to your chest, arms, and legs',
+        'Remove jewelry that might interfere with the electrodes'
+      ],
+      whatToExpect: [
+        'You\'ll be asked to lie down on an examination table',
+        'Electrodes (small sticky patches) are placed on your chest, arms, and legs',
+        'The electrodes are connected to the ECG machine',
+        'You\'ll need to lie still and breathe normally during the recording',
+        'The actual recording takes only a few seconds',
+        'Electrodes are removed and you can resume normal activities'
+      ],
+      followUp: [
+        'Results are available immediately',
+        'Your doctor will interpret the ECG pattern',
+        'Normal results indicate regular heart rhythm and electrical activity',
+        'Abnormal results may require additional testing or treatment'
+      ],
       link: 'consultation'
     },
     {
       name: 'Holter Monitoring',
       description: 'Continuous heart rhythm monitoring over 24 hours',
-      duration: '24 hours',
-      preparation: 'Shower before appointment',
+      detailedDescription: 'A Holter monitor is a portable device that records your heart\'s electrical activity for 24-48 hours during your normal daily activities. It helps detect irregular heart rhythms that may not show up during a short ECG.',
+      duration: '24-48 hours',
+      preparation: [
+        'Shower or bathe before your appointment (you cannot get the monitor wet)',
+        'Wear a comfortable, loose-fitting shirt',
+        'Avoid using lotions, oils, or powders on your chest',
+        'Bring a list of your current medications'
+      ],
+      whatToExpect: [
+        'Electrodes are attached to your chest with adhesive patches',
+        'A small recording device is connected to the electrodes',
+        'The device is worn in a small pouch or clipped to your clothing',
+        'You\'ll keep a diary of your activities and any symptoms',
+        'Continue normal activities but avoid getting the device wet',
+        'Return to the clinic after 24-48 hours to remove the device'
+      ],
+      followUp: [
+        'The recorded data is analyzed by computer and reviewed by a cardiologist',
+        'Results are typically available within 3-5 business days',
+        'A follow-up appointment will be scheduled to discuss findings',
+        'Treatment recommendations will be based on any detected arrhythmias'
+      ],
       link: 'holter'
     },
     {
       name: 'Stress Testing',
       description: 'Exercise or medication-induced stress to assess heart function',
+      detailedDescription: 'A stress test evaluates how your heart works during physical activity. It can help diagnose coronary artery disease, determine safe exercise levels, and evaluate the effectiveness of heart treatments.',
       duration: '45-60 minutes',
-      preparation: 'Comfortable exercise clothing',
+      preparation: [
+        'Wear comfortable exercise clothing and walking shoes',
+        'Avoid eating, drinking caffeine, or smoking for 3 hours before the test',
+        'Take your medications as usual unless told otherwise',
+        'Bring a list of your current medications',
+        'Arrange for someone to drive you home if medication stress test is used'
+      ],
+      whatToExpect: [
+        'Baseline ECG and blood pressure measurements are taken',
+        'You\'ll walk on a treadmill that gradually increases in speed and incline',
+        'Heart rate, blood pressure, and ECG are monitored throughout',
+        'The test continues until you reach your target heart rate or develop symptoms',
+        'If unable to exercise, medication may be used to stress the heart',
+        'Recovery monitoring continues for 10-15 minutes after exercise'
+      ],
+      followUp: [
+        'Results are reviewed immediately by the medical team',
+        'Normal results indicate good blood flow to the heart during exercise',
+        'Abnormal results may indicate blocked arteries requiring further testing',
+        'Your cardiologist will discuss results and treatment options if needed'
+      ],
       link: 'stress-test'
     },
     {
       name: 'Coronary Angiography',
       description: 'X-ray imaging of coronary arteries using contrast dye',
+      detailedDescription: 'Coronary angiography is an invasive procedure that uses contrast dye and X-rays to visualize the coronary arteries. It\'s the gold standard for diagnosing coronary artery disease and determining treatment options.',
       duration: '30-60 minutes',
-      preparation: 'Fasting required',
-      link: 'angiography'
+      preparation: [
+        'Fast for 6-8 hours before the procedure',
+        'Arrange for someone to drive you home',
+        'Stop certain medications as directed by your doctor',
+        'Inform staff of any allergies, especially to iodine or contrast dye',
+        'Complete pre-procedure blood tests and consent forms'
+      ],
+      whatToExpect: [
+        'IV line is inserted and mild sedation may be given',
+        'Local anesthetic is injected at the catheter insertion site (wrist or groin)',
+        'A thin catheter is guided to the coronary arteries',
+        'Contrast dye is injected while X-ray images are taken',
+        'You may feel a warm sensation when dye is injected',
+        'The catheter is removed and pressure is applied to prevent bleeding'
+      ],
+      followUp: [
+        'Bed rest for 2-6 hours with frequent vital sign checks',
+        'Results are available immediately and discussed with you',
+        'Discharge home the same day or overnight observation',
+        'Follow-up appointment to discuss treatment options if blockages are found'
+      ],
+      link: 'angiography',
+      hasJourneyMap: true,
+      journeyMapId: 'angiogram_pci'
     },
     {
       name: 'CT Coronary Angiography',
       description: 'Non-invasive CT imaging of coronary arteries',
+      detailedDescription: 'CT coronary angiography uses computed tomography and contrast dye to create detailed images of the coronary arteries without the need for cardiac catheterization. It\'s excellent for ruling out significant coronary artery disease.',
       duration: '30-45 minutes',
-      preparation: 'Heart rate control may be needed',
+      preparation: [
+        'Avoid caffeine for 24 hours before the test',
+        'Fast for 4 hours before the procedure',
+        'Heart rate may need to be controlled with beta-blockers',
+        'Remove all metal objects including jewelry',
+        'Inform staff of any allergies to contrast dye'
+      ],
+      whatToExpect: [
+        'IV line is inserted for contrast dye injection',
+        'Heart rate and blood pressure are monitored',
+        'You\'ll lie on a CT scanner table',
+        'Beta-blockers may be given to slow your heart rate',
+        'Contrast dye is injected while CT images are taken',
+        'You\'ll need to hold your breath for 10-15 seconds during scanning'
+      ],
+      followUp: [
+        'Images are analyzed by a radiologist and cardiologist',
+        'Results are typically available within 24-48 hours',
+        'Follow-up appointment to discuss findings',
+        'Further testing may be recommended if significant disease is detected'
+      ],
       link: 'ct-angiography'
     },
     {
       name: 'Cardiac MRI',
       description: 'Detailed magnetic resonance imaging of the heart',
+      detailedDescription: 'Cardiac MRI provides detailed images of heart structure and function using magnetic fields and radio waves. It\'s excellent for evaluating heart muscle damage, inflammation, and congenital heart disease.',
       duration: '45-90 minutes',
-      preparation: 'Remove metal objects',
+      preparation: [
+        'Remove all metal objects including jewelry, watches, and hearing aids',
+        'Inform staff of any implanted devices (pacemaker, ICD, metal implants)',
+        'Change into a hospital gown',
+        'Complete safety questionnaire regarding metal objects',
+        'Arrive 30 minutes early for preparation'
+      ],
+      whatToExpect: [
+        'You\'ll lie on a movable table that slides into the MRI scanner',
+        'Electrodes are placed on your chest to monitor heart rhythm',
+        'You\'ll need to lie still and may need to hold your breath periodically',
+        'The scanner makes loud knocking sounds during image acquisition',
+        'Contrast dye may be injected through an IV for enhanced imaging',
+        'The technologist communicates with you throughout the procedure'
+      ],
+      followUp: [
+        'Images are analyzed by a specialized cardiac radiologist',
+        'Results are typically available within 2-3 business days',
+        'Your cardiologist will review findings with you',
+        'Treatment plans are developed based on the detailed heart function assessment'
+      ],
       link: 'cardiac-mri'
     },
     {
       name: 'Nuclear Stress Test',
       description: 'Stress test combined with radioactive tracer imaging',
+      detailedDescription: 'A nuclear stress test combines exercise or pharmacologic stress with radioactive tracer imaging to evaluate blood flow to the heart muscle. It can detect areas of poor blood flow and assess heart function.',
       duration: '3-4 hours',
-      preparation: 'Fasting and medication adjustments',
+      preparation: [
+        'Fast for 4-6 hours before the test',
+        'Avoid caffeine for 24 hours before the test',
+        'Wear comfortable exercise clothing and shoes',
+        'Stop certain heart medications as directed',
+        'Arrange for transportation home after the test'
+      ],
+      whatToExpect: [
+        'Radioactive tracer is injected through an IV',
+        'Rest images are taken with a special camera',
+        'Exercise stress test is performed or medication is given',
+        'Second tracer injection is given at peak stress',
+        'Stress images are taken 30-60 minutes later',
+        'Total time includes waiting periods between imaging sessions'
+      ],
+      followUp: [
+        'Images are compared to assess blood flow differences',
+        'Results are typically available within 24-48 hours',
+        'Normal results indicate good blood flow to all areas of the heart',
+        'Abnormal results may indicate blockages requiring further evaluation'
+      ],
       link: 'nuclear-stress'
     },
     {
       name: 'PYP Scan (Pyrophosphate)',
       description: 'Nuclear imaging test to detect cardiac amyloidosis',
+      detailedDescription: 'A PYP scan uses a radioactive tracer that binds to amyloid deposits in the heart. It\'s a specialized test used to diagnose cardiac amyloidosis, a condition where abnormal proteins accumulate in heart muscle.',
       duration: '2-3 hours',
-      preparation: 'No special preparation required',
+      preparation: [
+        'No special preparation required',
+        'Continue taking all medications as normal',
+        'Wear comfortable clothing',
+        'Remove jewelry and metal objects before imaging',
+        'Inform staff if you are pregnant or breastfeeding'
+      ],
+      whatToExpect: [
+        'Radioactive tracer (pyrophosphate) is injected through an IV',
+        'You\'ll wait 2-3 hours for the tracer to circulate and bind',
+        'During waiting time, you can eat and drink normally',
+        'You\'ll lie on an imaging table for the scan',
+        'A special camera takes pictures of your heart',
+        'The scan itself takes 30-45 minutes'
+      ],
+      followUp: [
+        'Images are analyzed for tracer uptake in the heart muscle',
+        'Results are typically available within 24-48 hours',
+        'Positive results may indicate cardiac amyloidosis',
+        'Further testing and specialist consultation may be recommended'
+      ],
       link: 'pyp-scan'
+    },
+    {
+      name: 'TAVI (Transcatheter Aortic Valve Implantation)',
+      description: 'Minimally invasive aortic valve replacement procedure',
+      detailedDescription: 'TAVI is a minimally invasive procedure to replace a diseased aortic valve without open heart surgery. A new valve is delivered via catheter, typically through the groin artery, offering an alternative to traditional open-heart surgery.',
+      duration: '2-3 hours',
+      preparation: [
+        'Comprehensive cardiac assessment and imaging',
+        'Heart team evaluation and planning',
+        'Pre-procedure blood tests and dental clearance',
+        'Fasting from midnight before procedure',
+        'Arrange for 2-3 day hospital stay'
+      ],
+      whatToExpect: [
+        'Admission and pre-procedure preparation',
+        'Local anesthetic or light sedation',
+        'Catheter insertion via groin artery',
+        'Precise valve positioning using advanced imaging',
+        'New valve deployment and immediate testing',
+        'Post-procedure monitoring in cardiac unit'
+      ],
+      followUp: [
+        'Intensive care monitoring for 24-48 hours',
+        'Early mobilization and activity progression',
+        'Echocardiogram before discharge',
+        'Follow-up appointments at 1 week, 1 month, and annually',
+        'Long-term anticoagulation management'
+      ],
+      link: 'tavi',
+      hasJourneyMap: true,
+      journeyMapId: 'tavi'
+    },
+    {
+      name: 'Atrial Fibrillation (AF) Ablation',
+      description: 'Catheter-based treatment for atrial fibrillation using advanced ablation techniques',
+      detailedDescription: 'Catheter ablation for atrial fibrillation uses advanced techniques including the latest Pulsed Field Ablation (PFA) technology to eliminate abnormal electrical pathways causing irregular heart rhythm.',
+      duration: '3-6 hours',
+      preparation: [
+        'Transesophageal echocardiogram to exclude blood clots',
+        'Blood tests including clotting studies',
+        'Medication adjustments (blood thinners)',
+        'Pre-procedure consultation and detailed consent',
+        'Arrange for 1-2 night hospital stay'
+      ],
+      whatToExpect: [
+        'General anesthesia or deep sedation',
+        'Multiple catheter insertions via groin vessels',
+        '3D mapping of heart\'s electrical system',
+        'Pulmonary vein isolation using ablation energy',
+        'Additional ablation areas if needed',
+        'Post-procedure monitoring and recovery'
+      ],
+      followUp: [
+        'Continuous cardiac monitoring for 24-48 hours',
+        'Gradual mobilization with activity restrictions',
+        'Continued anticoagulation therapy',
+        'Follow-up appointments at 1 week, 1 month, 3 months',
+        'Long-term rhythm monitoring and management'
+      ],
+      link: 'af-ablation',
+      hasJourneyMap: true,
+      journeyMapId: 'af_ablation'
+    },
+    {
+      name: 'TOE & Cardioversion (DCR)',
+      description: 'Transesophageal echocardiography with electrical cardioversion for rhythm restoration',
+      detailedDescription: 'TOE-guided cardioversion combines advanced cardiac imaging with electrical cardioversion to safely restore normal heart rhythm in patients with atrial fibrillation, ensuring no blood clots are present before the procedure.',
+      duration: '2-3 hours including recovery',
+      preparation: [
+        'Fasting for 6-8 hours before procedure',
+        'Medication review (especially blood thinners)',
+        'Pre-procedure blood tests if required',
+        'Arrange for transport home after sedation',
+        'Comfortable clothing and removal of jewelry'
+      ],
+      whatToExpect: [
+        'IV line insertion and monitoring setup',
+        'Throat numbing and conscious sedation',
+        'TOE probe insertion for detailed heart imaging',
+        'Assessment for blood clots in heart chambers',
+        'Electrical cardioversion if safe to proceed',
+        'Recovery monitoring until sedation wears off'
+      ],
+      followUp: [
+        'Recovery period of 2-4 hours with monitoring',
+        'Soft diet and throat comfort measures',
+        'Resume normal activities within 24 hours',
+        'Follow-up appointment to assess rhythm',
+        'Continued anticoagulation as directed'
+      ],
+      link: 'toe-dcr',
+      hasJourneyMap: true,
+      journeyMapId: 'toe_dcr'
+    },
+    {
+      name: 'Pacemaker Implantation',
+      description: 'Permanent pacemaker device implantation for heart rhythm disorders',
+      detailedDescription: 'Pacemaker insertion involves implanting a small electronic device that monitors your heart rate and delivers electrical impulses when needed to maintain a normal rhythm, helping manage various heart rhythm disorders.',
+      duration: '1-2 hours',
+      preparation: [
+        'Pre-operative assessment and blood tests',
+        'Chest X-ray and baseline ECG',
+        'Medication review and adjustments',
+        'Fasting for 8 hours before procedure',
+        'Shower with antibacterial soap'
+      ],
+      whatToExpect: [
+        'Local anesthetic at implantation site',
+        'Small incision below the left collarbone',
+        'Pacemaker leads threaded through veins to heart',
+        'Device testing and programming',
+        'Wound closure and dressing application',
+        'Post-procedure chest X-ray'
+      ],
+      followUp: [
+        'Overnight monitoring and observation',
+        'Arm movement restrictions for 4-6 weeks',
+        'Wound care instructions for 1-2 weeks',
+        'Device check at 2 weeks, then every 3-6 months',
+        'Lifelong device monitoring and battery replacement planning'
+      ],
+      link: 'pacemaker',
+      hasJourneyMap: true,
+      journeyMapId: 'pacemaker'
     }
   ];
 
@@ -603,8 +968,37 @@ const LearningLibrary: React.FC = () => {
     return matchesCategory && matchesSearch;
   });
 
+  const filteredConditions = conditionsData.filter(condition => {
+    const matchesSearch = condition.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         condition.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         condition.symptoms.some(symptom => symptom.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         condition.causes.some(cause => cause.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         condition.treatments.some(treatment => treatment.toLowerCase().includes(searchTerm.toLowerCase()));
+    return matchesSearch;
+  });
+
+  const filteredTests = testsData.filter(test => {
+    const matchesSearch = test.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         test.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         test.detailedDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         test.preparation.some(prep => prep.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         test.whatToExpect.some(expect => expect.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         test.followUp.some(follow => follow.toLowerCase().includes(searchTerm.toLowerCase()));
+    return matchesSearch;
+  });
+
   const goBack = () => {
     window.history.back();
+  };
+
+  const handleJourneyMapClick = (journeyMapId: string) => {
+    setSelectedProcedure(journeyMapId);
+    setActivePhase('pre-procedure');
+    // Scroll to journey map section
+    const journeySection = document.getElementById('journey-map-section');
+    if (journeySection) {
+      journeySection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const getCurrentPhaseData = () => {
@@ -673,9 +1067,8 @@ const LearningLibrary: React.FC = () => {
             ))}
           </div>
 
-          {/* Search and Filter - Only show for non-journey-maps tabs */}
-          {activeTab !== 'journey-maps' && (
-            <div className="max-w-2xl mx-auto space-y-6">
+          {/* Search and Filter */}
+          <div className="max-w-2xl mx-auto space-y-6">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary-400 w-5 h-5" />
                 <input
@@ -746,7 +1139,6 @@ const LearningLibrary: React.FC = () => {
                 </div>
               )}
             </div>
-          )}
         </div>
 
         {/* Content */}
@@ -950,7 +1342,7 @@ const LearningLibrary: React.FC = () => {
                     <img
                       src={video.thumbnail}
                       alt={video.title}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-96 object-cover"
                     />
                     <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                       <div className="bg-white/90 p-3 rounded-full">
@@ -977,7 +1369,7 @@ const LearningLibrary: React.FC = () => {
           {/* Conditions Tab */}
           {activeTab === 'conditions' && (
             <div className="grid lg:grid-cols-2 gap-10">
-              {conditionsData.map((condition, index) => (
+              {filteredConditions.map((condition, index) => (
                 <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm p-10 hover:shadow-lg transition-all duration-300 border border-secondary-200/50">
                   <div className="flex items-center space-x-3 mb-6">
                     {condition.icon}
@@ -1039,40 +1431,274 @@ const LearningLibrary: React.FC = () => {
 
           {/* Tests Tab */}
           {activeTab === 'tests' && (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {testsData.map((test, index) => (
-                <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-secondary-200/50">
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-3">
-                      <div className="bg-primary-100 p-2 rounded-xl">
-                        <Stethoscope className="w-5 h-5 text-primary-600" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+              {filteredTests.map((test, index) => (
+                <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-secondary-200/50 overflow-hidden hover:shadow-lg transition-all duration-300">
+                  {/* Card Header */}
+                  <div className="p-8">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center space-x-3">
+                        <div className="bg-primary-100 p-2 rounded-xl">
+                          <Stethoscope className="w-5 h-5 text-primary-600" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-secondary-800">{test.name}</h3>
                       </div>
-                      <h3 className="text-lg font-semibold text-secondary-800">{test.name}</h3>
+                      <button
+                        onClick={() => setExpandedTestCard(expandedTestCard === test.name ? null : test.name)}
+                        className="p-2 rounded-lg hover:bg-secondary-100 transition-colors duration-200"
+                      >
+                        {expandedTestCard === test.name ? (
+                          <ChevronUp className="w-5 h-5 text-secondary-600" />
+                        ) : (
+                          <ChevronDown className="w-5 h-5 text-secondary-600" />
+                        )}
+                      </button>
                     </div>
                     
-                    <p className="text-secondary-600 text-sm leading-relaxed">{test.description}</p>
+                    <p className="text-secondary-600 text-sm leading-relaxed mb-6">{test.description}</p>
                     
-                    <div className="space-y-3">
+                    <div className="grid grid-cols-1 gap-3">
                       <div className="flex items-center space-x-2">
                         <Clock className="w-4 h-4 text-secondary-500" />
                         <span className="text-sm text-secondary-600">Duration: {test.duration}</span>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Info className="w-4 h-4 text-secondary-500" />
-                        <span className="text-sm text-secondary-600">Preparation: {test.preparation}</span>
-                      </div>
                     </div>
                     
-                    <button className="w-full flex items-center justify-center space-x-2 bg-primary-500 text-white py-3 rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium">
-                      <span>Learn More</span>
-                      <ExternalLink className="w-4 h-4" />
-                    </button>
+                    <div className="space-y-3 mt-6">
+                      <button
+                        onClick={() => setExpandedTestCard(expandedTestCard === test.name ? null : test.name)}
+                        className="w-full flex items-center justify-center space-x-2 bg-primary-500 text-white py-3 rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium"
+                      >
+                        <span>{expandedTestCard === test.name ? 'Show Less' : 'Learn More'}</span>
+                        {expandedTestCard === test.name ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        )}
+                      </button>
+                      
+                      {test.hasJourneyMap && (
+                        <button
+                          onClick={() => handleJourneyMapClick(test.journeyMapId)}
+                          className="w-full flex items-center justify-center space-x-2 bg-sage-500 text-white py-3 rounded-xl hover:bg-sage-600 transition-colors duration-200 font-medium"
+                        >
+                          <MapPin className="w-4 h-4" />
+                          <span>View Patient Journey</span>
+                        </button>
+                      )}
+                    </div>
                   </div>
+
+                  {/* Expanded Content */}
+                  {expandedTestCard === test.name && (
+                    <div className="border-t border-secondary-200/50 bg-secondary-50/30 p-8 space-y-8">
+                      {/* Detailed Description */}
+                      <div>
+                        <h4 className="font-semibold text-secondary-800 mb-3 flex items-center space-x-2">
+                          <FileText className="w-4 h-4 text-primary-500" />
+                          <span>About This Test</span>
+                        </h4>
+                        <p className="text-secondary-600 text-sm leading-relaxed">{test.detailedDescription}</p>
+                      </div>
+
+                      {/* Preparation Checklist */}
+                      <div>
+                        <h4 className="font-semibold text-secondary-800 mb-4 flex items-center space-x-2">
+                          <CheckCircle className="w-4 h-4 text-sage-500" />
+                          <span>Preparation Checklist</span>
+                        </h4>
+                        <div className="space-y-3">
+                          {test.preparation.map((item, idx) => (
+                            <div key={idx} className="flex items-start space-x-3 p-3 bg-white/60 rounded-lg">
+                              <div className="w-2 h-2 bg-sage-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-sm text-secondary-700">{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* What to Expect */}
+                      <div>
+                        <h4 className="font-semibold text-secondary-800 mb-4 flex items-center space-x-2">
+                          <Monitor className="w-4 h-4 text-accent-500" />
+                          <span>What to Expect</span>
+                        </h4>
+                        <div className="space-y-3">
+                          {test.whatToExpect.map((item, idx) => (
+                            <div key={idx} className="flex items-start space-x-3 p-3 bg-white/60 rounded-lg">
+                              <div className="w-6 h-6 bg-accent-100 text-accent-600 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0">
+                                {idx + 1}
+                              </div>
+                              <span className="text-sm text-secondary-700">{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Follow-up */}
+                      <div>
+                        <h4 className="font-semibold text-secondary-800 mb-4 flex items-center space-x-2">
+                          <Calendar className="w-4 h-4 text-cream-600" />
+                          <span>Follow-up & Results</span>
+                        </h4>
+                        <div className="space-y-3">
+                          {test.followUp.map((item, idx) => (
+                            <div key={idx} className="flex items-start space-x-3 p-3 bg-white/60 rounded-lg">
+                              <div className="w-2 h-2 bg-cream-600 rounded-full mt-2 flex-shrink-0"></div>
+                              <span className="text-sm text-secondary-700">{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           )}
         </div>
+
+        {/* Journey Map Section */}
+        {selectedProcedure !== 'general' && (
+          <div id="journey-map-section" className={`mt-20 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200/50 overflow-hidden">
+              {/* Timeline Header */}
+              <div className="bg-gradient-to-r from-secondary-50 to-primary-50/30 p-8 border-b border-secondary-200/50">
+                <h3 className="text-2xl font-bold text-secondary-800 mb-2">
+                  {procedureJourneys[selectedProcedure as keyof typeof procedureJourneys].name} - Patient Journey
+                </h3>
+                <p className="text-secondary-600">
+                  {procedureJourneys[selectedProcedure as keyof typeof procedureJourneys].description}
+                </p>
+              </div>
+
+              {/* Timeline Navigation */}
+              <div className="p-8 border-b border-secondary-200/50">
+                <div className="relative">
+                  {/* Timeline Line */}
+                  <div className="absolute top-6 left-0 right-0 h-0.5 bg-secondary-200"></div>
+                  <div 
+                    className="absolute top-6 left-0 h-0.5 bg-primary-500 transition-all duration-500"
+                    style={{ 
+                      width: `${((getCurrentPhaseIndex() + 1) / timelinePhases.length) * 100}%` 
+                    }}
+                  ></div>
+
+                  {/* Timeline Phases */}
+                  <div className="relative flex justify-between">
+                    {timelinePhases.map((phase, index) => (
+                      <button
+                        key={phase.id}
+                        onClick={() => setActivePhase(phase.id)}
+                        className={`flex flex-col items-center space-y-3 transition-all duration-300 ${
+                          activePhase === phase.id ? 'scale-110' : 'hover:scale-105'
+                        }`}
+                      >
+                        {/* Phase Circle */}
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center border-4 transition-all duration-300 ${
+                          index <= getCurrentPhaseIndex()
+                            ? 'bg-primary-500 border-primary-500 text-white shadow-lg'
+                            : 'bg-white border-secondary-300 text-secondary-400'
+                        }`}>
+                          {phase.icon}
+                        </div>
+                        
+                        {/* Phase Label */}
+                        <div className="text-center">
+                          <div className={`font-semibold text-sm transition-colors duration-300 ${
+                            activePhase === phase.id ? 'text-primary-600' : 'text-secondary-600'
+                          }`}>
+                            {phase.label}
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Phase Content */}
+              <div className="p-8">
+                {getCurrentPhaseData() && (
+                  <div className="space-y-8">
+                    {/* Phase Header */}
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-primary-100 p-3 rounded-xl">
+                        {getCurrentPhaseData()!.icon}
+                      </div>
+                      <div>
+                        <h4 className="text-2xl font-bold text-secondary-800">
+                          {getCurrentPhaseData()!.title}
+                        </h4>
+                        <p className="text-primary-600 font-semibold">
+                          {getCurrentPhaseData()!.duration}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Activities List */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {getCurrentPhaseData()!.activities.map((activity, index) => (
+                        <div 
+                          key={index}
+                          className="flex items-start space-x-3 p-4 bg-secondary-50/50 rounded-xl hover:bg-secondary-50 transition-colors duration-200"
+                        >
+                          <div className="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-secondary-700 leading-relaxed">{activity}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Navigation */}
+                    <div className="flex justify-between items-center pt-8 border-t border-secondary-200/50">
+                      <button
+                        onClick={() => {
+                          const currentIndex = getCurrentPhaseIndex();
+                          if (currentIndex > 0) {
+                            setActivePhase(timelinePhases[currentIndex - 1].id);
+                          }
+                        }}
+                        disabled={getCurrentPhaseIndex() === 0}
+                        className={`flex items-center space-x-2 px-6 py-3 rounded-xl transition-all duration-200 ${
+                          getCurrentPhaseIndex() === 0
+                            ? 'bg-secondary-100 text-secondary-400 cursor-not-allowed'
+                            : 'bg-secondary-200 text-secondary-700 hover:bg-secondary-300'
+                        }`}
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                        <span>Previous Phase</span>
+                      </button>
+
+                      <div className="text-center">
+                        <span className="text-sm text-secondary-500">
+                          Phase {getCurrentPhaseIndex() + 1} of {timelinePhases.length}
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          const currentIndex = getCurrentPhaseIndex();
+                          if (currentIndex < timelinePhases.length - 1) {
+                            setActivePhase(timelinePhases[currentIndex + 1].id);
+                          }
+                        }}
+                        disabled={getCurrentPhaseIndex() === timelinePhases.length - 1}
+                        className={`flex items-center space-x-2 px-6 py-3 rounded-xl transition-all duration-200 ${
+                          getCurrentPhaseIndex() === timelinePhases.length - 1
+                            ? 'bg-secondary-100 text-secondary-400 cursor-not-allowed'
+                            : 'bg-primary-500 text-white hover:bg-primary-600'
+                        }`}
+                      >
+                        <span>Next Phase</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Call to Action */}
         <div className={`mt-20 bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg p-12 text-center transition-all duration-1000 delay-600 border border-secondary-200/50 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>

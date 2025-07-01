@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Award, Users, Heart, Shield, ChevronRight } from 'lucide-react';
+import { Award, Users, Heart, Shield } from 'lucide-react';
 
 const About: React.FC = () => {
   const [activeFeature, setActiveFeature] = useState(0);
@@ -18,7 +18,7 @@ const About: React.FC = () => {
     {
       icon: <Users className="w-6 h-6 text-sage-600" />,
       title: "Specialist Team",
-      description: "Board-certified cardiologists with advanced training from leading medical institutions.",
+      description: "Cardiologists with advanced training from leading medical institutions.",
       color: "bg-sage-50/80",
       hoverColor: "hover:bg-sage-100/80"
     },
@@ -71,6 +71,41 @@ const About: React.FC = () => {
   return (
     <section id="about" className="py-32 bg-white" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        {/* Centered Header */}
+        <motion.div 
+          className="text-center mb-20"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          <motion.h2 
+            className="text-5xl lg:text-6xl font-bold text-secondary-800 leading-tight"
+            variants={itemVariants}
+          >
+            Melbourne's Leading
+            <span className="text-primary-600 block">
+              Cardiovascular Specialists
+            </span>
+          </motion.h2>
+        </motion.div>
+
+        {/* Full-width centered description */}
+        <motion.div 
+          className="text-center mb-20 max-w-4xl mx-auto"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          <motion.div className="space-y-6" variants={itemVariants}>
+            <p className="text-xl text-secondary-600 leading-relaxed">
+              Heart Clinic Melbourne provides comprehensive cardiovascular care with over two decades of clinical experience.
+            </p>
+            <p className="text-lg text-secondary-600 leading-relaxed">
+              Our team of sub-specialists delivers evidence-based treatment using the latest advanced diagnostic and therapeutic technologies, ensuring optimal cardiovascular health outcomes for you through a collaborative care approach.
+            </p>
+          </motion.div>
+        </motion.div>
+
         <div className="grid lg:grid-cols-2 gap-24 items-center">
           {/* Content */}
           <motion.div 
@@ -79,22 +114,6 @@ const About: React.FC = () => {
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
           >
-            <motion.div className="space-y-8" variants={itemVariants}>
-              <h2 className="text-5xl lg:text-6xl font-bold text-secondary-800 leading-tight">
-                Melbourne's Leading
-                <span className="text-primary-600 block">
-                  Cardiovascular Specialists
-                </span>
-              </h2>
-              <div className="space-y-6">
-                <p className="text-xl text-secondary-600 leading-relaxed">
-                  Heart Clinic Melbourne provides comprehensive cardiovascular care with over two decades of clinical experience.
-                </p>
-                <p className="text-lg text-secondary-600 leading-relaxed">
-                  Our multidisciplinary team delivers evidence-based treatment using advanced diagnostic and therapeutic technologies, ensuring optimal cardiovascular health outcomes through collaborative care approaches.
-                </p>
-              </div>
-            </motion.div>
 
             <motion.div 
               className="grid sm:grid-cols-2 gap-8"
@@ -124,17 +143,6 @@ const About: React.FC = () => {
                     </motion.div>
                     <h3 className="text-xl font-semibold text-secondary-800">{feature.title}</h3>
                     <p className="text-secondary-600 leading-relaxed">{feature.description}</p>
-                    {activeFeature === index && (
-                      <motion.div 
-                        className="flex items-center text-primary-600 font-medium"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <span>Learn more</span>
-                        <ChevronRight className="w-4 h-4 ml-1" />
-                      </motion.div>
-                    )}
                   </div>
                 </motion.div>
               ))}
@@ -154,7 +162,7 @@ const About: React.FC = () => {
               transition={{ type: "spring", stiffness: 300 }}
             >
               <motion.img
-                src="https://images.pexels.com/photos/4173251/pexels-photo-4173251.jpeg?auto=compress&cs=tinysrgb&w=800"
+                src="/images/table_port.png"
                 alt="Medical professionals in consultation discussing patient care"
                 className="w-full h-[600px] object-cover"
                 initial={{ scale: 1.1 }}

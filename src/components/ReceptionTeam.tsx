@@ -46,7 +46,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Medical Office Support",
       description: "Jennifer provides essential administrative support to our clinical team. Her organizational skills and warm personality help create a welcoming environment for all patients visiting our clinic.",
       qualities: ["Organized", "Warm Personality", "Supportive", "Efficient"],
-      image: "https://images.pexels.com/photos/32789483/pexels-photo-32789483.jpeg",
+      image: "/images/placeholder1.png",
       specialties: ["Administrative Support", "Patient Communication", "File Management", "Clinical Coordination"],
       color: "from-accent-100 to-cream-100"
     },
@@ -56,7 +56,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Front Office Management",
       description: "The newest member of our team, Georgie coordinates our front office operations with enthusiasm and professionalism. She ensures that every patient interaction is positive and that our reception area runs smoothly throughout the day.",
       qualities: ["Enthusiastic", "Coordinated", "Professional", "Team Player"],
-      image: "https://images.pexels.com/photos/5327647/pexels-photo-5327647.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "/images/placeholder2.png",
       specialties: ["Front Office Management", "Patient Flow", "Team Coordination", "Quality Assurance"],
       color: "from-primary-100 to-sage-100"
     },
@@ -100,7 +100,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Diagnostic Imaging",
       description: "Aaron brings fresh expertise to our imaging team with a focus on providing comfortable patient experiences during diagnostic procedures. His technical skills and patient-centered approach make him a valuable addition to our team.",
       qualities: ["Technical Proficiency", "Patient Comfort", "Innovation", "Collaborative"],
-      image: "/images/janie.png",
+      image: "/images/placeholder3.png",
       specialties: ["Cardiac Ultrasound", "Diagnostic Procedures", "Patient Care", "Technical Innovation"],
       color: "from-sage-100 to-primary-100"
     }
@@ -131,7 +131,7 @@ const ReceptionTeam: React.FC = () => {
   }, []);
 
   return (
-    <section id="reception-team" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20" ref={sectionRef}>
+    <section id="team" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
         <div className={`text-center mb-20 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
@@ -165,7 +165,7 @@ const ReceptionTeam: React.FC = () => {
                 <img
                   src={practiceManager.image}
                   alt={`${practiceManager.name} - ${practiceManager.title}`}
-                  className="w-full h-80 object-cover object-top"
+                  className="w-full h-96 object-cover object-top"
                   style={{ objectFit: 'cover', objectPosition: 'top' }}
                 />
                 
@@ -234,7 +234,7 @@ const ReceptionTeam: React.FC = () => {
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 {/* Member Image */}
-                <div className={`relative h-48 overflow-hidden bg-gradient-to-br ${member.color}`}>
+                <div className={`relative h-72 overflow-hidden bg-gradient-to-br ${member.color}`}>
                   <img
                     src={member.image}
                     alt={`${member.name} - ${member.title}`}
@@ -304,7 +304,7 @@ const ReceptionTeam: React.FC = () => {
 
                 <div className="p-6 space-y-6">
                   {/* Tech Image */}
-                  <div className={`relative h-40 overflow-hidden rounded-xl bg-gradient-to-br ${tech.color}`}>
+                  <div className={`relative h-72 overflow-hidden rounded-xl bg-gradient-to-br ${tech.color}`}>
                     <img
                       src={tech.image}
                       alt={`${tech.name} - ${tech.title}`}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Phone, Mail, MapPin, Clock, Fan as Fax } from 'lucide-react';
+import { Phone, Mail, Clock, Fan as Fax } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const scrollToSection = (sectionId: string) => {
@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
     { id: 'doctors', label: 'Our Doctors' },
     { id: 'reception-team', label: 'Reception Team' },
     { id: 'patients', label: 'Patient Info' },
-    { id: 'education', label: 'Learning Library' },
+    { id: 'education', label: 'Library' },
     { id: 'contact', label: 'Contact' },
   ];
 
@@ -35,11 +35,6 @@ const Footer: React.FC = () => {
       name: "Casey Medical Centre, Clyde",
       address: "1s Morison Rd, Clyde",
       phone: "(03) 9509 5009"
-    },
-    {
-      name: "SJOG Hospital Berwick",
-      address: "75 Kangan Dv, Berwick", 
-      phone: "(03) 9509 5009"
     }
   ];
 
@@ -51,8 +46,12 @@ const Footer: React.FC = () => {
           {/* Clinic Info */}
           <div className="space-y-6">
             <div className="flex items-center space-x-3">
-              <div className="bg-blue-600 p-2 rounded-full">
-                <Heart className="w-6 h-6 text-white" />
+              <div className="bg-white p-2 rounded-full">
+                <img 
+                  src="/images/hcm3d2.png" 
+                  alt="Heart Clinic Melbourne Logo" 
+                  className="w-6 h-6 object-contain"
+                />
               </div>
               <div>
                 <h3 className="text-xl font-bold">Heart Clinic</h3>
@@ -61,7 +60,7 @@ const Footer: React.FC = () => {
             </div>
             
             <p className="text-gray-400 leading-relaxed">
-              Comprehensive cardiovascular services across four convenient locations in Melbourne's southeast, providing expert cardiac care close to home.
+              Comprehensive cardiovascular services across three convenient locations in Melbourne's southeast, providing expert cardiac care close to home.
             </p>
 
             <div className="space-y-3">

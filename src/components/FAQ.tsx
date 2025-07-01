@@ -47,12 +47,12 @@ const FAQ: React.FC = () => {
     {
       category: 'general',
       question: 'How do I book an appointment?',
-      answer: 'You can book an appointment by calling our reception team at (03) 9509 5009. We have locations at Malvern, Pakenham, Clyde, and Berwick. Our team will help you choose the most convenient location and time slot that suits your needs.'
+      answer: 'You can book an appointment by calling our reception team at (03) 9509 5009. We have locations at Malvern, Pakenham, and Clyde. Our team will help you choose the most convenient location and time slot that suits your needs.'
     },
     {
       category: 'general',
       question: 'What locations do you have?',
-      answer: 'We have four convenient locations: Cabrini Hospital Malvern (our main clinic), Heart Clinic Pakenham, Casey Medical Centre Clyde, and SJOG Hospital Berwick. Each location offers different services, and our reception team can advise which location is best for your specific needs.'
+      answer: 'We have three convenient locations: Cabrini Hospital Malvern (our main clinic), Heart Clinic Pakenham, and Casey Medical Centre Clyde. Each location offers different services, and our reception team can advise which location is best for your specific needs.'
     },
     {
       category: 'general',

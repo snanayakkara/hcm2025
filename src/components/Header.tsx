@@ -1,41 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, FileText, ChevronDown, Video, Search, BookOpen, Mic, Camera } from 'lucide-react';
+import { Menu, X, FileText, Video, Search, BookOpen, Mic, Camera } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showTelehealthTooltip, setShowTelehealthTooltip] = useState(false);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [showSearchPopover, setShowSearchPopover] = useState(false);
+  const [selectedResultIndex, setSelectedResultIndex] = useState(-1);
   const navigate = useNavigate();
   const location = useLocation();
 
   // Search data - all searchable content
   const searchData = [
-    // Services
-    { type: 'service', title: 'Cardiac Consultation', description: 'Expert cardiac assessments and consultations', section: 'services', keywords: ['doctor', 'appointment', 'consultation', 'assessment'] },
-    { type: 'service', title: 'Echocardiography', description: 'Heart ultrasound imaging', section: 'services', keywords: ['echo', 'ultrasound', 'imaging', 'heart scan'] },
-    { type: 'service', title: 'Stress Testing', description: 'Exercise and pharmacological stress tests', section: 'services', keywords: ['stress test', 'exercise', 'treadmill', 'cardiac stress'] },
-    { type: 'service', title: 'Holter Monitoring', description: '24-48 hour heart rhythm monitoring', section: 'services', keywords: ['holter', 'monitor', 'rhythm', 'arrhythmia', '24 hour'] },
-    { type: 'service', title: 'Coronary Angiography', description: 'Coronary artery imaging and intervention', section: 'services', keywords: ['angiogram', 'catheter', 'coronary', 'arteries', 'stent'] },
-    { type: 'service', title: 'Pacemaker Insertion', description: 'Device implantation and follow-up', section: 'services', keywords: ['pacemaker', 'device', 'implant', 'bradycardia'] },
+    // Services - All services from Services.tsx
+    { type: 'service', title: 'Consultation', description: 'Comprehensive cardiac assessment and specialist consultation', section: 'services', keywords: ['doctor', 'appointment', 'consultation', 'assessment', 'cardiac', 'specialist'] },
+    { type: 'service', title: 'Echocardiography', description: 'Resting and stress echocardiography for detailed cardiac imaging', section: 'services', keywords: ['echo', 'ultrasound', 'imaging', 'heart scan', 'cardiac imaging'] },
+    { type: 'service', title: 'Stress Echocardiography', description: 'Exercise or pharmacological stress testing with echocardiography', section: 'services', keywords: ['stress echo', 'exercise test', 'treadmill', 'cardiac stress', 'stress testing'] },
+    { type: 'service', title: '24 Hour Holter Monitoring', description: 'Continuous cardiac rhythm monitoring over 24 hours', section: 'services', keywords: ['holter', 'monitor', 'rhythm', 'arrhythmia', '24 hour', 'heart monitor'] },
+    { type: 'service', title: 'Coronary Angiography', description: 'Advanced imaging of coronary arteries to detect blockages', section: 'services', keywords: ['angiogram', 'catheter', 'coronary', 'arteries', 'stent', 'angioplasty', 'intervention'] },
+    { type: 'service', title: 'Transoesophageal Echocardiography (TOE)', description: 'Advanced cardiac imaging via esophageal probe for detailed assessment', section: 'services', keywords: ['toe', 'transoesophageal', 'echo', 'advanced imaging', 'valve assessment'] },
+    { type: 'service', title: 'TOE-Guided Cardioversion', description: 'Electrical cardioversion with TOE guidance for atrial fibrillation', section: 'services', keywords: ['cardioversion', 'dcr', 'atrial fibrillation', 'rhythm', 'toe guided'] },
+    { type: 'service', title: 'Atrial Fibrillation Ablation', description: 'Advanced catheter ablation including Pulsed Field Ablation (PFA)', section: 'services', keywords: ['ablation', 'af ablation', 'atrial fibrillation', 'pfa', 'pulsed field', 'electrophysiology'] },
+    { type: 'service', title: 'TAVI', description: 'Transcatheter Aortic Valve Implantation - minimally invasive valve replacement', section: 'services', keywords: ['tavi', 'transcatheter', 'aortic valve', 'valve replacement', 'minimally invasive'] },
+    { type: 'service', title: 'Mitral TEER', description: 'Mitral Transcatheter Edge-to-Edge Repair using MitraClip technology', section: 'services', keywords: ['mteer', 'mitraclip', 'mitral valve', 'valve repair', 'transcatheter'] },
+    { type: 'service', title: 'Pacemaker Insertion', description: 'Permanent pacemaker implantation for heart rhythm disorders', section: 'services', keywords: ['pacemaker', 'device', 'implant', 'bradycardia', 'heart rhythm'] },
     
     // Doctors
     { type: 'doctor', title: 'Dr Mark Freilich', description: 'Interventional Cardiologist', section: 'doctors', keywords: ['freilich', 'interventional', 'cardiologist', 'angioplasty'] },
-    { type: 'doctor', title: 'Dr Phillip Ngu', description: 'General Cardiologist', section: 'doctors', keywords: ['ngu', 'general', 'cardiologist', 'heart failure'] },
+    { type: 'doctor', title: 'Dr Phillip Ngu', description: 'Non-Invasive Imaging Cardiologist', section: 'doctors', keywords: ['ngu', 'general', 'cardiologist', 'heart failure'] },
     { type: 'doctor', title: 'A/Prof Alex Voskoboinik', description: 'Electrophysiologist', section: 'doctors', keywords: ['voskoboinik', 'electrophysiology', 'arrhythmia', 'ablation'] },
-    { type: 'doctor', title: 'Dr Shane Nanayakkara', description: 'Heart Failure Specialist', section: 'doctors', keywords: ['nanayakkara', 'heart failure', 'cardiomyopathy'] },
+    { type: 'doctor', title: 'Dr Shane Nanayakkara', description: 'Interventional, Structural and Heart Failure Cardiologist', section: 'doctors', keywords: ['nanayakkara', 'heart failure', 'cardiomyopathy'] },
     
     // Locations
     { type: 'location', title: 'Cabrini Hospital, Malvern', description: 'Main clinic location', section: 'contact', keywords: ['malvern', 'cabrini', 'location', 'address', 'clinic'] },
     { type: 'location', title: 'Heart Clinic Pakenham', description: 'Southeastern location', section: 'contact', keywords: ['pakenham', 'location', 'address', 'clinic'] },
     { type: 'location', title: 'Casey Medical Centre, Clyde', description: 'Southeastern location', section: 'contact', keywords: ['clyde', 'casey', 'location', 'address', 'clinic'] },
-    { type: 'location', title: 'SJOG Hospital Berwick', description: 'Southeastern location', section: 'contact', keywords: ['berwick', 'sjog', 'location', 'address', 'clinic'] },
     
     // General pages
     { type: 'page', title: 'About Us', description: 'Learn about Heart Clinic Melbourne', section: 'about', keywords: ['about', 'history', 'team', 'mission'] },
@@ -84,6 +90,30 @@ const Header: React.FC = () => {
     const query = e.target.value;
     setSearchQuery(query);
     performSearch(query);
+    setSelectedResultIndex(-1); // Reset selection when query changes
+  };
+
+  // Handle keyboard navigation in search
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedResultIndex(prev => 
+        prev < searchResults.length - 1 ? prev + 1 : 0
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedResultIndex(prev => 
+        prev > 0 ? prev - 1 : searchResults.length - 1
+      );
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedResultIndex >= 0 && searchResults[selectedResultIndex]) {
+        handleSearchResultClick(searchResults[selectedResultIndex]);
+        handleSearchPopoverClose();
+      }
+    } else if (e.key === 'Escape') {
+      handleSearchPopoverClose();
+    }
   };
 
   // Handle search result click
@@ -108,6 +138,17 @@ const Header: React.FC = () => {
     }, 200);
   };
 
+  // Handle search icon click for popover
+  const handleSearchIconClick = () => {
+    setShowSearchPopover(true);
+  };
+
+  const handleSearchPopoverClose = () => {
+    setShowSearchPopover(false);
+    setSearchQuery('');
+    setShowSearchResults(false);
+  };
+
   // Get icon for search result type
   const getResultIcon = (type: string) => {
     switch (type) {
@@ -124,9 +165,15 @@ const Header: React.FC = () => {
       const currentScrollY = window.scrollY;
       setIsScrolled(currentScrollY > 20);
       
+      // Track if user has scrolled at all
+      if (currentScrollY > 0 && !hasScrolled) {
+        console.log('User has scrolled - enabling logo pulse animation');
+        setHasScrolled(true);
+      }
+      
       // Update active section based on scroll position (only on homepage)
       if (location.pathname === '/') {
-        const sections = ['home', 'about', 'services', 'doctors', 'reception-team', 'patients', 'education', 'contact'];
+        const sections = ['home', 'about', 'services', 'doctors', 'team', 'reception-team', 'patients', 'education', 'contact'];
         const currentSection = sections.find(section => {
           const element = document.getElementById(section);
           if (element) {
@@ -144,7 +191,7 @@ const Header: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname]);
+  }, [location.pathname, hasScrolled]);
 
   const scrollToSection = (sectionId: string) => {
     // If we're not on the homepage, navigate there first
@@ -152,23 +199,30 @@ const Header: React.FC = () => {
       navigate('/');
       // Wait for navigation to complete, then scroll
       setTimeout(() => {
+        if (sectionId === 'home') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          const element = document.getElementById(sectionId);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      }, 100);
+    } else {
+      if (sectionId === 'home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
         const element = document.getElementById(sectionId);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100);
-    } else {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
       }
     }
     setIsMenuOpen(false);
-    setShowMegaMenu(false);
   };
 
   const handleReferralClick = () => {
-    window.open('mailto:reception@heartclinicmelbourne.com.au?subject=Patient Referral&body=Dear Heart Clinic Melbourne Team,%0D%0A%0D%0AI would like to refer a patient for cardiac consultation.%0D%0A%0D%0APatient Details:%0D%0AName: %0D%0ADate of Birth: %0D%0AMedicare Number: %0D%0AContact Number: %0D%0A%0D%0AReason for Referral:%0D%0A%0D%0AClinical History:%0D%0A%0D%0ACurrent Medications:%0D%0A%0D%0AUrgency: [ ] Routine [ ] Semi-urgent [ ] Urgent%0D%0A%0D%0APreferred Location: [ ] Malvern [ ] Pakenham [ ] Clyde [ ] Berwick%0D%0A%0D%0AThank you,%0D%0A%0D%0ADr. [Your Name]%0D%0A[Practice Name]%0D%0A[Contact Details]');
+    window.open('mailto:reception@heartclinicmelbourne.com.au?subject=Patient Referral&body=Dear Heart Clinic Melbourne Team,%0D%0A%0D%0AI would like to refer a patient for cardiac consultation.%0D%0A%0D%0APatient Details:%0D%0AName: %0D%0ADate of Birth: %0D%0AMedicare Number: %0D%0AContact Number: %0D%0A%0D%0AReason for Referral:%0D%0A%0D%0AClinical History:%0D%0A%0D%0ACurrent Medications:%0D%0A%0D%0AUrgency: [ ] Routine [ ] Semi-urgent [ ] Urgent%0D%0A%0D%0APreferred Location: [ ] Malvern [ ] Pakenham [ ] Clyde%0D%0A%0D%0AThank you,%0D%0A%0D%0ADr. [Your Name]%0D%0A[Practice Name]%0D%0A[Contact Details]');
   };
 
   const handleTelehealthClick = () => {
@@ -176,34 +230,13 @@ const Header: React.FC = () => {
   };
 
   const navItems = [
-    { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
-    { 
-      id: 'services', 
-      label: 'Services',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'services', label: 'All Services', description: 'Complete range of cardiac services' },
-        { id: 'services', label: 'Consultations', description: 'Expert cardiac assessments', filter: 'consultation' },
-        { id: 'services', label: 'Cardiac Imaging', description: 'Advanced diagnostic imaging', filter: 'imaging' },
-        { id: 'services', label: 'Procedures', description: 'Interventional treatments', filter: 'interventional' }
-      ]
-    },
+    { id: 'services', label: 'Services' },
     { id: 'doctors', label: 'Doctors' },
+    { id: 'team', label: 'Our Team' },
     { id: 'contact', label: 'Contact' },
     { id: 'faq', label: 'FAQ' },
   ];
-
-  const handleSubmenuClick = (subItem: any) => {
-    scrollToSection('services');
-    // Trigger filter change after navigation
-    setTimeout(() => {
-      if (subItem.filter) {
-        const event = new CustomEvent('filterServices', { detail: subItem.filter });
-        window.dispatchEvent(event);
-      }
-    }, 500);
-  };
 
   return (
     <>
@@ -219,23 +252,23 @@ const Header: React.FC = () => {
             onClick={handleTelehealthClick}
             onMouseEnter={() => setShowTelehealthTooltip(true)}
             onMouseLeave={() => setShowTelehealthTooltip(false)}
-            className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2 group relative overflow-hidden"
+            className="w-20 h-20 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center group relative overflow-hidden"
             whileHover={{ 
-              scale: 1.1,
-              rotate: [0, -2, 2, 0],
-              boxShadow: "0 20px 40px rgba(16, 185, 129, 0.5)"
+              scale: 1.15,
+              rotate: [0, -3, 3, 0],
+              boxShadow: "0 20px 40px rgba(16, 185, 129, 0.6)"
             }}
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.9 }}
             animate={{
               boxShadow: [
-                "0 8px 25px rgba(16, 185, 129, 0.3)",
-                "0 12px 30px rgba(16, 185, 129, 0.4)",
-                "0 8px 25px rgba(16, 185, 129, 0.3)"
+                "0 8px 25px rgba(16, 185, 129, 0.4)",
+                "0 12px 35px rgba(16, 185, 129, 0.5)",
+                "0 8px 25px rgba(16, 185, 129, 0.4)"
               ]
             }}
             transition={{
               boxShadow: {
-                duration: 2,
+                duration: 2.5,
                 repeat: Infinity,
                 ease: "easeInOut"
               },
@@ -247,57 +280,80 @@ const Header: React.FC = () => {
           >
             {/* Animated background pulse */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full"
+              className="absolute inset-0 bg-gradient-to-br from-emerald-400 via-teal-400 to-cyan-400 rounded-full"
               animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.5, 0.8, 0.5]
+                scale: [1, 1.3, 1],
+                opacity: [0.4, 0.7, 0.4]
               }}
               transition={{
-                duration: 2,
+                duration: 2.5,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
             />
             
+            {/* Outer ring pulse */}
+            <motion.div
+              className="absolute inset-0 border-2 border-white/30 rounded-full"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.8, 0.3, 0.8]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.5
+              }}
+            />
+            
+            {/* Curved Text */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <svg className="w-full h-full" viewBox="0 0 80 80">
+                <defs>
+                  <path
+                    id="circle-path"
+                    d="M 40,40 m -28,0 a 28,28 0 1,1 56,0 a 28,28 0 1,1 -56,0"
+                  />
+                </defs>
+                <text className="fill-white text-[8px] font-semibold tracking-wider" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+                  <textPath href="#circle-path" startOffset="0%">
+                    TELEHEALTH • TELEHEALTH • 
+                  </textPath>
+                </text>
+              </svg>
+            </div>
+            
             {/* Content */}
-            <div className="relative z-10 flex items-center space-x-2">
+            <div className="relative z-10 flex items-center justify-center">
               <motion.div
                 animate={{ 
-                  rotate: [0, 5, -5, 0],
+                  rotate: [0, 8, -8, 0],
                   scale: [1, 1.1, 1]
                 }}
                 transition={{ 
-                  duration: 2, 
+                  duration: 2.5, 
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
                 whileHover={{
-                  rotate: [0, 10, -10, 0],
-                  scale: 1.2,
-                  transition: { duration: 0.5, repeat: Infinity }
+                  rotate: [0, 15, -15, 0],
+                  scale: 1.3,
+                  transition: { duration: 0.4, repeat: Infinity }
                 }}
               >
-                <Video className="w-4 h-4" />
+                <Video className="w-5 h-5" />
               </motion.div>
-              <motion.span 
-                className="font-semibold"
-                whileHover={{
-                  x: [0, 2, -2, 0],
-                  transition: { duration: 0.3, repeat: Infinity }
-                }}
-              >
-                Join Telehealth
-              </motion.span>
             </div>
 
             {/* Enhanced shimmer effect */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"
               animate={{
-                x: ['-100%', '100%']
+                rotate: [0, 360]
               }}
               transition={{
-                duration: 2,
+                duration: 3,
                 repeat: Infinity,
                 ease: "linear"
               }}
@@ -305,11 +361,11 @@ const Header: React.FC = () => {
 
             {/* Hover glow effect */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-emerald-300 to-teal-300 rounded-full opacity-0"
+              className="absolute inset-0 bg-gradient-to-br from-emerald-300 via-teal-300 to-cyan-300 rounded-full opacity-0"
               whileHover={{
-                opacity: [0, 0.3, 0],
-                scale: [1, 1.1, 1],
-                transition: { duration: 0.6, repeat: Infinity }
+                opacity: [0, 0.4, 0],
+                scale: [1, 1.2, 1],
+                transition: { duration: 0.8, repeat: Infinity }
               }}
             />
           </motion.button>
@@ -351,191 +407,106 @@ const Header: React.FC = () => {
       </motion.div>
 
       <div className="fixed top-0 left-0 right-0 z-40 px-4 pt-4">
-        <motion.header 
-          className={`mx-auto max-w-7xl transition-all duration-500 ${
-            isScrolled 
-              ? 'bg-white/95 backdrop-blur-xl shadow-lg border border-secondary-200/50 rounded-2xl' 
-              : 'bg-white/80 backdrop-blur-sm border border-secondary-100/30 rounded-2xl'
-          }`}
-          initial={{ y: -100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        >
+        <div className="mx-auto max-w-7xl relative">
+          {/* Floating Logo Image - Positioned relative to header */}
+          <motion.div
+            className="absolute left-4 top-0 bottom-0 flex items-center z-50"
+            initial={{ opacity: 0, scale: 0.8, x: -20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.2 }}
+          >
+            <motion.div 
+              className="cursor-pointer" 
+              onClick={() => scrollToSection('home')}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <motion.img
+                src="/images/hcm3d2.png"
+                alt="Heart Clinic Melbourne Logo"
+                className="w-32 h-32 object-contain"
+                animate={hasScrolled ? {
+                  scale: [1, 1.3, 1],
+                } : {
+                  scale: 1
+                }}
+                transition={hasScrolled ? {
+                  duration: 1.2, // 50 pulses per minute = 1.2 seconds per pulse
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                } : {
+                  duration: 0.3
+                }}
+                whileHover={{
+                  scale: 1.1,
+                  transition: { duration: 0.3 }
+                }}
+                style={{
+                  filter: "drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2))"
+                }}
+              />
+            </motion.div>
+          </motion.div>
+
+          <motion.header 
+            className={`transition-all duration-500 ${
+              isScrolled 
+                ? 'bg-white/95 backdrop-blur-xl shadow-lg border border-secondary-200/50 rounded-2xl' 
+                : 'bg-white/80 backdrop-blur-sm border border-secondary-100/30 rounded-2xl'
+            }`}
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          >
           <div className="px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16 lg:h-18">
-              {/* Logo with Simple Heart */}
+            <div className="flex items-center h-16 lg:h-18">
+              {/* Text logo - positioned normally in header */}
               <motion.div 
-                className="flex items-center space-x-3 group cursor-pointer" 
-                onClick={() => navigate('/')}
+                className="flex items-center cursor-pointer flex-shrink-0" 
+                onClick={() => scrollToSection('home')}
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <div className="relative">
-                  <motion.div 
-                    className="bg-white p-2.5 rounded-xl shadow-sm overflow-hidden"
-                    whileHover={{ 
-                      scale: 1.1,
-                      boxShadow: "0 8px 25px rgba(100, 116, 139, 0.25)"
-                    }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <motion.img
-                      src="/images/hcm3d2.png"
-                      alt="Heart Clinic Melbourne Logo"
-                      className="w-8 h-8"
-                      animate={{
-                        scale: [1, 1.05, 1],
-                        rotate: [0, 2, -2, 0]
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                      whileHover={{
-                        scale: 1.1,
-                        rotate: [0, 5, -5, 0],
-                        transition: { duration: 0.5, repeat: Infinity }
-                      }}
-                    />
-                  </motion.div>
-                </div>
-                <div>
-                  <h1 className="text-lg font-semibold text-secondary-800">
-                    Heart Clinic
+                <div className="ml-28"> {/* Further increased margin for better spacing */}
+                  <h1 className="text-base font-semibold bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent whitespace-nowrap">
+                    Heart Clinic Melbourne
                   </h1>
-                  <p className="text-xs text-secondary-500 hidden sm:block">Melbourne</p>
                 </div>
               </motion.div>
 
-              {/* Enhanced Search Bar - Desktop */}
-              <div className="hidden lg:flex flex-1 max-w-md mx-8">
-                <div className="relative w-full">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400 w-4 h-4" />
-                  <input
-                    type="text"
-                    placeholder="Search services, doctors, or information..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    onFocus={handleSearchFocus}
-                    onBlur={handleSearchBlur}
-                    className="w-full pl-10 pr-4 py-2 bg-secondary-50/80 border border-secondary-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
-                  />
-                  
-                  {/* Search Results Dropdown */}
-                  <AnimatePresence>
-                    {showSearchResults && searchResults.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl rounded-xl shadow-xl border border-secondary-200/50 py-2 z-50 max-h-80 overflow-y-auto"
-                      >
-                        {searchResults.map((result, index) => (
-                          <motion.button
-                            key={index}
-                            onClick={() => handleSearchResultClick(result)}
-                            className="w-full text-left px-4 py-3 hover:bg-primary-50/80 transition-all duration-200 flex items-start space-x-3 group"
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.05 }}
-                            whileHover={{ x: 4 }}
-                          >
-                            <span className="text-lg mt-0.5 flex-shrink-0">
-                              {getResultIcon(result.type)}
-                            </span>
-                            <div className="flex-1 min-w-0">
-                              <div className="font-medium text-secondary-800 group-hover:text-primary-600 transition-colors text-sm truncate">
-                                {result.title}
-                              </div>
-                              <div className="text-xs text-secondary-500 mt-1 line-clamp-1">
-                                {result.description}
-                              </div>
-                              <div className="text-xs text-primary-600 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                Go to {result.type} →
-                              </div>
-                            </div>
-                          </motion.button>
-                        ))}
-                        
-                        {searchQuery && searchResults.length === 0 && (
-                          <div className="px-4 py-6 text-center text-secondary-500">
-                            <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                            <p className="text-sm">No results found for "{searchQuery}"</p>
-                            <p className="text-xs mt-1">Try searching for services, doctors, or locations</p>
-                          </div>
-                        )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-
               {/* Desktop Navigation */}
-              <nav className="hidden lg:flex items-center space-x-1">
+              <nav className="hidden lg:flex items-center justify-center space-x-3 flex-1">
                 {navItems.map((item) => (
-                  <div key={item.id} className="relative group">
-                    <motion.button
-                      onClick={() => item.hasSubmenu ? setShowMegaMenu(!showMegaMenu) : scrollToSection(item.id)}
-                      onMouseEnter={() => item.hasSubmenu && setShowMegaMenu(true)}
-                      className={`flex items-center space-x-1 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 relative ${
-                        activeSection === item.id && location.pathname === '/'
-                          ? 'text-primary-600 bg-primary-50/80'
-                          : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50/50'
-                      }`}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span>{item.label}</span>
-                      {item.hasSubmenu && (
-                        <motion.div
-                          animate={{ rotate: showMegaMenu ? 180 : 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <ChevronDown className="w-3 h-3" />
-                        </motion.div>
-                      )}
-                    </motion.button>
-
-                    {/* Mega Menu */}
-                    <AnimatePresence>
-                      {item.hasSubmenu && showMegaMenu && (
-                        <motion.div 
-                          className="absolute top-full left-0 mt-2 w-72 bg-white/95 backdrop-blur-xl rounded-xl shadow-xl border border-secondary-200/50 p-4 z-50"
-                          onMouseLeave={() => setShowMegaMenu(false)}
-                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                          transition={{ duration: 0.15 }}
-                        >
-                          <div className="space-y-2">
-                            {item.submenu?.map((subItem, idx) => (
-                              <motion.button
-                                key={idx}
-                                onClick={() => handleSubmenuClick(subItem)}
-                                className="w-full text-left p-3 rounded-lg hover:bg-primary-50/80 transition-all duration-200 group"
-                                whileHover={{ x: 4 }}
-                              >
-                                <div className="font-medium text-secondary-800 group-hover:text-primary-600 transition-colors text-sm">
-                                  {subItem.label}
-                                </div>
-                                <div className="text-xs text-secondary-500 mt-1">
-                                  {subItem.description}
-                                </div>
-                              </motion.button>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                  <motion.button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`flex items-center space-x-1 px-2 py-2 rounded-xl text-xs font-medium transition-all duration-200 relative whitespace-nowrap ${
+                      activeSection === item.id && location.pathname === '/'
+                        ? 'text-primary-600 bg-primary-50/80'
+                        : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50/50'
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span>{item.label}</span>
+                  </motion.button>
                 ))}
 
-                {/* Learning Library Link */}
+                {/* Search Icon Button - Now positioned in navigation */}
+                <motion.button
+                  onClick={handleSearchIconClick}
+                  className="flex items-center space-x-1 px-2 py-2 rounded-xl text-secondary-600 hover:text-primary-600 hover:bg-primary-50/50 transition-all duration-200"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Search className="w-3 h-3" />
+                  <span className="text-xs font-medium">Search</span>
+                </motion.button>
+
+                {/* Library Link */}
                 <motion.button
                   onClick={() => navigate('/learning-library')}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  className={`flex items-center space-x-1 px-2 py-2 rounded-xl text-xs font-medium transition-all duration-200 whitespace-nowrap ${
                     location.pathname === '/learning-library'
                       ? 'text-primary-600 bg-primary-50/80'
                       : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50/50'
@@ -543,33 +514,158 @@ const Header: React.FC = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <BookOpen className="w-4 h-4" />
-                  <span>Learning Library</span>
+                  <BookOpen className="w-3 h-3" />
+                  <span>Library</span>
                 </motion.button>
               </nav>
+
+              {/* Search Popover - Triggered by search icon click */}
+              <AnimatePresence>
+                {showSearchPopover && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 backdrop-blur-sm z-50 flex items-start justify-center pt-20"
+                    onClick={handleSearchPopoverClose}
+                  >
+                    <motion.div
+                      initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-secondary-200/50 p-6 w-full max-w-2xl mx-4"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="relative mb-4">
+                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary-400 w-5 h-5" />
+                        <input
+                          type="text"
+                          placeholder="Search for services, doctors, locations, or information..."
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                          onKeyDown={handleSearchKeyDown}
+                          onFocus={() => {
+                            if (searchQuery.trim()) {
+                              setShowSearchResults(true);
+                            }
+                          }}
+                          autoFocus
+                          className="w-full pl-12 pr-12 py-4 bg-secondary-50/80 border border-secondary-200 rounded-xl text-base focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                        />
+                        <button
+                          onClick={handleSearchPopoverClose}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary-400 hover:text-secondary-600 transition-colors"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                      {/* Popover Search Results */}
+                      <AnimatePresence>
+                        {searchQuery && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            {searchResults.length > 0 ? (
+                              <div className="space-y-2 max-h-80 overflow-y-auto">
+                                {searchResults.map((result, index) => (
+                                  <motion.button
+                                    key={index}
+                                    onClick={() => {
+                                      handleSearchResultClick(result);
+                                      handleSearchPopoverClose();
+                                    }}
+                                    className={`w-full text-left p-4 transition-all duration-200 flex items-start space-x-3 group rounded-xl ${
+                                      index === selectedResultIndex
+                                        ? 'bg-primary-100/80 border border-primary-200'
+                                        : 'hover:bg-primary-50/80'
+                                    }`}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.05 }}
+                                    whileHover={{ x: 4 }}
+                                    onMouseEnter={() => setSelectedResultIndex(index)}
+                                  >
+                                    <span className="text-xl mt-0.5 flex-shrink-0">
+                                      {getResultIcon(result.type)}
+                                    </span>
+                                    <div className="flex-1 min-w-0">
+                                      <div className="font-medium text-secondary-800 group-hover:text-primary-600 transition-colors text-base">
+                                        {result.title}
+                                      </div>
+                                      <div className="text-sm text-secondary-500 mt-1">
+                                        {result.description}
+                                      </div>
+                                      <div className="text-sm text-primary-600 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        Go to {result.type} →
+                                      </div>
+                                    </div>
+                                  </motion.button>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="text-center py-8 text-secondary-500">
+                                <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                                <p className="text-base">No results found for "{searchQuery}"</p>
+                                <p className="text-sm mt-2">Try searching for services, doctors, or locations</p>
+                              </div>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      {!searchQuery && (
+                        <div className="text-center py-8 text-secondary-500">
+                          <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                          <p className="text-base mb-2">Search our services and information</p>
+                          <div className="flex flex-wrap justify-center gap-2 mt-4">
+                            {['Consultations', 'Echocardiography', 'Doctors', 'Locations'].map((term) => (
+                              <button
+                                key={term}
+                                onClick={() => {
+                                  setSearchQuery(term);
+                                  performSearch(term);
+                                  setSelectedResultIndex(-1);
+                                }}
+                                className="px-3 py-1 bg-primary-50 text-primary-600 rounded-full text-sm hover:bg-primary-100 transition-colors"
+                              >
+                                {term}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
               
               {/* Action Buttons */}
-              <div className="hidden lg:flex items-center space-x-3">
+              <div className="hidden lg:flex items-center space-x-2 flex-shrink-0">
                 <motion.button
                   onClick={handleReferralClick}
-                  className="flex items-center space-x-2 text-accent-600 hover:text-accent-700 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+                  className="flex items-center space-x-1 text-accent-600 hover:text-accent-700 px-2 py-2 rounded-xl text-xs font-medium transition-all duration-200 whitespace-nowrap"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <FileText className="w-4 h-4" />
-                  <span>Send Referral</span>
+                  <FileText className="w-3 h-3" />
+                  <span>Referral</span>
                 </motion.button>
                 
                 <motion.button
                   onClick={() => scrollToSection('contact')}
-                  className="bg-gradient-to-r from-primary-500 to-primary-600 text-white px-5 py-2 rounded-xl text-sm font-medium shadow-sm"
+                  className="bg-gradient-to-r from-primary-500 to-primary-600 text-white px-3 py-2 rounded-xl text-xs font-medium shadow-sm whitespace-nowrap"
                   whileHover={{ 
                     scale: 1.02,
                     boxShadow: "0 8px 25px rgba(100, 116, 139, 0.25)"
                   }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Book Consultation
+                  Book
                 </motion.button>
               </div>
 
@@ -754,7 +850,8 @@ const Header: React.FC = () => {
               )}
             </AnimatePresence>
           </div>
-        </motion.header>
+          </motion.header>
+        </div>
       </div>
     </>
   );
