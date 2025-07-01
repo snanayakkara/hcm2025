@@ -28,8 +28,8 @@ const Services: React.FC = () => {
     },
     'consultation': {
       hasContent: true,
-      learningPath: 'faq',
-      section: 'consultation',
+      learningPath: 'tests',
+      procedure: 'consultation',
       title: 'Common questions about cardiac consultations'
     },
     'toe': {
@@ -59,13 +59,13 @@ const Services: React.FC = () => {
     'echocardiography': {
       hasContent: true,
       learningPath: 'tests',
-      procedure: 'echo',
+      procedure: 'echocardiography',
       title: 'Learn about echocardiography and cardiac imaging'
     },
     'stress-echo': {
       hasContent: true,
       learningPath: 'tests',
-      procedure: 'stress-echo',
+      procedure: 'stress-test',
       title: 'Understand stress echocardiography testing'
     },
     'holter': {
@@ -101,8 +101,7 @@ const Services: React.FC = () => {
   const handleLearnMore = (serviceId: string) => {
     const linkInfo = educationalLinks[serviceId as keyof typeof educationalLinks];
     if (linkInfo?.hasContent) {
-      const focusParam = ('procedure' in linkInfo) ? linkInfo.procedure : 
-                        ('section' in linkInfo) ? linkInfo.section : serviceId;
+      const focusParam = linkInfo.procedure;
       const targetUrl = `/learning-library?tab=${linkInfo.learningPath}&focus=${focusParam}`;
       console.log('Navigating to:', targetUrl, 'for service:', serviceId, 'with linkInfo:', linkInfo);
       navigate(targetUrl);
