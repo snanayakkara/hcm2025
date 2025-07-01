@@ -304,7 +304,6 @@ const Services: React.FC = () => {
           <div className={`grid ${isMobile ? 'grid-cols-1' : 'lg:grid-cols-5'} gap-8`}>
             {/* Services Menu List */}
             <div className={`${isMobile ? 'col-span-1' : 'lg:col-span-2'} flex flex-col`}>
-              <h3 className="text-2xl font-bold text-secondary-800 mb-6 text-center">Our Services</h3>
               <div className="space-y-2 flex-1">
                 {services.map((service) => (
                   <motion.div
@@ -342,7 +341,6 @@ const Services: React.FC = () => {
 
             {/* Detail Card */}
             <div className={`${isMobile ? 'col-span-1' : 'lg:col-span-3'} flex flex-col`}>
-              <div className="h-[3.5rem]"></div> {/* Spacer to align with menu content */}
               <div className="flex-1">
                 <AnimatePresence mode="wait">
                   {selectedService && (() => {
@@ -368,7 +366,7 @@ const Services: React.FC = () => {
                       </div>
 
                       {/* Image */}
-                      <div className={`w-full ${isMobile ? 'h-64' : 'h-96'} rounded-2xl overflow-hidden mb-6`}>
+                      <div className={`w-full ${isMobile ? 'h-72' : 'h-[28rem]'} rounded-2xl overflow-hidden mb-6`}>
                         <img
                           src={s.image}
                           alt={s.name}
