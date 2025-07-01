@@ -252,7 +252,7 @@ const Services: React.FC = () => {
       name: "Mitral Transcatheter Edge-to-Edge Repair (mTEER)",
       category: 'interventional',
       icon: <Heart className="w-5 h-5" />,
-      shortDescription: "Minimally invasive mitral valve repair using MitraClip technology",
+      shortDescription: "Minimally invasive mitral valve repair using keyhole technology",
       duration: "2-4 hours",
       preparation: "Multidisciplinary team assessment required",
       locations: ["Malvern"],
@@ -331,7 +331,7 @@ const Services: React.FC = () => {
                           {service.name}
                         </h4>
                         <p className="text-xs text-secondary-600 mt-1">
-                          {service.category}
+                          {service.shortDescription}
                         </p>
                       </div>
                     </div>

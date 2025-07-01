@@ -18,7 +18,7 @@ async function testMobileApp() {
     
     try {
         // Navigate to the local development server
-        await page.goto('http://localhost:5175', { waitUntil: 'networkidle' });
+        await page.goto('http://localhost:5173', { waitUntil: 'networkidle' });
         await page.waitForTimeout(3000);
         
         // Test 1: Check if page loads properly

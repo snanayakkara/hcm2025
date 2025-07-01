@@ -640,7 +640,7 @@ const LearningLibrary: React.FC = () => {
     {
       name: 'Spontaneous Coronary Artery Dissection (SCAD)',
       description:
-        'A sudden tear in the wall of a coronary artery that can block blood flow and cause a heart attack. SCAD often affects healthy women under 50, including during or after pregnancy.',
+        'A sudden tear in the wall of a coronary artery that blocks blood flow and causes a heart attack. About 90 % of cases occur in women, and SCAD accounts for up to a third of heart attacks in women under 50. Arteries usually heal over weeks, but repeat SCAD occurs in roughly 1 in 5 survivors, so long-term follow-up is essential.',
       symptoms: [
         'Sudden chest pain or tightness',
         'Pain radiating to arm, jaw, back or shoulder',
@@ -651,22 +651,23 @@ const LearningLibrary: React.FC = () => {
       ],
       causes: [
         'Exact trigger unknown—spontaneous weakening of the artery wall',
-        'Hormonal changes (pregnancy or post-partum period)',
-        'Fibromuscular dysplasia (FMD)',
+        'Hormonal changes (pregnancy or early post-partum)',
+        'Fibromuscular dysplasia (FMD, present in >50 % of SCAD patients)',
         'Connective-tissue disorders (e.g. Marfan, Ehlers-Danlos)',
-        'Extreme emotional or physical stress',
+        'Sudden intense emotional or physical stress',
         'Severe hypertension',
-        'Intense exercise',
+        'High-intensity or competitive exercise',
         'Certain stimulant or hormonal drugs (rare)'
       ],
       treatments: [
-        'Emergency care similar to other heart attacks (aspirin, oxygen, monitoring)',
-        'Coronary angiography to confirm dissection',
-        'Most cases managed conservatively with antiplatelet therapy and beta-blockers—arteries often heal over weeks',
-        'Stenting or bypass surgery only if ongoing ischaemia or unstable condition',
-        'Screening for fibromuscular dysplasia and other vascular disorders',
-        'Cardiac rehabilitation and gradual return to activity',
-        'Long-term avoidance of extreme lifting, high-intensity exercise and hormonal triggers as advised by your cardiologist'
+        'Emergency care similar to other heart attacks (aspirin, oxygen, ECG monitoring)',
+        'Coronary angiography to confirm the dissection; stenting or bypass **only** if ongoing ischaemia',
+        'Conservative management in most cases: aspirin long-term ± beta-blocker (reduces recurrence); dual antiplatelet therapy **not routine**',
+        'Screen once for fibromuscular dysplasia and other vascular abnormalities (head/neck, renal, iliac) with CT/MR angiography',
+        'Structured cardiac rehabilitation with gradual return to moderate aerobic activity; avoid extreme weight-lifting or contact sports',
+        'Stress-management strategies (mindfulness, counselling) because emotional surges can trigger SCAD',
+        'Discuss future pregnancy early with a cardio-obstetric team; individualised risk–benefit assessment',
+        'Follow-up CT or invasive angiography at 6–12 weeks to document healing; lifelong cardiology review because ≈10–30 % experience repeat SCAD'
       ],
       icon: <Heart className="w-6 h-6 text-accent-500" />
     },
@@ -1591,7 +1592,7 @@ const LearningLibrary: React.FC = () => {
           )}
 
           {/* Conditions Tab */}
-          {activeTab === 'conditions' && (
+          {activeTab === "conditions" && (
             <div className="grid lg:grid-cols-2 gap-10">
               {filteredConditions.length > 0 ? (
                 filteredConditions.map((condition, index) => (
@@ -1650,7 +1651,7 @@ const LearningLibrary: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              ))
+                ))
               ) : searchTerm ? (
                 <div className="col-span-full text-center py-12">
                   <Search className="w-12 h-12 text-secondary-300 mx-auto mb-4" />
@@ -1661,8 +1662,8 @@ const LearningLibrary: React.FC = () => {
             </div>
           )}
 
-          {/* Tests Tab */
-          {activeTab === 'tests' && (
+          {/* Tests Tab */}
+          {activeTab === "tests" && (
             <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
               {filteredTests.length > 0 ? (
                 filteredTests.map((test, index) => (
@@ -1800,7 +1801,7 @@ const LearningLibrary: React.FC = () => {
                     </div>
                   )}
                 </div>
-              ))
+                ))
               ) : searchTerm ? (
                 <div className="col-span-full text-center py-12">
                   <Search className="w-12 h-12 text-secondary-300 mx-auto mb-4" />
