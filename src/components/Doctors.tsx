@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Award, GraduationCap, MapPin, Stethoscope, ChevronLeft, ChevronRight, Calendar, Users, Heart } from 'lucide-react';
+import { Award, GraduationCap, MapPin, Stethoscope, ChevronLeft, ChevronRight, Calendar, Heart, Star } from 'lucide-react';
 
 const Doctors: React.FC = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(0);
@@ -41,7 +41,7 @@ const Doctors: React.FC = () => {
       specialization: "Cardiac Rhythm Disturbances",
       education: "MBBS (Hons) Monash University 2008, PhD Baker Heart Institute 2019, Electrophysiology Fellowship UCSF 2019",
       expertise: ["Pacemaker implantation", "Defibrillator implantation", "Catheter ablation", "Atrial fibrillation treatment"],
-      image: "https://images.pexels.com/photos/5214030/pexels-photo-5214030.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "/images/vosko.png",
       locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
       appointments: ["Cabrini Hospital Malvern", "Alfred Health"],
       description: "Associate Professor Voskoboinik is a leading electrophysiologist specializing in rhythm disorders. He has extensive research experience and has won prestigious awards including the Ralph Reader Prize for top young investigator.",
@@ -55,7 +55,7 @@ const Doctors: React.FC = () => {
       specialization: "Advanced Interventional Procedures",
       education: "MBBS Monash University, PhD Heart Failure, Advanced Fellowships in Coronary Intervention and Structural Intervention",
       expertise: ["Coronary angiography", "Coronary stenting", "Transcatheter valve procedures", "Structural heart interventions"],
-      image: "https://images.pexels.com/photos/6129967/pexels-photo-6129967.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "/images/nanayakkara.png",
       locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
       appointments: ["Cabrini Hospital Malvern", "Alfred Hospital"],
       description: "Dr Nanayakkara is an interventional and structural cardiologist with expertise in advanced procedures including transcatheter valve interventions. He combines clinical excellence with research innovation and has a passion for both face-to-face and telemedicine care.",
@@ -64,6 +64,31 @@ const Doctors: React.FC = () => {
       accentHex: '#79e7e1',
     }
   ];
+
+  // ──────────────────────────────────────────────────────────────
+  // Small reusable section with an icon heading
+  const Block = ({
+    icon: Icon,
+    title,
+    children,
+  }: {
+    icon: React.FC<any>;
+    title: string;
+    children: React.ReactNode;
+  }) => (
+    <div className="space-y-2">
+      <h4 className="flex items-center gap-2 font-semibold text-secondary-800">
+        <Icon className="w-4 h-4" />
+        {title}
+      </h4>
+      {typeof children === 'string' ? (
+        <p className="text-sm text-secondary-600">{children}</p>
+      ) : (
+        children
+      )}
+    </div>
+  );
+  // ──────────────────────────────────────────────────────────────
 
   useEffect(() => {
     if (isAutoPlaying) {
@@ -192,115 +217,91 @@ const Doctors: React.FC = () => {
         {/* Main Doctor Showcase - Below the selection cards */}
         <div className="mb-20">
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-secondary-100">
-            <div className="grid lg:grid-cols-2">
-              {/* Doctor Image and Info */}
+            <div className="md:grid md:grid-cols-[minmax(0,220px)_1fr]">
+              {/* ─ Portrait ─ */}
               <div className="relative">
-                <div className="relative z-10 h-full w-full p-12 lg:p-16">
-                  {/* Doctor Image */}
-                  <div className="relative mb-8 h-full w-full">
-                    <div className="w-full h-full relative">
-                      <img
-                        src={doctors[selectedDoctor].image}
-                        alt={`${doctors[selectedDoctor].name} - ${doctors[selectedDoctor].title}`}
-                        className="w-full h-full object-cover rounded-3xl shadow-2xl"
-                      />
-                      <div className="absolute -top-4 -right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full flex items-center space-x-2 shadow-lg">
-                        <span className="font-bold text-secondary-900 text-sm line-clamp-1">{doctors[selectedDoctor].specialization}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Doctor Info */}
-                  <div className="text-center text-white space-y-4">
-                    <h3 className="text-3xl lg:text-4xl font-bold">{doctors[selectedDoctor].name}</h3>
-                    <p className="text-xl font-semibold text-white/90">{doctors[selectedDoctor].title}</p>
-                    <p className="text-lg text-white/80">{doctors[selectedDoctor].specialization}</p>
-                  </div>
-                </div>
+                <img
+                  src={doctors[selectedDoctor].image}
+                  alt={doctors[selectedDoctor].name}
+                  className="w-full aspect-[3/4] object-cover object-top md:h-full md:aspect-auto md:max-h-96"
+                />
 
-                {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-10 pointer-events-none">
-                  <div className="absolute top-10 left-10 w-20 h-20 border-2 border-white rounded-full"></div>
-                  <div className="absolute bottom-10 right-10 w-16 h-16 border-2 border-white rounded-full"></div>
-                  <div className="absolute top-1/2 right-20 w-12 h-12 border-2 border-white rounded-full"></div>
-                </div>
+                {/* Badge */}
+                <span className="absolute top-4 left-4 md:bottom-4 md:left-auto md:right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-secondary-900">
+                  {doctors[selectedDoctor].specialization}
+                </span>
 
                 {/* Navigation */}
                 <button
                   onClick={prevDoctor}
-                  className="absolute top-1/2 -translate-y-1/2 left-6 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all duration-200 group"
+                  className="absolute top-1/2 -translate-y-1/2 -left-3 md:-left-6 bg-white/70 hover:bg-white p-2 rounded-full shadow"
                 >
-                  <ChevronLeft className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+                  <ChevronLeft className="w-5 h-5 text-secondary-700" />
                 </button>
                 <button
                   onClick={nextDoctor}
-                  className="absolute top-1/2 -translate-y-1/2 right-6 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all duration-200 group"
+                  className="absolute top-1/2 -translate-y-1/2 -right-3 md:-right-6 bg-white/70 hover:bg-white p-2 rounded-full shadow"
                 >
-                  <ChevronRight className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+                  <ChevronRight className="w-5 h-5 text-secondary-700" />
                 </button>
               </div>
 
-              {/* Doctor Details */}
-              <div className="p-12 lg:p-16 space-y-8">
-                {/* Education */}
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-accent-100 p-2 rounded-lg">
-                      <GraduationCap className="w-6 h-6 text-accent-600" />
+              {/* ─ Info column ─ */}
+              <div className="flex flex-col justify-between p-8 md:p-12 space-y-6">
+                {/* Header */}
+                <header className="space-y-1">
+                  <h3 className="text-2xl font-bold text-secondary-800">
+                    {doctors[selectedDoctor].name}
+                  </h3>
+                  <p className="font-semibold text-primary-600">
+                    {doctors[selectedDoctor].title}
+                  </p>
+                </header>
+                <p className="text-secondary-700 text-sm leading-relaxed mt-2">
+                  {doctors[selectedDoctor].description}
+                </p>
+
+                {/* Scrollable details */}
+                <section className="space-y-6 overflow-y-auto pr-2 md:pr-4 flex-grow">
+                  <Block icon={GraduationCap} title="Education & Training">
+                    {doctors[selectedDoctor].education}
+                  </Block>
+
+                  <Block icon={Star} title="Areas of Expertise">
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {doctors[selectedDoctor].expertise.map((exp) => (
+                        <span
+                          key={exp}
+                          className="bg-slate-50 border border-slate-200 text-xs px-3 py-1 rounded-full whitespace-nowrap"
+                        >
+                          {exp}
+                        </span>
+                      ))}
                     </div>
-                    <span className="font-bold text-secondary-900 text-lg">Education & Training</span>
-                  </div>
-                  <p className="text-secondary-600 leading-relaxed pl-11">{doctors[selectedDoctor].education}</p>
-                </div>
+                  </Block>
 
-                {/* Expertise */}
-                <div className="space-y-4">
-                  <h4 className="font-bold text-secondary-900 text-lg">Areas of Expertise</h4>
-                  <div className="grid grid-cols-1 gap-3">
-                    {doctors[selectedDoctor].expertise.map((skill, idx) => (
-                      <div key={idx} className="flex items-center space-x-3 p-3 bg-secondary-50 rounded-xl">
-                        <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
-                        <span className="text-secondary-700 font-medium">{skill}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                  <Block icon={MapPin} title="Primary Locations">
+                    <ul className="list-disc list-inside space-y-1 text-sm">
+                      {doctors[selectedDoctor].locations.map((loc) => (
+                        <li key={loc}>{loc}</li>
+                      ))}
+                    </ul>
+                  </Block>
+                </section>
 
-                {/* Locations */}
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-sage-100 p-2 rounded-lg">
-                      <MapPin className="w-6 h-6 text-sage-600" />
-                    </div>
-                    <span className="font-bold text-secondary-900 text-lg">Primary Locations</span>
-                  </div>
-                  <div className="space-y-2 pl-11">
-                    {doctors[selectedDoctor].locations.map((location, idx) => (
-                      <div key={idx} className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-sage-500 rounded-full"></div>
-                        <span className="text-secondary-600 font-medium">{location}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Description */}
-                <div className="space-y-4">
-                  <h4 className="font-bold text-secondary-900 text-lg">About</h4>
-                  <p className="text-secondary-600 leading-relaxed">{doctors[selectedDoctor].description}</p>
-                </div>
-
-                {/* CTA Button */}
-                <button
-                  className="w-full text-white py-4 rounded-2xl hover:shadow-xl transition-all duration-300 font-bold text-lg transform hover:-translate-y-1"
-                  style={{ backgroundColor: doctors[selectedDoctor].accentHex }}
-                >
-                  Book with {doctors[selectedDoctor].name.split(' ')[1]}
-                </button>
+                {/* CTA */}
+                <footer>
+                  <button
+                    className="w-full py-4 rounded-2xl font-bold text-white transition hover:shadow-xl"
+                    style={{ backgroundColor: doctors[selectedDoctor].accentHex }}
+                  >
+                    Book with {doctors[selectedDoctor].name.split(' ')[1]}
+                  </button>
+                </footer>
               </div>
             </div>
 
-            {/* Enhanced Doctor Selection */}
+            {/* Selection bullets */}
             <div className="flex justify-center space-x-4 p-8 bg-secondary-50/50">
               {doctors.map((_, index) => (
                 <button

@@ -4,18 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Muted, calming color palette
+        // Updated color palette to match hex specifications
         primary: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b', // Muted slate blue
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
+          50: '#f0fdff',
+          100: '#ccf7fe',
+          200: '#99f0fd',
+          300: '#5de4fa',
+          400: '#22d3f6',
+          500: '#148792', // Main teal - your specified color
+          600: '#0e6b75',
+          700: '#0c5761',
+          800: '#0d4750',
+          900: '#103b44',
         },
         secondary: {
           50: '#f9fafb',
@@ -23,47 +23,47 @@ export default {
           200: '#e5e7eb',
           300: '#d1d5db',
           400: '#9ca3af',
-          500: '#6b7280', // Muted gray
+          500: '#6b7280',
           600: '#4b5563',
           700: '#374151',
           800: '#1f2937',
           900: '#111827',
         },
         accent: {
-          50: '#fdf2f8',
-          100: '#fce7f3',
-          200: '#fbcfe8',
-          300: '#f9a8d4',
-          400: '#f472b6',
-          500: '#d1a3a4', // Muted dusty rose
-          600: '#be7a7b',
-          700: '#a85859',
-          800: '#8b4142',
-          900: '#6f2d2e',
+          50: '#f0fffe',
+          100: '#ccfefd',
+          200: '#99fdfb',
+          300: '#5dfaf7',
+          400: '#22f2ed',
+          500: '#3bd7d6', // Bright cyan - your specified color
+          600: '#2db5b4',
+          700: '#259392',
+          800: '#207675',
+          900: '#1e6261',
         },
         sage: {
-          50: '#f6f7f6',
-          100: '#e8ebe8',
-          200: '#d1d7d1',
-          300: '#a8b5a8',
-          400: '#7a8a7a', // Muted sage green
-          500: '#5a6b5a',
-          600: '#4a5a4a',
-          700: '#3d4a3d',
-          800: '#333d33',
-          900: '#2a332a',
+          50: '#f6f9f9',
+          100: '#ecf1f1',
+          200: '#d5e1e2',
+          300: '#b1c9cb',
+          400: '#86acaf',
+          500: '#4a787d', // Muted teal - your specified color
+          600: '#3e6469',
+          700: '#355357',
+          800: '#2f4649',
+          900: '#2a3d40',
         },
         cream: {
-          50: '#fefefe',
-          100: '#fdfcf8',
-          200: '#faf7f0',
-          300: '#f5f0e8',
-          400: '#e8ddd0', // Muted warm cream
-          500: '#d4c4b0',
-          600: '#bfa890',
-          700: '#a68d70',
-          800: '#8b7355',
-          900: '#6f5a3f',
+          50: '#ffe4dd', // Very light peach - your specified color
+          100: '#ffd3c2', // Peach - your specified color  
+          200: '#fcdfbe', // Warm cream - your specified color
+          300: '#fcd5b5', // Warm cream - your specified color
+          400: '#ffe5b4', // Light peach - your specified color
+          500: '#79e7e1', // Light cyan - your specified color
+          600: '#f5c99b',
+          700: '#eca978',
+          800: '#e18a56',
+          900: '#d6713a',
         }
       },
       fontFamily: {

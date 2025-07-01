@@ -121,7 +121,7 @@ const Services: React.FC = () => {
         "Medication adjustments if required"
       ],
       cost: "Medicare rebates available",
-      image: "https://images.pexels.com/photos/4173251/pexels-photo-4173251.jpeg?auto=compress&cs=tinysrgb&w=600"
+      image: "/images/consult.png"
     },
     {
       id: 'echocardiography',

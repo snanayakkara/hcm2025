@@ -46,7 +46,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Medical Office Support",
       description: "Jennifer provides essential administrative support to our clinical team. Her organizational skills and warm personality help create a welcoming environment for all patients visiting our clinic.",
       qualities: ["Organized", "Warm Personality", "Supportive", "Efficient"],
-      image: "https://images.pexels.com/photos/5327580/pexels-photo-5327580.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "https://images.pexels.com/photos/32789483/pexels-photo-32789483.jpeg",
       specialties: ["Administrative Support", "Patient Communication", "File Management", "Clinical Coordination"],
       color: "from-accent-100 to-cream-100"
     },
@@ -66,7 +66,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Healthcare Support",
       description: "Alison specializes in patient services and support, helping patients navigate their healthcare journey with confidence. Her compassionate approach ensures every patient feels heard and supported.",
       qualities: ["Compassionate", "Supportive", "Knowledgeable", "Patient Advocate"],
-      image: "https://images.pexels.com/photos/5327648/pexels-photo-5327648.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "/images/alison.png",
       specialties: ["Patient Services", "Healthcare Navigation", "Insurance Assistance", "Patient Advocacy"],
       color: "from-sage-100 to-accent-100"
     },
@@ -76,7 +76,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Medical Administration",
       description: "Leanne coordinates various administrative functions across our multiple locations. Her attention to detail and systematic approach help maintain consistency and quality in all our administrative processes.",
       qualities: ["Systematic", "Detail-Focused", "Multi-Location Coordinator", "Quality-Driven"],
-      image: "https://images.pexels.com/photos/5327649/pexels-photo-5327649.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "/images/leanne.png",
       specialties: ["Multi-Location Coordination", "Process Management", "Quality Control", "Administrative Systems"],
       color: "from-cream-100 to-primary-100"
     }
@@ -90,7 +90,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Specialized Cardiac Imaging",
       description: "Janie is our senior cardiac sonographer with extensive experience in echocardiography and cardiac imaging. She provides high-quality diagnostic imaging services and works closely with our cardiologists to ensure accurate assessments.",
       qualities: ["Technical Excellence", "Patient Care", "Diagnostic Expertise", "Professional Development"],
-      image: "https://images.pexels.com/photos/5327921/pexels-photo-5327921.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "/images/janie.png",
       specialties: ["Echocardiography", "Stress Echo", "Cardiac Imaging", "Patient Education"],
       color: "from-primary-100 to-accent-100"
     },
@@ -100,7 +100,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Diagnostic Imaging",
       description: "Aaron brings fresh expertise to our imaging team with a focus on providing comfortable patient experiences during diagnostic procedures. His technical skills and patient-centered approach make him a valuable addition to our team.",
       qualities: ["Technical Proficiency", "Patient Comfort", "Innovation", "Collaborative"],
-      image: "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "/images/janie.png",
       specialties: ["Cardiac Ultrasound", "Diagnostic Procedures", "Patient Care", "Technical Innovation"],
       color: "from-sage-100 to-primary-100"
     }
@@ -165,7 +165,8 @@ const ReceptionTeam: React.FC = () => {
                 <img
                   src={practiceManager.image}
                   alt={`${practiceManager.name} - ${practiceManager.title}`}
-                  className="w-full h-80 object-cover"
+                  className="w-full h-80 object-cover object-top"
+                  style={{ objectFit: 'cover', objectPosition: 'top' }}
                 />
                 
                 {/* Experience Badge */}
@@ -237,7 +238,8 @@ const ReceptionTeam: React.FC = () => {
                   <img
                     src={member.image}
                     alt={`${member.name} - ${member.title}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
+                    style={{ objectFit: 'cover', objectPosition: 'center' }}
                   />
                 </div>
 
@@ -306,7 +308,8 @@ const ReceptionTeam: React.FC = () => {
                     <img
                       src={tech.image}
                       alt={`${tech.name} - ${tech.title}`}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-center"
+                      style={{ objectFit: 'cover', objectPosition: 'center' }}
                     />
                   </div>
 
