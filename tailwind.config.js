@@ -73,6 +73,17 @@ export default {
         '18': '4.5rem',
         '88': '22rem',
         '128': '32rem',
+        // Mobile-friendly touch targets
+        '44': '2.75rem', // 44px minimum touch target
+        '48': '3rem',    // 48px comfortable touch target
+      },
+      minHeight: {
+        '44': '2.75rem', // 44px minimum touch target
+        '48': '3rem',    // 48px comfortable touch target
+      },
+      minWidth: {
+        '44': '2.75rem', // 44px minimum touch target
+        '48': '3rem',    // 48px comfortable touch target
       },
       backdropBlur: {
         xs: '2px',

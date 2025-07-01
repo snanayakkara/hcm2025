@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, FileText, Video, Search, BookOpen, Mic, Camera } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useMobileDetection } from '../hooks/useMobileDetection';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,6 +17,7 @@ const Header: React.FC = () => {
   const [selectedResultIndex, setSelectedResultIndex] = useState(-1);
   const navigate = useNavigate();
   const location = useLocation();
+  const { isMobile, isTouchDevice } = useMobileDetection();
 
   // Search data - all searchable content
   const searchData = [

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Car, Train, Bus, Navigation, Fan as Fax, ExternalLink, Search, Route } from 'lucide-react';
+import { useMobileDetection } from '../hooks/useMobileDetection';
 
 const Contact: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState(0);
   const [userAddress, setUserAddress] = useState('');
   const [showDirections, setShowDirections] = useState(false);
+  const { isMobile } = useMobileDetection();
 
   const locations = [
     {
@@ -72,10 +74,10 @@ const Contact: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
         <div className="text-center mb-20">
-          <h2 className="text-5xl font-bold text-secondary-800 mb-6">
+          <h2 className={`${isMobile ? 'text-3xl' : 'text-5xl'} font-bold text-secondary-800 mb-6`}>
             Visit Our Clinics
           </h2>
-          <p className="text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed">
+          <p className={`${isMobile ? 'text-lg' : 'text-xl'} text-secondary-600 max-w-3xl mx-auto leading-relaxed`}>
             Heart Clinic Melbourne operates across three convenient locations in Melbourne's southeast, making expert cardiac care accessible close to home.
           </p>
         </div>
@@ -83,23 +85,23 @@ const Contact: React.FC = () => {
         {/* Interactive Map Section */}
         <div className="mb-20">
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden border border-secondary-200/50">
-            <div className="grid lg:grid-cols-3">
+            <div className={`grid ${isMobile ? 'grid-cols-1' : 'lg:grid-cols-3'}`}>
               {/* Location List */}
-              <div className="lg:col-span-1 p-8 bg-secondary-50/50 border-r border-secondary-200">
-                <h3 className="text-xl font-bold text-secondary-800 mb-8">Our Locations</h3>
+              <div className={`${isMobile ? 'col-span-1' : 'lg:col-span-1'} p-8 bg-secondary-50/50 ${isMobile ? 'border-b' : 'border-r'} border-secondary-200`}>
+                <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-secondary-800 mb-8`}>Our Locations</h3>
                 <div className="space-y-4">
                   {locations.map((location, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedLocation(index)}
-                      className={`w-full text-left p-6 rounded-2xl transition-all duration-200 ${
+                      className={`w-full text-left ${isMobile ? 'p-4 min-h-[44px]' : 'p-6'} rounded-2xl transition-all duration-200 ${
                         selectedLocation === index
                           ? 'bg-primary-500 text-white shadow-lg'
                           : 'bg-white hover:bg-primary-50 border border-secondary-200'
                       }`}
                     >
                       <div className="space-y-3">
-                        <h4 className={`font-semibold text-lg leading-tight ${
+                        <h4 className={`font-semibold ${isMobile ? 'text-base' : 'text-lg'} leading-tight ${
                           selectedLocation === index ? 'text-white' : 'text-secondary-800'
                         }`}>
                           {location.name}
@@ -131,13 +133,13 @@ const Contact: React.FC = () => {
               </div>
 
               {/* Interactive Map */}
-              <div className="lg:col-span-2 h-96 lg:h-auto relative">
+              <div className={`${isMobile ? 'col-span-1 h-64' : 'lg:col-span-2 h-96 lg:h-auto'} relative`}>
                 <iframe
                   key={selectedLocation} // Force re-render when location changes
                   src={locations[selectedLocation].googleMapsEmbed}
                   width="100%"
                   height="100%"
-                  style={{ border: 0, minHeight: '500px' }}
+                  style={{ border: 0, minHeight: isMobile ? '250px' : '500px' }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -169,10 +171,10 @@ const Contact: React.FC = () => {
             </div>
 
             {/* Address Input and Directions */}
-            <div className="p-8 bg-white border-t border-secondary-200">
+            <div className={`${isMobile ? 'p-6' : 'p-8'} bg-white border-t border-secondary-200`}>
               <div className="mb-8">
-                <h4 className="text-lg font-semibold text-secondary-800 mb-4">Get Directions from Your Location</h4>
-                <div className="flex flex-col sm:flex-row gap-4">
+                <h4 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-secondary-800 mb-4`}>Get Directions from Your Location</h4>
+                <div className="flex flex-col gap-4">
                   <div className="flex-1 relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400 w-5 h-5" />
                     <input
@@ -185,20 +187,20 @@ const Contact: React.FC = () => {
                           handleGetDirections();
                         }
                       }}
-                      className="w-full pl-10 pr-4 py-3 border border-secondary-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
+                      className={`w-full pl-10 pr-4 ${isMobile ? 'py-4 min-h-[44px]' : 'py-3'} border border-secondary-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm`}
                     />
                   </div>
-                  <div className="flex gap-3">
+                  <div className={`flex ${isMobile ? 'flex-col gap-3' : 'gap-3'}`}>
                     <button
                       onClick={handleGetDirections}
-                      className="bg-primary-500 text-white px-6 py-3 rounded-xl hover:bg-primary-600 transition-colors duration-200 flex items-center space-x-2 font-medium"
+                      className={`bg-primary-500 text-white ${isMobile ? 'px-6 py-4 min-h-[44px]' : 'px-6 py-3'} rounded-xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-medium`}
                     >
                       <Car className="w-4 h-4" />
                       <span>Driving</span>
                     </button>
                     <button
                       onClick={handlePublicTransport}
-                      className="bg-sage-500 text-white px-6 py-3 rounded-xl hover:bg-sage-600 transition-colors duration-200 flex items-center space-x-2 font-medium"
+                      className={`bg-sage-500 text-white ${isMobile ? 'px-6 py-4 min-h-[44px]' : 'px-6 py-3'} rounded-xl hover:bg-sage-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-medium`}
                     >
                       <Train className="w-4 h-4" />
                       <span>Public Transport</span>
@@ -208,7 +210,7 @@ const Contact: React.FC = () => {
               </div>
 
               {/* Selected Location Details */}
-              <div className="grid md:grid-cols-3 gap-8">
+              <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'md:grid-cols-3 gap-8'}`}>
                 <div>
                   <h4 className="font-semibold text-secondary-800 mb-4 flex items-center space-x-2">
                     <Clock className="w-5 h-5 text-primary-600" />
@@ -254,17 +256,17 @@ const Contact: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-8 border-t border-secondary-200">
+              <div className={`flex ${isMobile ? 'flex-col gap-4' : 'flex-col sm:flex-row gap-4'} mt-8 pt-8 border-t border-secondary-200`}>
                 <button 
                   onClick={() => window.open(`tel:${locations[selectedLocation].phone}`, '_self')}
-                  className="flex-1 bg-primary-500 text-white px-8 py-4 rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold"
+                  className={`flex-1 bg-primary-500 text-white ${isMobile ? 'px-8 py-4 min-h-[44px]' : 'px-8 py-4'} rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold`}
                 >
                   <Phone className="w-4 h-4" />
                   <span>Call {locations[selectedLocation].phone}</span>
                 </button>
                 <button 
                   onClick={() => window.open(`https://www.google.com/maps/search/${encodeURIComponent(locations[selectedLocation].address)}`, '_blank')}
-                  className="flex-1 border border-primary-500 text-primary-600 px-8 py-4 rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold"
+                  className={`flex-1 border border-primary-500 text-primary-600 ${isMobile ? 'px-8 py-4 min-h-[44px]' : 'px-8 py-4'} rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold`}
                 >
                   <ExternalLink className="w-4 h-4" />
                   <span>View on Google Maps</span>
@@ -275,14 +277,14 @@ const Contact: React.FC = () => {
         </div>
 
         {/* Main Contact Information */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 mb-20 shadow-lg border border-secondary-200/50">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className={`bg-white/80 backdrop-blur-sm rounded-3xl ${isMobile ? 'p-8' : 'p-12'} mb-20 shadow-lg border border-secondary-200/50`}>
+          <div className={`grid ${isMobile ? 'grid-cols-1 gap-8' : 'lg:grid-cols-2 gap-12'} items-center`}>
             <div className="space-y-8">
-              <h3 className="text-3xl font-bold text-secondary-800">Main Reception</h3>
+              <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-secondary-800`}>Main Reception</h3>
               <div className="space-y-6">
                 <div className="flex items-center space-x-4">
-                  <div className="bg-primary-100 p-3 rounded-xl">
-                    <MapPin className="w-6 h-6 text-primary-600" />
+                  <div className={`bg-primary-100 ${isMobile ? 'p-2' : 'p-3'} rounded-xl`}>
+                    <MapPin className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-primary-600`} />
                   </div>
                   <div>
                     <p className="font-semibold text-secondary-800">Address</p>
@@ -291,8 +293,8 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div className="flex items-center space-x-4">
-                  <div className="bg-primary-100 p-3 rounded-xl">
-                    <Phone className="w-6 h-6 text-primary-600" />
+                  <div className={`bg-primary-100 ${isMobile ? 'p-2' : 'p-3'} rounded-xl`}>
+                    <Phone className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-primary-600`} />
                   </div>
                   <div>
                     <p className="font-semibold text-secondary-800">Phone</p>
@@ -301,8 +303,8 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div className="flex items-center space-x-4">
-                  <div className="bg-primary-100 p-3 rounded-xl">
-                    <Fax className="w-6 h-6 text-primary-600" />
+                  <div className={`bg-primary-100 ${isMobile ? 'p-2' : 'p-3'} rounded-xl`}>
+                    <Fax className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-primary-600`} />
                   </div>
                   <div>
                     <p className="font-semibold text-secondary-800">Fax</p>
@@ -311,8 +313,8 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div className="flex items-center space-x-4">
-                  <div className="bg-primary-100 p-3 rounded-xl">
-                    <Mail className="w-6 h-6 text-primary-600" />
+                  <div className={`bg-primary-100 ${isMobile ? 'p-2' : 'p-3'} rounded-xl`}>
+                    <Mail className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-primary-600`} />
                   </div>
                   <div>
                     <p className="font-semibold text-secondary-800">Email</p>
@@ -321,8 +323,8 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div className="flex items-center space-x-4">
-                  <div className="bg-primary-100 p-3 rounded-xl">
-                    <Clock className="w-6 h-6 text-primary-600" />
+                  <div className={`bg-primary-100 ${isMobile ? 'p-2' : 'p-3'} rounded-xl`}>
+                    <Clock className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-primary-600`} />
                   </div>
                   <div>
                     <p className="font-semibold text-secondary-800">Opening Hours</p>
@@ -332,22 +334,22 @@ const Contact: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-primary-50/80 p-8 rounded-2xl">
-              <h4 className="text-xl font-semibold text-secondary-800 mb-6">Contact Our Reception Team</h4>
-              <p className="text-secondary-600 mb-8 leading-relaxed">
+            <div className={`bg-primary-50/80 ${isMobile ? 'p-6' : 'p-8'} rounded-2xl`}>
+              <h4 className={`${isMobile ? 'text-lg' : 'text-xl'} font-semibold text-secondary-800 mb-6`}>Contact Our Reception Team</h4>
+              <p className={`text-secondary-600 ${isMobile ? 'mb-6' : 'mb-8'} leading-relaxed`}>
                 Emma and our reception team are here to help you schedule appointments, answer questions, and ensure your visit goes smoothly.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col gap-4">
                 <button 
                   onClick={() => window.open('tel:(03) 9509 5009', '_self')}
-                  className="flex-1 bg-primary-500 text-white px-8 py-4 rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold"
+                  className={`flex-1 bg-primary-500 text-white ${isMobile ? 'px-8 py-4 min-h-[44px]' : 'px-8 py-4'} rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold`}
                 >
                   <Phone className="w-4 h-4" />
                   <span>Call Now</span>
                 </button>
                 <button 
                   onClick={() => window.open('mailto:reception@heartclinicmelbourne.com.au', '_self')}
-                  className="flex-1 border border-primary-500 text-primary-600 px-8 py-4 rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold"
+                  className={`flex-1 border border-primary-500 text-primary-600 ${isMobile ? 'px-8 py-4 min-h-[44px]' : 'px-8 py-4'} rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold`}
                 >
                   <Mail className="w-4 h-4" />
                   <span>Send Email</span>
@@ -358,10 +360,10 @@ const Contact: React.FC = () => {
         </div>
 
         {/* Before Your Visit */}
-        <div className="bg-white/80 backdrop-blur-sm p-12 rounded-3xl shadow-lg border border-secondary-200/50">
-          <h3 className="text-3xl font-bold text-secondary-800 mb-8">Before Your Visit</h3>
+        <div className={`bg-white/80 backdrop-blur-sm ${isMobile ? 'p-8' : 'p-12'} rounded-3xl shadow-lg border border-secondary-200/50`}>
+          <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-secondary-800 mb-8`}>Before Your Visit</h3>
           
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className={`grid ${isMobile ? 'grid-cols-1 gap-8' : 'lg:grid-cols-2 gap-12'}`}>
             <div className="space-y-6">
               <div className="space-y-4">
                 <h4 className="font-semibold text-secondary-800 text-lg">What to Bring</h4>

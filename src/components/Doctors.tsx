@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Award, GraduationCap, MapPin, Stethoscope, ChevronLeft, ChevronRight, Calendar, Heart, Star } from 'lucide-react';
+import { useMobileDetection } from '../hooks/useMobileDetection';
 
 const Doctors: React.FC = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const { isMobile, isTouchDevice } = useMobileDetection();
 
   const doctors = [
     {
@@ -125,44 +127,44 @@ const Doctors: React.FC = () => {
             <Stethoscope className="w-4 h-4" />
             <span>Meet Our Expert Team</span>
           </div>
-          <h2 className="text-5xl lg:text-6xl font-bold text-secondary-800 mb-6 tracking-tight leading-tight">
+          <h2 className={`${isMobile ? 'text-3xl' : 'text-5xl lg:text-6xl'} font-bold text-secondary-800 mb-6 tracking-tight leading-tight`}>
             Our Expert
             <span className="block bg-gradient-to-r from-primary-600 via-accent-600 to-primary-800 bg-clip-text text-transparent">
               Cardiologists
             </span>
           </h2>
-          <p className="text-xl text-secondary-600 max-w-4xl mx-auto leading-relaxed">
+          <p className={`${isMobile ? 'text-lg' : 'text-xl'} text-secondary-600 max-w-4xl mx-auto leading-relaxed`}>
             Our team of highly qualified cardiologists brings extensive experience and specialized expertise in all aspects of cardiovascular care, from general cardiology to advanced interventional procedures.
           </p>
         </div>
 
         {/* Doctor Selection Cards - Above the main showcase */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'md:grid-cols-2 lg:grid-cols-4 gap-6'} mb-16`}>
           {doctors.map((doctor, index) => (
             <button
               key={index}
-              onMouseEnter={() => setHoveredCard(index)}
-              onMouseLeave={() => setHoveredCard(null)}
+              onMouseEnter={() => !isTouchDevice && setHoveredCard(index)}
+              onMouseLeave={() => !isTouchDevice && setHoveredCard(null)}
               onClick={() => {
                 setSelectedDoctor(index);
                 setIsAutoPlaying(false);
               }}
-              className={`group relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-lg transition-all duration-500 transform hover:-translate-y-2 cursor-pointer overflow-hidden border-2 ${
+              className={`group relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-lg transition-all duration-500 ${isMobile ? 'transform-none' : 'transform hover:-translate-y-2'} cursor-pointer overflow-hidden border-2 ${isMobile ? 'min-h-[44px]' : ''} ${
                 selectedDoctor === index 
-                  ? `border-${doctor.accentColor}-500 scale-105 shadow-xl` 
+                  ? `border-${doctor.accentColor}-500 ${isMobile ? '' : 'scale-105'} shadow-xl` 
                   : 'border-secondary-200/50 hover:border-primary-300'
               }`}
             >
               {/* Card Background Gradient */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500 bg-white" />
               
-              <div className="relative p-6 space-y-4">
+              <div className={`relative ${isMobile ? 'p-4' : 'p-6'} space-y-4`}>
                 {/* Doctor Image */}
                 <div className="relative">
                   <img
                     src={doctor.image}
                     alt={doctor.name}
-                    className="w-20 h-20 object-cover rounded-xl mx-auto shadow-md group-hover:shadow-lg transition-shadow duration-300"
+                    className={`${isMobile ? 'w-16 h-16' : 'w-20 h-20'} object-cover rounded-xl mx-auto shadow-md group-hover:shadow-lg transition-shadow duration-300`}
                   />
                 </div>
                 
@@ -217,13 +219,13 @@ const Doctors: React.FC = () => {
         {/* Main Doctor Showcase - Below the selection cards */}
         <div className="mb-20">
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-secondary-100">
-            <div className="md:grid md:grid-cols-[minmax(0,280px)_1fr]">
+            <div className={`${isMobile ? 'block' : 'md:grid md:grid-cols-[minmax(0,280px)_1fr]'}`}>
               {/* ─ Portrait ─ */}
-              <div className="relative flex items-center justify-center p-12">
+              <div className={`relative flex items-center justify-center ${isMobile ? 'p-8' : 'p-12'}`}>
                 {/* Portrait Circle */}
                 <div className="relative z-10 group cursor-pointer">
                   <div 
-                    className="w-48 h-48 rounded-full overflow-hidden border-4 shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-3xl"
+                    className={`${isMobile ? 'w-32 h-32' : 'w-48 h-48'} rounded-full overflow-hidden border-4 shadow-2xl transition-all duration-300 ${isMobile ? '' : 'group-hover:scale-110 group-hover:shadow-3xl'}`}
                     style={{ 
                       borderColor: doctors[selectedDoctor].accentHex,
                       boxShadow: `0 0 0 4px ${doctors[selectedDoctor].accentHex}20, 0 25px 50px -12px rgba(0, 0, 0, 0.25)`
@@ -232,7 +234,7 @@ const Doctors: React.FC = () => {
                     <img
                       src={doctors[selectedDoctor].image}
                       alt={doctors[selectedDoctor].name}
-                      className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                      className={`w-full h-full object-cover object-center transition-transform duration-300 ${isMobile ? '' : 'group-hover:scale-105'}`}
                       style={{ objectFit: 'cover', objectPosition: 'center top' }}
                     />
                   </div>
@@ -259,37 +261,37 @@ const Doctors: React.FC = () => {
                 {/* Navigation */}
                 <button
                   onClick={prevDoctor}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 z-20"
+                  className={`absolute ${isMobile ? 'left-1 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 min-h-[44px] min-w-[44px]' : 'left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-3'} rounded-full shadow-lg transition-all duration-200 ${isMobile ? '' : 'hover:scale-110'} z-20 flex items-center justify-center`}
                   style={{ color: doctors[selectedDoctor].accentHex }}
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className={`${isMobile ? 'w-4 h-4' : 'w-5 h-5'}`} />
                 </button>
                 <button
                   onClick={nextDoctor}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 z-20"
+                  className={`absolute ${isMobile ? 'right-1 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 min-h-[44px] min-w-[44px]' : 'right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-3'} rounded-full shadow-lg transition-all duration-200 ${isMobile ? '' : 'hover:scale-110'} z-20 flex items-center justify-center`}
                   style={{ color: doctors[selectedDoctor].accentHex }}
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className={`${isMobile ? 'w-4 h-4' : 'w-5 h-5'}`} />
                 </button>
               </div>
 
               {/* ─ Info column ─ */}
-              <div className="flex flex-col justify-between p-8 md:p-12 space-y-6">
+              <div className={`flex flex-col justify-between ${isMobile ? 'p-6' : 'p-8 md:p-12'} space-y-6`}>
                 {/* Header */}
                 <header className="space-y-1">
-                  <h3 className="text-2xl font-bold text-secondary-800">
+                  <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-secondary-800`}>
                     {doctors[selectedDoctor].name}
                   </h3>
-                  <p className="font-semibold text-primary-600">
+                  <p className={`font-semibold text-primary-600 ${isMobile ? 'text-sm' : ''}`}>
                     {doctors[selectedDoctor].title}
                   </p>
                 </header>
-                <p className="text-secondary-700 text-sm leading-relaxed mt-2">
+                <p className={`text-secondary-700 ${isMobile ? 'text-xs' : 'text-sm'} leading-relaxed mt-2`}>
                   {doctors[selectedDoctor].description}
                 </p>
 
                 {/* Scrollable details */}
-                <section className="space-y-6 overflow-y-auto pr-2 md:pr-4 flex-grow">
+                <section className={`${isMobile ? 'space-y-4' : 'space-y-6'} overflow-y-auto pr-2 md:pr-4 flex-grow`}>
                   <Block icon={GraduationCap} title="Education & Training">
                     {doctors[selectedDoctor].education}
                   </Block>
@@ -319,7 +321,7 @@ const Doctors: React.FC = () => {
                 {/* CTA */}
                 <footer>
                   <button
-                    className="w-full py-4 rounded-2xl font-bold text-white transition hover:shadow-xl"
+                    className={`w-full ${isMobile ? 'py-4 min-h-[44px] text-sm' : 'py-4 text-base'} rounded-2xl font-bold text-white transition hover:shadow-xl`}
                     style={{ backgroundColor: doctors[selectedDoctor].accentHex }}
                   >
                     Book with {doctors[selectedDoctor].name.split(' ')[1]}
@@ -329,7 +331,7 @@ const Doctors: React.FC = () => {
             </div>
 
             {/* Selection bullets */}
-            <div className="flex justify-center space-x-4 p-8 bg-secondary-50/50">
+            <div className={`flex justify-center ${isMobile ? 'space-x-2 p-6' : 'space-x-4 p-8'} bg-secondary-50/50`}>
               {doctors.map((_, index) => (
                 <button
                   key={index}
@@ -339,10 +341,12 @@ const Doctors: React.FC = () => {
                   }}
                   style={{
                     backgroundColor: index === selectedDoctor ? doctors[index].accentHex : '#d1d5db',
-                    width: index === selectedDoctor ? '48px' : '16px',
-                    height: '16px',
+                    width: index === selectedDoctor ? (isMobile ? '32px' : '48px') : (isMobile ? '12px' : '16px'),
+                    height: isMobile ? '12px' : '16px',
                     borderRadius: '9999px',
                     transition: 'all 0.3s',
+                    minHeight: isMobile ? '44px' : 'auto',
+                    minWidth: isMobile ? '44px' : 'auto',
                   }}
                 />
               ))}

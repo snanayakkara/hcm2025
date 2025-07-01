@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, BookOpen, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useMobileDetection } from '../hooks/useMobileDetection';
 
 const Services: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string | null>('consultation');
   const [isPaused, setIsPaused] = useState(false);
   const navigate = useNavigate();
+  const { isMobile, isTouchDevice } = useMobileDetection();
 
   // Check for reduced motion preference
   const prefersReducedMotion = typeof window !== 'undefined' && 
@@ -279,7 +281,7 @@ const Services: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-20">
           <motion.h2 
-            className="text-5xl lg:text-6xl font-bold text-secondary-800 mb-8 leading-tight"
+            className={`${isMobile ? 'text-3xl' : 'text-5xl lg:text-6xl'} font-bold text-secondary-800 mb-8 leading-tight`}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -287,7 +289,7 @@ const Services: React.FC = () => {
             Our Cardiac Services
           </motion.h2>
           <motion.p 
-            className="text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed"
+            className={`${isMobile ? 'text-lg' : 'text-xl'} text-secondary-600 max-w-3xl mx-auto leading-relaxed`}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -299,9 +301,9 @@ const Services: React.FC = () => {
 
         {/* Services Menu + Detail Layout */}
         <div className="mb-20">
-          <div className="grid lg:grid-cols-5 gap-8">
+          <div className={`grid ${isMobile ? 'grid-cols-1' : 'lg:grid-cols-5'} gap-8`}>
             {/* Services Menu List */}
-            <div className="lg:col-span-2 flex flex-col">
+            <div className={`${isMobile ? 'col-span-1' : 'lg:col-span-2'} flex flex-col`}>
               <h3 className="text-2xl font-bold text-secondary-800 mb-6 text-center">Our Services</h3>
               <div className="space-y-2 flex-1">
                 {services.map((service) => (
@@ -339,7 +341,7 @@ const Services: React.FC = () => {
             </div>
 
             {/* Detail Card */}
-            <div className="lg:col-span-3 flex flex-col">
+            <div className={`${isMobile ? 'col-span-1' : 'lg:col-span-3'} flex flex-col`}>
               <div className="h-[3.5rem]"></div> {/* Spacer to align with menu content */}
               <div className="flex-1">
                 <AnimatePresence mode="wait">
@@ -366,7 +368,7 @@ const Services: React.FC = () => {
                       </div>
 
                       {/* Image */}
-                      <div className="w-full h-96 rounded-2xl overflow-hidden mb-6">
+                      <div className={`w-full ${isMobile ? 'h-64' : 'h-96'} rounded-2xl overflow-hidden mb-6`}>
                         <img
                           src={s.image}
                           alt={s.name}
@@ -378,7 +380,7 @@ const Services: React.FC = () => {
                       <p className="text-secondary-700 leading-relaxed mb-6">{s.description}</p>
 
                       {/* Quick Facts */}
-                      <div className="grid grid-cols-3 gap-4 p-4 bg-secondary-50 rounded-xl mb-6">
+                      <div className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'grid-cols-3 gap-4'} p-4 bg-secondary-50 rounded-xl mb-6`}>
                         <QuickFact icon={Clock} title="Duration" value={s.duration} />
                         <QuickFact icon={MapPin} title="Locations" value={s.locations.join(', ')} />
                         <QuickFact icon={FileText} title="Cost" value={s.cost} />
@@ -392,7 +394,7 @@ const Services: React.FC = () => {
                             console.log('Learn More button clicked for:', s.id);
                             handleLearnMore(s.id);
                           }}
-                          className="w-full bg-sage-500 text-white py-3 rounded-xl flex items-center justify-center space-x-2 hover:bg-sage-600 transition-colors duration-200"
+                          className={`w-full bg-sage-500 text-white ${isMobile ? 'py-4 min-h-[44px]' : 'py-3'} rounded-xl flex items-center justify-center space-x-2 hover:bg-sage-600 transition-colors duration-200`}
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
@@ -411,23 +413,23 @@ const Services: React.FC = () => {
 
         {/* Call to Action */}
         <motion.div 
-          className="bg-gradient-to-r from-primary-500 to-accent-500 rounded-3xl p-12 text-center mt-32"
+          className={`bg-gradient-to-r from-primary-500 to-accent-500 rounded-3xl ${isMobile ? 'p-8' : 'p-12'} text-center ${isMobile ? 'mt-16' : 'mt-32'}`}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h3 className="text-3xl font-bold text-white mb-6">
+          <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-white mb-6`}>
             Ready to Schedule Your Appointment?
           </h3>
-          <p className="text-primary-100 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
+          <p className={`text-primary-100 ${isMobile ? 'mb-6' : 'mb-8'} max-w-2xl mx-auto ${isMobile ? 'text-base' : 'text-lg'} leading-relaxed`}>
             Our reception team is ready to help you book the right service at the most convenient location for you.
           </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <button className="bg-white text-primary-600 px-10 py-4 rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold text-lg">
+          <div className={`flex flex-col ${isMobile ? 'gap-4' : 'sm:flex-row gap-6'} justify-center`}>
+            <button className={`bg-white text-primary-600 ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold`}>
               <Phone className="w-5 h-5" />
               <span>Call (03) 9509 5009</span>
             </button>
-            <button className="border-2 border-white text-white px-10 py-4 rounded-2xl hover:bg-white hover:text-primary-600 transition-colors duration-200 font-semibold text-lg">
+            <button className={`border-2 border-white text-white ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-white hover:text-primary-600 transition-colors duration-200 font-semibold`}>
               Book Online
             </button>
           </div>

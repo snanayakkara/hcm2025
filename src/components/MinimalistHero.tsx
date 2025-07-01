@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import SplitText from './SplitText';
+import { useMobileDetection } from '../hooks/useMobileDetection';
 
 const MinimalistHero: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
+  const { isMobile, isTouchDevice } = useMobileDetection();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -119,7 +121,7 @@ const MinimalistHero: React.FC = () => {
           
           {/* Main Headline */}
           <motion.div className="space-y-12" variants={itemVariants}>
-            <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold text-secondary-800 leading-[0.9] tracking-tight">
+            <h1 className={`${isMobile ? 'text-4xl' : 'text-6xl sm:text-7xl lg:text-8xl'} font-bold text-secondary-800 leading-[0.9] tracking-tight`}>
               Welcome to
               <span className="block relative">
                 {/* Image background container for text */}
@@ -148,7 +150,7 @@ const MinimalistHero: React.FC = () => {
             </h1>
             
             {/* Value Proposition */}
-            <p className="text-xl lg:text-2xl text-secondary-500 max-w-3xl mx-auto leading-relaxed font-light">
+            <p className={`${isMobile ? 'text-lg' : 'text-xl lg:text-2xl'} text-secondary-500 max-w-3xl mx-auto leading-relaxed font-light`}>
               Comprehensive cardiovascular services across Melbourne's southeast with a focus on personalized, compassionate care
             </p>
           </motion.div>
@@ -158,11 +160,11 @@ const MinimalistHero: React.FC = () => {
             className="space-y-8"
             variants={itemVariants}
           >
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <div className={`flex flex-col ${isMobile ? 'gap-4' : 'sm:flex-row gap-6'} justify-center`}>
               <motion.button 
-                className="bg-secondary-800 text-white px-10 py-4 rounded-2xl font-medium text-lg shadow-sm"
+                className={`bg-secondary-800 text-white ${isMobile ? 'px-8 py-4 text-base min-h-[44px]' : 'px-10 py-4 text-lg'} rounded-2xl font-medium shadow-sm`}
                 whileHover={{ 
-                  scale: 1.02,
+                  scale: isMobile ? 1.01 : 1.02,
                   backgroundColor: "#1e293b",
                   boxShadow: "0 10px 25px rgba(0,0,0,0.15)"
                 }}
@@ -173,9 +175,9 @@ const MinimalistHero: React.FC = () => {
                 Book An Appointment
               </motion.button>
               <motion.button 
-                className="border-2 border-secondary-200 text-secondary-600 px-10 py-4 rounded-2xl font-medium text-lg hover:border-secondary-300 hover:bg-secondary-50/50"
+                className={`border-2 border-secondary-200 text-secondary-600 ${isMobile ? 'px-8 py-4 text-base min-h-[44px]' : 'px-10 py-4 text-lg'} rounded-2xl font-medium hover:border-secondary-300 hover:bg-secondary-50/50`}
                 whileHover={{ 
-                  scale: 1.02
+                  scale: isMobile ? 1.01 : 1.02
                 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 300 }}

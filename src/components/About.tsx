@@ -106,23 +106,22 @@ const About: React.FC = () => {
           </motion.div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-24 items-center">
-          {/* Content */}
+        <div className="grid lg:grid-cols-2 gap-12 xl:gap-16 items-stretch">
+          {/* Content - Cards */}
           <motion.div 
-            className="space-y-16"
+            className="flex flex-col"
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
           >
-
             <motion.div 
-              className="grid sm:grid-cols-2 gap-8"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-6 h-full"
               variants={containerVariants}
             >
               {features.map((feature, index) => (
                 <motion.div
                   key={index}
-                  className={`${feature.color} ${feature.hoverColor} p-8 rounded-2xl transition-all duration-500 cursor-pointer border border-secondary-200/50 ${
+                  className={`${feature.color} ${feature.hoverColor} p-8 rounded-2xl transition-all duration-500 cursor-pointer border border-secondary-200/50 flex flex-col h-full ${
                     activeFeature === index ? 'scale-105 shadow-lg ring-2 ring-primary-200/50' : 'hover:scale-102'
                   }`}
                   onClick={() => setActiveFeature(index)}
@@ -132,17 +131,18 @@ const About: React.FC = () => {
                     boxShadow: "0 10px 25px rgba(0,0,0,0.08)"
                   }}
                   whileTap={{ scale: 0.98 }}
+                  style={{ minHeight: '280px' }}
                 >
-                  <div className="space-y-6">
+                  <div className="space-y-6 flex-1 flex flex-col">
                     <motion.div 
-                      className="bg-white/80 backdrop-blur-sm w-14 h-14 rounded-xl flex items-center justify-center shadow-sm"
+                      className="bg-white/80 backdrop-blur-sm w-14 h-14 rounded-xl flex items-center justify-center shadow-sm flex-shrink-0"
                       whileHover={{ rotate: 5 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
                       {feature.icon}
                     </motion.div>
-                    <h3 className="text-xl font-semibold text-secondary-800">{feature.title}</h3>
-                    <p className="text-secondary-600 leading-relaxed">{feature.description}</p>
+                    <h3 className="text-xl font-semibold text-secondary-800 flex-shrink-0">{feature.title}</h3>
+                    <p className="text-secondary-600 leading-relaxed flex-1">{feature.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -151,20 +151,21 @@ const About: React.FC = () => {
 
           {/* Image */}
           <motion.div 
-            className="relative"
+            className="relative flex flex-col"
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
             <motion.div 
-              className="rounded-3xl overflow-hidden shadow-xl"
+              className="rounded-3xl overflow-hidden shadow-xl flex-1"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
+              style={{ minHeight: '572px' }}
             >
               <motion.img
                 src="/images/table_port.png"
                 alt="Medical professionals in consultation discussing patient care"
-                className="w-full h-[600px] object-cover"
+                className="w-full h-full object-cover"
                 initial={{ scale: 1.1 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.8 }}

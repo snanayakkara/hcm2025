@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, FileText, Search, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useMobileDetection } from '../hooks/useMobileDetection';
 
 const FAQ: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const navigate = useNavigate();
+  const { isMobile, isTouchDevice } = useMobileDetection();
 
   const handleLearningLibraryClick = () => {
     navigate('/learning-library');
@@ -84,7 +86,7 @@ const FAQ: React.FC = () => {
           </motion.div>
           
           <motion.h2 
-            className="text-5xl lg:text-6xl font-bold text-secondary-800 mb-8 leading-tight"
+            className={`${isMobile ? 'text-3xl' : 'text-5xl lg:text-6xl'} font-bold text-secondary-800 mb-8 leading-tight`}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -92,7 +94,7 @@ const FAQ: React.FC = () => {
             Common Questions
           </motion.h2>
           <motion.p 
-            className="text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed"
+            className={`${isMobile ? 'text-lg' : 'text-xl'} text-secondary-600 max-w-3xl mx-auto leading-relaxed`}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -117,14 +119,14 @@ const FAQ: React.FC = () => {
               placeholder="Search questions and answers..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 border border-secondary-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
+              className={`w-full pl-12 pr-4 ${isMobile ? 'py-4 min-h-[44px]' : 'py-4'} border border-secondary-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm`}
             />
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className={`flex ${isMobile ? 'flex-col gap-3' : 'flex-wrap justify-center gap-3'}`}>
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+              className={`${isMobile ? 'px-6 py-4 min-h-[44px]' : 'px-6 py-3'} rounded-xl text-sm transition-all duration-200 ${
                 selectedCategory === 'all'
                   ? 'bg-primary-500 text-white shadow-md'
                   : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
@@ -134,7 +136,7 @@ const FAQ: React.FC = () => {
             </button>
             <button
               onClick={() => setSelectedCategory('general')}
-              className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+              className={`${isMobile ? 'px-6 py-4 min-h-[44px]' : 'px-6 py-3'} rounded-xl text-sm transition-all duration-200 ${
                 selectedCategory === 'general'
                   ? 'bg-primary-500 text-white shadow-md'
                   : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
@@ -144,7 +146,7 @@ const FAQ: React.FC = () => {
             </button>
             <button
               onClick={() => setSelectedCategory('billing')}
-              className={`px-6 py-3 rounded-xl text-sm transition-all duration-200 ${
+              className={`${isMobile ? 'px-6 py-4 min-h-[44px]' : 'px-6 py-3'} rounded-xl text-sm transition-all duration-200 ${
                 selectedCategory === 'billing'
                   ? 'bg-primary-500 text-white shadow-md'
                   : 'bg-white text-secondary-600 hover:bg-primary-50 border border-secondary-200'
@@ -174,16 +176,16 @@ const FAQ: React.FC = () => {
             >
               <button
                 onClick={() => setExpandedFAQ(expandedFAQ === index ? null : index)}
-                className="w-full p-8 text-left flex items-center justify-between hover:bg-secondary-50/50 transition-colors duration-200"
+                className={`w-full ${isMobile ? 'p-6 min-h-[44px]' : 'p-8'} text-left flex items-center justify-between hover:bg-secondary-50/50 transition-colors duration-200`}
               >
-                <h3 className="text-lg font-semibold text-secondary-800 pr-4">{faq.question}</h3>
+                <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-secondary-800 pr-4`}>{faq.question}</h3>
                 <ChevronDown className={`w-5 h-5 text-secondary-500 transition-transform duration-200 flex-shrink-0 ${
                   expandedFAQ === index ? 'rotate-180' : ''
                 }`} />
               </button>
               {expandedFAQ === index && (
                 <motion.div 
-                  className="px-8 pb-8 border-t border-secondary-100"
+                  className={`${isMobile ? 'px-6 pb-6' : 'px-8 pb-8'} border-t border-secondary-100`}
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
@@ -194,7 +196,7 @@ const FAQ: React.FC = () => {
                       <p className="text-secondary-600 leading-relaxed">{faq.answer}</p>
                       <button
                         onClick={handleLearningLibraryClick}
-                        className="inline-flex items-center space-x-2 bg-primary-500 text-white px-6 py-3 rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium"
+                        className={`inline-flex items-center space-x-2 bg-primary-500 text-white ${isMobile ? 'px-6 py-4 min-h-[44px] text-sm' : 'px-6 py-3 text-base'} rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium`}
                       >
                         <span>Visit Learning Library</span>
                         <ExternalLink className="w-4 h-4" />
@@ -229,23 +231,23 @@ const FAQ: React.FC = () => {
 
         {/* Call to Action */}
         <motion.div 
-          className="mt-20 bg-gradient-to-r from-primary-500 to-accent-500 rounded-3xl p-12 text-center"
+          className={`mt-20 bg-gradient-to-r from-primary-500 to-accent-500 rounded-3xl ${isMobile ? 'p-8' : 'p-12'} text-center`}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
         >
-          <h3 className="text-3xl font-bold text-white mb-6">
+          <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-white mb-6`}>
             Still Have Questions?
           </h3>
-          <p className="text-primary-100 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
+          <p className={`text-primary-100 ${isMobile ? 'mb-6' : 'mb-8'} max-w-2xl mx-auto ${isMobile ? 'text-base' : 'text-lg'} leading-relaxed`}>
             Our friendly reception team is here to help answer any questions you may have about our services or procedures.
           </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <button className="bg-white text-primary-600 px-10 py-4 rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold text-lg">
+          <div className="flex flex-col gap-4 justify-center">
+            <button className={`bg-white text-primary-600 ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold`}>
               <span>Call (03) 9509 5009</span>
             </button>
-            <button className="border-2 border-white text-white px-10 py-4 rounded-2xl hover:bg-white hover:text-primary-600 transition-colors duration-200 font-semibold text-lg">
+            <button className={`border-2 border-white text-white ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-white hover:text-primary-600 transition-colors duration-200 font-semibold`}>
               Send Email
             </button>
           </div>

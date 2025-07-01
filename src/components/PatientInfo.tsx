@@ -178,14 +178,14 @@ const PatientInfo: React.FC = () => {
                   className="flex items-center justify-center space-x-2 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-all duration-200 transform hover:scale-105"
                 >
                   <Phone className="w-5 h-5" />
-                  <span>(03) 9123 4567</span>
+                  <span>(03) 9509 5009</span>
                 </a>
                 <a
-                  href="mailto:emergency@heartclinicmelbourne.com"
+                  href="mailto:reception@heartclinicmelbourne.com"
                   className="flex items-center justify-center space-x-2 border-2 border-red-600 text-red-600 px-6 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-200 transform hover:scale-105"
                 >
                   <Mail className="w-5 h-5" />
-                  <span>Emergency Email</span>
+                  <span>Email</span>
                 </a>
               </div>
             </div>
