@@ -495,18 +495,64 @@ const LearningLibrary: React.FC = () => {
     },
     {
       name: 'Heart Failure',
-      description: 'A condition where the heart cannot pump blood effectively to meet the body\'s needs, causing fluid buildup and fatigue.',
-      symptoms: ['Shortness of breath', 'Swelling in legs/ankles', 'Fatigue', 'Rapid heartbeat'],
-      causes: ['Coronary artery disease', 'High blood pressure', 'Previous heart attack', 'Valve disease'],
-      treatments: ['Medications', 'Lifestyle changes', 'Device therapy', 'Surgery in severe cases'],
+      description: 'A long‑term condition in which the heart muscle can’t pump blood strongly enough to meet the body’s needs, causing fluid build‑up, breathlessness and fatigue. With the right treatment plan, most people can live longer and feel better.',
+      symptoms: [
+        'Shortness of breath on exertion or when lying flat',
+        'Swollen ankles, legs or abdomen (fluid build‑up)',
+        'Persistent cough or wheeze',
+        'Fatigue and reduced exercise capacity',
+        'Rapid or irregular heartbeat (palpitations)',
+        'Sudden weight gain or bloated stomach',
+        'Dizziness or light‑headedness'
+      ],
+      causes: [
+        'Coronary heart disease or previous heart attack',
+        'High blood pressure (hypertension)',
+        'Damaged heart muscle (cardiomyopathy or myocarditis)',
+        'Faulty heart valves (valve disease)',
+        'Heart rhythm problems (e.g. atrial fibrillation)',
+        'Congenital heart disease',
+        'Long‑standing conditions such as diabetes or thyroid disease'
+      ],
+      treatments: [
+        'Evidence‑based medicines: ACE inhibitors/ARBs/ARNIs, beta‑blockers, MRAs, SGLT2 inhibitors, diuretics',
+        'Heart‑failure management program and cardiac rehabilitation',
+        'Lifestyle changes: low‑salt diet, fluid balance, weight monitoring, limiting alcohol',
+        'Pacemaker, cardiac resynchronisation therapy (CRT) or implantable defibrillator if indicated',
+        'Surgery or procedures such as valve repair/replacement, coronary bypass or, rarely, heart transplant'
+      ],
       icon: <Activity className="w-6 h-6 text-sage-500" />
     },
     {
       name: 'Atrial Fibrillation (AF)',
-      description: 'An irregular heart rhythm where the upper chambers beat chaotically, potentially causing blood clots and stroke.',
-      symptoms: ['Irregular heartbeat', 'Palpitations', 'Fatigue', 'Shortness of breath'],
-      causes: ['Age', 'High blood pressure', 'Heart disease', 'Thyroid problems', 'Alcohol'],
-      treatments: ['Blood thinners', 'Rate control medications', 'Cardioversion', 'Ablation'],
+      description: 'A fast, irregular heartbeat that can come and go. AF reduces the heart’s pumping efficiency and markedly increases the risk of stroke and heart failure if untreated.',
+      symptoms: [
+        'Fluttering or racing heartbeat',
+        'Irregular pulse',
+        'Shortness of breath',
+        'Fatigue or reduced exercise capacity',
+        'Dizziness or light‑headedness',
+        'Chest discomfort'
+      ],
+      causes: [
+        'Advancing age',
+        'High blood pressure',
+        'Coronary or valve heart disease',
+        'Heart failure or previous heart attack',
+        'Thyroid problems',
+        'Obstructive sleep apnoea',
+        'Obesity',
+        'Excess alcohol or binge drinking',
+        'Infections or acute illness',
+        'Post‑surgery stress'
+      ],
+      treatments: [
+        'Anticoagulant (“blood‑thinning”) therapy to reduce stroke risk',
+        'Medicines to slow the heart rate',
+        'Medicines or electrical cardioversion to restore normal rhythm',
+        'Catheter ablation for rhythm control',
+        'Lifestyle changes: weight, alcohol, blood pressure, sleep apnoea'
+      ],
       icon: <Activity className="w-6 h-6 text-accent-500" />
     },
     {
@@ -519,10 +565,27 @@ const LearningLibrary: React.FC = () => {
     },
     {
       name: 'Aortic Stenosis',
-      description: 'A narrowing of the aortic valve that restricts blood flow from the heart to the rest of the body, making the heart work harder.',
-      symptoms: ['Chest pain with exertion', 'Shortness of breath', 'Dizziness or fainting', 'Fatigue', 'Heart murmur'],
-      causes: ['Age-related calcification', 'Congenital bicuspid valve', 'Rheumatic heart disease', 'Calcium buildup'],
-      treatments: ['Monitoring', 'Valve replacement (TAVI or surgical)', 'Medications for symptoms', 'Activity modification'],
+      description: 'Narrowing of the aortic valve opening that obstructs blood flow from the heart to the body. Untreated, it can lead to heart failure, fainting or sudden death, but modern valve‑replacement procedures can restore normal flow.',
+      symptoms: [
+        'Shortness of breath on exertion',
+        'Chest pain or pressure (angina)',
+        'Dizziness or fainting spells (syncope)',
+        'Unusual tiredness or reduced exercise capacity',
+        'Heart‑failure signs such as ankle swelling'
+      ],
+      causes: [
+        'Age‑related calcification and scarring of the aortic valve',
+        'Congenital bicuspid (two‑leaflet) aortic valve',
+        'Rheumatic heart disease after rheumatic fever',
+        'Risk factors: smoking, high blood pressure, high cholesterol, chronic kidney disease'
+      ],
+      treatments: [
+        'Regular cardiology follow‑up and echocardiography if mild or asymptomatic',
+        'Aortic valve replacement — either surgical (open‑heart) or transcatheter (TAVI)',
+        'Balloon valvuloplasty as temporary or bridge therapy in selected cases',
+        'Medicines to control blood pressure, cholesterol and heart‑failure symptoms',
+        'Lifestyle measures: quit smoking, manage blood pressure and cholesterol'
+      ],
       icon: <Heart className="w-6 h-6 text-primary-500" />
     },
     {
@@ -542,11 +605,95 @@ const LearningLibrary: React.FC = () => {
       icon: <AlertCircle className="w-6 h-6 text-cream-600" />
     },
     {
+      name: 'Pericarditis',
+      description:
+        'Inflammation of the pericardium (the sac around the heart) that can cause sharp chest pain and other symptoms. Most cases improve with medication and rest, but large fluid build-up or tamponade can be serious.',
+      symptoms: [
+        'Sharp or stabbing chest pain that may spread to neck or shoulders',
+        'Pain worse when lying down and eased by sitting forward',
+        'Fever or chills',
+        'Shortness of breath—especially when flat',
+        'Heart palpitations',
+        'Fatigue or general weakness',
+        'Dry cough'
+      ],
+      causes: [
+        'Viral infection (most common)',
+        'Bacterial or, rarely, fungal infection',
+        'Heart attack or recent heart surgery',
+        'Auto-immune conditions such as lupus or rheumatoid arthritis',
+        'Kidney failure (uraemic pericarditis)',
+        'Chest injury or trauma',
+        'Cancer spreading to the pericardium',
+        'Certain medicines or radiation therapy'
+      ],
+      treatments: [
+        'Anti-inflammatory medicines (NSAIDs) plus colchicine',
+        'Rest and avoidance of strenuous activity until symptoms settle',
+        'Corticosteroids if pain persists or recurs',
+        'Antibiotics or targeted therapy for infectious causes',
+        'Pericardiocentesis (drainage) if large effusion or tamponade',
+        'Hospital admission and monitoring in severe cases'
+      ],
+      icon: <Heart className="w-6 h-6 text-sage-500" />
+    },
+    {
+      name: 'Spontaneous Coronary Artery Dissection (SCAD)',
+      description:
+        'A sudden tear in the wall of a coronary artery that can block blood flow and cause a heart attack. SCAD often affects healthy women under 50, including during or after pregnancy.',
+      symptoms: [
+        'Sudden chest pain or tightness',
+        'Pain radiating to arm, jaw, back or shoulder',
+        'Shortness of breath',
+        'Sweating, nausea or vomiting',
+        'Light-headedness or fainting',
+        'Rapid heartbeat or palpitations'
+      ],
+      causes: [
+        'Exact trigger unknown—spontaneous weakening of the artery wall',
+        'Hormonal changes (pregnancy or post-partum period)',
+        'Fibromuscular dysplasia (FMD)',
+        'Connective-tissue disorders (e.g. Marfan, Ehlers-Danlos)',
+        'Extreme emotional or physical stress',
+        'Severe hypertension',
+        'Intense exercise',
+        'Certain stimulant or hormonal drugs (rare)'
+      ],
+      treatments: [
+        'Emergency care similar to other heart attacks (aspirin, oxygen, monitoring)',
+        'Coronary angiography to confirm dissection',
+        'Most cases managed conservatively with antiplatelet therapy and beta-blockers—arteries often heal over weeks',
+        'Stenting or bypass surgery only if ongoing ischaemia or unstable condition',
+        'Screening for fibromuscular dysplasia and other vascular disorders',
+        'Cardiac rehabilitation and gradual return to activity',
+        'Long-term avoidance of extreme lifting, high-intensity exercise and hormonal triggers as advised by your cardiologist'
+      ],
+      icon: <Heart className="w-6 h-6 text-accent-500" />
+    },
+    {
       name: 'Coronary Artery Bypass Grafting (CABG)',
-      description: 'A surgical procedure that creates new pathways around blocked coronary arteries using grafts from other blood vessels.',
-      symptoms: ['Procedure treats: severe chest pain', 'Shortness of breath', 'Poor exercise tolerance', 'Multiple blocked arteries'],
-      causes: ['Severe coronary artery disease', 'Multiple vessel blockages', 'Left main artery disease', 'Failed angioplasty'],
-      treatments: ['Open-heart surgery', 'Minimally invasive techniques', 'Off-pump surgery', 'Robotic-assisted surgery'],
+      description: 'Open‑heart surgery that uses healthy blood vessels to create new pathways around blocked coronary arteries. CABG restores blood flow, relieves angina and lowers the risk of future heart attacks when stents or medicines are not enough.',
+      symptoms: [
+        "Persistent chest pain (angina) despite medicines",
+        "Shortness of breath on minimal exertion",
+        "Poor exercise capacity or fatigue",
+        "High risk or history of heart attack",
+        "Multiple severe coronary blockages"
+      ],
+      causes: [
+        "Severe coronary artery disease with multiple blockages",
+        "Left main coronary artery narrowing",
+        "Not suitable for or failed angioplasty/stenting",
+        "Diabetes with complex coronary disease",
+        "Previous heart attack causing impaired blood flow"
+      ],
+      treatments: [
+        "Traditional open‑heart bypass using a heart‑lung machine",
+        "Off‑pump (“beating‑heart”) bypass surgery",
+        "Minimally invasive or robotic‑assisted bypass techniques",
+        "Hybrid procedures combining stents and bypass grafts",
+        "Cardiac rehabilitation and lifelong heart‑healthy lifestyle"
+      ],
       icon: <Stethoscope className="w-6 h-6 text-accent-500" />
     },
     {
@@ -585,29 +732,30 @@ const LearningLibrary: React.FC = () => {
 
   const testsData = [
     {
-      name: 'Echocardiography (Echo)',
-      description: 'Ultrasound imaging of the heart to assess structure and function',
-      detailedDescription: 'An echocardiogram uses sound waves to create detailed pictures of your heart\'s chambers, valves, and blood flow. This non-invasive test helps evaluate heart function, valve problems, and structural abnormalities.',
-      duration: '30-45 minutes',
+      name: 'Transthoracic Echocardiogram (TTE)',
+      description: 'Ultrasound scan of the heart performed through the chest wall at rest, providing detailed pictures of heart muscle, valves and pumping strength.',
+      detailedDescription: 'A resting (transthoracic) echocardiogram uses sound waves to create moving images of your heart. A handheld transducer is placed on different areas of the chest to show how well the heart pumps, whether the valves leak or tighten, and if the muscle is thickened or weakened. It is non‑invasive and painless, which is why almost every patient with a heart condition has had at least one echo.',
+      duration: '30–45 minutes',
       preparation: [
-        'No special preparation required',
-        'Wear comfortable clothing that can be easily removed from the waist up',
-        'Continue taking all medications as normal',
-        'Arrive 15 minutes early for check-in'
+        'No fasting required; continue normal food and drink',
+        'Take regular medications as usual',
+        'Wear a loose top that is easy to remove – you will change into a disposable gown',
+        'Avoid body lotions or oils on the chest on the day',
+        'Bring your referral form, Medicare card and medication list'
       ],
       whatToExpect: [
-        'You\'ll be asked to undress from the waist up and wear a hospital gown',
-        'Lie on your left side on an examination table',
-        'A clear gel is applied to your chest',
-        'The technologist moves a transducer across your chest',
-        'You may be asked to change positions or hold your breath briefly',
-        'The test is painless and you can return to normal activities immediately'
+        'You will undress from the waist up and lie on an examination couch',
+        'Sticky ECG dots are placed on the chest for monitoring',
+        'Gel is applied to help the ultrasound waves travel',
+        'The sonographer moves the probe over several positions; you may feel firm pressure',
+        'You may be asked to hold your breath briefly or roll onto your side',
+        'The test is painless and you can resume normal activities immediately'
       ],
       followUp: [
-        'Results are typically available within 24-48 hours',
-        'Your cardiologist will review the images and measurements',
-        'A follow-up appointment will be scheduled to discuss results',
-        'Further testing may be recommended based on findings'
+        'Images are reviewed by a cardiologist',
+        'A report is sent to your referring doctor (and GP) within 2 business days – sooner if urgent',
+        'You may request a personal copy of the report',
+        'Your doctor will discuss results and any next steps; additional tests are arranged if needed'
       ],
       link: 'echocardiography'
     },
@@ -666,32 +814,32 @@ const LearningLibrary: React.FC = () => {
       link: 'holter'
     },
     {
-      name: 'Stress Testing',
-      description: 'Exercise or medication-induced stress to assess heart function',
-      detailedDescription: 'A stress test evaluates how your heart works during physical activity. It can help diagnose coronary artery disease, determine safe exercise levels, and evaluate the effectiveness of heart treatments.',
-      duration: '45-60 minutes',
+      name: 'Exercise Stress Echocardiogram (ESE)',
+      description: 'Ultrasound imaging of the heart taken before and immediately after treadmill exercise to see how your heart copes with physical stress.',
+      detailedDescription: 'An Exercise Stress Echo combines a standard treadmill ECG stress test with ultrasound pictures of the heart. Images taken at rest and again within 60 seconds of peak exercise show how well the heart muscle and valves perform under load and help detect reduced blood flow or exercise‑induced rhythm problems. Because you are connected to ECG leads throughout, the test also provides continuous rhythm monitoring.',
+      duration: '45 minutes (exercise 6‑12 min)',
       preparation: [
-        'Wear comfortable exercise clothing and walking shoes',
-        'Avoid eating, drinking caffeine, or smoking for 3 hours before the test',
-        'Take your medications as usual unless told otherwise',
-        'Bring a list of your current medications',
-        'Arrange for someone to drive you home if medication stress test is used'
+        'Wear flat‑soled runners or comfortable walking shoes',
+        'Loose, easy‑to‑remove top; you will change into a disposable gown',
+        'Avoid caffeine or a heavy meal for 3 h before the test',
+        'Take usual medicines unless your doctor advises otherwise',
+        'Bring referral form, Medicare card and medication list'
       ],
       whatToExpect: [
-        'Baseline ECG and blood pressure measurements are taken',
-        'You\'ll walk on a treadmill that gradually increases in speed and incline',
-        'Heart rate, blood pressure, and ECG are monitored throughout',
-        'The test continues until you reach your target heart rate or develop symptoms',
-        'If unable to exercise, medication may be used to stress the heart',
-        'Recovery monitoring continues for 10-15 minutes after exercise'
+        'Baseline ECG and resting echo images are taken',
+        'You walk on a treadmill that gradually increases speed and incline; you can stop at any time',
+        'At peak effort the treadmill stops and immediate post‑exercise echo images are recorded',
+        'Continuous ECG monitoring looks for rhythm changes',
+        'Total time on the treadmill is typically 6–12 minutes',
+        'A cardiologist supervises the entire test and will stop it if any concerning findings occur'
       ],
       followUp: [
-        'Results are reviewed immediately by the medical team',
-        'Normal results indicate good blood flow to the heart during exercise',
-        'Abnormal results may indicate blocked arteries requiring further testing',
-        'Your cardiologist will discuss results and treatment options if needed'
+        'Preliminary results are reviewed straight away',
+        'A full report is sent to your referring doctor (and GP) within 2 business days',
+        'No driving restrictions after the test; resume normal activities',
+        'Contact the clinic if you feel unwell later in the day'
       ],
-      link: 'stress-test'
+      link: 'stress-echo'
     },
     {
       name: 'Coronary Angiography',
@@ -725,57 +873,57 @@ const LearningLibrary: React.FC = () => {
     },
     {
       name: 'CT Coronary Angiography',
-      description: 'Non-invasive CT imaging of coronary arteries',
-      detailedDescription: 'CT coronary angiography uses computed tomography and contrast dye to create detailed images of the coronary arteries without the need for cardiac catheterization. It\'s excellent for ruling out significant coronary artery disease.',
-      duration: '30-45 minutes',
+      description: 'Non‑invasive CT scan that uses iodine contrast to produce detailed images of the coronary arteries, helping doctors detect — or confidently rule out — coronary artery disease.',
+      detailedDescription: 'A CT Coronary Angiography (CTCA) is performed on a high‑speed CT scanner after an iodine contrast injection into a vein in your arm. Timed to your heartbeat, the scanner creates a 3‑D map of the vessels that supply the heart. CTCA is used to evaluate unexplained chest pain or shortness of breath, clarify inconclusive stress‑test results, screen people with risk factors, check bypass grafts and detect other cardiac abnormalities.',
+      duration: '30‑45 minutes (scanning time ~10 min)',
       preparation: [
-        'Avoid caffeine for 24 hours before the test',
-        'Fast for 4 hours before the procedure',
-        'Heart rate may need to be controlled with beta-blockers',
-        'Remove all metal objects including jewelry',
-        'Inform staff of any allergies to contrast dye'
+        'Booking is essential – bring any referral form (all providers accepted)',
+        'Eat and drink normally but avoid caffeine for 24 hours before your scan',
+        'Do **not** take Viagra or Levitra for 72 h, or Cialis for 7 days before the test',
+        'Bring your Medicare card, medication list and any prior cardiac imaging',
+        'Continue all usual medications unless instructed otherwise'
       ],
       whatToExpect: [
-        'IV line is inserted for contrast dye injection',
-        'Heart rate and blood pressure are monitored',
-        'You\'ll lie on a CT scanner table',
-        'Beta-blockers may be given to slow your heart rate',
-        'Contrast dye is injected while CT images are taken',
-        'You\'ll need to hold your breath for 10-15 seconds during scanning'
+        'You will lie on a motorised table that slides through a doughnut‑shaped CT scanner',
+        'ECG stickers are placed on your chest so the images can be taken in sync with your heartbeat',
+        'A radiographer inserts a small IV line in your arm for the iodine contrast injection',
+        'The contrast may give a brief warm sensation as it circulates',
+        'You will be asked to hold your breath for 5‑10 seconds several times while the table moves',
+        'Staff are in constant voice contact and can see you at all times during the 10‑minute scan'
       ],
       followUp: [
-        'Images are analyzed by a radiologist and cardiologist',
-        'Results are typically available within 24-48 hours',
-        'Follow-up appointment to discuss findings',
-        'Further testing may be recommended if significant disease is detected'
+        'A radiologist **and** cardiologist review the images',
+        'Your referring doctor usually receives the report within 24 hours',
+        'You will discuss the findings and any next steps at your follow‑up appointment',
+        'Further tests or treatment may be recommended if significant disease is found'
       ],
       link: 'ct-angiography'
     },
     {
       name: 'Cardiac MRI',
-      description: 'Detailed magnetic resonance imaging of the heart',
-      detailedDescription: 'Cardiac MRI provides detailed images of heart structure and function using magnetic fields and radio waves. It\'s excellent for evaluating heart muscle damage, inflammation, and congenital heart disease.',
-      duration: '45-90 minutes',
+      description: 'Non‑invasive scan that uses a strong magnetic field and radio waves (no X‑rays) to create moving 3‑D pictures of your heart.',
+      detailedDescription: 'Cardiac MRI provides highly detailed images of heart chambers, muscle, valves and blood flow without radiation. It detects heart‑attack damage, myocarditis, cardiomyopathy, congenital defects and valve disease, and guides treatment planning.',
+      duration: '45‑90 minutes',
       preparation: [
-        'Remove all metal objects including jewelry, watches, and hearing aids',
-        'Inform staff of any implanted devices (pacemaker, ICD, metal implants)',
-        'Change into a hospital gown',
-        'Complete safety questionnaire regarding metal objects',
-        'Arrive 30 minutes early for preparation'
+        'Remove all metal objects including jewelry, watches and hearing aids',
+        'Tell staff about any implanted devices (pacemaker, ICD, stent, artificial joints)',
+        'Change into a hospital gown and complete the MRI safety questionnaire',
+        'Take medicines as usual unless instructed otherwise',
+        'Arrive 30 minutes early for IV cannula placement.'
       ],
       whatToExpect: [
-        'You\'ll lie on a movable table that slides into the MRI scanner',
-        'Electrodes are placed on your chest to monitor heart rhythm',
-        'You\'ll need to lie still and may need to hold your breath periodically',
-        'The scanner makes loud knocking sounds during image acquisition',
-        'Contrast dye may be injected through an IV for enhanced imaging',
-        'The technologist communicates with you throughout the procedure'
+        'You will lie on a narrow table that slides into the MRI tunnel',
+        'Sticky pads (ECG leads) will monitor your heartbeat during the scan',
+        'The scanner makes loud tapping noises – you will get earplugs or headphones',
+        'Technologists will ask you to hold your breath for 10–15 seconds several times',
+        'Contrast dye (gadolinium) may be injected through an IV to highlight blood flow',
+        'A microphone allows two‑way communication with the technologist at all times'
       ],
       followUp: [
-        'Images are analyzed by a specialized cardiac radiologist',
-        'Results are typically available within 2-3 business days',
-        'Your cardiologist will review findings with you',
-        'Treatment plans are developed based on the detailed heart function assessment'
+        'Images are processed and reviewed by a cardiac radiologist',
+        'Preliminary results are often available within a few days; a full report follows within 5-7 business days',
+        'Your cardiologist will explain the findings and how they affect your treatment',
+        'Further tests or therapy adjustments may be recommended based on the results'
       ],
       link: 'cardiac-mri'
     },
@@ -872,7 +1020,7 @@ const LearningLibrary: React.FC = () => {
       detailedDescription: 'Catheter ablation for atrial fibrillation uses advanced techniques including the latest Pulsed Field Ablation (PFA) technology to eliminate abnormal electrical pathways causing irregular heart rhythm.',
       duration: '3-6 hours',
       preparation: [
-        'Transesophageal echocardiogram to exclude blood clots',
+        'Transoesophageal echocardiogram to exclude blood clots',
         'Blood tests including clotting studies',
         'Medication adjustments (blood thinners)',
         'Pre-procedure consultation and detailed consent',
@@ -898,31 +1046,62 @@ const LearningLibrary: React.FC = () => {
       journeyMapId: 'af_ablation'
     },
     {
-      name: 'TOE & Cardioversion (DCR)',
-      description: 'Transesophageal echocardiography with electrical cardioversion for rhythm restoration',
-      detailedDescription: 'TOE-guided cardioversion combines advanced cardiac imaging with electrical cardioversion to safely restore normal heart rhythm in patients with atrial fibrillation, ensuring no blood clots are present before the procedure.',
-      duration: '2-3 hours including recovery',
+      name: 'Transoesophageal Echocardiogram (TOE)',
+      description: 'Ultrasound probe passed down the oesophagus to obtain close‑up images of the heart.',
+      detailedDescription: 'A transoesophageal echocardiogram places a small ultrasound probe into the oesophagus — the tube behind your heart — so doctors can see valves, chambers and blood clots far more clearly than with a surface echo. You are lightly sedated and the test takes about half an hour.',
+      duration: '30 minutes including sedation',
       preparation: [
-        'Fasting for 6-8 hours before procedure',
-        'Medication review (especially blood thinners)',
-        'Pre-procedure blood tests if required',
-        'Arrange for transport home after sedation',
-        'Comfortable clothing and removal of jewelry'
+        'Fast for at least 6 hours (sip of water allowed for essential pills)',
+        'Discuss any medication changes, especially blood thinners if you are also having cardioversion',
+        'Provide full medical history and allergy list',
+        'Arrange a responsible adult to drive you home (no driving for 24 h after sedation)',
+        'Wear comfortable clothes; you will change into a hospital gown',
+        'Sign the consent form after the procedure has been explained'
       ],
       whatToExpect: [
-        'IV line insertion and monitoring setup',
-        'Throat numbing and conscious sedation',
-        'TOE probe insertion for detailed heart imaging',
-        'Assessment for blood clots in heart chambers',
-        'Electrical cardioversion if safe to proceed',
-        'Recovery monitoring until sedation wears off'
+        'Admission, IV line and vital‑sign monitoring',
+        'Throat numbing spray and light sedation',
+        'A mouth‑guard is placed to protect teeth and probe',
+        'Probe gently passes through the mouth and down the oesophagus while you lie on your left side',
+        'Real‑time heart images are recorded for about 10–15 minutes',
+        'Monitoring continues until the sedation wears off (30–60 minutes)'
       ],
       followUp: [
-        'Recovery period of 2-4 hours with monitoring',
-        'Soft diet and throat comfort measures',
-        'Resume normal activities within 24 hours',
-        'Follow-up appointment to assess rhythm',
-        'Continued anticoagulation as directed'
+        'Mild throat discomfort may last 24–48 h',
+        'Formal report sent to your referring doctor and GP within 24 h',
+        'You may request a personal copy of the results',
+        'Contact the clinic if you develop fever, severe pain or difficulty swallowing'
+      ],
+      link: 'toe'
+    },
+    {
+      name: 'TOE & Cardioversion (DCR)',
+      description: 'Sedated electrical shock delivered to reset an irregular heartbeat (usually atrial fibrillation) to normal rhythm, often guided by a TOE scan to exclude clots.',
+      detailedDescription: 'Direct (electrical) cardioversion is the most effective single way to restore a normal, coordinated heart rhythm. Large adhesive pads on the chest deliver a synchronised shock while you are briefly anaesthetised. A transoesophageal echo (TOE) may be performed immediately beforehand to ensure no blood clots are hiding in the heart. The entire procedure—including preparation, anaesthesia, shock, and recovery—takes a few hours, but the shock itself lasts only a fraction of a second.',
+      duration: '2–3 hours total (shock < 1 second)',
+      preparation: [
+        'Medical evaluation and recent ECG/echo review',
+        'Continue blood‑thinning medicines unless told otherwise',
+        'Other medications may be paused—follow your doctor’s instructions',
+        'Fast from midnight for morning lists, or 6 h before an afternoon list (sip of water for essential pills is fine)',
+        'Bring referral, Medicare card and current medication list',
+        'Arrange someone to drive you home (no driving for 24 h after sedation)'
+      ],
+      whatToExpect: [
+        'Admission, consent signing and IV cannula insertion',
+        'Monitoring leads and large adhesive shock pads placed on your chest',
+        'Light anaesthetic given—you will be asleep for a few minutes',
+        'One or more controlled shocks delivered; you will not feel them',
+        'Heart rhythm checked; repeat shock if needed',
+        'Observation in recovery while sedation wears off (1–2 h)',
+        'If TOE performed first, you may notice mild throat discomfort afterward'
+      ],
+      followUp: [
+        'Most people go home the same day',
+        'Continue blood thinners unless your doctor advises otherwise',
+        'Normal activities next day; avoid driving for 24 h',
+        'Contact the clinic if you experience chest pain, severe sore throat or dizziness',
+        'Follow‑up visit (or ECG) in 1–4 weeks to confirm rhythm and adjust medications'
       ],
       link: 'toe-dcr',
       hasJourneyMap: true,
@@ -969,7 +1148,8 @@ const LearningLibrary: React.FC = () => {
   });
 
   const filteredConditions = conditionsData.filter(condition => {
-    const matchesSearch = condition.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = searchTerm === '' ||
+                         condition.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          condition.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          condition.symptoms.some(symptom => symptom.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          condition.causes.some(cause => cause.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -978,13 +1158,29 @@ const LearningLibrary: React.FC = () => {
   });
 
   const filteredTests = testsData.filter(test => {
-    const matchesSearch = test.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = searchTerm === '' ||
+                         test.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          test.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          test.detailedDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          test.preparation.some(prep => prep.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          test.whatToExpect.some(expect => expect.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          test.followUp.some(follow => follow.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesSearch;
+  });
+
+  // Filter journey maps based on search
+  const filteredJourneyMaps = Object.entries(procedureJourneys).filter(([, procedure]) => {
+    if (searchTerm === '') return true;
+    
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      procedure.name.toLowerCase().includes(searchLower) ||
+      procedure.description.toLowerCase().includes(searchLower) ||
+      ('phases' in procedure && procedure.phases && Object.values(procedure.phases).some((phase: any) => 
+        phase.title.toLowerCase().includes(searchLower) ||
+        phase.activities.some((activity: string) => activity.toLowerCase().includes(searchLower))
+      ))
+    );
   });
 
   const goBack = () => {
@@ -994,6 +1190,8 @@ const LearningLibrary: React.FC = () => {
   const handleJourneyMapClick = (journeyMapId: string) => {
     setSelectedProcedure(journeyMapId);
     setActivePhase('pre-procedure');
+    // Reset expanded test cards when selecting a journey map
+    setExpandedTestCard(null);
     // Scroll to journey map section
     const journeySection = document.getElementById('journey-map-section');
     if (journeySection) {
@@ -1054,7 +1252,12 @@ const LearningLibrary: React.FC = () => {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  // Reset all expanded states when switching tabs
+                  setExpandedTestCard(null);
+                  setSelectedProcedure('general');
+                }}
                 className={`flex items-center space-x-2 px-8 py-4 rounded-2xl transition-all duration-200 font-medium ${
                   activeTab === tab.id
                     ? 'bg-primary-500 text-white shadow-lg'
@@ -1073,12 +1276,23 @@ const LearningLibrary: React.FC = () => {
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary-400 w-5 h-5" />
                 <input
                   type="text"
-                  placeholder={`Search ${tabs.find(t => t.id === activeTab)?.label.toLowerCase()}...`}
+                  placeholder="Search across all resources - procedures, tests, conditions, videos..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-12 pr-4 py-4 border border-secondary-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white shadow-sm"
                 />
               </div>
+
+              {/* Search Results Indicator */}
+              {searchTerm && (
+                <div className="text-center text-sm text-secondary-600 bg-primary-50 rounded-xl py-2 px-4">
+                  {activeTab === 'journey-maps' && `${filteredJourneyMaps.length} procedure${filteredJourneyMaps.length !== 1 ? 's' : ''} found`}
+                  {activeTab === 'tests' && `${filteredTests.length} test${filteredTests.length !== 1 ? 's' : ''} found`}
+                  {activeTab === 'conditions' && `${filteredConditions.length} condition${filteredConditions.length !== 1 ? 's' : ''} found`}
+                  {activeTab === 'videos' && `${filteredVideos.length} video${filteredVideos.length !== 1 ? 's' : ''} found`}
+                  {searchTerm && ` for "${searchTerm}"`}
+                </div>
+              )}
 
               {activeTab === 'videos' && (
                 <div className="flex flex-wrap justify-center gap-3">
@@ -1152,35 +1366,45 @@ const LearningLibrary: React.FC = () => {
                   Select a Procedure Journey
                 </h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {Object.entries(procedureJourneys).map(([key, procedure]) => (
-                    <button
-                      key={key}
-                      onClick={() => {
-                        setSelectedProcedure(key);
-                        setActivePhase('pre-procedure');
-                      }}
-                      className={`p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
-                        selectedProcedure === key
-                          ? 'bg-gradient-to-r ' + procedure.color + ' text-white shadow-xl scale-105 border-transparent' 
-                          : 'bg-white text-secondary-900 shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-200'
-                      }`}
-                    >
-                      <div className="space-y-4">
-                        <h4 className="font-semibold text-lg leading-tight">{procedure.name}</h4>
-                        <p className={`text-sm ${
-                          selectedProcedure === key ? 'text-white/90' : 'text-secondary-600'
-                        }`}>
-                          {procedure.description}
-                        </p>
-                        {selectedProcedure === key && (
-                          <div className="flex items-center space-x-2 text-white/90">
-                            <CheckCircle className="w-4 h-4" />
-                            <span className="text-sm font-medium">Selected</span>
-                          </div>
-                        )}
-                      </div>
-                    </button>
-                  ))}
+                  {filteredJourneyMaps.length > 0 ? (
+                    filteredJourneyMaps.map(([key, procedure]) => (
+                      <button
+                        key={key}
+                        onClick={() => {
+                          setSelectedProcedure(key);
+                          setActivePhase('pre-procedure');
+                          // Reset expanded test cards when selecting a procedure
+                          setExpandedTestCard(null);
+                        }}
+                        className={`p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
+                          selectedProcedure === key
+                            ? 'bg-gradient-to-r ' + procedure.color + ' text-white shadow-xl scale-105 border-transparent' 
+                            : 'bg-white text-secondary-900 shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-200'
+                        }`}
+                      >
+                        <div className="space-y-4">
+                          <h4 className="font-semibold text-lg leading-tight">{procedure.name}</h4>
+                          <p className={`text-sm ${
+                            selectedProcedure === key ? 'text-white/90' : 'text-secondary-600'
+                          }`}>
+                            {procedure.description}
+                          </p>
+                          {selectedProcedure === key && (
+                            <div className="flex items-center space-x-2 text-white/90">
+                              <CheckCircle className="w-4 h-4" />
+                              <span className="text-sm font-medium">Selected</span>
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    ))
+                  ) : searchTerm ? (
+                    <div className="col-span-full text-center py-12">
+                      <Search className="w-12 h-12 text-secondary-300 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-secondary-600 mb-2">No procedures found</h3>
+                      <p className="text-secondary-500">Try adjusting your search terms or browse all procedures.</p>
+                    </div>
+                  ) : null}
                 </div>
               </div>
 
@@ -1369,7 +1593,8 @@ const LearningLibrary: React.FC = () => {
           {/* Conditions Tab */}
           {activeTab === 'conditions' && (
             <div className="grid lg:grid-cols-2 gap-10">
-              {filteredConditions.map((condition, index) => (
+              {filteredConditions.length > 0 ? (
+                filteredConditions.map((condition, index) => (
                 <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm p-10 hover:shadow-lg transition-all duration-300 border border-secondary-200/50">
                   <div className="flex items-center space-x-3 mb-6">
                     {condition.icon}
@@ -1425,14 +1650,22 @@ const LearningLibrary: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))
+              ) : searchTerm ? (
+                <div className="col-span-full text-center py-12">
+                  <Search className="w-12 h-12 text-secondary-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-secondary-600 mb-2">No conditions found</h3>
+                  <p className="text-secondary-500">Try adjusting your search terms or browse all conditions.</p>
+                </div>
+              ) : null}
             </div>
           )}
 
-          {/* Tests Tab */}
+          {/* Tests Tab */
           {activeTab === 'tests' && (
             <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
-              {filteredTests.map((test, index) => (
+              {filteredTests.length > 0 ? (
+                filteredTests.map((test, index) => (
                 <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-secondary-200/50 overflow-hidden hover:shadow-lg transition-all duration-300">
                   {/* Card Header */}
                   <div className="p-8">
@@ -1444,7 +1677,14 @@ const LearningLibrary: React.FC = () => {
                         <h3 className="text-lg font-semibold text-secondary-800">{test.name}</h3>
                       </div>
                       <button
-                        onClick={() => setExpandedTestCard(expandedTestCard === test.name ? null : test.name)}
+                        onClick={() => {
+                          const newExpanded = expandedTestCard === test.name ? null : test.name;
+                          setExpandedTestCard(newExpanded);
+                          // Reset patient journey when expanding a test
+                          if (newExpanded) {
+                            setSelectedProcedure('general');
+                          }
+                        }}
                         className="p-2 rounded-lg hover:bg-secondary-100 transition-colors duration-200"
                       >
                         {expandedTestCard === test.name ? (
@@ -1466,7 +1706,14 @@ const LearningLibrary: React.FC = () => {
                     
                     <div className="space-y-3 mt-6">
                       <button
-                        onClick={() => setExpandedTestCard(expandedTestCard === test.name ? null : test.name)}
+                        onClick={() => {
+                          const newExpanded = expandedTestCard === test.name ? null : test.name;
+                          setExpandedTestCard(newExpanded);
+                          // Reset patient journey when expanding a test
+                          if (newExpanded) {
+                            setSelectedProcedure('general');
+                          }
+                        }}
                         className="w-full flex items-center justify-center space-x-2 bg-primary-500 text-white py-3 rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium"
                       >
                         <span>{expandedTestCard === test.name ? 'Show Less' : 'Learn More'}</span>
@@ -1553,7 +1800,14 @@ const LearningLibrary: React.FC = () => {
                     </div>
                   )}
                 </div>
-              ))}
+              ))
+              ) : searchTerm ? (
+                <div className="col-span-full text-center py-12">
+                  <Search className="w-12 h-12 text-secondary-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-secondary-600 mb-2">No tests found</h3>
+                  <p className="text-secondary-500">Try adjusting your search terms or browse all tests.</p>
+                </div>
+              ) : null}
             </div>
           )}
         </div>
