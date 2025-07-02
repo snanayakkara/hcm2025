@@ -68,9 +68,9 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
   const logoWidth = 50;
   let currentY = height - marginTop;
   
-  // Color palette
-  const primaryBlue = rgb(0.118, 0.365, 0.549); // #1E5D8C
-  const lightBlue = rgb(0.89, 0.945, 0.984); // #E3F1FB
+  // Color palette - Updated to match teal gradient
+  const primaryTeal = rgb(0.2, 0.6, 0.6); // Teal color
+  const lightTeal = rgb(0.89, 0.97, 0.95); // Light teal background
   const darkGray = rgb(0.2, 0.2, 0.2); // #333333
   const lightGray = rgb(0.6, 0.6, 0.6); // #999999
   const veryLightGray = rgb(0.95, 0.95, 0.95); // #F2F2F2
@@ -134,12 +134,12 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     });
   }
   
-  // Clinic name and title
+  // Clinic name and title - Updated with teal gradient effect
   const titleX = marginLeft + (logo ? logoWidth + 20 : 0);
   drawText('Heart Clinic Melbourne', titleX, currentY - 10, { 
     font: boldFont, 
     size: 24, 
-    color: primaryBlue 
+    color: primaryTeal 
   });
   drawText('Patient Intake Summary', titleX, currentY - 35, { 
     font: boldFont, 
@@ -147,7 +147,7 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     color: darkGray 
   });
   
-  // Date and time
+  // Date and time - Simplified for footer
   const today = new Date();
   const dateStr = today.toLocaleDateString('en-AU', {
     day: '2-digit',
@@ -159,27 +159,17 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     minute: '2-digit'
   });
   
-  drawText(`Generated: ${dateStr} at ${timeStr}`, width - marginRight - 140, currentY - 10, { 
-    size: 10, 
-    color: lightGray 
-  });
-  drawText('Document ID: #' + Math.random().toString(36).substr(2, 9).toUpperCase(), 
-    width - marginRight - 140, currentY - 25, { 
-    size: 10, 
-    color: lightGray 
-  });
-  
   currentY -= 80;
   
   // Elegant separator line
-  drawLine(marginLeft, currentY, width - marginRight, currentY, primaryBlue, 2);
+  drawLine(marginLeft, currentY, width - marginRight, currentY, primaryTeal, 2);
   currentY -= 30;
   
   // Helper function to create section
   const createSection = (title: string, content: () => number) => {
     // Section header with background
-    drawRectangle(marginLeft - 10, currentY - 5, width - marginLeft - marginRight + 20, 25, lightBlue);
-    drawText(title, marginLeft, currentY, { font: boldFont, size: 14, color: primaryBlue });
+    drawRectangle(marginLeft - 10, currentY - 5, width - marginLeft - marginRight + 20, 25, lightTeal);
+    drawText(title, marginLeft, currentY, { font: boldFont, size: 14, color: primaryTeal });
     currentY -= 35;
     
     // Section content
@@ -189,7 +179,17 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     return currentY;
   };
   
-  // Medical History Section
+  // Primary Symptom Section (new)
+  if (data.primarySymptom && data.primarySymptom.trim()) {
+    createSection('Primary Symptom', () => {
+      drawText('[>]', marginLeft + 10, currentY, { color: rgb(0.8, 0.4, 0), size: 12, font: boldFont });
+      drawText(data.primarySymptom!, marginLeft + 40, currentY, { size: 11, color: rgb(0.8, 0.4, 0) });
+      currentY -= 16;
+      return currentY;
+    });
+  }
+  
+  // Medical History Section (now includes smoking and family history)
   createSection('Medical History', () => {
     const medicalConditions = [
       { key: 'bp', label: 'High Blood Pressure (Hypertension)' },
@@ -205,8 +205,8 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     
     if (activeConditions.length > 0) {
       activeConditions.forEach(condition => {
-        drawText('✓', marginLeft + 10, currentY, { color: rgb(0, 0.6, 0), size: 12 });
-        drawText(condition.label, marginLeft + 25, currentY, { size: 11 });
+        drawText('[+]', marginLeft + 10, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
+        drawText(condition.label, marginLeft + 35, currentY, { size: 11 });
         currentY -= 16;
       });
     } else {
@@ -217,16 +217,60 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
       currentY -= 16;
     }
     
+    // Add smoking history as part of medical history
+    currentY -= 8;
+    drawText('Smoking History:', marginLeft + 10, currentY, { size: 11, font: boldFont, color: darkGray });
+    currentY -= 16;
+    
+    if (data.smoking?.current) {
+      drawText('[X]', marginLeft + 20, currentY, { size: 12, color: rgb(0.8, 0.2, 0.2), font: boldFont });
+      drawText('Current smoker', marginLeft + 50, currentY, { size: 11, color: rgb(0.8, 0.2, 0.2) });
+      currentY -= 16;
+      if (data.smoking.start) {
+        drawText(`Started smoking: ${data.smoking.start}`, marginLeft + 50, currentY, { size: 10, color: lightGray });
+        currentY -= 14;
+      }
+    } else if (data.smoking?.past) {
+      drawText('[-]', marginLeft + 20, currentY, { size: 12, color: rgb(0, 0.6, 0), font: boldFont });
+      drawText('Former smoker (quit)', marginLeft + 50, currentY, { size: 11, color: rgb(0, 0.6, 0) });
+      currentY -= 16;
+      if (data.smoking.start) {
+        drawText(`Smoking period: ${data.smoking.start}`, marginLeft + 50, currentY, { size: 10, color: lightGray });
+        if (data.smoking.stop) {
+          drawText(` - ${data.smoking.stop}`, marginLeft + 150, currentY, { size: 10, color: lightGray });
+        }
+        currentY -= 14;
+      }
+    } else {
+      drawText('[+]', marginLeft + 20, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
+      drawText('Never smoked', marginLeft + 50, currentY, { size: 11, color: rgb(0, 0.6, 0) });
+      currentY -= 16;
+    }
+    
+    // Add family history as part of medical history
+    currentY -= 8;
+    drawText('Family History:', marginLeft + 10, currentY, { size: 11, font: boldFont, color: darkGray });
+    currentY -= 16;
+    
+    if (data.familyHistory) {
+      drawText('!', marginLeft + 20, currentY, { color: rgb(0.8, 0.4, 0), size: 12, font: boldFont });
+      drawText('Family history of heart disease before age 65', marginLeft + 40, currentY, { size: 11, color: rgb(0.8, 0.4, 0) });
+    } else {
+      drawText('[+]', marginLeft + 20, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
+      drawText('No family history of early heart disease', marginLeft + 50, currentY, { size: 11 });
+    }
+    currentY -= 16;
+    
     return currentY;
   });
   
   // Medications Section
   if (data.medications && data.medications.trim()) {
     createSection('Current Medications', () => {
-      const medicationLines = data.medications.split('\n').slice(0, 4);
+      const medicationLines = data.medications!.split('\n').slice(0, 4);
       medicationLines.forEach(line => {
         if (line.trim()) {
-          drawText('•', marginLeft + 10, currentY, { color: primaryBlue, size: 12 });
+          drawText('*', marginLeft + 10, currentY, { color: primaryTeal, size: 12, font: boldFont });
           drawText(line.trim(), marginLeft + 25, currentY, { size: 11, maxWidth: width - marginLeft - marginRight - 40 });
           currentY -= 16;
         }
@@ -238,10 +282,10 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
   // Allergies Section
   if (data.allergies && data.allergies.trim()) {
     createSection('Known Allergies', () => {
-      const allergyLines = data.allergies.split('\n').slice(0, 3);
+      const allergyLines = data.allergies!.split('\n').slice(0, 3);
       allergyLines.forEach(line => {
         if (line.trim()) {
-          drawText('⚠', marginLeft + 10, currentY, { color: rgb(0.8, 0.4, 0), size: 12 });
+          drawText('!', marginLeft + 10, currentY, { color: rgb(0.8, 0.4, 0), size: 12, font: boldFont });
           drawText(line.trim(), marginLeft + 25, currentY, { size: 11, maxWidth: width - marginLeft - marginRight - 40 });
           currentY -= 16;
         }
@@ -265,8 +309,8 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     
     if (completedTests.length > 0) {
       completedTests.forEach(test => {
-        drawText('✓', marginLeft + 10, currentY, { color: rgb(0, 0.6, 0), size: 12 });
-        drawText(test.label, marginLeft + 25, currentY, { size: 11 });
+        drawText('[+]', marginLeft + 10, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
+        drawText(test.label, marginLeft + 35, currentY, { size: 11 });
         currentY -= 16;
       });
     } else {
@@ -280,65 +324,23 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     return currentY;
   });
   
-  // Smoking History Section
-  createSection('Smoking History', () => {
-    if (data.smoking?.current) {
-      drawText('🚬', marginLeft + 10, currentY, { size: 12 });
-      drawText('Current smoker', marginLeft + 30, currentY, { size: 11, color: rgb(0.8, 0.2, 0.2) });
-      currentY -= 16;
-      if (data.smoking.start) {
-        drawText(`Started smoking: ${data.smoking.start}`, marginLeft + 30, currentY, { size: 10, color: lightGray });
-        currentY -= 14;
-      }
-    } else if (data.smoking?.past) {
-      drawText('⊘', marginLeft + 10, currentY, { size: 12, color: rgb(0, 0.6, 0) });
-      drawText('Former smoker (quit)', marginLeft + 30, currentY, { size: 11, color: rgb(0, 0.6, 0) });
-      currentY -= 16;
-      if (data.smoking.start) {
-        drawText(`Smoking period: ${data.smoking.start}`, marginLeft + 30, currentY, { size: 10, color: lightGray });
-        if (data.smoking.stop) {
-          drawText(` - ${data.smoking.stop}`, marginLeft + 130, currentY, { size: 10, color: lightGray });
-        }
-        currentY -= 14;
-      }
-    } else {
-      drawText('✓', marginLeft + 10, currentY, { color: rgb(0, 0.6, 0), size: 12 });
-      drawText('Never smoked', marginLeft + 30, currentY, { size: 11, color: rgb(0, 0.6, 0) });
-      currentY -= 16;
-    }
-    return currentY;
-  });
-  
-  // Family History Section
-  createSection('Family History', () => {
-    if (data.familyHistory) {
-      drawText('⚡', marginLeft + 10, currentY, { color: rgb(0.8, 0.4, 0), size: 12 });
-      drawText('Family history of heart disease before age 65', marginLeft + 30, currentY, { size: 11, color: rgb(0.8, 0.4, 0) });
-    } else {
-      drawText('✓', marginLeft + 10, currentY, { color: rgb(0, 0.6, 0), size: 12 });
-      drawText('No family history of early heart disease', marginLeft + 30, currentY, { size: 11 });
-    }
-    currentY -= 16;
-    return currentY;
-  });
-  
   // Emergency Contact Section
   if (data.nok?.name || data.nok?.relation || data.nok?.phone) {
     createSection('Emergency Contact', () => {
       if (data.nok.name) {
-        drawText('👤', marginLeft + 10, currentY, { size: 12 });
+        drawText('>', marginLeft + 10, currentY, { size: 12, font: boldFont, color: primaryTeal });
         drawText(`Name: ${data.nok.name}`, marginLeft + 30, currentY, { size: 11 });
         currentY -= 16;
       }
       
       if (data.nok.relation) {
-        drawText('🔗', marginLeft + 10, currentY, { size: 12 });
+        drawText('>', marginLeft + 10, currentY, { size: 12, font: boldFont, color: primaryTeal });
         drawText(`Relationship: ${data.nok.relation}`, marginLeft + 30, currentY, { size: 11 });
         currentY -= 16;
       }
       
       if (data.nok.phone) {
-        drawText('📞', marginLeft + 10, currentY, { size: 12 });
+        drawText('>', marginLeft + 10, currentY, { size: 12, font: boldFont, color: primaryTeal });
         drawText(`Phone: ${data.nok.phone}`, marginLeft + 30, currentY, { size: 11 });
         currentY -= 16;
       }
@@ -353,7 +355,7 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
       drawRectangle(marginLeft, currentY - 5, width - marginLeft - marginRight, 2, veryLightGray);
       currentY -= 10;
       
-      const noteLines = data.notes.split('\n').slice(0, 6);
+      const noteLines = data.notes!.split('\n').slice(0, 6);
       noteLines.forEach(line => {
         if (line.trim()) {
           drawText(line.trim(), marginLeft + 10, currentY, { 
@@ -371,7 +373,7 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     });
   }
   
-  // Professional Footer
+  // Professional Footer - Updated with Cabrini address and timestamp
   const footerY = 60;
   
   // Footer separator
@@ -381,9 +383,9 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
   drawText('Heart Clinic Melbourne', marginLeft, footerY + 20, { 
     font: boldFont, 
     size: 10, 
-    color: primaryBlue 
+    color: primaryTeal 
   });
-  drawText('Level 1, 142 Toorak Road, Hawksburn VIC 3142', marginLeft, footerY + 8, { 
+  drawText('Suite 21/183 Wattletree Rd, Malvern VIC 3144', marginLeft, footerY + 8, { 
     size: 8, 
     color: lightGray 
   });
@@ -392,13 +394,9 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     color: lightGray 
   });
   
-  // Privacy notice
-  drawText('🔒 Generated locally via hcm2025.pages.dev', width - marginRight - 180, footerY + 8, { 
-    size: 8, 
-    color: lightGray 
-  });
-  drawText('No patient data stored online or transmitted', width - marginRight - 180, footerY - 4, { 
-    size: 8, 
+  // Timestamp in footer (smaller font)
+  drawText(`Generated: ${dateStr} at ${timeStr}`, width - marginRight - 120, footerY - 4, { 
+    size: 7, 
     color: lightGray 
   });
   

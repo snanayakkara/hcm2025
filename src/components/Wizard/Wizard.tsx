@@ -584,13 +584,13 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <motion.div
-        className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] overflow-hidden flex flex-col"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0">
           <h2 className="text-xl font-bold text-gray-900">Patient Intake Wizard</h2>
           <button
             onClick={handleCloseWizard}
@@ -601,7 +601,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
         </div>
 
         {/* Stepper */}
-        <div className="px-6 py-4 border-b border-gray-100">
+        <div className="px-6 py-4 border-b border-gray-100 flex-shrink-0">
           <Stepper
             currentStep={state.currentStep}
             totalSteps={10}
@@ -609,8 +609,8 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
           />
         </div>
 
-        {/* Content */}
-        <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 200px)' }}>
+        {/* Content - Fixed height with scroll */}
+        <div className="flex-1 p-6 overflow-y-auto min-h-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={state.currentStep}
@@ -618,6 +618,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.2 }}
+              className="h-full"
             >
               {renderStep()}
             </motion.div>
@@ -626,7 +627,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
 
         {/* Footer */}
         {state.currentStep < 9 && (
-          <div className="flex items-center justify-between p-6 border-t border-gray-200">
+          <div className="flex items-center justify-between p-6 border-t border-gray-200 flex-shrink-0">
             <button
               onClick={handlePrev}
               disabled={state.currentStep === 0}

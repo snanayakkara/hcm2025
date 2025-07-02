@@ -36,6 +36,7 @@ export const NextOfKinSchema = z.object({
 });
 
 export const IntakeSchema = z.object({
+  primarySymptom: z.string().optional(),
   medicalHistory: MedicalHistorySchema,
   medications: z.string().optional(),
   allergies: z.string().optional(),

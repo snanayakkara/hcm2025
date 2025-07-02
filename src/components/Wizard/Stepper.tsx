@@ -11,7 +11,7 @@ interface StepperProps {
 const Stepper: React.FC<StepperProps> = ({ currentStep, totalSteps, stepTitles }) => {
   return (
     <div className="w-full py-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between">
         {Array.from({ length: totalSteps }, (_, index) => (
           <React.Fragment key={index}>
             <div className="flex flex-col items-center">
@@ -35,16 +35,18 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, totalSteps, stepTitles }
                   <span>{index + 1}</span>
                 )}
               </motion.div>
-              <span className={`
-                mt-2 text-xs text-center max-w-16 leading-tight
+              <div className={`
+                mt-2 text-xs text-center w-20 h-8 flex items-center justify-center leading-tight
                 ${index === currentStep ? 'text-blue-600 font-medium' : 'text-gray-500'}
               `}>
-                {stepTitles[index]}
-              </span>
+                <span className="px-1">
+                  {stepTitles[index]}
+                </span>
+              </div>
             </div>
             {index < totalSteps - 1 && (
               <div className={`
-                flex-1 h-0.5 mx-2
+                flex-1 h-0.5 mx-2 mt-4
                 ${index < currentStep ? 'bg-green-500' : 'bg-gray-200'}
               `} />
             )}
