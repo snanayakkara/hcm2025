@@ -64,6 +64,21 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
     prevStep();
   }, [formData, updateData, prevStep]);
 
+  const handleStepClick = useCallback((targetStep: number) => {
+    updateData(formData);
+    // Allow navigation to any step (you could add validation here if needed)
+    const stepDiff = targetStep - state.currentStep;
+    if (stepDiff > 0) {
+      for (let i = 0; i < stepDiff; i++) {
+        nextStep();
+      }
+    } else if (stepDiff < 0) {
+      for (let i = 0; i < Math.abs(stepDiff); i++) {
+        prevStep();
+      }
+    }
+  }, [formData, updateData, nextStep, prevStep, state.currentStep]);
+
   const handleGeneratePDF = async () => {
     setIsGenerating(true);
     try {
@@ -584,7 +599,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <motion.div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] overflow-hidden flex flex-col"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[85vh] overflow-hidden flex flex-col"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
@@ -606,6 +621,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
             currentStep={state.currentStep}
             totalSteps={10}
             stepTitles={stepTitles}
+            onStepClick={handleStepClick}
           />
         </div>
 

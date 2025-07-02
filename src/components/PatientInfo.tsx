@@ -134,10 +134,6 @@ const PatientInfo: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Patient Resources */}
           <div className="space-y-8">
-            <h3 className={`text-2xl font-bold text-gray-900 mb-6 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-              Patient Resources
-            </h3>
-            
             {patientResources.map((resource, index) => (
               <div
                 key={index}
