@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Award, GraduationCap, MapPin, Stethoscope, ChevronLeft, ChevronRight, Calendar, Heart, Star } from 'lucide-react';
+import { Award, GraduationCap, MapPin, Stethoscope, Calendar, Star } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 
 const Doctors: React.FC = () => {
@@ -100,16 +100,6 @@ const Doctors: React.FC = () => {
       return () => clearInterval(interval);
     }
   }, [isAutoPlaying, doctors.length]);
-
-  const nextDoctor = () => {
-    setSelectedDoctor((prev) => (prev + 1) % doctors.length);
-    setIsAutoPlaying(false);
-  };
-
-  const prevDoctor = () => {
-    setSelectedDoctor((prev) => (prev - 1 + doctors.length) % doctors.length);
-    setIsAutoPlaying(false);
-  };
 
   return (
     <section id="doctors" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20 relative overflow-hidden">
@@ -219,13 +209,13 @@ const Doctors: React.FC = () => {
         {/* Main Doctor Showcase - Below the selection cards */}
         <div className="mb-20">
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-secondary-100">
-            <div className={`${isMobile ? 'block' : 'md:grid md:grid-cols-[minmax(0,280px)_1fr]'}`}>
+            <div className={`${isMobile ? 'block' : 'md:grid md:grid-cols-[auto_1fr]'}`}>
               {/* ─ Portrait ─ */}
-              <div className={`relative flex items-center justify-center ${isMobile ? 'p-8' : 'p-12'}`}>
+              <div className={`relative flex flex-col items-center justify-center ${isMobile ? 'p-8' : 'p-12'} space-y-4 group`}>
                 {/* Portrait Circle */}
-                <div className="relative z-10 group cursor-pointer">
+                <div className="relative z-10 cursor-pointer">
                   <div 
-                    className={`${isMobile ? 'w-32 h-32' : 'w-48 h-48'} rounded-full overflow-hidden border-4 shadow-2xl transition-all duration-300 ${isMobile ? '' : 'group-hover:scale-110 group-hover:shadow-3xl'}`}
+                    className={`${isMobile ? 'w-48 h-48' : 'w-64 h-64'} rounded-full overflow-hidden border-4 shadow-2xl transition-all duration-300 ${isMobile ? '' : 'group-hover:scale-110 group-hover:shadow-3xl'}`}
                     style={{ 
                       borderColor: doctors[selectedDoctor].accentHex,
                       boxShadow: `0 0 0 4px ${doctors[selectedDoctor].accentHex}20, 0 25px 50px -12px rgba(0, 0, 0, 0.25)`
@@ -248,31 +238,22 @@ const Doctors: React.FC = () => {
                     }}
                   ></div>
                   
-                  {/* Hover overlay with doctor info */}
-                  <div className="absolute inset-0 bg-black/70 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="text-center text-white p-4">
-                      <p className="font-semibold text-sm leading-tight">
-                        {doctors[selectedDoctor].specialization}
-                      </p>
-                    </div>
-                  </div>
+                  {/* Enhanced border on hover */}
+                  <div 
+                    className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ 
+                      border: `4px solid ${doctors[selectedDoctor].accentHex}`,
+                      transform: 'scale(1.05)'
+                    }}
+                  ></div>
                 </div>
 
-                {/* Navigation */}
-                <button
-                  onClick={prevDoctor}
-                  className={`absolute ${isMobile ? 'left-1 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 min-h-[44px] min-w-[44px]' : 'left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-3'} rounded-full shadow-lg transition-all duration-200 ${isMobile ? '' : 'hover:scale-110'} z-20 flex items-center justify-center`}
-                  style={{ color: doctors[selectedDoctor].accentHex }}
-                >
-                  <ChevronLeft className={`${isMobile ? 'w-4 h-4' : 'w-5 h-5'}`} />
-                </button>
-                <button
-                  onClick={nextDoctor}
-                  className={`absolute ${isMobile ? 'right-1 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 min-h-[44px] min-w-[44px]' : 'right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-3'} rounded-full shadow-lg transition-all duration-200 ${isMobile ? '' : 'hover:scale-110'} z-20 flex items-center justify-center`}
-                  style={{ color: doctors[selectedDoctor].accentHex }}
-                >
-                  <ChevronRight className={`${isMobile ? 'w-4 h-4' : 'w-5 h-5'}`} />
-                </button>
+                {/* Specialization text below photo */}
+                <div className="text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <p className="font-semibold text-sm text-secondary-700 leading-tight">
+                    {doctors[selectedDoctor].specialization}
+                  </p>
+                </div>
               </div>
 
               {/* ─ Info column ─ */}

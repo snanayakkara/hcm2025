@@ -1,7 +1,8 @@
-import React from 'react';
-import { Phone, Mail, Clock, Fan as Fax } from 'lucide-react';
+import React, { useState } from 'react';
+import { Phone, Mail, Clock, Printer, X } from 'lucide-react';
 
 const Footer: React.FC = () => {
+  const [modalType, setModalType] = useState<null | 'privacy' | 'terms' | 'disclaimer'>(null);
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -69,12 +70,12 @@ const Footer: React.FC = () => {
                 <span className="text-gray-300">(03) 9509 5009</span>
               </div>
               <div className="flex items-center space-x-3">
-                <Fax className="w-5 h-5 text-blue-400" />
+                <Printer className="w-5 h-5 text-blue-400" />
                 <span className="text-gray-300">(03) 9509 6448</span>
               </div>
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-blue-400" />
-                <span className="text-gray-300">reception@heartclinicmelbourne.com.au</span>
+              <div className="flex items-start space-x-3">
+                <Mail className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                <span className="text-gray-300 break-words">reception@heartclinicmelbourne.com.au</span>
               </div>
             </div>
           </div>
@@ -143,17 +144,25 @@ const Footer: React.FC = () => {
             <div className="text-gray-400 text-sm">
               <p>&copy; 2024 Heart Clinic Melbourne. All rights reserved.</p>
             </div>
-            
             <div className="flex space-x-6 text-sm text-gray-400">
-              <a href="#" className="hover:text-white transition-colors duration-200">
+              <button
+                onClick={() => setModalType('privacy')}
+                className="hover:text-white transition-colors duration-200"
+              >
                 Privacy Policy
-              </a>
-              <a href="#" className="hover:text-white transition-colors duration-200">
+              </button>
+              <button
+                onClick={() => setModalType('terms')}
+                className="hover:text-white transition-colors duration-200"
+              >
                 Terms of Service
-              </a>
-              <a href="#" className="hover:text-white transition-colors duration-200">
+              </button>
+              <button
+                onClick={() => setModalType('disclaimer')}
+                className="hover:text-white transition-colors duration-200"
+              >
                 Medical Disclaimer
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -169,6 +178,62 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
+      {modalType && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="relative bg-white rounded-2xl shadow-xl max-w-xl w-full p-8 overflow-y-auto max-h-[90vh]">
+            <button
+              onClick={() => setModalType(null)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {modalType === 'privacy' && (
+              <>
+                <h3 className="text-xl font-bold mb-4">Privacy Policy</h3>
+                <p className="text-sm text-gray-700 leading-relaxed space-y-4">
+                  Heart Clinic Melbourne complies with the Australian Privacy Act&nbsp;1988 (Cth) and the
+                  Australian Privacy Principles.  We collect only the information necessary to provide
+                  high‑quality cardiac care, securely store it on Australian servers, and never disclose
+                  it to third parties except where required for your treatment, by law, or with your
+                  explicit consent.  You may request access to your personal information or ask for it
+                  to be corrected at any time by contacting our reception team.  Full details of our
+                  data‑handling practices, retention periods, My Health Record use and complaint
+                  process are available on request.
+                </p>
+              </>
+            )}
+
+            {modalType === 'terms' && (
+              <>
+                <h3 className="text-xl font-bold mb-4">Website&nbsp;Terms&nbsp;of&nbsp;Service</h3>
+                <p className="text-sm text-gray-700 leading-relaxed space-y-4">
+                  This website is provided by Heart Clinic Melbourne for general information about our
+                  services.  By browsing, you agree not to rely on the content as medical advice, to use
+                  the site lawfully under the laws of Victoria, and not to reproduce or distribute any
+                  material without written permission.  We aim for accuracy but make no warranties that
+                  the content is complete or up‑to‑date.  To the extent permitted by Australian
+                  Consumer Law, we exclude liability for loss arising from your use of the site.  We may
+                  update these terms at any time without notice.
+                </p>
+              </>
+            )}
+
+            {modalType === 'disclaimer' && (
+              <>
+                <h3 className="text-xl font-bold mb-4">Medical Disclaimer</h3>
+                <p className="text-sm text-gray-700 leading-relaxed space-y-4">
+                  Information on this website is of a general nature and is not a substitute for
+                  individual medical advice.  It should not be used to diagnose, treat, cure or prevent
+                  any condition.  Always consult your GP, cardiologist or call <strong>000</strong> in
+                  an emergency.  Heart Clinic Melbourne does not accept responsibility for any loss
+                  caused by reliance on the information provided here.
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </footer>
   );
 };

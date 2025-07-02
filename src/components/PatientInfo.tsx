@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { FileText, Clock, Shield, CreditCard, Phone, Mail, ArrowRight, CheckCircle, Upload, X } from 'lucide-react';
+
+const PatientIntakeWizard = lazy(() => import('./Wizard/Wizard'));
 
 const PatientInfo: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ const PatientInfo: React.FC = () => {
   const [attachments, setAttachments] = useState<File[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const [activeResource, setActiveResource] = useState(0);
+  const [showIntakeWizard, setShowIntakeWizard] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -79,9 +82,10 @@ const PatientInfo: React.FC = () => {
     {
       icon: <FileText className="w-6 h-6 text-blue-600" />,
       title: "Patient Forms",
-      description: "Download and complete forms before your visit",
-      items: ["New Patient Registration", "Medical History Form", "Insurance Information", "Consent Forms"],
-      color: "from-blue-100 to-indigo-100"
+      description: "Complete your intake form digitally before your visit",
+      items: ["Quick Intake Wizard", "Medical History Form", "Insurance Information", "Consent Forms"],
+      color: "from-blue-100 to-indigo-100",
+      hasWizard: true
     },
     {
       icon: <Clock className="w-6 h-6 text-blue-600" />,
@@ -155,9 +159,22 @@ const PatientInfo: React.FC = () => {
                     </div>
                     <ul className="space-y-2">
                       {resource.items.map((item, idx) => (
-                        <li key={idx} className="flex items-center space-x-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          <span className="text-sm text-gray-700">{item}</span>
+                        <li key={idx} className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <CheckCircle className="w-4 h-4 text-green-500" />
+                            <span className="text-sm text-gray-700">{item}</span>
+                          </div>
+                          {resource.hasWizard && idx === 0 && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowIntakeWizard(true);
+                              }}
+                              className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition-colors"
+                            >
+                              Start
+                            </button>
+                          )}
                         </li>
                       ))}
                     </ul>
@@ -404,6 +421,20 @@ const PatientInfo: React.FC = () => {
             </p>
           </div>
         </div>
+
+        {/* Patient Intake Wizard */}
+        {showIntakeWizard && (
+          <Suspense fallback={
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-8 flex items-center space-x-3">
+                <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                <span className="text-gray-700">Loading intake form...</span>
+              </div>
+            </div>
+          }>
+            <PatientIntakeWizard onClose={() => setShowIntakeWizard(false)} />
+          </Suspense>
+        )}
       </div>
     </section>
   );
