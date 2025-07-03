@@ -229,9 +229,14 @@ const ReceptionTeam: React.FC = () => {
               <div
                 key={index}
                 className={`bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-500 transform border border-secondary-200/50 ${
-                  activeCard === index + 1 ? 'scale-105 ring-2 ring-primary-200/50' : 'hover:scale-102'
+                  activeCard === index + 1 ? 'ring-2 ring-primary-200/50 shadow-xl' : 'hover:shadow-lg'
                 }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{ 
+                  transformOrigin: 'center',
+                  willChange: 'transform',
+                  transform: activeCard === index + 1 ? 'scale(1.02)' : 'scale(1)',
+                  transitionDelay: `${index * 100}ms` 
+                }}
               >
                 {/* Member Image */}
                 <div className={`relative h-72 overflow-hidden bg-gradient-to-br ${member.color}`}>
@@ -290,9 +295,14 @@ const ReceptionTeam: React.FC = () => {
               <div
                 key={index}
                 className={`bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-500 transform border border-secondary-200/50 ${
-                  activeCard === index + receptionTeam.length + 1 ? 'scale-105 ring-2 ring-sage-200/50' : 'hover:scale-102'
+                  activeCard === index + receptionTeam.length + 1 ? 'ring-2 ring-sage-200/50 shadow-xl' : 'hover:shadow-lg'
                 }`}
-                style={{ transitionDelay: `${index * 150}ms` }}
+                style={{ 
+                  transformOrigin: 'center',
+                  willChange: 'transform',
+                  transform: activeCard === index + receptionTeam.length + 1 ? 'scale(1.02)' : 'scale(1)',
+                  transitionDelay: `${index * 150}ms` 
+                }}
               >
                 {/* Tech Header */}
                 <div className="bg-gradient-to-r from-sage-500 to-primary-500 p-4 text-white">

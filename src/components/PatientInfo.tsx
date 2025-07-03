@@ -251,9 +251,14 @@ ${formData.name}`;
                 className={`relative bg-white border border-gray-200 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 transform ${
                   isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
                 } ${
-                  activeResource === index ? 'scale-105 ring-2 ring-blue-200' : 'hover:scale-102'
+                  activeResource === index ? 'ring-2 ring-blue-200 shadow-xl' : 'hover:shadow-lg'
                 }`}
-                style={{ transitionDelay: `${300 + index * 150}ms` }}
+                style={{ 
+                  transformOrigin: 'center',
+                  willChange: 'transform',
+                  transform: activeResource === index ? 'scale(1.02)' : 'scale(1)',
+                  transitionDelay: `${300 + index * 150}ms`
+                }}
                 onMouseEnter={() => resource.hasHoverCard && setShowVisitInfo(true)}
                 onMouseLeave={() => resource.hasHoverCard && setShowVisitInfo(false)}
               >

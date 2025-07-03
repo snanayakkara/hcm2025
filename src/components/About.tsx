@@ -122,7 +122,7 @@ const About: React.FC = () => {
                 <motion.div
                   key={index}
                   className={`${feature.color} ${feature.hoverColor} p-8 rounded-2xl transition-all duration-500 cursor-pointer border border-secondary-200/50 flex flex-col h-full ${
-                    activeFeature === index ? 'scale-105 shadow-lg ring-2 ring-primary-200/50' : 'hover:scale-102'
+                    activeFeature === index ? 'shadow-lg ring-2 ring-primary-200/50' : 'hover:shadow-md'
                   }`}
                   onClick={() => setActiveFeature(index)}
                   variants={itemVariants}
@@ -131,7 +131,12 @@ const About: React.FC = () => {
                     boxShadow: "0 10px 25px rgba(0,0,0,0.08)"
                   }}
                   whileTap={{ scale: 0.98 }}
-                  style={{ minHeight: '280px' }}
+                  style={{
+                    transformOrigin: 'center',
+                    willChange: 'transform',
+                    transform: activeFeature === index ? 'scale(1.02)' : 'scale(1)',
+                    minHeight: '280px'
+                  }}
                 >
                   <div className="space-y-6 flex-1 flex flex-col">
                     <motion.div 

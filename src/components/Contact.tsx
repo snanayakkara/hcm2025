@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Car, Train, Printer, ExternalLink, Search } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Car, Train, Printer, ExternalLink, Search, Building2 } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 
 const Contact: React.FC = () => {
@@ -39,6 +39,33 @@ const Contact: React.FC = () => {
       coordinates: { lat: -38.1234, lng: 145.3456 },
       googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8!2d145.3456!3d-38.1234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad7b9b1b5b6b6b1%3A0x5017d681632ccc55!2s1%20Morison%20Rd%2C%20Clyde%20VIC%203978%2C%20Australia!5e0!3m2!1sen!2sau!4v1640995200000!5m2!1sen!2sau"
     },
+  ];
+
+  const hospitals = [
+    {
+      name: "The Alfred",
+      address: "55 Commercial Rd, Melbourne VIC 3004",
+      description: "Procedural services and inpatient consultations",
+      icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYED9TXRJ2hBE9BHlrjdbbaT6E8UM7cgIWwQ&s"
+    },
+    {
+      name: "Cabrini Malvern",
+      address: "183 Wattletree Rd, Malvern VIC 3144", 
+      description: "Procedural services and inpatient consultations",
+      icon: "https://gandelfoundation.org.au/wp-content/uploads/2017/07/Cabrini.jpg"
+    },
+    {
+      name: "Epworth Richmond",
+      address: "89 Bridge Rd, Richmond VIC 3121",
+      description: "Procedural services and inpatient consultations",
+      icon: "https://upload.wikimedia.org/wikipedia/en/5/5e/Epworth_HealthCare_logo.png"
+    },
+    {
+      name: "SJOG Berwick",
+      address: "75 Kangan Dr, Berwick VIC 3806",
+      description: "Procedural services and inpatient consultations",
+      icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0RQpP2eNsJYr7osMZpUpgRYhdkXNgo8-Mfw&s"
+    }
   ];
 
   const handleGetDirections = () => {
@@ -270,6 +297,82 @@ const Contact: React.FC = () => {
                   <span>View on Google Maps</span>
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Hospital Locations Section */}
+        <div className={`bg-gradient-to-r from-primary-50 to-sage-50 rounded-3xl ${isMobile ? 'p-8' : 'p-12'} mb-20 shadow-lg border border-primary-200`}>
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <div className="bg-primary-100 p-3 rounded-xl">
+                <Building2 className="w-6 h-6 text-primary-600" />
+              </div>
+              <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-secondary-800`}>
+                Hospital Locations We Service
+              </h3>
+            </div>
+            <p className={`${isMobile ? 'text-lg' : 'text-xl'} text-secondary-600 max-w-3xl mx-auto leading-relaxed`}>
+              We provide procedural services and inpatient consultations at these major hospital locations across Melbourne.
+            </p>
+          </div>
+
+          <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'md:grid-cols-2 lg:grid-cols-4 gap-6'}`}>
+            {hospitals.map((hospital, index) => (
+              <div
+                key={index}
+                className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-secondary-200 hover:shadow-lg transition-all duration-200"
+              >
+                <div className="text-center">
+                  <div className="w-16 h-16 rounded-xl mx-auto mb-4 overflow-hidden">
+                    {hospital.icon ? (
+                      <img
+                        src={hospital.icon}
+                        alt={`${hospital.name} logo`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="bg-primary-100 w-full h-full flex items-center justify-center">
+                        <Building2 className="w-6 h-6 text-primary-600" />
+                      </div>
+                    )}
+                  </div>
+                  <h4 className="text-lg font-semibold text-secondary-800 mb-2">
+                    {hospital.name}
+                  </h4>
+                  <div className="flex items-start justify-center space-x-2 mb-3">
+                    <MapPin className="w-4 h-4 text-secondary-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-secondary-600 text-center">
+                      {hospital.address}
+                    </p>
+                  </div>
+                  <p className="text-sm text-secondary-600 font-medium">
+                    {hospital.description}
+                  </p>
+                  <button
+                    onClick={() => window.open(`https://www.google.com/maps/search/${encodeURIComponent(hospital.address)}`, '_blank')}
+                    className="mt-4 w-full bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 text-sm font-medium"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span>View Location</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className={`text-center mt-12 ${isMobile ? 'px-4' : 'px-8'}`}>
+            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-secondary-200">
+              <p className="text-secondary-600 leading-relaxed">
+                <strong>Note:</strong> Hospital-based services are by appointment only. Please contact our reception team at{' '}
+                <button
+                  onClick={() => window.open('tel:(03) 9509 5009', '_self')}
+                  className="text-primary-600 hover:text-primary-800 font-semibold underline"
+                >
+                  (03) 9509 5009
+                </button>
+                {' '}to schedule your hospital consultation or procedure.
+              </p>
             </div>
           </div>
         </div>

@@ -9,14 +9,15 @@ interface ReferralFormProps {
 
 const ReferralForm: React.FC<ReferralFormProps> = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
+    // Referral Types
+    referralTypes: [] as string[],
+    
     // Patient Details
     patientName: '',
     dateOfBirth: '',
     gender: '',
     address: '',
     phoneNumber: '',
-    medicareNumber: '',
-    privateHealthInsurance: '',
     
     // Combined Clinical Information
     clinicalInformation: '',
@@ -53,6 +54,15 @@ const ReferralForm: React.FC<ReferralFormProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleReferralTypeToggle = (type: string) => {
+    setFormData(prev => ({
+      ...prev,
+      referralTypes: prev.referralTypes.includes(type)
+        ? prev.referralTypes.filter(t => t !== type)
+        : [...prev.referralTypes, type]
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -63,6 +73,9 @@ const ReferralForm: React.FC<ReferralFormProps> = ({ isOpen, onClose }) => {
 
 I would like to refer a patient for cardiac consultation.
 
+REFERRAL FOR:
+${formData.referralTypes.length > 0 ? formData.referralTypes.join(', ') : 'Not specified'}
+
 PATIENT DETAILS:
 Patient Name: ${formData.patientName}
 Date of Birth: ${formData.dateOfBirth}
@@ -70,8 +83,6 @@ Gender: ${formData.gender}
 Address: ${formData.address}
 
 Phone Number: ${formData.phoneNumber}
-Medicare Number: ${formData.medicareNumber}
-Private Health Insurance: ${formData.privateHealthInsurance}
 
 CLINICAL INFORMATION:
 ${formData.clinicalInformation}
@@ -226,6 +237,34 @@ Provider Number: ${formData.providerNumber}`;
     }
   ];
 
+  const referralTypes = [
+    {
+      value: "Cardiology Consult",
+      label: "Cardiology Consult",
+      image: "/images/consult.png"
+    },
+    {
+      value: "Resting Echocardiogram", 
+      label: "Resting Echo",
+      image: "/images/echo.png"
+    },
+    {
+      value: "Stress Echocardiogram",
+      label: "Stress Echo",
+      image: "/images/stressecho.png"
+    },
+    {
+      value: "Holter Monitor",
+      label: "Holter Monitor",
+      image: "/images/holter.png"
+    },
+    {
+      value: "Pacemaker/Device Review",
+      label: "Device Review",
+      image: "/images/pacemaker.png"
+    }
+  ];
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -249,7 +288,11 @@ Provider Number: ${formData.providerNumber}`;
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-3 rounded-lg">
-                    <FileText className="w-6 h-6 text-blue-600" />
+                    <img 
+                      src="/images/hcm3d2.png" 
+                      alt="Heart Clinic Melbourne" 
+                      className="w-6 h-6 object-contain"
+                    />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900">Patient Referral Form</h2>
@@ -267,6 +310,63 @@ Provider Number: ${formData.providerNumber}`;
 
             {/* Form Content */}
             <form onSubmit={handleSubmit} className="p-6 space-y-8">
+              {/* Referral Types Section */}
+              <section>
+                <div className="flex items-center space-x-2 mb-4">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">What is this referral for? (choose all that apply)</h3>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {referralTypes.map((type) => (
+                    <button
+                      key={type.value}
+                      type="button"
+                      onClick={() => handleReferralTypeToggle(type.value)}
+                      className={`relative overflow-hidden px-6 py-8 text-sm font-medium rounded-xl border-2 transition-all duration-300 flex flex-col items-center justify-center space-y-3 min-h-[120px] ${
+                        formData.referralTypes.includes(type.value)
+                          ? 'border-blue-600 shadow-lg transform scale-105'
+                          : 'border-gray-300 hover:border-blue-300 hover:shadow-md'
+                      }`}
+                      style={{
+                        backgroundImage: `url(${type.image})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                      }}
+                    >
+                      {/* Background overlay */}
+                      <div className={`absolute inset-0 transition-all duration-300 ${
+                        formData.referralTypes.includes(type.value)
+                          ? 'bg-blue-600/85'
+                          : 'bg-white/75 hover:bg-white/60'
+                      }`}></div>
+                      
+                      {/* Content */}
+                      <div className="relative z-10 flex flex-col items-center justify-center">
+                        <span className={`text-lg text-center leading-tight font-bold transition-all duration-300 ${
+                          formData.referralTypes.includes(type.value)
+                            ? 'text-white'
+                            : 'text-gray-800'
+                        }`}>
+                          {type.label}
+                        </span>
+                      </div>
+                      
+                      {/* Selection indicator */}
+                      {formData.referralTypes.includes(type.value) && (
+                        <div className="absolute top-2 right-2 z-20">
+                          <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                            <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                          </div>
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-3">
+                  Select all services that apply. Multiple selections are allowed.
+                </p>
+              </section>
+
               {/* Patient Details Section */}
               <section>
                 <div className="flex items-center space-x-2 mb-4">
@@ -302,10 +402,10 @@ Provider Number: ${formData.providerNumber}`;
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Gender
                     </label>
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-3 gap-2">
                       {genderOptions.map((option) => (
                         <button
                           key={option.value}
@@ -316,13 +416,13 @@ Provider Number: ${formData.providerNumber}`;
                               gender: option.value
                             });
                           }}
-                          className={`px-4 py-3 text-sm font-medium rounded-lg border-2 transition-all duration-200 flex flex-col items-center space-y-1 ${
+                          className={`px-2 py-2.5 text-sm font-medium rounded-lg border-2 transition-all duration-200 flex items-center justify-center space-x-1 ${
                             formData.gender === option.value
                               ? 'bg-blue-600 text-white border-blue-600 shadow-md'
                               : 'bg-white text-gray-700 border-gray-300 hover:border-blue-300 hover:bg-blue-50'
                           }`}
                         >
-                          <span className="text-lg">{option.icon}</span>
+                          <span className="text-base">{option.icon}</span>
                           <span className="text-xs">{option.label}</span>
                         </button>
                       ))}
@@ -352,32 +452,6 @@ Provider Number: ${formData.providerNumber}`;
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Full address"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Medicare Number
-                    </label>
-                    <input
-                      type="text"
-                      name="medicareNumber"
-                      value={formData.medicareNumber}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Medicare number"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Private Health Insurance
-                    </label>
-                    <input
-                      type="text"
-                      name="privateHealthInsurance"
-                      value={formData.privateHealthInsurance}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Insurance provider and number"
                     />
                   </div>
                 </div>
@@ -442,6 +516,7 @@ Provider Number: ${formData.providerNumber}`;
                       ))}
                     </div>
                   </div>
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       Urgency
@@ -641,7 +716,7 @@ Provider Number: ${formData.providerNumber}`;
                       value={formData.providerNumber}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Provider/Medicare number"
+                      placeholder="Provider Number"
                     />
                   </div>
                 </div>

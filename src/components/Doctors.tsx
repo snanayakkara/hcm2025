@@ -141,9 +141,14 @@ const Doctors: React.FC = () => {
               }}
               className={`group relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-lg transition-all duration-500 ${isMobile ? 'transform-none' : 'transform hover:-translate-y-2'} cursor-pointer overflow-hidden border-2 ${isMobile ? 'min-h-[44px]' : ''} ${
                 selectedDoctor === index 
-                  ? `border-${doctor.accentColor}-500 ${isMobile ? '' : 'scale-105'} shadow-xl` 
+                  ? `border-${doctor.accentColor}-500 shadow-xl` 
                   : 'border-secondary-200/50 hover:border-primary-300'
               }`}
+              style={{
+                transformOrigin: 'center',
+                willChange: 'transform',
+                transform: selectedDoctor === index && !isMobile ? 'scale(1.02)' : 'scale(1)'
+              }}
             >
               {/* Card Background Gradient */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500 bg-white" />
