@@ -224,7 +224,7 @@ const ReceptionTeam: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {receptionTeam.map((member, index) => (
               <div
                 key={index}
@@ -285,7 +285,7 @@ const ReceptionTeam: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
             {technologists.map((tech, index) => (
               <div
                 key={index}

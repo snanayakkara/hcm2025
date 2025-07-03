@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, FileText, Video, Search, BookOpen, Mic, Camera } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useMobileDetection } from '../hooks/useMobileDetection';
+import ReferralForm from './ReferralForm';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,9 +16,10 @@ const Header: React.FC = () => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [showSearchPopover, setShowSearchPopover] = useState(false);
   const [selectedResultIndex, setSelectedResultIndex] = useState(-1);
+  const [isReferralFormOpen, setIsReferralFormOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { isMobile, isTouchDevice } = useMobileDetection();
+  const { isMobile } = useMobileDetection();
 
   // Search data - all searchable content
   const searchData = [
@@ -224,7 +226,7 @@ const Header: React.FC = () => {
   };
 
   const handleReferralClick = () => {
-    window.open('mailto:reception@heartclinicmelbourne.com.au?subject=Patient Referral&body=Dear Heart Clinic Melbourne Team,%0D%0A%0D%0AI would like to refer a patient for cardiac consultation.%0D%0A%0D%0APatient Details:%0D%0AName: %0D%0ADate of Birth: %0D%0AMedicare Number: %0D%0AContact Number: %0D%0A%0D%0AReason for Referral:%0D%0A%0D%0AClinical History:%0D%0A%0D%0ACurrent Medications:%0D%0A%0D%0AUrgency: [ ] Routine [ ] Semi-urgent [ ] Urgent%0D%0A%0D%0APreferred Location: [ ] Malvern [ ] Pakenham [ ] Clyde%0D%0A%0D%0AThank you,%0D%0A%0D%0ADr. [Your Name]%0D%0A[Practice Name]%0D%0A[Contact Details]');
+    setIsReferralFormOpen(true);
   };
 
   const handleTelehealthClick = () => {
@@ -244,7 +246,7 @@ const Header: React.FC = () => {
     <>
       {/* Enhanced Floating Telehealth Button */}
       <motion.div
-        className="fixed top-6 right-6 z-50"
+        className={`fixed right-6 z-50 ${isMobile ? 'top-20' : 'top-6'}`}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1, duration: 0.5 }}
@@ -659,7 +661,7 @@ const Header: React.FC = () => {
                 </motion.button>
                 
                 <motion.button
-                  onClick={() => scrollToSection('contact')}
+                  onClick={() => scrollToSection('patients')}
                   className="bg-gradient-to-r from-primary-500 to-primary-600 text-white px-3 py-2 rounded-xl text-xs font-medium shadow-sm whitespace-nowrap"
                   whileHover={{ 
                     scale: 1.02,
@@ -836,7 +838,7 @@ const Header: React.FC = () => {
                       </motion.button>
                       
                       <motion.button
-                        onClick={() => scrollToSection('contact')}
+                        onClick={() => scrollToSection('patients')}
                         className="w-full bg-gradient-to-r from-primary-500 to-primary-600 text-white px-4 py-3 rounded-lg text-sm font-medium shadow-sm"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -855,6 +857,12 @@ const Header: React.FC = () => {
           </motion.header>
         </div>
       </div>
+
+      {/* Referral Form Modal */}
+      <ReferralForm
+        isOpen={isReferralFormOpen}
+        onClose={() => setIsReferralFormOpen(false)}
+      />
     </>
   );
 };

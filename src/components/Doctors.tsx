@@ -117,9 +117,9 @@ const Doctors: React.FC = () => {
             <Stethoscope className="w-4 h-4" />
             <span>Meet Our Expert Team</span>
           </div>
-          <h2 className={`${isMobile ? 'text-3xl' : 'text-5xl lg:text-6xl'} font-bold text-secondary-800 mb-6 tracking-tight leading-tight`}>
+          <h2 className={`${isMobile ? 'text-3xl' : 'text-5xl lg:text-6xl'} font-bold text-secondary-800 mb-8 tracking-tight leading-relaxed`}>
             Our Expert
-            <span className="block bg-gradient-to-r from-primary-600 via-accent-600 to-primary-800 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-primary-600 via-accent-600 to-primary-800 bg-clip-text text-transparent pb-2">
               Cardiologists
             </span>
           </h2>
@@ -163,23 +163,16 @@ const Doctors: React.FC = () => {
                   <h4 className="font-bold text-secondary-800 text-sm leading-tight">{doctor.name}</h4>
                   <p className="text-xs text-primary-600 font-semibold">{doctor.specialization}</p>
                   
-                  {/* Locations */}
+                  {/* Qualifications */}
                   <div className="space-y-1">
-                    <div className="flex items-center justify-center space-x-1 text-xs text-secondary-500">
-                      <MapPin className="w-3 h-3" />
-                      <span>Primary Locations:</span>
-                    </div>
-                    <div className="space-y-1">
-                      {doctor.locations.slice(0, 2).map((location, idx) => (
-                        <div key={idx} className="text-xs text-secondary-600 font-medium">
-                          {location}
-                        </div>
-                      ))}
-                      {doctor.locations.length > 2 && (
-                        <div className="text-xs text-primary-600 font-medium">
-                          +{doctor.locations.length - 2} more
-                        </div>
-                      )}
+                    <div className="flex items-center justify-center space-x-2 text-xs text-secondary-600 font-medium">
+                      <GraduationCap className="w-3 h-3" />
+                      <span>
+                        {doctor.name === "Dr Mark Freilich" ? "MBBS (Hons) FRACP" :
+                         doctor.name === "Dr Phillip Ngu" ? "MBBS (Hons) FRACP" :
+                         doctor.name === "A/Prof Alex Voskoboinik" ? "MBBS (Hons) PhD FRACP" :
+                         doctor.name === "Dr Shane Nanayakkara" ? "MBBS PhD FRACP" : "MBBS FRACP"}
+                      </span>
                     </div>
                   </div>
                 </div>

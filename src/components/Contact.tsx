@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Car, Train, Bus, Navigation, Fan as Fax, ExternalLink, Search, Route } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Car, Train, Printer, ExternalLink, Search } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 
 const Contact: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState(0);
   const [userAddress, setUserAddress] = useState('');
-  const [showDirections, setShowDirections] = useState(false);
   const { isMobile } = useMobileDetection();
 
   const locations = [
@@ -50,7 +49,6 @@ const Contact: React.FC = () => {
       // Open Google Maps with directions
       const directionsUrl = `https://www.google.com/maps/dir/${origin}/${destination}`;
       window.open(directionsUrl, '_blank');
-      setShowDirections(true);
     } else {
       alert('Please enter your address to get directions');
     }
@@ -304,7 +302,7 @@ const Contact: React.FC = () => {
 
                 <div className="flex items-center space-x-4">
                   <div className={`bg-primary-100 ${isMobile ? 'p-2' : 'p-3'} rounded-xl`}>
-                    <Fax className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-primary-600`} />
+                    <Printer className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'} text-primary-600`} />
                   </div>
                   <div>
                     <p className="font-semibold text-secondary-800">Fax</p>
@@ -354,61 +352,6 @@ const Contact: React.FC = () => {
                   <Mail className="w-4 h-4" />
                   <span>Send Email</span>
                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Before Your Visit */}
-        <div className={`bg-white/80 backdrop-blur-sm ${isMobile ? 'p-8' : 'p-12'} rounded-3xl shadow-lg border border-secondary-200/50`}>
-          <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-secondary-800 mb-8`}>Before Your Visit</h3>
-          
-          <div className={`grid ${isMobile ? 'grid-cols-1 gap-8' : 'lg:grid-cols-2 gap-12'}`}>
-            <div className="space-y-6">
-              <div className="space-y-4">
-                <h4 className="font-semibold text-secondary-800 text-lg">What to Bring</h4>
-                <ul className="space-y-3">
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-600 rounded-full mt-2"></div>
-                    <span className="text-secondary-700">Medicare card and private health insurance details</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-600 rounded-full mt-2"></div>
-                    <span className="text-secondary-700">Referral letter from your GP</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-600 rounded-full mt-2"></div>
-                    <span className="text-secondary-700">List of current medications</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-600 rounded-full mt-2"></div>
-                    <span className="text-secondary-700">Previous cardiac test results</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <div className="space-y-4">
-                <h4 className="font-semibold text-secondary-800 text-lg">Appointment Tips</h4>
-                <ul className="space-y-3">
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-sage-500 rounded-full mt-2"></div>
-                    <span className="text-secondary-700">Arrive 15 minutes early</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-sage-500 rounded-full mt-2"></div>
-                    <span className="text-secondary-700">Wear comfortable clothing</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-sage-500 rounded-full mt-2"></div>
-                    <span className="text-secondary-700">Prepare questions for your doctor</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-sage-500 rounded-full mt-2"></div>
-                    <span className="text-secondary-700">Call if you need to reschedule</span>
-                  </li>
-                </ul>
               </div>
             </div>
           </div>

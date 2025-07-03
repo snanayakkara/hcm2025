@@ -205,7 +205,7 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     
     if (activeConditions.length > 0) {
       activeConditions.forEach(condition => {
-        drawText('[+]', marginLeft + 10, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
+        drawText('↪', marginLeft + 10, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
         drawText(condition.label, marginLeft + 35, currentY, { size: 11 });
         currentY -= 16;
       });
@@ -223,27 +223,27 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     currentY -= 16;
     
     if (data.smoking?.current) {
-      drawText('[X]', marginLeft + 20, currentY, { size: 12, color: rgb(0.8, 0.2, 0.2), font: boldFont });
-      drawText('Current smoker', marginLeft + 50, currentY, { size: 11, color: rgb(0.8, 0.2, 0.2) });
+      drawText('↪', marginLeft + 20, currentY, { size: 12, color: rgb(0, 0.6, 0), font: boldFont });
+      drawText('Current smoker', marginLeft + 45, currentY, { size: 11, color: rgb(0.8, 0.2, 0.2) });
       currentY -= 16;
       if (data.smoking.start) {
-        drawText(`Started smoking: ${data.smoking.start}`, marginLeft + 50, currentY, { size: 10, color: lightGray });
+        drawText(`Started smoking: ${data.smoking.start}`, marginLeft + 45, currentY, { size: 10, color: lightGray });
         currentY -= 14;
       }
     } else if (data.smoking?.past) {
-      drawText('[-]', marginLeft + 20, currentY, { size: 12, color: rgb(0, 0.6, 0), font: boldFont });
-      drawText('Former smoker (quit)', marginLeft + 50, currentY, { size: 11, color: rgb(0, 0.6, 0) });
+      drawText('↪', marginLeft + 20, currentY, { size: 12, color: rgb(0, 0.6, 0), font: boldFont });
+      drawText('Former smoker (quit)', marginLeft + 45, currentY, { size: 11, color: rgb(0, 0.6, 0) });
       currentY -= 16;
       if (data.smoking.start) {
-        drawText(`Smoking period: ${data.smoking.start}`, marginLeft + 50, currentY, { size: 10, color: lightGray });
+        drawText(`Smoking period: ${data.smoking.start}`, marginLeft + 45, currentY, { size: 10, color: lightGray });
         if (data.smoking.stop) {
           drawText(` - ${data.smoking.stop}`, marginLeft + 150, currentY, { size: 10, color: lightGray });
         }
         currentY -= 14;
       }
     } else {
-      drawText('[+]', marginLeft + 20, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
-      drawText('Never smoked', marginLeft + 50, currentY, { size: 11, color: rgb(0, 0.6, 0) });
+      drawText('↪', marginLeft + 20, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
+      drawText('Never smoked', marginLeft + 45, currentY, { size: 11, color: rgb(0, 0.6, 0) });
       currentY -= 16;
     }
     
@@ -253,11 +253,11 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     currentY -= 16;
     
     if (data.familyHistory) {
-      drawText('!', marginLeft + 20, currentY, { color: rgb(0.8, 0.4, 0), size: 12, font: boldFont });
-      drawText('Family history of heart disease before age 65', marginLeft + 40, currentY, { size: 11, color: rgb(0.8, 0.4, 0) });
+      drawText('↪', marginLeft + 20, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
+      drawText('Family history of heart disease before age 65', marginLeft + 45, currentY, { size: 11, color: rgb(0.8, 0.4, 0) });
     } else {
-      drawText('[+]', marginLeft + 20, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
-      drawText('No family history of early heart disease', marginLeft + 50, currentY, { size: 11 });
+      drawText('↪', marginLeft + 20, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
+      drawText('No family history of early heart disease', marginLeft + 45, currentY, { size: 11 });
     }
     currentY -= 16;
     
@@ -312,6 +312,26 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
         drawText('[+]', marginLeft + 10, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
         drawText(test.label, marginLeft + 35, currentY, { size: 11 });
         currentY -= 16;
+        
+        // Add per-test location and date details if provided
+        const locationKey = `${test.key}Location` as keyof IntakeForm;
+        const dateKey = `${test.key}Date` as keyof IntakeForm;
+        const location = data[locationKey] as string;
+        const date = data[dateKey] as string;
+        
+        if (location || date) {
+          if (location) {
+            drawText('Location:', marginLeft + 45, currentY, { size: 9, font: boldFont, color: lightGray });
+            drawText(location, marginLeft + 95, currentY, { size: 9, color: lightGray });
+            currentY -= 12;
+          }
+          if (date) {
+            drawText('Date:', marginLeft + 45, currentY, { size: 9, font: boldFont, color: lightGray });
+            drawText(date, marginLeft + 75, currentY, { size: 9, color: lightGray });
+            currentY -= 12;
+          }
+          currentY -= 4; // Add spacing between tests
+        }
       });
     } else {
       drawText('No previous cardiac tests or procedures reported', marginLeft + 10, currentY, { 

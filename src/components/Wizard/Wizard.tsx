@@ -44,8 +44,6 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
     'Medical History',
     'Medications',
     'Cardiac Tests',
-    'Smoking',
-    'Family History',
     'Emergency Contact',
     'Additional Notes',
     'Review',
@@ -54,7 +52,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
 
   const handleNext = useCallback(() => {
     updateData(formData);
-    if (state.currentStep < 9) {
+    if (state.currentStep < 7) {
       nextStep();
     }
   }, [formData, updateData, nextStep, state.currentStep]);
@@ -108,7 +106,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
               <FileText className="w-8 h-8 text-blue-600" />
             </div>
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Patient Intake Form</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Patient Summary</h3>
               <p className="text-gray-600 max-w-md mx-auto">
                 This secure form collects your cardiovascular health information. All data stays on your device and is never stored online.
               </p>
@@ -119,7 +117,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                 <div className="text-left">
                   <h4 className="font-medium text-blue-900">Privacy Notice</h4>
                   <p className="text-sm text-blue-800 mt-1">
-                    Your information is processed locally and automatically deleted after PDF generation.
+                    Your information is stored only on your computer, and automatically deleted after you finish.
                   </p>
                 </div>
               </div>
@@ -129,7 +127,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
 
       case 1:
         return (
-          <div className="space-y-4">
+          <div className="space-y-6">
             <h3 className="text-xl font-bold text-gray-900 mb-6">Medical History</h3>
             <p className="text-gray-600 mb-6">Please select any conditions you currently have or have had in the past:</p>
             
@@ -160,6 +158,106 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                 </div>
               )}
             />
+
+            {/* Smoking History Section */}
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Smoking History</h4>
+              
+              <Controller
+                name="smoking"
+                control={control}
+                render={({ field }) => (
+                  <div className="space-y-4">
+                    <ToggleCard
+                      title="Current Smoker"
+                      description="I currently smoke cigarettes, cigars, or use tobacco products"
+                      checked={field.value?.current || false}
+                      onChange={(checked) => 
+                        field.onChange({
+                          ...field.value,
+                          current: checked
+                        })
+                      }
+                    />
+                    
+                    <ToggleCard
+                      title="Past Smoker"
+                      description="I used to smoke but have quit"
+                      checked={field.value?.past || false}
+                      onChange={(checked) => 
+                        field.onChange({
+                          ...field.value,
+                          past: checked
+                        })
+                      }
+                    />
+
+                    {(field.value?.current || field.value?.past) && (
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 space-y-4">
+                        <h5 className="font-medium text-yellow-900">Smoking Details</h5>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Year Started
+                            </label>
+                            <input
+                              type="text"
+                              value={field.value?.start || ''}
+                              onChange={(e) => 
+                                field.onChange({
+                                  ...field.value,
+                                  start: e.target.value
+                                })
+                              }
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                              placeholder="e.g., 1995"
+                            />
+                          </div>
+                          
+                          {field.value?.past && (
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Year Stopped
+                              </label>
+                              <input
+                                type="text"
+                                value={field.value?.stop || ''}
+                                onChange={(e) => 
+                                  field.onChange({
+                                    ...field.value,
+                                    stop: e.target.value
+                                  })
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="e.g., 2020"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              />
+            </div>
+
+            {/* Family History Section */}
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Family History</h4>
+              
+              <Controller
+                name="familyHistory"
+                control={control}
+                render={({ field }) => (
+                  <ToggleCard
+                    title="Family History of Heart Disease"
+                    description="Has anyone in your immediate family (parents, siblings, children) had heart disease before age 65?"
+                    checked={field.value || false}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </div>
           </div>
         );
 
@@ -216,25 +314,70 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
               name="tests"
               control={control}
               render={({ field }) => (
-                <div className="space-y-3">
+                <div className="space-y-6">
                   {[
                     { key: 'echo', label: 'Echocardiogram' },
                     { key: 'holter', label: 'Holter Monitor' },
-                    { key: 'angio', label: 'Angiogram/Catheterization' },
-                    { key: 'surgery', label: 'Cardiac Surgery' }
+                    { key: 'angio', label: 'Coronary Angiogram' },
+                    { key: 'surgery', label: 'Heart Surgery' }
                   ].map(test => (
-                    <ToggleCard
-                      key={test.key}
-                      title={test.label}
-                      checked={field.value?.[test.key as keyof typeof field.value] || false}
-                      onChange={(checked) => 
-                        field.onChange({
-                          ...field.value,
-                          [test.key]: checked
-                        })
-                      }
-                      tooltip={CARD_TEST_DESCRIPTIONS[test.key as keyof typeof CARD_TEST_DESCRIPTIONS]}
-                    />
+                    <div key={test.key} className="space-y-4">
+                      <ToggleCard
+                        title={test.label}
+                        checked={field.value?.[test.key as keyof typeof field.value] || false}
+                        onChange={(checked) => 
+                          field.onChange({
+                            ...field.value,
+                            [test.key]: checked
+                          })
+                        }
+                        tooltip={CARD_TEST_DESCRIPTIONS[test.key as keyof typeof CARD_TEST_DESCRIPTIONS]}
+                      />
+                      
+                      {/* Conditional fields for this specific test */}
+                      {field.value?.[test.key as keyof typeof field.value] && (
+                        <div className="ml-6 bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4">
+                          <h5 className="font-medium text-blue-900">{test.label} Details</h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Where was this test performed?
+                              </label>
+                              <Controller
+                                name={`${test.key}Location` as any}
+                                control={control}
+                                render={({ field: locationField }) => (
+                                  <input
+                                    type="text"
+                                    {...locationField}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="e.g., Alfred Hospital, Cabrini Malvern"
+                                  />
+                                )}
+                              />
+                            </div>
+                            
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Approximate date
+                              </label>
+                              <Controller
+                                name={`${test.key}Date` as any}
+                                control={control}
+                                render={({ field: dateField }) => (
+                                  <input
+                                    type="text"
+                                    {...dateField}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="e.g., March 2023"
+                                  />
+                                )}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
               )}
@@ -243,107 +386,6 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
         );
 
       case 4:
-        return (
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold text-gray-900">Smoking History</h3>
-            
-            <Controller
-              name="smoking"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-4">
-                  <ToggleCard
-                    title="Current Smoker"
-                    description="I currently smoke cigarettes, cigars, or use tobacco products"
-                    checked={field.value?.current || false}
-                    onChange={(checked) => 
-                      field.onChange({
-                        ...field.value,
-                        current: checked
-                      })
-                    }
-                  />
-                  
-                  <ToggleCard
-                    title="Past Smoker"
-                    description="I used to smoke but have quit"
-                    checked={field.value?.past || false}
-                    onChange={(checked) => 
-                      field.onChange({
-                        ...field.value,
-                        past: checked
-                      })
-                    }
-                  />
-
-                  {(field.value?.current || field.value?.past) && (
-                    <div className="grid grid-cols-2 gap-4 mt-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Year Started
-                        </label>
-                        <input
-                          type="text"
-                          value={field.value?.start || ''}
-                          onChange={(e) => 
-                            field.onChange({
-                              ...field.value,
-                              start: e.target.value
-                            })
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                          placeholder="e.g., 1995"
-                        />
-                      </div>
-                      
-                      {field.value?.past && (
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Year Stopped
-                          </label>
-                          <input
-                            type="text"
-                            value={field.value?.stop || ''}
-                            onChange={(e) => 
-                              field.onChange({
-                                ...field.value,
-                                stop: e.target.value
-                              })
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="e.g., 2020"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            />
-          </div>
-        );
-
-      case 5:
-        return (
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold text-gray-900">Family History</h3>
-            
-            <Controller
-              name="familyHistory"
-              control={control}
-              render={({ field }) => (
-                <ToggleCard
-                  title="Family History of Heart Disease"
-                  description="Has anyone in your immediate family (parents, siblings, children) had heart disease before age 65?"
-                  checked={field.value || false}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-          </div>
-        );
-
-      case 6:
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-gray-900">Emergency Contact (Optional)</h3>
@@ -416,7 +458,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
           </div>
         );
 
-      case 7:
+      case 5:
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-gray-900">Additional Information</h3>
@@ -441,12 +483,12 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
           </div>
         );
 
-      case 8:
+      case 6:
         return (
-          <div className="space-y-6">
+          <div className="flex flex-col h-full space-y-6">
             <h3 className="text-xl font-bold text-gray-900 mb-6">Review Your Information</h3>
             
-            <div className="space-y-4 max-h-96 overflow-y-auto">
+            <div className="flex-1 space-y-4 overflow-y-auto">
               {/* Medical History Summary */}
               <div className="border border-gray-200 rounded-lg p-4">
                 <h4 className="font-medium text-gray-900 mb-2">Medical History</h4>
@@ -463,6 +505,31 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                     <p>No conditions reported</p>
                   )}
                 </div>
+              </div>
+
+              {/* Smoking History */}
+              <div className="border border-gray-200 rounded-lg p-4">
+                <h4 className="font-medium text-gray-900 mb-2">Smoking History</h4>
+                <div className="text-sm text-gray-600">
+                  {formData.smoking?.current || formData.smoking?.past ? (
+                    <div className="space-y-1">
+                      {formData.smoking?.current && <p>Current smoker</p>}
+                      {formData.smoking?.past && <p>Past smoker</p>}
+                      {formData.smoking?.start && <p>Started: {formData.smoking.start}</p>}
+                      {formData.smoking?.stop && <p>Stopped: {formData.smoking.stop}</p>}
+                    </div>
+                  ) : (
+                    <p>No smoking history</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Family History */}
+              <div className="border border-gray-200 rounded-lg p-4">
+                <h4 className="font-medium text-gray-900 mb-2">Family History</h4>
+                <p className="text-sm text-gray-600">
+                  {formData.familyHistory ? 'Yes, family history of heart disease before 65' : 'No family history reported'}
+                </p>
               </div>
 
               {/* Medications */}
@@ -486,24 +553,56 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                 <h4 className="font-medium text-gray-900 mb-2">Previous Tests</h4>
                 <div className="text-sm text-gray-600">
                   {Object.entries(formData.tests || {}).filter(([, value]) => value).length > 0 ? (
-                    <ul className="list-disc list-inside space-y-1">
-                      {formData.tests?.echo && <li>Echocardiogram</li>}
-                      {formData.tests?.holter && <li>Holter Monitor</li>}
-                      {formData.tests?.angio && <li>Angiogram</li>}
-                      {formData.tests?.surgery && <li>Cardiac Surgery</li>}
-                    </ul>
+                    <div className="space-y-2">
+                      {formData.tests?.echo && (
+                        <div className="pl-4 border-l-2 border-blue-200">
+                          <p className="font-medium">Echocardiogram</p>
+                          {(formData.echoLocation || formData.echoDate) && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              {formData.echoLocation && <p>Location: {formData.echoLocation}</p>}
+                              {formData.echoDate && <p>Date: {formData.echoDate}</p>}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {formData.tests?.holter && (
+                        <div className="pl-4 border-l-2 border-blue-200">
+                          <p className="font-medium">Holter Monitor</p>
+                          {(formData.holterLocation || formData.holterDate) && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              {formData.holterLocation && <p>Location: {formData.holterLocation}</p>}
+                              {formData.holterDate && <p>Date: {formData.holterDate}</p>}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {formData.tests?.angio && (
+                        <div className="pl-4 border-l-2 border-blue-200">
+                          <p className="font-medium">Angiogram</p>
+                          {(formData.angioLocation || formData.angioDate) && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              {formData.angioLocation && <p>Location: {formData.angioLocation}</p>}
+                              {formData.angioDate && <p>Date: {formData.angioDate}</p>}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {formData.tests?.surgery && (
+                        <div className="pl-4 border-l-2 border-blue-200">
+                          <p className="font-medium">Cardiac Surgery</p>
+                          {(formData.surgeryLocation || formData.surgeryDate) && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              {formData.surgeryLocation && <p>Location: {formData.surgeryLocation}</p>}
+                              {formData.surgeryDate && <p>Date: {formData.surgeryDate}</p>}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <p>No previous tests reported</p>
                   )}
                 </div>
-              </div>
-
-              {/* Family History */}
-              <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-medium text-gray-900 mb-2">Family History</h4>
-                <p className="text-sm text-gray-600">
-                  {formData.familyHistory ? 'Yes, family history of heart disease before 65' : 'No family history reported'}
-                </p>
               </div>
             </div>
 
@@ -521,7 +620,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
           </div>
         );
 
-      case 9:
+      case 7:
         return (
           <div className="text-center space-y-6">
             {!isComplete ? (
@@ -532,7 +631,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                 <div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">Generate Your PDF</h3>
                   <p className="text-gray-600 max-w-md mx-auto mb-6">
-                    Your intake form is complete. Click below to generate your PDF and prepare it for email.
+                    Your pre-review form is complete. Click below to generate your PDF and prepare it for email.
                   </p>
                 </div>
                 
@@ -589,7 +688,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
         return true;
       case 1:
         return formData.medicalHistory !== undefined;
-      case 8:
+      case 6:
         return isValid;
       default:
         return true;
@@ -606,7 +705,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0">
-          <h2 className="text-xl font-bold text-gray-900">Patient Intake Wizard</h2>
+          <h2 className="text-xl font-bold text-gray-900">Patient Summary</h2>
           <button
             onClick={handleCloseWizard}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -619,7 +718,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
         <div className="px-6 py-4 border-b border-gray-100 flex-shrink-0">
           <Stepper
             currentStep={state.currentStep}
-            totalSteps={10}
+            totalSteps={8}
             stepTitles={stepTitles}
             onStepClick={handleStepClick}
           />
@@ -642,7 +741,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
         </div>
 
         {/* Footer */}
-        {state.currentStep < 9 && (
+        {state.currentStep < 7 && (
           <div className="flex items-center justify-between p-6 border-t border-gray-200 flex-shrink-0">
             <button
               onClick={handlePrev}

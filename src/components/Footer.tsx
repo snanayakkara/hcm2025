@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
     { id: 'about', label: 'About Us' },
     { id: 'services', label: 'Locations & Services' },
     { id: 'doctors', label: 'Our Doctors' },
-    { id: 'reception-team', label: 'Reception Team' },
+    { id: 'team', label: 'Reception Team' },
     { id: 'patients', label: 'Patient Info' },
     { id: 'education', label: 'Library' },
     { id: 'contact', label: 'Contact' },
@@ -56,7 +56,7 @@ const Footer: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold">Heart Clinic</h3>
-                <p className="text-gray-400">Melbourne</p>
+                <p className="text-gray-400 whitespace-nowrap">Melbourne</p>
               </div>
             </div>
             
@@ -110,23 +110,13 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Services & Hours */}
+          {/* Hours */}
           <div className="space-y-6">
-            <h4 className="text-lg font-semibold">Our Services</h4>
-            <div className="space-y-3 text-gray-400 text-sm">
-              <p>• Cardiac Consultation</p>
-              <p>• Echocardiography</p>
-              <p>• 24 Hour Holter Monitoring</p>
-              <p>• Coronary Angiography</p>
-              <p>• Cardioversion</p>
-              <p>• Inpatient Services</p>
-            </div>
-
             <div className="space-y-3">
-              <h5 className="font-semibold flex items-center space-x-2">
+              <h4 className="text-lg font-semibold flex items-center space-x-2">
                 <Clock className="w-4 h-4 text-blue-400" />
                 <span>Opening Hours</span>
-              </h5>
+              </h4>
               <div className="text-gray-300 text-sm space-y-1">
                 <p>Monday-Friday: 8:30am - 5:00pm</p>
                 <p>Saturday-Sunday: Closed</p>
@@ -142,7 +132,7 @@ const Footer: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-gray-400 text-sm">
-              <p>&copy; {new Date().getFullYear()} Heart Clinic Melbourne. Website designed and created by Dr. Shane Nanayakkara. Last updated {new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}.</p>
+              <p>&copy; {new Date().getFullYear()} Heart Clinic Melbourne. Website designed and created by Dr.&nbsp;Shane&nbsp;Nanayakkara. Last updated {new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}.</p>
             </div>
             <div className="flex space-x-6 text-sm text-gray-400">
               <button

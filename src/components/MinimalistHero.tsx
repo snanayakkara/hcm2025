@@ -7,7 +7,7 @@ const MinimalistHero: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
-  const { isMobile, isTouchDevice } = useMobileDetection();
+  const { isMobile } = useMobileDetection();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -139,12 +139,15 @@ const MinimalistHero: React.FC = () => {
                     filter: 'drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3))',
                   }}
                 >
-                  <SplitText 
-                    delay={0.5}
-                    duration={0.04}
-                  >
-                    Heart Clinic Melbourne.
+                  {/* Animated headline with no internal break in “Melbourne” */}
+                  <SplitText delay={0.5} duration={0.04}>
+                    Heart Clinic&nbsp;
                   </SplitText>
+                  <span className="whitespace-nowrap inline-block">
+                    <SplitText delay={0.5} duration={0.04}>
+                      Melbourne.
+                    </SplitText>
+                  </span>
                 </div>
               </span>
             </h1>
@@ -191,7 +194,7 @@ const MinimalistHero: React.FC = () => {
 
         {/* Scroll Indicator */}
         <motion.div 
-          className="absolute bottom-12 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-12 left-0 right-0 flex justify-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 0.6 }}

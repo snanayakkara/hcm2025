@@ -8,7 +8,7 @@ const Services: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string | null>('consultation');
   const [isPaused, setIsPaused] = useState(false);
   const navigate = useNavigate();
-  const { isMobile, isTouchDevice } = useMobileDetection();
+  const { isMobile } = useMobileDetection();
 
   // Check for reduced motion preference
   const prefersReducedMotion = typeof window !== 'undefined' && 
@@ -427,8 +427,11 @@ const Services: React.FC = () => {
               <Phone className="w-5 h-5" />
               <span>Call (03) 9509 5009</span>
             </button>
-            <button className={`border-2 border-white text-white ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-white hover:text-primary-600 transition-colors duration-200 font-semibold`}>
-              Book Online
+            <button 
+              onClick={() => window.location.href = 'mailto:reception@hcm2025.com.au'}
+              className={`border-2 border-white text-white ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-white hover:text-primary-600 transition-colors duration-200 font-semibold`}
+            >
+              Email Us
             </button>
           </div>
         </motion.div>
