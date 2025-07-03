@@ -297,7 +297,7 @@ ${formData.name}`;
 
                 {/* Floating "Before Your Visit" Card */}
                 {resource.hasHoverCard && showVisitInfo && (
-                  <div className="absolute left-full top-0 ml-4 w-96 bg-white border border-gray-200 rounded-xl shadow-2xl p-6 z-[99999] animate-in slide-in-from-left-2 duration-200">
+                  <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 bg-white border border-gray-200 rounded-xl shadow-2xl p-6 z-[99999] animate-in fade-in duration-200 pointer-events-auto">
                     <h4 className="text-lg font-bold text-gray-900 mb-4">Before Your Visit</h4>
                     
                     <div className="space-y-6">

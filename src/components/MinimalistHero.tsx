@@ -75,14 +75,14 @@ const MinimalistHero: React.FC = () => {
       className="relative min-h-screen bg-gradient-to-br from-cream-50 via-white to-primary-50/20 overflow-hidden"
     >
       {/* Subtle Background Elements */}
-      <div className="absolute inset-0 opacity-30">
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
         <motion.div 
           className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-primary-200/30 to-sage-200/30 rounded-full blur-3xl"
           style={{ 
             y: scrollY * 0.1,
+            transformOrigin: 'center'
           }}
           animate={{
-            scale: [1, 1.1, 1],
             opacity: [0.2, 0.4, 0.2]
           }}
           transition={{
@@ -95,9 +95,9 @@ const MinimalistHero: React.FC = () => {
           className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-br from-accent-200/30 to-primary-200/30 rounded-full blur-3xl"
           style={{ 
             y: scrollY * 0.15,
+            transformOrigin: 'center'
           }}
           animate={{
-            scale: [1, 1.2, 1],
             opacity: [0.2, 0.5, 0.2]
           }}
           transition={{

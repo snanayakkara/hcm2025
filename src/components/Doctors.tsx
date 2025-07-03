@@ -104,9 +104,9 @@ const Doctors: React.FC = () => {
   return (
     <section id="doctors" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20 relative overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute inset-0 opacity-20">
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-primary-200 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-24 h-24 bg-accent-200 rounded-full animate-bounce"></div>
+        <div className="absolute bottom-20 right-10 w-24 h-24 bg-accent-200 rounded-full" style={{ animation: 'gentlePulse 3s ease-in-out infinite' }}></div>
         <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-sage-200 rounded-full animate-pulse"></div>
       </div>
 

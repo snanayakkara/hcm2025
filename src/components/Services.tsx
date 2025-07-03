@@ -341,18 +341,18 @@ const Services: React.FC = () => {
 
             {/* Detail Card */}
             <div className={`${isMobile ? 'col-span-1' : 'lg:col-span-3'} flex flex-col`}>
-              <div className="flex-1">
+              <div className="flex-1 relative" style={{ minHeight: isMobile ? '600px' : '800px' }}>
                 <AnimatePresence mode="wait">
                   {selectedService && (() => {
                     const s = services.find((x) => x.id === selectedService)!;
                     return (
                       <motion.div
                         key={selectedService}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                         transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="bg-white rounded-3xl shadow-lg p-8 h-full flex flex-col"
+                        className="bg-white rounded-3xl shadow-lg p-8 flex flex-col absolute inset-0"
                       >
                       {/* Header */}
                       <div className="flex items-start space-x-4 mb-6">
