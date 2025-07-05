@@ -18,16 +18,55 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [isDevTools, setIsDevTools] = useState(false);
+
+  // Detect Chrome DevTools/localhost and initialize
+  useEffect(() => {
+    // Detect Chrome DevTools (device simulation) - same logic as BottomNavigation
+    const isChrome = window.chrome !== undefined || /chrome/i.test(navigator.userAgent);
+    const hasDevToolsAPI = window.devtools !== undefined;
+    const isDevToolsOpen = window.outerHeight - window.innerHeight > 200 || 
+                          window.outerWidth - window.innerWidth > 200;
+    
+    // More reliable detection for Chrome DevTools simulator or localhost
+    const isSimulator = (
+      // Check if running in Chrome with mobile user agent (likely simulator)
+      isChrome && /mobile|iphone|android/i.test(navigator.userAgent) ||
+      // Check for specific Chrome DevTools indicators
+      hasDevToolsAPI ||
+      isDevToolsOpen ||
+      // Check if it's localhost (development environment)
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      // Check for dev server ports
+      /:\d{4}/.test(window.location.href)
+    );
+    
+    setIsDevTools(isSimulator);
+    
+    console.log('MobileHeader initialization:', { 
+      isDevTools: isSimulator,
+      isChrome,
+      hostname: window.location.hostname,
+      userAgent: navigator.userAgent 
+    });
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrolled = window.scrollY > 10;
+      const currentScrollY = window.scrollY;
+      // Use a more reliable threshold for mobile devices
+      const scrolled = currentScrollY > 50;
+      
+      console.log('MobileHeader scroll:', { currentScrollY, scrolled, isDevTools });
+      
       setIsScrolled(scrolled);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    // Add passive option for better mobile performance
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isDevTools]);
 
   const handleLogoClick = () => {
     onNavigate('home');
@@ -51,6 +90,14 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
       navigator.vibrate(6);
     }
   };
+
+  // Debug logging for header state
+  console.log('MobileHeader render:', { 
+    isScrolled, 
+    isDevTools, 
+    showMoreMenu,
+    scrollY: window.scrollY 
+  });
 
   return (
     <>
@@ -176,7 +223,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                 >
                   <Video className="w-4 h-4 mb-0.5" strokeWidth={2.5} />
                   <span className="text-xs font-medium">
-                    Video
+                    Telehealth
                   </span>
                 </motion.button>
 
