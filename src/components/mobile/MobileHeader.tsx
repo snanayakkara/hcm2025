@@ -44,29 +44,83 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     
     setIsDevTools(isSimulator);
     
-    console.log('MobileHeader initialization:', { 
-      isDevTools: isSimulator,
-      isChrome,
-      hostname: window.location.hostname,
-      userAgent: navigator.userAgent 
-    });
   }, []);
 
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      // Use a more reliable threshold for mobile devices
-      const scrolled = currentScrollY > 50;
-      
-      console.log('MobileHeader scroll:', { currentScrollY, scrolled, isDevTools });
-      
-      setIsScrolled(scrolled);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+          const scrolled = currentScrollY > 50;
+          
+          setIsScrolled(scrolled);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    // Add passive option for better mobile performance
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isDevTools]);
+    // iOS Safari specific scroll detection
+    const handleTouchMove = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+          const scrolled = currentScrollY > 50;
+          
+          setIsScrolled(scrolled);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    // Use Intersection Observer as fallback for iOS
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50px 0px 0px 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        // When the top section is out of view, show scrolled header
+        setIsScrolled(!entry.isIntersecting);
+      });
+    }, observerOptions);
+
+    // Create a sentinel element at the top
+    const sentinel = document.createElement('div');
+    sentinel.style.position = 'absolute';
+    sentinel.style.top = '0';
+    sentinel.style.height = '1px';
+    sentinel.style.width = '100%';
+    sentinel.style.pointerEvents = 'none';
+    document.body.appendChild(sentinel);
+    observer.observe(sentinel);
+
+    const options = { passive: true };
+    
+    // Multiple event listeners for better iOS compatibility
+    window.addEventListener('scroll', handleScroll, options);
+    document.addEventListener('scroll', handleScroll, options);
+    window.addEventListener('touchmove', handleTouchMove, options);
+    window.addEventListener('touchend', handleScroll, options);
+    
+    // Force initial check
+    const timeoutId = setTimeout(handleScroll, 100);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleScroll);
+      observer.disconnect();
+      document.body.removeChild(sentinel);
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   const handleLogoClick = () => {
     onNavigate('home');
@@ -91,13 +145,6 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     }
   };
 
-  // Debug logging for header state
-  console.log('MobileHeader render:', { 
-    isScrolled, 
-    isDevTools, 
-    showMoreMenu,
-    scrollY: window.scrollY 
-  });
 
   return (
     <>

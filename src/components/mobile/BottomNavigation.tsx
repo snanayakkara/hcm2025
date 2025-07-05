@@ -41,11 +41,6 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
     // Always show initially, especially for DevTools
     setIsVisible(true);
     
-    console.log('BottomNavigation initialization:', { 
-      isDevTools: isDevToolsOpen, 
-      isVisible: true,
-      userAgent: navigator.userAgent 
-    });
   }, []);
 
   useEffect(() => {
@@ -60,7 +55,6 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
       const scrollingDown = currentScrollY > lastScrollY;
       const scrollingUp = currentScrollY < lastScrollY;
       
-      console.log('Scroll event:', { currentScrollY, scrollingDown, scrollingUp, lastScrollY });
       
       // Show navbar when scrolling up or at the top
       if (scrollingUp || currentScrollY < 50) {
@@ -186,14 +180,6 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   };
 
 
-  // Debug logging for visibility changes
-  console.log('BottomNavigation render:', { 
-    isVisible, 
-    isDevTools, 
-    hasInitialized,
-    lastScrollY,
-    showMoreMenu 
-  });
 
   return (
     <>
