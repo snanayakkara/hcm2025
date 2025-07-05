@@ -272,7 +272,7 @@ Provider Number: ${formData.providerNumber}`;
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto"
+          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center p-2 sm:p-4 pt-4 sm:pt-8 overflow-y-auto"
           onClick={onClose}
         >
           <motion.div
@@ -280,49 +280,50 @@ Provider Number: ${formData.providerNumber}`;
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-4 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl z-10">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 rounded-t-2xl z-10">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-3 rounded-lg">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-2 sm:p-3 rounded-lg">
                     <img 
                       src="/images/hcm3d2.png" 
                       alt="Heart Clinic Melbourne" 
-                      className="w-6 h-6 object-contain"
+                      className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
                     />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Patient Referral Form</h2>
-                    <p className="text-sm text-gray-600">Heart Clinic Melbourne</p>
+                    <h2 className="text-lg sm:text-2xl font-bold text-gray-900">Patient Referral Form</h2>
+                    <p className="text-xs sm:text-sm text-gray-600">Heart Clinic Melbourne</p>
                   </div>
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
-                  <X className="w-6 h-6 text-gray-500" />
+                  <X className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" />
                 </button>
               </div>
             </div>
 
-            {/* Form Content */}
-            <form onSubmit={handleSubmit} className="p-6 space-y-8">
+            {/* Scrollable Form Content */}
+            <div className="max-h-[75vh] sm:max-h-[80vh] overflow-y-auto">
+              <form onSubmit={handleSubmit} className="p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 lg:space-y-8">
               {/* Referral Types Section */}
               <section>
                 <div className="flex items-center space-x-2 mb-4">
                   <FileText className="w-5 h-5 text-blue-600" />
                   <h3 className="text-lg font-semibold text-gray-900">What is this referral for? (choose all that apply)</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                   {referralTypes.map((type) => (
                     <button
                       key={type.value}
                       type="button"
                       onClick={() => handleReferralTypeToggle(type.value)}
-                      className={`relative overflow-hidden px-6 py-8 text-sm font-medium rounded-xl border-2 transition-all duration-300 flex flex-col items-center justify-center space-y-3 min-h-[120px] ${
+                      className={`relative overflow-hidden px-3 py-4 sm:px-4 sm:py-6 lg:px-6 lg:py-8 text-sm font-medium rounded-xl border-2 transition-all duration-300 flex flex-col items-center justify-center space-y-1 sm:space-y-2 lg:space-y-3 min-h-[80px] sm:min-h-[100px] lg:min-h-[120px] ${
                         formData.referralTypes.includes(type.value)
                           ? 'border-blue-600 shadow-lg transform scale-105'
                           : 'border-gray-300 hover:border-blue-300 hover:shadow-md'
@@ -521,7 +522,7 @@ Provider Number: ${formData.providerNumber}`;
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       Urgency
                     </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                       {urgencyLevels.map((level) => (
                         <button
                           key={level.value}
@@ -532,13 +533,13 @@ Provider Number: ${formData.providerNumber}`;
                               urgency: level.value
                             });
                           }}
-                          className={`px-4 py-3 text-center rounded-lg border-2 transition-all duration-200 ${
+                          className={`px-3 py-2 sm:px-4 sm:py-3 text-center rounded-lg border-2 transition-all duration-200 ${
                             formData.urgency === level.value
                               ? `${level.bgColor} text-white ${level.borderColor} shadow-md`
                               : `bg-white text-gray-700 border-gray-300 ${level.hoverBorder} ${level.hoverBg}`
                           }`}
                         >
-                          <div className="font-medium text-sm">{level.label}</div>
+                          <div className="font-medium text-xs sm:text-sm">{level.label}</div>
                           <div className={`text-xs mt-1 ${
                             formData.urgency === level.value ? 'text-white/90' : 'text-gray-500'
                           }`}>
@@ -552,7 +553,7 @@ Provider Number: ${formData.providerNumber}`;
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       Preferred Cardiologist
                     </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                       {availableCardiologists.map((cardiologist) => (
                         <button
                           key={cardiologist.name}
@@ -566,7 +567,7 @@ Provider Number: ${formData.providerNumber}`;
                               });
                             }
                           }}
-                          className={`px-4 py-4 text-left rounded-lg border-2 transition-all duration-200 flex items-center space-x-3 ${
+                          className={`px-3 py-3 sm:px-4 sm:py-4 text-left rounded-lg border-2 transition-all duration-200 flex items-center space-x-2 sm:space-x-3 ${
                             !formData.preferredLocation
                               ? 'bg-gray-50 text-gray-400 border-gray-200 cursor-not-allowed'
                               : formData.preferredCardiologist === cardiologist.displayName
@@ -745,6 +746,7 @@ Provider Number: ${formData.providerNumber}`;
                 </p>
               </div>
             </form>
+            </div>
           </motion.div>
         </motion.div>
       )}

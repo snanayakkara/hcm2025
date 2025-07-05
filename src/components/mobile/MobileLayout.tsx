@@ -7,6 +7,7 @@ import PullToRefresh from './PullToRefresh';
 import QuickActionsCard from './QuickActionsCard';
 import MobileServiceCards from './MobileServiceCards';
 import MobileDoctorCarousel from './MobileDoctorCarousel';
+import MobileDoctorActionBar from './MobileDoctorActionBar';
 import LocationOverlay from './LocationOverlay';
 import CallModal from './CallModal';
 import MinimalistHero from '../MinimalistHero';
@@ -179,6 +180,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
                 transition={{ duration: 0.6 }}
               >
                 <MobileDoctorCarousel />
+                <MobileDoctorActionBar />
               </motion.div>
             </section>
 

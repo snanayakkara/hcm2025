@@ -665,7 +665,7 @@ ${formData.name}`;
                     </div>
                   </div>
                 </div>
-                <div>
+                <div className="mt-16 md:mt-0">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Preferred Time
                   </label>

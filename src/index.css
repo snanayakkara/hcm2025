@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* 1 ─ abolish any corner clipping on the slide itself */
+  .swiper-slide {          /* remove ALL rounded-* classes */
+    border-radius: 0 !important;
+    padding: 64px 32px 64px;   /* room for the 20-px blur on every edge   */
+    overflow: hidden;          /* neighbours stay hidden                  */
+  }
+
+  /* 2 ─ only the centred slide may overflow so its halo shows */
+  .swiper-slide-active {
+    overflow: visible;
+  }
+
+  /* 3 ─ the card remains unchanged and centred */
+  .doctor-card {
+    @apply mx-auto rounded-3xl bg-white
+           shadow-[0_0_20px_rgba(0,0,0,0.12)]
+           px-6 py-8;
+  }
+
+  /* 4 ─ leave .swiper and .swiper-wrapper at overflow:hidden (default) */
+  .swiper,
+  .swiper-wrapper {
+    overflow: hidden;           /* hides neighbour slides */
+  }
+}
+
 /* CSS Custom Properties for Brand Colors */
 :root {
   --brand-primary: #0891b2;

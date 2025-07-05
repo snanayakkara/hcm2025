@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
-import { RotateCcw, ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { RotateCcw, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface SwipeItem {
   id: string;
@@ -194,14 +194,9 @@ const SwipeDeck: React.FC<SwipeDeckProps> = ({
             whileTap={{ scale: 0.98 }}
             style={{ 
               cursor: 'grab', 
-              height: 'auto',
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 25%, rgba(255,255,255,0.95) 50%, rgba(248,250,252,0.9) 75%, rgba(255,255,255,0.95) 100%)',
-              backdropFilter: 'blur(20px) saturate(180%) brightness(105%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(180%) brightness(105%)',
-              border: '1px solid rgba(255,255,255,0.6)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.02)'
+              height: 'auto'
             }}
-            className="flex flex-col rounded-2xl overflow-hidden w-full h-auto relative"
+            className="relative"
           >
             {currentItem.content}
             
@@ -295,41 +290,6 @@ const SwipeDeck: React.FC<SwipeDeckProps> = ({
         </button>
       </div>
 
-      {/* Undo Button */}
-      {swipedItems.length > 0 && (
-        <motion.button
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          onClick={handleUndo}
-          className="absolute top-4 right-4 p-2 rounded-full transition-all duration-300"
-          style={{
-            background: 'rgba(255,255,255,0.9)',
-            backdropFilter: 'blur(10px) saturate(150%)',
-            WebkitBackdropFilter: 'blur(10px) saturate(150%)',
-            border: '1px solid rgba(255,255,255,0.6)',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8)'
-          }}
-        >
-          <RotateCcw className="w-4 h-4 text-gray-600" />
-        </motion.button>
-      )}
-
-      {/* Info Button */}
-      <motion.button
-        onClick={() => onLongPress && currentItem && onLongPress(currentItem)}
-        className="absolute top-4 left-4 p-2 rounded-full transition-all duration-300"
-        style={{
-          background: 'rgba(255,255,255,0.9)',
-          backdropFilter: 'blur(10px) saturate(150%)',
-          WebkitBackdropFilter: 'blur(10px) saturate(150%)',
-          border: '1px solid rgba(255,255,255,0.6)',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8)'
-        }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <Info className="w-4 h-4 text-gray-600" />
-      </motion.button>
 
       {/* Swipe Instructions */}
       <div className="text-center mt-2">
