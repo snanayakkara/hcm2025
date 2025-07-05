@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import MobileHeader from './MobileHeader';
-import BottomNavigation from './BottomNavigation';
 import AddToCalendar from './AddToCalendar';
 import PWAInstallBanner from './PWAInstallBanner';
 import PullToRefresh from './PullToRefresh';
@@ -24,7 +23,7 @@ interface MobileLayoutProps {
   onPageChange: (page: string) => void;
 }
 
-const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage, onPageChange }) => {
+const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
   const [showLocationOverlay, setShowLocationOverlay] = useState(false);
   const [showCallModal, setShowCallModal] = useState(false);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
@@ -251,93 +250,88 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage, onPageChange }
   };
 
   return (
-    <PullToRefresh onRefresh={handleRefresh}>
-      <div className="min-h-screen relative overflow-x-hidden ios-vh-fix safe-area-inset-top safe-area-inset-bottom">
-        {/* Animated Light Background */}
-        <div className="fixed inset-0 -z-10">
-          {/* Base light gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#fefefe] via-[#faf9f7] to-[#f8f6f4] animate-gradient-shift" 
-               style={{ backgroundSize: '400% 400%' }} />
-          
-          {/* Subtle floating orbs */}
-          <div className="absolute top-20 left-10 w-40 h-40 bg-gradient-to-br from-primary-100/30 to-accent-100/20 rounded-full blur-3xl animate-float-slow" 
-               style={{ animationDelay: '0s', animationDuration: '8s' }} />
-          <div className="absolute top-60 right-20 w-32 h-32 bg-gradient-to-br from-sage-100/25 to-primary-100/15 rounded-full blur-2xl animate-float-slow" 
-               style={{ animationDelay: '2s', animationDuration: '12s' }} />
-          <div className="absolute bottom-60 left-1/4 w-48 h-48 bg-gradient-to-br from-accent-100/20 to-cream-100/30 rounded-full blur-3xl animate-float-slow" 
-               style={{ animationDelay: '4s', animationDuration: '10s' }} />
-          <div className="absolute top-1/3 right-1/3 w-28 h-28 bg-gradient-to-br from-cream-100/35 to-sage-100/25 rounded-full blur-xl animate-float-slow" 
-               style={{ animationDelay: '6s', animationDuration: '14s' }} />
-          
-          {/* Gentle wave patterns */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="w-full h-full animate-gentle-wave"
-                 style={{
-                   backgroundImage: `
-                     radial-gradient(circle at 20% 80%, rgba(8, 145, 178, 0.1) 0%, transparent 50%),
-                     radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
-                     radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.06) 0%, transparent 50%)
-                   `,
-                 }} />
+    <>
+      {/* Mobile Header - MOVED OUTSIDE containers */}
+      <MobileHeader 
+        onNavigate={handleNavigate}
+        currentSection={activeSection}
+        onTelehealthClick={handleTelehealthClick}
+        onCallClick={handleCallClick}
+        onDirectionsClick={handleDirectionsClick}
+      />
+
+      <PullToRefresh onRefresh={handleRefresh}>
+        <div className="min-h-screen relative overflow-x-hidden ios-vh-fix safe-area-inset-top safe-area-inset-bottom">
+          {/* Animated Light Background */}
+          <div className="fixed inset-0 -z-10">
+            {/* Base light gradient */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#fefefe] via-[#faf9f7] to-[#f8f6f4] animate-gradient-shift" 
+                 style={{ backgroundSize: '400% 400%' }} />
+            
+            {/* Subtle floating orbs */}
+            <div className="absolute top-20 left-10 w-40 h-40 bg-gradient-to-br from-primary-100/30 to-accent-100/20 rounded-full blur-3xl animate-float-slow" 
+                 style={{ animationDelay: '0s', animationDuration: '8s' }} />
+            <div className="absolute top-60 right-20 w-32 h-32 bg-gradient-to-br from-sage-100/25 to-primary-100/15 rounded-full blur-2xl animate-float-slow" 
+                 style={{ animationDelay: '2s', animationDuration: '12s' }} />
+            <div className="absolute bottom-60 left-1/4 w-48 h-48 bg-gradient-to-br from-accent-100/20 to-cream-100/30 rounded-full blur-3xl animate-float-slow" 
+                 style={{ animationDelay: '4s', animationDuration: '10s' }} />
+            <div className="absolute top-1/3 right-1/3 w-28 h-28 bg-gradient-to-br from-cream-100/35 to-sage-100/25 rounded-full blur-xl animate-float-slow" 
+                 style={{ animationDelay: '6s', animationDuration: '14s' }} />
+            
+            {/* Gentle wave patterns */}
+            <div className="absolute inset-0 opacity-20">
+              <div className="w-full h-full animate-gentle-wave"
+                   style={{
+                     backgroundImage: `
+                       radial-gradient(circle at 20% 80%, rgba(8, 145, 178, 0.1) 0%, transparent 50%),
+                       radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                       radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.06) 0%, transparent 50%)
+                     `,
+                   }} />
+            </div>
+            
+            {/* Ultra-subtle grid for texture */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="w-full h-full"
+                   style={{
+                     backgroundImage: `
+                       linear-gradient(rgba(8, 145, 178, 0.1) 1px, transparent 1px),
+                       linear-gradient(90deg, rgba(8, 145, 178, 0.1) 1px, transparent 1px)
+                     `,
+                     backgroundSize: '80px 80px'
+                   }} />
+            </div>
           </div>
           
-          {/* Ultra-subtle grid for texture */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="w-full h-full"
-                 style={{
-                   backgroundImage: `
-                     linear-gradient(rgba(8, 145, 178, 0.1) 1px, transparent 1px),
-                     linear-gradient(90deg, rgba(8, 145, 178, 0.1) 1px, transparent 1px)
-                   `,
-                   backgroundSize: '80px 80px'
-                 }} />
-          </div>
-        </div>
-        {/* New Mobile Header */}
-        <MobileHeader 
-          onNavigate={handleNavigate}
-          currentSection={activeSection}
-        />
-        
-        <main className="pt-16 safe-area-inset-left safe-area-inset-right">
-          {renderPageContent()}
-        </main>
+          <main className="pt-16 safe-area-inset-left safe-area-inset-right">
+            {renderPageContent()}
+          </main>
 
-        {/* Updated Bottom Navigation */}
-        <BottomNavigation
-          currentPage={currentPage}
-          onPageChange={onPageChange}
-          activeSection={activeSection}
-          onTelehealthClick={handleTelehealthClick}
-          onCallClick={handleCallClick}
-          onDirectionsClick={handleDirectionsClick}
-          onNavigate={handleNavigate}
-        />
+          {/* PWA Install Banner */}
+          <PWAInstallBanner />
 
-        {/* PWA Install Banner */}
-        <PWAInstallBanner />
-
-        {/* Overlays and Modals */}
-        <LocationOverlay
-          isOpen={showLocationOverlay}
-          onClose={() => setShowLocationOverlay(false)}
-        />
-
-        <CallModal
-          isOpen={showCallModal}
-          onClose={() => setShowCallModal(false)}
-        />
-
-        {/* Add to Calendar Modal */}
-        {calendarEvent && (
-          <AddToCalendar
-            isOpen={showCalendarModal}
-            onClose={() => setShowCalendarModal(false)}
-            event={calendarEvent}
+          {/* Overlays and Modals */}
+          <LocationOverlay
+            isOpen={showLocationOverlay}
+            onClose={() => setShowLocationOverlay(false)}
           />
-        )}
-      </div>
-    </PullToRefresh>
+
+          <CallModal
+            isOpen={showCallModal}
+            onClose={() => setShowCallModal(false)}
+          />
+
+          {/* Add to Calendar Modal */}
+          {calendarEvent && (
+            <AddToCalendar
+              isOpen={showCalendarModal}
+              onClose={() => setShowCalendarModal(false)}
+              event={calendarEvent}
+            />
+          )}
+        </div>
+      </PullToRefresh>
+    </>
   );
 };
 
