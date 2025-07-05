@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import MobileHeader from './MobileHeader';
 import BottomNavigation from './BottomNavigation';
-import SwipeDeck from './SwipeDeck';
 import AddToCalendar from './AddToCalendar';
 import PWAInstallBanner from './PWAInstallBanner';
 import PullToRefresh from './PullToRefresh';
@@ -30,7 +29,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage, onPageChange }
   const [showCallModal, setShowCallModal] = useState(false);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const [calendarEvent, setCalendarEvent] = useState<any>(null);
+  const [calendarEvent] = useState<any>(null);
 
   // Parallax hero effect
   const parallax = useParallaxHero({
@@ -42,7 +41,6 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage, onPageChange }
   useEffect(() => {
     // Track scroll position for active section
     const handleScroll = () => {
-      const scrollY = window.scrollY;
       const sections = ['home', 'about', 'services', 'doctors', 'reception-team', 'patients', 'contact'];
       
       const currentSection = sections.find(section => {
@@ -90,24 +88,6 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage, onPageChange }
     // Simulate refresh
     await new Promise(resolve => setTimeout(resolve, 1000));
     window.location.reload();
-  };
-
-  const handleBookingConfirm = (appointmentDetails: any) => {
-    // Create calendar event
-    const event = {
-      title: `Heart Clinic Melbourne - ${appointmentDetails.type || 'Consultation'}`,
-      description: `Appointment with ${appointmentDetails.doctor || 'Heart Clinic Melbourne'}`,
-      startDate: new Date(appointmentDetails.date),
-      endDate: new Date(new Date(appointmentDetails.date).getTime() + (30 * 60 * 1000)), // 30 min default
-      location: 'Cabrini Hospital, 183 Wattletree Rd, Malvern VIC 3144',
-      organizer: {
-        name: 'Heart Clinic Melbourne',
-        email: 'admin@heartclinicmelbourne.com.au'
-      }
-    };
-    
-    setCalendarEvent(event);
-    setShowCalendarModal(true);
   };
 
   const renderPageContent = () => {
@@ -329,6 +309,9 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage, onPageChange }
           onPageChange={onPageChange}
           activeSection={activeSection}
           onTelehealthClick={handleTelehealthClick}
+          onCallClick={handleCallClick}
+          onDirectionsClick={handleDirectionsClick}
+          onNavigate={handleNavigate}
         />
 
         {/* PWA Install Banner */}

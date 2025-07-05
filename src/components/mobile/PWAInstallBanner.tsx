@@ -127,7 +127,7 @@ const PWAInstallBanner: React.FC = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed bottom-16 left-4 right-4 z-40 bg-white/95 backdrop-blur-xl rounded-xl shadow-lg border border-gray-200 p-4 safe-area-inset-bottom"
+            className="fixed bottom-24 left-4 right-4 z-40 bg-white/95 backdrop-blur-xl rounded-xl shadow-lg border border-gray-200 p-4 safe-area-inset-bottom"
           >
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">

@@ -202,8 +202,6 @@ function App() {
             </div>
           } />
         </Routes>
-        {/* Footer at top level for proper fixed positioning */}
-        <Footer />
       </Router>
     );
   }

@@ -224,7 +224,6 @@ ${formData.name}`;
           }
         ];
       case "Pakenham":
-      case "Clyde":
         return [
           { 
             name: "Dr Mark Freilich", 
@@ -236,6 +235,19 @@ ${formData.name}`;
             image: "/images/vosko.png",
             specialty: "Electrophysiology"
           },
+          { 
+            name: "Dr Phillip Ngu", 
+            image: "/images/ngu.png",
+            specialty: "General and Non-Invasive Imaging"
+          },
+          { 
+            name: "No preference", 
+            image: null,
+            specialty: "Any available cardiologist"
+          }
+        ];
+      case "Clyde":
+        return [
           { 
             name: "Dr Phillip Ngu", 
             image: "/images/ngu.png",

@@ -679,18 +679,18 @@ const Header: React.FC = () => {
 
       {/* Floating Telehealth Button - Desktop Only */}
       {!isMobile && (
-        <div className="fixed top-6 right-6 z-50">
+        <div className="fixed bottom-6 right-6 z-50">
           <motion.div
             className="relative group"
-            initial={{ opacity: 0, scale: 0.8, y: -20 }}
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.5, type: "spring", stiffness: 300 }}
           >
             {/* Tooltip */}
-            <div className="absolute top-full left-0 mt-2 -ml-32 bg-white text-gray-800 text-sm px-4 py-3 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none z-20 shadow-xl border border-gray-100">
+            <div className="absolute bottom-full left-0 mb-2 -ml-32 bg-white text-gray-800 text-sm px-4 py-3 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none z-20 shadow-xl border border-gray-100">
               <div className="text-teal-600 font-semibold text-xs mb-1">Camera & Microphone</div>
               <div className="text-gray-600 text-xs">Allow permissions when prompted</div>
-              <div className="absolute -top-2 left-8 w-0 h-0 border-l-[8px] border-r-[8px] border-b-[8px] border-l-transparent border-r-transparent border-b-white"></div>
+              <div className="absolute -bottom-2 left-8 w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent border-t-white"></div>
             </div>
 
           <motion.button
