@@ -558,7 +558,7 @@ ${formData.name}`;
                 />
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="preferredDate" className="block text-sm font-medium text-gray-700 mb-2">
                     Preferred Date
@@ -573,7 +573,7 @@ ${formData.name}`;
                   />
                   
                   {/* Mini Calendar Widget */}
-                  <div className="mt-3 bg-gray-50 rounded-lg p-4 h-[200px] flex flex-col">
+                  <div className="mt-3 bg-gray-50 rounded-lg p-4 h-[200px] flex flex-col mb-12 md:mb-0">
                     <div className="flex items-center justify-between mb-3">
                       <button
                         type="button"
@@ -665,7 +665,7 @@ ${formData.name}`;
                     </div>
                   </div>
                 </div>
-                <div className="mt-16 md:mt-0">
+                <div className="mt-8 md:mt-0">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Preferred Time
                   </label>
