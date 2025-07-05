@@ -1235,7 +1235,7 @@ const LearningLibrary: React.FC = () => {
               <div className="bg-primary-500 p-2 rounded-lg">
                 <BookOpen className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-2xl font-bold text-secondary-800">Learning Library</h1>
+              <h1 className="text-2xl font-bold text-secondary-800">Library</h1>
             </div>
           </div>
         </div>

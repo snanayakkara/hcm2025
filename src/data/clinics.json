@@ -1,0 +1,124 @@
+[
+  {
+    "id": "cabrini-malvern",
+    "name": "Cabrini Hospital, Malvern",
+    "address": "183 Wattletree Rd, Malvern VIC 3144",
+    "coordinates": {
+      "latitude": -37.8564,
+      "longitude": 145.0278
+    },
+    "phone": "(03) 9508 1800",
+    "email": "admin@heartclinicmelbourne.com.au",
+    "services": [
+      "Consultation",
+      "Echocardiography",
+      "Stress Testing",
+      "Holter Monitoring",
+      "Coronary Angiography",
+      "TAVI",
+      "Mitral TEER",
+      "Pacemaker Insertion"
+    ],
+    "doctors": [
+      "Dr Mark Freilich",
+      "Dr Phillip Ngu", 
+      "A/Prof Alex Voskoboinik",
+      "Dr Shane Nanayakkara"
+    ],
+    "hours": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 5:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "parking": "Available on-site",
+    "publicTransport": "Tram routes 5, 6, 16, 64, 67, 72",
+    "isMain": true,
+    "features": [
+      "Full cardiac services",
+      "Emergency access",
+      "Parking available",
+      "Wheelchair accessible",
+      "Public transport"
+    ]
+  },
+  {
+    "id": "heart-clinic-pakenham",
+    "name": "Heart Clinic Pakenham",
+    "address": "12 Sharnet Circuit, Pakenham VIC 3810",
+    "coordinates": {
+      "latitude": -38.0773,
+      "longitude": 145.4835
+    },
+    "phone": "(03) 5940 4454",
+    "email": "admin@heartclinicmelbourne.com.au",
+    "services": [
+      "Consultation",
+      "Echocardiography",
+      "Stress Testing",
+      "Holter Monitoring"
+    ],
+    "doctors": [
+      "Dr Phillip Ngu",
+      "Dr Shane Nanayakkara"
+    ],
+    "hours": {
+      "monday": "9:00 AM - 5:00 PM",
+      "tuesday": "9:00 AM - 5:00 PM", 
+      "wednesday": "9:00 AM - 5:00 PM",
+      "thursday": "9:00 AM - 5:00 PM",
+      "friday": "9:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "parking": "Free parking available",
+    "publicTransport": "Train to Pakenham Station, then bus",
+    "isMain": false,
+    "features": [
+      "General cardiology",
+      "Free parking",
+      "Near train station",
+      "Wheelchair accessible"
+    ]
+  },
+  {
+    "id": "casey-medical-clyde",
+    "name": "Casey Medical Centre, Clyde",
+    "address": "2 Thompsons Rd, Clyde North VIC 3978",
+    "coordinates": {
+      "latitude": -38.1036,
+      "longitude": 145.3514
+    },
+    "phone": "(03) 8790 8000",
+    "email": "admin@heartclinicmelbourne.com.au",
+    "services": [
+      "Consultation",
+      "Echocardiography",
+      "Holter Monitoring"
+    ],
+    "doctors": [
+      "Dr Phillip Ngu"
+    ],
+    "hours": {
+      "monday": "9:00 AM - 5:00 PM",
+      "tuesday": "Closed",
+      "wednesday": "9:00 AM - 5:00 PM",
+      "thursday": "Closed",
+      "friday": "9:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "parking": "Free parking available",
+    "publicTransport": "Train to Cranbourne, then bus",
+    "isMain": false,
+    "features": [
+      "General cardiology",
+      "Free parking",
+      "Family medical centre",
+      "Wheelchair accessible"
+    ]
+  }
+]

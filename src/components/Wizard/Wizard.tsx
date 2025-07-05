@@ -129,134 +129,186 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-gray-900 mb-6">Medical History</h3>
-            <p className="text-gray-600 mb-6">Please select any conditions you currently have or have had in the past:</p>
             
-            <Controller
-              name="medicalHistory"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-3">
-                  {[
-                    { key: 'bp', label: 'High Blood Pressure (Hypertension)' },
-                    { key: 'diabetes', label: 'Diabetes (Type 1 or 2)' },
-                    { key: 'cholesterol', label: 'High Cholesterol' },
-                    { key: 'af', label: 'Atrial Fibrillation (Irregular heartbeat)' },
-                    { key: 'osa', label: 'Obstructive Sleep Apnea' }
-                  ].map(condition => (
-                    <ToggleCard
-                      key={condition.key}
-                      title={condition.label}
-                      checked={field.value?.[condition.key as keyof typeof field.value] || false}
-                      onChange={(checked) => 
-                        field.onChange({
-                          ...field.value,
-                          [condition.key]: checked
-                        })
-                      }
-                    />
-                  ))}
-                </div>
-              )}
-            />
-
-            {/* Smoking History Section */}
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4">Smoking History</h4>
-              
-              <Controller
-                name="smoking"
-                control={control}
-                render={({ field }) => (
-                  <div className="space-y-4">
-                    <ToggleCard
-                      title="Current Smoker"
-                      description="I currently smoke cigarettes, cigars, or use tobacco products"
-                      checked={field.value?.current || false}
-                      onChange={(checked) => 
-                        field.onChange({
-                          ...field.value,
-                          current: checked
-                        })
-                      }
-                    />
-                    
-                    <ToggleCard
-                      title="Past Smoker"
-                      description="I used to smoke but have quit"
-                      checked={field.value?.past || false}
-                      onChange={(checked) => 
-                        field.onChange({
-                          ...field.value,
-                          past: checked
-                        })
-                      }
-                    />
-
-                    {(field.value?.current || field.value?.past) && (
-                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 space-y-4">
-                        <h5 className="font-medium text-yellow-900">Smoking Details</h5>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Year Started
-                            </label>
-                            <input
-                              type="text"
-                              value={field.value?.start || ''}
-                              onChange={(e) => 
-                                field.onChange({
-                                  ...field.value,
-                                  start: e.target.value
-                                })
-                              }
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                              placeholder="e.g., 1995"
-                            />
-                          </div>
-                          
-                          {field.value?.past && (
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Year Stopped
-                              </label>
-                              <input
-                                type="text"
-                                value={field.value?.stop || ''}
-                                onChange={(e) => 
-                                  field.onChange({
-                                    ...field.value,
-                                    stop: e.target.value
-                                  })
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="e.g., 2020"
-                              />
-                            </div>
-                          )}
-                        </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Left Column - Medical History */}
+              <div className="space-y-4">
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Medical Conditions</h4>
+                  <p className="text-gray-600 mb-4">Please select any conditions you currently have or have had in the past:</p>
+                  
+                  <Controller
+                    name="medicalHistory"
+                    control={control}
+                    render={({ field }) => (
+                      <div className="space-y-3">
+                        {[
+                          { key: 'bp', label: 'High Blood Pressure (Hypertension)', icon: '/images/icons/blood-pressure.svg' },
+                          { key: 'diabetes', label: 'Diabetes (Type 1 or 2)', icon: '/images/icons/diabetes.svg' },
+                          { key: 'cholesterol', label: 'High Cholesterol', icon: '/images/icons/blood-drop.svg' },
+                          { key: 'af', label: 'Atrial Fibrillation (Irregular heartbeat)', icon: '/images/icons/heart-cardiogram.svg' },
+                          { key: 'osa', label: 'Obstructive Sleep Apnea', icon: '/images/icons/cpap-masks.svg' }
+                        ].map(condition => (
+                          <ToggleCard
+                            key={condition.key}
+                            title={
+                              <div className="flex items-center space-x-2">
+                                <img 
+                                  src={condition.icon} 
+                                  alt={condition.label}
+                                  className="w-5 h-5 text-blue-600"
+                                  style={{ filter: 'invert(21%) sepia(77%) saturate(1342%) hue-rotate(211deg) brightness(97%) contrast(94%)' }}
+                                />
+                                <span>{condition.label}</span>
+                              </div>
+                            }
+                            checked={field.value?.[condition.key as keyof typeof field.value] || false}
+                            onChange={(checked) => 
+                              field.onChange({
+                                ...field.value,
+                                [condition.key]: checked
+                              })
+                            }
+                          />
+                        ))}
                       </div>
                     )}
-                  </div>
-                )}
-              />
-            </div>
-
-            {/* Family History Section */}
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4">Family History</h4>
-              
-              <Controller
-                name="familyHistory"
-                control={control}
-                render={({ field }) => (
-                  <ToggleCard
-                    title="Family History of Heart Disease"
-                    description="Has anyone in your immediate family (parents, siblings, children) had heart disease before age 65?"
-                    checked={field.value || false}
-                    onChange={field.onChange}
                   />
-                )}
-              />
+                </div>
+              </div>
+
+              {/* Right Column - Smoking & Family History */}
+              <div className="space-y-6">
+                {/* Smoking History Section */}
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Smoking History</h4>
+                  
+                  <Controller
+                    name="smoking"
+                    control={control}
+                    render={({ field }) => (
+                      <div className="space-y-4">
+                        <ToggleCard
+                          title={
+                            <div className="flex items-center space-x-2">
+                              <img 
+                                src="/images/icons/smoking.svg" 
+                                alt="Current Smoker"
+                                className="w-5 h-5"
+                                style={{ filter: 'invert(21%) sepia(77%) saturate(1342%) hue-rotate(211deg) brightness(97%) contrast(94%)' }}
+                              />
+                              <span>Current Smoker</span>
+                            </div>
+                          }
+                          description="I currently smoke cigarettes, cigars, or use tobacco products"
+                          checked={field.value?.current || false}
+                          onChange={(checked) => 
+                            field.onChange({
+                              ...field.value,
+                              current: checked
+                            })
+                          }
+                        />
+                        
+                        <ToggleCard
+                          title={
+                            <div className="flex items-center space-x-2">
+                              <img 
+                                src="/images/icons/smoking-cessation.svg" 
+                                alt="Past Smoker"
+                                className="w-5 h-5"
+                                style={{ filter: 'invert(21%) sepia(77%) saturate(1342%) hue-rotate(211deg) brightness(97%) contrast(94%)' }}
+                              />
+                              <span>Past Smoker</span>
+                            </div>
+                          }
+                          description="I used to smoke but have quit"
+                          checked={field.value?.past || false}
+                          onChange={(checked) => 
+                            field.onChange({
+                              ...field.value,
+                              past: checked
+                            })
+                          }
+                        />
+
+                        {(field.value?.current || field.value?.past) && (
+                          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 space-y-4">
+                            <h5 className="font-medium text-yellow-900">Smoking Details</h5>
+                            <div className="grid grid-cols-1 gap-4">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                  Year Started
+                                </label>
+                                <input
+                                  type="text"
+                                  value={field.value?.start || ''}
+                                  onChange={(e) => 
+                                    field.onChange({
+                                      ...field.value,
+                                      start: e.target.value
+                                    })
+                                  }
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                  placeholder="e.g., 1995"
+                                />
+                              </div>
+                              
+                              {field.value?.past && (
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Year Stopped
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={field.value?.stop || ''}
+                                    onChange={(e) => 
+                                      field.onChange({
+                                        ...field.value,
+                                        stop: e.target.value
+                                      })
+                                    }
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="e.g., 2020"
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  />
+                </div>
+
+                {/* Family History Section */}
+                <div className="pt-6 border-t border-gray-200">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Family History</h4>
+                  
+                  <Controller
+                    name="familyHistory"
+                    control={control}
+                    render={({ field }) => (
+                      <ToggleCard
+                        title={
+                          <div className="flex items-center space-x-2">
+                            <img 
+                              src="/images/icons/elderly.svg" 
+                              alt="Family History"
+                              className="w-5 h-5"
+                              style={{ filter: 'invert(21%) sepia(77%) saturate(1342%) hue-rotate(211deg) brightness(97%) contrast(94%)' }}
+                            />
+                            <span>Family History of Heart Disease</span>
+                          </div>
+                        }
+                        description="Has anyone in your immediate family (parents, siblings, children) had heart disease before age 65?"
+                        checked={field.value || false}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         );

@@ -110,7 +110,7 @@ const MinimalistHero: React.FC = () => {
       </div>
 
       {/* Main Content Container */}
-      <div className="relative max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 min-h-screen flex flex-col justify-center pt-24">
+      <div className={`relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 min-h-screen flex flex-col justify-center pt-24 ${isMobile ? 'pb-12' : ''}`}>
         
         <motion.div 
           className="text-center space-y-20"

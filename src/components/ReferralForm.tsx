@@ -337,7 +337,7 @@ Provider Number: ${formData.providerNumber}`;
                       <div className={`absolute inset-0 transition-all duration-300 ${
                         formData.referralTypes.includes(type.value)
                           ? 'bg-blue-600/85'
-                          : 'bg-white/75 hover:bg-white/60'
+                          : 'bg-white/75 hover:bg-white/95'
                       }`}></div>
                       
                       {/* Content */}

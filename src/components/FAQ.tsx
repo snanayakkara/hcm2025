@@ -151,7 +151,7 @@ const FAQ: React.FC = () => {
                         onClick={handleLearningLibraryClick}
                         className={`inline-flex items-center space-x-2 bg-primary-500 text-white ${isMobile ? 'px-6 py-4 min-h-[44px] text-sm' : 'px-6 py-3 text-base'} rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium`}
                       >
-                        <span>Visit Learning Library</span>
+                        <span>Visit Library</span>
                         <ExternalLink className="w-4 h-4" />
                       </button>
                     </div>

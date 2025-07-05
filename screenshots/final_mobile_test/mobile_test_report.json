@@ -1,0 +1,150 @@
+{
+  "timestamp": "2025-07-03T19:14:15.532Z",
+  "viewport": {
+    "width": 375,
+    "height": 667,
+    "deviceScaleFactor": 2,
+    "isMobile": true,
+    "hasTouch": true,
+    "isLandscape": false
+  },
+  "score": 67,
+  "passed": 4,
+  "total": 6,
+  "sections": [
+    {
+      "name": "Mobile Layout Detection",
+      "passed": true,
+      "details": {
+        "screenWidth": 375,
+        "isMobile": true,
+        "mobileElementsCount": 1,
+        "bodyClasses": ""
+      }
+    },
+    {
+      "name": "Quick Actions Card",
+      "passed": true,
+      "details": {
+        "buttonsFound": 112,
+        "actionsFound": [
+          "Call",
+          "Call",
+          "Telehealth",
+          "Directions",
+          "Call",
+          "Call",
+          "Directions",
+          "Directions",
+          "Directions",
+          "Directions",
+          "Call",
+          "Call",
+          "Telehealth",
+          "Directions",
+          "Directions"
+        ],
+        "hasQuickActions": true
+      }
+    },
+    {
+      "name": "Services Horizontal Scroll",
+      "passed": true,
+      "details": {
+        "scrollableElements": 1,
+        "hasHorizontalScroll": true
+      }
+    },
+    {
+      "name": "Doctor Carousel",
+      "passed": false,
+      "details": {
+        "carouselElements": 0,
+        "navigationButtons": 0,
+        "hasCarousel": false
+      }
+    },
+    {
+      "name": "Mobile Action Bar",
+      "passed": true,
+      "details": {
+        "actionBarsFound": 25,
+        "visibleActionBar": {
+          "height": 85,
+          "bottom": 667,
+          "classes": "fixed bottom-0 left-0 right-0 z-50"
+        },
+        "hasActionBar": true
+      }
+    },
+    {
+      "name": "Typography & Touch Targets",
+      "passed": false,
+      "details": {
+        "headings": 36,
+        "paragraphs": 126,
+        "buttons": 112,
+        "issues": [
+          "Heading too small: H1 - 14px",
+          "Paragraph text too small: 12px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 12px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px",
+          "Paragraph text too small: 14px"
+        ],
+        "passed": false
+      }
+    }
+  ]
+}

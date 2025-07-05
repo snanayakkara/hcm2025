@@ -33,7 +33,7 @@ export const faqData: FAQItem[] = [
   {
     category: 'general',
     question: 'Where can I learn more about heart conditions and procedures?',
-    answer: 'Our comprehensive Learning Library contains detailed information about heart conditions, procedures, and patient journey maps. You can access educational videos, procedure guides, and step-by-step explanations of what to expect during your care. Visit our Learning Library for in-depth medical information and educational resources.'
+    answer: 'Our comprehensive Library contains detailed information about heart conditions, procedures, and patient journey maps. You can access educational videos, procedure guides, and step-by-step explanations of what to expect during your care. Visit our Library for in-depth medical information and educational resources.'
   },
   {
     category: 'general',

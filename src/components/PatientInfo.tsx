@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
-import { FileText, Clock, Shield, CreditCard, Phone, Mail, ArrowRight, CheckCircle, Upload, X, ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { FileText, Clock, Shield, CreditCard, Phone, Mail, ArrowRight, CheckCircle, ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
 import { faqData } from '../data/faqData';
-
-const PatientIntakeWizard = lazy(() => import('./Wizard/Wizard'));
+import Wizard from './Wizard/Wizard';
 
 const PatientInfo: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -16,13 +15,13 @@ const PatientInfo: React.FC = () => {
     preferredDoctor: '',
     localGP: ''
   });
-  const [attachments, setAttachments] = useState<File[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const [activeResource, setActiveResource] = useState(0);
   const [showIntakeWizard, setShowIntakeWizard] = useState(false);
   const [showVisitInfo, setShowVisitInfo] = useState(false);
   const [showFaqInfo, setShowFaqInfo] = useState(false);
   const [calendarDate, setCalendarDate] = useState(new Date());
+  const [doctorPreSelected, setDoctorPreSelected] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -42,25 +41,6 @@ const PatientInfo: React.FC = () => {
         [name]: value
       });
     }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    const validFiles = files.filter(file => {
-      const isValidType = file.type.includes('image/') || file.type === 'application/pdf';
-      const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB limit
-      return isValidType && isValidSize;
-    });
-    
-    if (validFiles.length !== files.length) {
-      alert('Some files were not added. Please ensure files are images or PDFs under 10MB.');
-    }
-    
-    setAttachments(prev => [...prev, ...validFiles]);
-  };
-
-  const removeAttachment = (index: number) => {
-    setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -88,12 +68,6 @@ Preferred Cardiologist: ${formData.preferredDoctor || 'Not specified'}
 REASON FOR VISIT:
 ${formData.reason || 'Not specified'}
 
-ATTACHMENTS:
-${attachments.length > 0 
-  ? attachments.map(file => `- ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`).join('\n')
-  : 'No attachments'
-}
-
 Please contact me to confirm the appointment details.
 
 Thank you,
@@ -107,7 +81,6 @@ ${formData.name}`;
     
     // Optional: Still log for debugging
     console.log('Form submitted:', formData);
-    console.log('Attachments:', attachments);
   };
 
   useEffect(() => {
@@ -132,6 +105,58 @@ ${formData.name}`;
       setActiveResource((prev) => (prev + 1) % patientResources.length);
     }, 3000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Listen for doctor selection from Doctors component
+  useEffect(() => {
+    const handleDoctorSelected = (event: CustomEvent) => {
+      const doctorInfo = event.detail;
+      setFormData(prev => ({
+        ...prev,
+        preferredDoctor: doctorInfo.name,
+        // Only set location if it's provided (not null), otherwise clear it
+        preferredLocation: doctorInfo.location || ''
+      }));
+      
+      // Show visual feedback only if both doctor and location are pre-selected
+      if (doctorInfo.location) {
+        setDoctorPreSelected(true);
+        setTimeout(() => setDoctorPreSelected(false), 3000);
+      }
+      
+      // Clear the stored data after using it
+      localStorage.removeItem('selectedDoctorBooking');
+    };
+
+    // Check for existing doctor selection on mount
+    const storedDoctorInfo = localStorage.getItem('selectedDoctorBooking');
+    if (storedDoctorInfo) {
+      try {
+        const doctorInfo = JSON.parse(storedDoctorInfo);
+        // Only use if timestamp is within the last 5 minutes
+        if (Date.now() - doctorInfo.timestamp < 300000) {
+          setFormData(prev => ({
+            ...prev,
+            preferredDoctor: doctorInfo.name,
+            // Only set location if it's provided (not null), otherwise clear it
+            preferredLocation: doctorInfo.location || ''
+          }));
+          // Show visual feedback only if both doctor and location are pre-selected
+          if (doctorInfo.location) {
+            setDoctorPreSelected(true);
+            setTimeout(() => setDoctorPreSelected(false), 3000);
+          }
+        }
+        localStorage.removeItem('selectedDoctorBooking');
+      } catch (e) {
+        console.error('Error parsing stored doctor info:', e);
+      }
+    }
+
+    window.addEventListener('doctorSelected', handleDoctorSelected as EventListener);
+    return () => {
+      window.removeEventListener('doctorSelected', handleDoctorSelected as EventListener);
+    };
   }, []);
 
   const patientResources = [
@@ -170,7 +195,7 @@ ${formData.name}`;
   const locations = [
     "Cabrini Malvern",
     "Pakenham", 
-    "Casey Medical Centre, Clyde"
+    "Clyde"
   ];
 
   const getDoctorsByLocation = (location: string) => {
@@ -199,7 +224,7 @@ ${formData.name}`;
           }
         ];
       case "Pakenham":
-      case "Casey Medical Centre, Clyde":
+      case "Clyde":
         return [
           { 
             name: "Dr Mark Freilich", 
@@ -230,8 +255,8 @@ ${formData.name}`;
   const availableDoctors = getDoctorsByLocation(formData.preferredLocation);
 
   return (
-    <section id="patients" className="py-20 bg-white" ref={sectionRef}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="patients" className="py-32 bg-white" ref={sectionRef}>
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -703,6 +728,19 @@ ${formData.name}`;
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   Preferred Cardiologist
                 </label>
+                
+                {/* Doctor Pre-selection Notification */}
+                {doctorPreSelected && (
+                  <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                      <span className="text-sm font-medium text-green-800">
+                        Doctor and location have been pre-selected based on your choice!
+                      </span>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {availableDoctors.map((doctor) => (
                     <button
@@ -795,67 +833,6 @@ ${formData.name}`;
               </div>
 
               <div>
-                <label htmlFor="attachments" className="block text-sm font-medium text-gray-700 mb-2">
-                  Attach Your Referral
-                </label>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-center w-full">
-                    <label
-                      htmlFor="attachments"
-                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all duration-200"
-                    >
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <Upload className="w-8 h-8 mb-4 text-gray-500" />
-                        <p className="mb-2 text-sm text-gray-500">
-                          <span className="font-semibold">Click to upload</span> or drag and drop
-                        </p>
-                        <p className="text-xs text-gray-500">PDF or Image files (MAX. 10MB each)</p>
-                      </div>
-                      <input
-                        id="attachments"
-                        name="attachments"
-                        type="file"
-                        multiple
-                        accept="image/*,.pdf"
-                        onChange={handleFileChange}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                  
-                  {/* Display selected files */}
-                  {attachments.length > 0 && (
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium text-gray-700">Selected files:</p>
-                      {attachments.map((file, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between bg-blue-50 border border-blue-200 p-3 rounded-lg"
-                        >
-                          <div className="flex items-center space-x-2">
-                            <FileText className="w-4 h-4 text-blue-600" />
-                            <span className="text-sm text-gray-700 truncate max-w-xs">
-                              {file.name}
-                            </span>
-                            <span className="text-xs text-gray-500">
-                              ({(file.size / 1024 / 1024).toFixed(1)} MB)
-                            </span>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => removeAttachment(index)}
-                            className="text-red-500 hover:text-red-700 transition-colors"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div>
                 <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-2">
                   Reason for Visit
                 </label>
@@ -887,16 +864,7 @@ ${formData.name}`;
 
         {/* Patient Intake Wizard */}
         {showIntakeWizard && (
-          <Suspense fallback={
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg p-8 flex items-center space-x-3">
-                <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-                <span className="text-gray-700">Loading intake form...</span>
-              </div>
-            </div>
-          }>
-            <PatientIntakeWizard onClose={() => setShowIntakeWizard(false)} />
-          </Suspense>
+          <Wizard onClose={() => setShowIntakeWizard(false)} />
         )}
       </div>
     </section>

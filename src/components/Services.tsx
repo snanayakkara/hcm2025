@@ -276,7 +276,7 @@ const Services: React.FC = () => {
   ];
 
   return (
-    <section id="services" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20">
+    <section id="services" className="py-32 bg-gradient-to-br from-white via-cream-25 to-primary-25/10">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
         <div className="text-center mb-20">
@@ -311,8 +311,12 @@ const Services: React.FC = () => {
                     onClick={() => handleServiceSelect(service.id)}
                     className={`p-4 rounded-2xl cursor-pointer transition-all duration-200 ${
                       selectedService === service.id
-                        ? 'bg-primary-100 border-2 border-primary-300 shadow-md'
-                        : 'bg-white border-2 border-transparent hover:bg-primary-50 hover:border-primary-200 shadow-sm'
+                        ? isMobile 
+                          ? 'bg-white/95 border-2 border-primary-200/30 shadow-2xl backdrop-blur-sm' 
+                          : 'bg-white/90 border-2 border-primary-200/50 shadow-xl backdrop-blur-sm'
+                        : isMobile
+                          ? 'bg-white/85 border-2 border-transparent hover:bg-white/95 hover:border-primary-100/30 shadow-xl hover:shadow-2xl backdrop-blur-sm'
+                          : 'bg-white/70 border-2 border-transparent hover:bg-white/90 hover:border-primary-100 shadow-lg backdrop-blur-sm'
                     }`}
                     whileHover={{ scale: prefersReducedMotion ? 1 : 1.02 }}
                     whileTap={{ scale: prefersReducedMotion ? 1 : 0.98 }}
@@ -320,8 +324,12 @@ const Services: React.FC = () => {
                     <div className="flex items-center space-x-3">
                       <div className={`p-2 rounded-lg ${
                         selectedService === service.id 
-                          ? 'bg-primary-200 text-primary-700' 
-                          : 'bg-primary-100 text-primary-600'
+                          ? isMobile
+                            ? 'bg-primary-50/90 text-primary-700 shadow-md'
+                            : 'bg-primary-100/80 text-primary-600'
+                          : isMobile
+                            ? 'bg-white/90 text-primary-600 shadow-sm'
+                            : 'bg-primary-50/80 text-primary-500'
                       }`}>
                         {service.icon}
                       </div>
@@ -341,22 +349,22 @@ const Services: React.FC = () => {
 
             {/* Detail Card */}
             <div className={`${isMobile ? 'col-span-1' : 'lg:col-span-3'} flex flex-col`}>
-              <div className="flex-1 relative" style={{ minHeight: isMobile ? '600px' : '800px' }}>
+              <div className="flex-1">
                 <AnimatePresence mode="wait">
                   {selectedService && (() => {
                     const s = services.find((x) => x.id === selectedService)!;
                     return (
                       <motion.div
                         key={selectedService}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
                         transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="bg-white rounded-3xl shadow-lg p-8 flex flex-col absolute inset-0"
+                        className={`${isMobile ? 'bg-white/95 shadow-2xl' : 'bg-white/80 shadow-2xl'} backdrop-blur-sm rounded-3xl p-8 h-full flex flex-col border border-white/20`}
                       >
                       {/* Header */}
                       <div className="flex items-start space-x-4 mb-6">
-                        <div className="p-3 rounded-xl bg-primary-100 text-primary-600">
+                        <div className="p-3 rounded-xl bg-primary-50/80 text-primary-600 shadow-sm">
                           {s.icon}
                         </div>
                         <div className="flex-1">
@@ -378,7 +386,7 @@ const Services: React.FC = () => {
                       <p className="text-secondary-700 leading-relaxed mb-6">{s.description}</p>
 
                       {/* Quick Facts */}
-                      <div className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'grid-cols-3 gap-4'} p-4 bg-secondary-50 rounded-xl mb-6`}>
+                      <div className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'grid-cols-3 gap-4'} p-4 bg-white/60 backdrop-blur-sm rounded-xl mb-6 shadow-inner border border-white/30`}>
                         <QuickFact icon={Clock} title="Duration" value={s.duration} />
                         <QuickFact icon={MapPin} title="Locations" value={s.locations.join(', ')} />
                         <QuickFact icon={FileText} title="Cost" value={s.cost} />
@@ -411,7 +419,7 @@ const Services: React.FC = () => {
 
         {/* Call to Action */}
         <motion.div 
-          className={`bg-gradient-to-r from-primary-500 to-accent-500 rounded-3xl ${isMobile ? 'p-8' : 'p-12'} text-center ${isMobile ? 'mt-16' : 'mt-32'}`}
+          className={`bg-gradient-to-r from-primary-500/90 to-accent-500/90 backdrop-blur-sm rounded-3xl ${isMobile ? 'p-8' : 'p-12'} text-center ${isMobile ? 'mt-16' : 'mt-32'} shadow-2xl border border-white/20`}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -423,13 +431,13 @@ const Services: React.FC = () => {
             Our reception team is ready to help you book the right service at the most convenient location for you.
           </p>
           <div className={`flex flex-col ${isMobile ? 'gap-4' : 'sm:flex-row gap-6'} justify-center`}>
-            <button className={`bg-white text-primary-600 ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold`}>
+            <button className={`bg-white/95 backdrop-blur-sm text-primary-600 ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-white hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2 font-semibold shadow-md`}>
               <Phone className="w-5 h-5" />
               <span>Call (03) 9509 5009</span>
             </button>
             <button 
               onClick={() => window.location.href = 'mailto:reception@hcm2025.com.au'}
-              className={`border-2 border-white text-white ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-white hover:text-primary-600 transition-colors duration-200 font-semibold`}
+              className={`border-2 border-white/80 text-white ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-white hover:text-primary-600 transition-all duration-200 font-semibold shadow-md hover:shadow-lg backdrop-blur-sm`}
             >
               Email Us
             </button>

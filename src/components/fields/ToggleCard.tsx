@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Info } from 'lucide-react';
 
 interface ToggleCardProps {
-  title: string;
+  title: string | React.ReactNode;
   description?: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
@@ -36,7 +36,7 @@ const ToggleCard: React.FC<ToggleCardProps> = ({
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center space-x-2">
-            <h4 className="font-medium text-gray-900">{title}</h4>
+            <div className="font-medium text-gray-900">{title}</div>
             {tooltip && (
               <div className="group relative">
                 <Info className="w-4 h-4 text-gray-400 hover:text-gray-600" />

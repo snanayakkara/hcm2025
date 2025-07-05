@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share to Heart Clinic Melbourne</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fcdfbe, #ffd3c2);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #0891b2, #14b8a6);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        h1 {
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        p {
+            color: #64748b;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .content-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        .content-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .content-text {
+            color: #6b7280;
+            font-size: 0.875rem;
+            word-wrap: break-word;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-direction: column;
+        }
+        
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .primary {
+            background: linear-gradient(135deg, #0891b2, #14b8a6);
+            color: white;
+        }
+        
+        .primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3);
+        }
+        
+        .secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        @media (max-width: 640px) {
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .button-group {
+                gap: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">❤️</div>
+        <h1>Heart Clinic Melbourne</h1>
+        <p>Thank you for sharing! How would you like to use this content?</p>
+        
+        <div id="error-message" class="error" style="display: none;"></div>
+        
+        <div id="shared-content" class="content-box" style="display: none;">
+            <div class="content-label">Shared Content:</div>
+            <div id="content-text" class="content-text"></div>
+        </div>
+        
+        <div class="button-group">
+            <button id="contact-btn" class="primary">
+                📞 Contact About This
+            </button>
+            <button id="info-btn" class="secondary">
+                ℹ️ Find Related Information
+            </button>
+            <button id="home-btn" class="secondary">
+                🏠 Go to Homepage
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Parse shared content
+        function parseSharedContent() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const formData = new FormData();
+            
+            // Try to get content from URL params (GET) or form data (POST)
+            const title = urlParams.get('title') || '';
+            const text = urlParams.get('text') || '';
+            const url = urlParams.get('url') || '';
+            
+            if (title || text || url) {
+                let content = '';
+                if (title) content += `Title: ${title}\n`;
+                if (text) content += `Text: ${text}\n`;
+                if (url) content += `URL: ${url}`;
+                
+                document.getElementById('shared-content').style.display = 'block';
+                document.getElementById('content-text').textContent = content;
+                
+                return { title, text, url };
+            }
+            
+            return null;
+        }
+        
+        // Handle form data for POST requests
+        function handleFormData() {
+            if (window.location.pathname === '/share' && document.body.dataset.method === 'POST') {
+                // This would be handled by the service worker or server
+                // For now, we'll just show that we received shared content
+                document.getElementById('shared-content').style.display = 'block';
+                document.getElementById('content-text').textContent = 'Shared content received via POST';
+            }
+        }
+        
+        // Navigation functions
+        function goToContact() {
+            const sharedData = parseSharedContent();
+            if (sharedData) {
+                // Redirect to contact form with pre-filled shared content
+                const params = new URLSearchParams({
+                    subject: sharedData.title || 'Shared Content Inquiry',
+                    message: `I'd like to discuss this shared content:\n\n${sharedData.text || ''}\n${sharedData.url || ''}`
+                });
+                window.location.href = `/#contact?${params.toString()}`;
+            } else {
+                window.location.href = '/#contact';
+            }
+        }
+        
+        function findRelatedInfo() {
+            const sharedData = parseSharedContent();
+            if (sharedData) {
+                // Try to match shared content to relevant sections
+                const content = (sharedData.title + ' ' + sharedData.text).toLowerCase();
+                
+                if (content.includes('heart') || content.includes('cardiac') || content.includes('cardio')) {
+                    window.location.href = '/#services';
+                } else if (content.includes('doctor') || content.includes('physician') || content.includes('specialist')) {
+                    window.location.href = '/#doctors';
+                } else if (content.includes('appointment') || content.includes('booking') || content.includes('schedule')) {
+                    window.location.href = '/#contact';
+                } else {
+                    window.location.href = '/#about';
+                }
+            } else {
+                window.location.href = '/#services';
+            }
+        }
+        
+        function goToHome() {
+            window.location.href = '/';
+        }
+        
+        // Error handling
+        function showError(message) {
+            const errorEl = document.getElementById('error-message');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+        }
+        
+        // Loading state
+        function setLoading(buttonId, isLoading) {
+            const button = document.getElementById(buttonId);
+            if (isLoading) {
+                button.classList.add('loading');
+                const spinner = document.createElement('div');
+                spinner.className = 'spinner';
+                button.insertBefore(spinner, button.firstChild);
+            } else {
+                button.classList.remove('loading');
+                const spinner = button.querySelector('.spinner');
+                if (spinner) spinner.remove();
+            }
+        }
+        
+        // Event listeners
+        document.getElementById('contact-btn').addEventListener('click', () => {
+            setLoading('contact-btn', true);
+            setTimeout(goToContact, 500);
+        });
+        
+        document.getElementById('info-btn').addEventListener('click', () => {
+            setLoading('info-btn', true);
+            setTimeout(findRelatedInfo, 500);
+        });
+        
+        document.getElementById('home-btn').addEventListener('click', () => {
+            setLoading('home-btn', true);
+            setTimeout(goToHome, 500);
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                parseSharedContent();
+                handleFormData();
+            } catch (error) {
+                console.error('Error parsing shared content:', error);
+                showError('Unable to process shared content. Please try again.');
+            }
+        });
+        
+        // Handle back button
+        window.addEventListener('popstate', () => {
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>

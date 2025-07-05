@@ -45,25 +45,25 @@ const Contact: React.FC = () => {
     {
       name: "The Alfred",
       address: "55 Commercial Rd, Melbourne VIC 3004",
-      description: "Procedural services and inpatient consultations",
+      description: "Public procedural services",
       icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYED9TXRJ2hBE9BHlrjdbbaT6E8UM7cgIWwQ&s"
     },
     {
       name: "Cabrini Malvern",
       address: "183 Wattletree Rd, Malvern VIC 3144", 
-      description: "Procedural services and inpatient consultations",
+      description: "Private procedural services",
       icon: "https://gandelfoundation.org.au/wp-content/uploads/2017/07/Cabrini.jpg"
     },
     {
       name: "Epworth Richmond",
       address: "89 Bridge Rd, Richmond VIC 3121",
-      description: "Procedural services and inpatient consultations",
+      description: "Private procedural services",
       icon: "https://upload.wikimedia.org/wikipedia/en/5/5e/Epworth_HealthCare_logo.png"
     },
     {
       name: "SJOG Berwick",
       address: "75 Kangan Dr, Berwick VIC 3806",
-      description: "Procedural services and inpatient consultations",
+      description: "Private procedural services",
       icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0RQpP2eNsJYr7osMZpUpgRYhdkXNgo8-Mfw&s"
     }
   ];
@@ -309,11 +309,11 @@ const Contact: React.FC = () => {
                 <Building2 className="w-6 h-6 text-primary-600" />
               </div>
               <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-secondary-800`}>
-                Hospital Locations We Service
+                Hospitals We Work With
               </h3>
             </div>
             <p className={`${isMobile ? 'text-lg' : 'text-xl'} text-secondary-600 max-w-3xl mx-auto leading-relaxed`}>
-              We provide procedural services and inpatient consultations at these major hospital locations across Melbourne.
+              We provide procedural services at these major hospital locations across Melbourne, including both public and private hospital systems.
             </p>
           </div>
 
@@ -364,14 +364,14 @@ const Contact: React.FC = () => {
           <div className={`text-center mt-12 ${isMobile ? 'px-4' : 'px-8'}`}>
             <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-secondary-200">
               <p className="text-secondary-600 leading-relaxed">
-                <strong>Note:</strong> Hospital-based services are by appointment only. Please contact our reception team at{' '}
+                <strong>Note:</strong> Hospital-based procedural services are by appointment only. Please contact our reception team at{' '}
                 <button
                   onClick={() => window.open('tel:(03) 9509 5009', '_self')}
                   className="text-primary-600 hover:text-primary-800 font-semibold underline"
                 >
                   (03) 9509 5009
                 </button>
-                {' '}to schedule your hospital consultation or procedure.
+                {' '}to schedule your hospital procedure.
               </p>
             </div>
           </div>

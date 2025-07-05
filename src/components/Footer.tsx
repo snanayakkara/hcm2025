@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
-import { Phone, Mail, Clock, Printer, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Phone, Video, MapPin, Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useMobileDetection } from '../hooks/useMobileDetection';
 
-const Footer: React.FC = () => {
-  const [modalType, setModalType] = useState<null | 'privacy' | 'terms' | 'disclaimer'>(null);
+interface FooterProps {
+  onNavigate?: (section: string) => void;
+}
+
+const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+  const [modalType, setModalType] = useState<null | 'menu'>(null);
+  const [showFloatingFooter, setShowFloatingFooter] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const { isMobile } = useMobileDetection();
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -10,221 +20,246 @@ const Footer: React.FC = () => {
     }
   };
 
-  const quickLinks = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About Us' },
-    { id: 'services', label: 'Locations & Services' },
-    { id: 'doctors', label: 'Our Doctors' },
-    { id: 'team', label: 'Reception Team' },
-    { id: 'patients', label: 'Patient Info' },
-    { id: 'education', label: 'Library' },
-    { id: 'contact', label: 'Contact' },
+  useEffect(() => {
+    if (!isMobile) return;
+
+    let scrollTimeout: NodeJS.Timeout;
+    
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      
+      // Show footer when user starts scrolling
+      if (scrollY > 100) {
+        setShowFloatingFooter(true);
+      } else {
+        setShowFloatingFooter(false);
+      }
+      
+      // Detect if user is actively scrolling
+      setIsScrolling(true);
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        setIsScrolling(false);
+      }, 150);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, [isMobile]);
+
+  const handleCall = () => {
+    window.location.href = 'tel:+61395095009';
+  };
+
+  const handleTelehealth = () => {
+    window.open('https://doxy.me/hcm21', '_blank');
+  };
+
+  const handleDirections = () => {
+    window.open('https://maps.google.com/?q=183+Wattletree+Rd+Malvern+VIC+3144', '_blank');
+  };
+
+  const handleMenuToggle = () => {
+    setModalType(modalType === 'menu' ? null : 'menu');
+  };
+
+  const navigationItems = [
+    { id: 'home', label: 'Home', icon: '🏠' },
+    { id: 'about', label: 'About Us', icon: '💙' },
+    { id: 'services', label: 'Services', icon: '🩺' },
+    { id: 'doctors', label: 'Our Doctors', icon: '👨‍⚕️' },
+    { id: 'reception-team', label: 'Reception Team', icon: '👥' },
+    { id: 'patients', label: 'Patient Info', icon: '📋' },
+    { id: 'contact', label: 'Contact', icon: '📞' },
   ];
 
-  const locations = [
-    {
-      name: "Cabrini Hospital, Malvern",
-      address: "Suite 21/183 Wattletree Rd, Malvern VIC 3144",
-      phone: "(03) 9509 5009"
-    },
-    {
-      name: "Heart Clinic Pakenham", 
-      address: "44 Main Street, Pakenham",
-      phone: "(03) 9509 5009"
-    },
-    {
-      name: "Casey Medical Centre, Clyde",
-      address: "1s Morison Rd, Clyde",
-      phone: "(03) 9509 5009"
-    }
-  ];
+  // Only show on mobile
+  if (!isMobile) {
+    return null;
+  }
 
   return (
-    <footer className="bg-gray-900 text-white">
-      {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Clinic Info */}
-          <div className="space-y-6">
-            <div className="flex items-center space-x-3">
-              <div className="bg-white p-2 rounded-full">
-                <img 
-                  src="/images/hcm3d2.png" 
-                  alt="Heart Clinic Melbourne Logo" 
-                  className="w-6 h-6 object-contain"
-                />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Heart Clinic</h3>
-                <p className="text-gray-400 whitespace-nowrap">Melbourne</p>
-              </div>
-            </div>
-            
-            <p className="text-gray-400 leading-relaxed">
-              Comprehensive cardiovascular services across three convenient locations in Melbourne's southeast, providing expert cardiac care close to home.
-            </p>
-
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-blue-400" />
-                <span className="text-gray-300">(03) 9509 5009</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Printer className="w-5 h-5 text-blue-400" />
-                <span className="text-gray-300">(03) 9509 6448</span>
-              </div>
-              <div className="flex items-start space-x-3">
-                <Mail className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
-                <span className="text-gray-300 break-words">reception@heartclinicmelbourne.com.au</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="space-y-6">
-            <h4 className="text-lg font-semibold">Quick Links</h4>
-            <nav className="space-y-3">
-              {quickLinks.map((link) => (
-                <button
-                  key={link.id}
-                  onClick={() => scrollToSection(link.id)}
-                  className="block text-gray-400 hover:text-white transition-colors duration-200"
-                >
-                  {link.label}
-                </button>
-              ))}
-            </nav>
-          </div>
-
-          {/* Locations */}
-          <div className="space-y-6">
-            <h4 className="text-lg font-semibold">Our Locations</h4>
-            <div className="space-y-4">
-              {locations.map((location, index) => (
-                <div key={index} className="space-y-1">
-                  <p className="text-white font-medium text-sm">{location.name}</p>
-                  <p className="text-gray-400 text-sm">{location.address}</p>
-                  <p className="text-blue-400 text-sm">{location.phone}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Hours */}
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <h4 className="text-lg font-semibold flex items-center space-x-2">
-                <Clock className="w-4 h-4 text-blue-400" />
-                <span>Opening Hours</span>
-              </h4>
-              <div className="text-gray-300 text-sm space-y-1">
-                <p>Monday-Friday: 8:30am - 5:00pm</p>
-                <p>Saturday-Sunday: Closed</p>
-                <p>Emergency: 24/7 at hospital locations</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-gray-400 text-sm">
-              <p>&copy; {new Date().getFullYear()} Heart Clinic Melbourne. Website designed and created by Dr.&nbsp;Shane&nbsp;Nanayakkara. Last updated {new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}.</p>
-            </div>
-            <div className="flex space-x-6 text-sm text-gray-400">
-              <button
-                onClick={() => setModalType('privacy')}
-                className="hover:text-white transition-colors duration-200"
-              >
-                Privacy Policy
-              </button>
-              <button
-                onClick={() => setModalType('terms')}
-                className="hover:text-white transition-colors duration-200"
-              >
-                Terms of Service
-              </button>
-              <button
-                onClick={() => setModalType('disclaimer')}
-                className="hover:text-white transition-colors duration-200"
-              >
-                Medical Disclaimer
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Emergency Banner */}
-      <div className="bg-red-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <div className="text-center text-white">
-            <p className="font-semibold">
-              Medical Emergency? Call 000 immediately or go to your nearest hospital emergency department.
-            </p>
-          </div>
-        </div>
-      </div>
-      {modalType && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-black/40 backdrop-blur-sm">
-          <div className="relative bg-white rounded-2xl shadow-xl max-w-xl w-full p-8 overflow-y-auto max-h-[90vh]">
-            <button
-              onClick={() => setModalType(null)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+    <>
+      {/* Mobile Floating Capsule Footer */}
+      <AnimatePresence>
+        {showFloatingFooter && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ 
+              type: "spring", 
+              stiffness: 400, 
+              damping: 25,
+              duration: 0.4 
+            }}
+            className="fixed bottom-8 left-0 right-0 z-[300] flex justify-center"
+          >
+            {/* Liquid Glass Capsule */}
+            <motion.div
+              animate={{
+                scale: isScrolling ? 0.95 : 1,
+              }}
+              transition={{ duration: 0.2 }}
+              className="relative"
             >
-              <X className="w-5 h-5" />
-            </button>
+              {/* Glass Background */}
+              <div 
+                className="absolute inset-0 rounded-3xl backdrop-blur-2xl backdrop-saturate-200 border border-white/30"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 25%, rgba(241,245,249,0.85) 50%, rgba(248,250,252,0.9) 75%, rgba(255,255,255,0.95) 100%)',
+                  backdropFilter: 'blur(24px) saturate(200%) brightness(110%)',
+                  WebkitBackdropFilter: 'blur(24px) saturate(200%) brightness(110%)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)',
+                }}
+              />
+              
+              {/* Content */}
+              <div className="relative z-10 flex items-center justify-center space-x-3 px-4 py-3">
+                {/* Call Button */}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={handleCall}
+                  className="flex flex-col items-center space-y-1"
+                >
+                  <div
+                    className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200"
+                    style={{
+                      background: 'linear-gradient(135deg, #10b981 0%, #0891b2 100%)',
+                      boxShadow: '0 4px 16px rgba(16,185,129,0.3), inset 0 1px 0 rgba(255,255,255,0.3)',
+                    }}
+                  >
+                    <Phone className="w-5 h-5" strokeWidth={2.5} />
+                  </div>
+                  <span className="text-xs font-medium text-gray-700">Call</span>
+                </motion.button>
 
-            {modalType === 'privacy' && (
-              <>
-                <h3 className="text-xl font-bold mb-4">Privacy Policy</h3>
-                <p className="text-sm text-gray-700 leading-relaxed space-y-4">
-                  Heart Clinic Melbourne complies with the Australian Privacy Act&nbsp;1988 (Cth) and the
-                  Australian Privacy Principles.  We collect only the information necessary to provide
-                  high‑quality cardiac care, securely store it on Australian servers, and never disclose
-                  it to third parties except where required for your treatment, by law, or with your
-                  explicit consent.  You may request access to your personal information or ask for it
-                  to be corrected at any time by contacting our reception team.  Full details of our
-                  data‑handling practices, retention periods, My Health Record use and complaint
-                  process are available on request.
-                </p>
-              </>
-            )}
+                {/* Telehealth Button */}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={handleTelehealth}
+                  className="flex flex-col items-center space-y-1"
+                >
+                  <div
+                    className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200"
+                    style={{
+                      background: 'linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%)',
+                      boxShadow: '0 4px 16px rgba(59,130,246,0.3), inset 0 1px 0 rgba(255,255,255,0.3)',
+                    }}
+                  >
+                    <Video className="w-5 h-5" strokeWidth={2.5} />
+                  </div>
+                  <span className="text-xs font-medium text-gray-700">Video</span>
+                </motion.button>
 
-            {modalType === 'terms' && (
-              <>
-                <h3 className="text-xl font-bold mb-4">Website&nbsp;Terms&nbsp;of&nbsp;Service</h3>
-                <p className="text-sm text-gray-700 leading-relaxed space-y-4">
-                  This website is provided by Heart Clinic Melbourne for general information about our
-                  services.  By browsing, you agree not to rely on the content as medical advice, to use
-                  the site lawfully under the laws of Victoria, and not to reproduce or distribute any
-                  material without written permission.  We aim for accuracy but make no warranties that
-                  the content is complete or up‑to‑date.  To the extent permitted by Australian
-                  Consumer Law, we exclude liability for loss arising from your use of the site.  We may
-                  update these terms at any time without notice.
-                </p>
-              </>
-            )}
+                {/* Directions Button */}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={handleDirections}
+                  className="flex flex-col items-center space-y-1"
+                >
+                  <div
+                    className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200"
+                    style={{
+                      background: 'linear-gradient(135deg, #f97316 0%, #dc2626 100%)',
+                      boxShadow: '0 4px 16px rgba(249,115,22,0.3), inset 0 1px 0 rgba(255,255,255,0.3)',
+                    }}
+                  >
+                    <MapPin className="w-5 h-5" strokeWidth={2.5} />
+                  </div>
+                  <span className="text-xs font-medium text-gray-700">Directions</span>
+                </motion.button>
 
-            {modalType === 'disclaimer' && (
-              <>
-                <h3 className="text-xl font-bold mb-4">Medical Disclaimer</h3>
-                <p className="text-sm text-gray-700 leading-relaxed space-y-4">
-                  Information on this website is of a general nature and is not a substitute for
-                  individual medical advice.  It should not be used to diagnose, treat, cure or prevent
-                  any condition.  Always consult your GP, cardiologist or call <strong>000</strong> in
-                  an emergency.  Heart Clinic Melbourne does not accept responsibility for any loss
-                  caused by reliance on the information provided here.
-                </p>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-    </footer>
+                {/* Menu Button */}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={handleMenuToggle}
+                  className="flex flex-col items-center space-y-1"
+                >
+                  <div
+                    className="w-12 h-12 rounded-full bg-gradient-to-br from-gray-600 to-gray-800 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200"
+                    style={{
+                      background: 'linear-gradient(135deg, #4b5563 0%, #1f2937 100%)',
+                      boxShadow: '0 4px 16px rgba(75,85,99,0.3), inset 0 1px 0 rgba(255,255,255,0.3)',
+                    }}
+                  >
+                    <Menu className="w-5 h-5" strokeWidth={2.5} />
+                  </div>
+                  <span className="text-xs font-medium text-gray-700">Menu</span>
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Navigation Menu Modal */}
+      <AnimatePresence>
+        {modalType === 'menu' && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setModalType(null)}
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[250]"
+            />
+            
+            {/* Menu Content */}
+            <motion.div
+              initial={{ y: 100, opacity: 0, scale: 0.9 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 100, opacity: 0, scale: 0.9 }}
+              transition={{ 
+                type: "spring", 
+                stiffness: 400, 
+                damping: 25,
+                duration: 0.3 
+              }}
+              className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-[260] w-80 max-w-[calc(100vw-2rem)]"
+            >
+              <div 
+                className="relative rounded-3xl backdrop-blur-2xl backdrop-saturate-200 border border-white/30 p-6"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 25%, rgba(241,245,249,0.85) 50%, rgba(248,250,252,0.9) 75%, rgba(255,255,255,0.95) 100%)',
+                  backdropFilter: 'blur(24px) saturate(200%) brightness(110%)',
+                  WebkitBackdropFilter: 'blur(24px) saturate(200%) brightness(110%)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)',
+                }}
+              >
+                <div className="space-y-2">
+                  {navigationItems.map((item, index) => (
+                    <motion.button
+                      key={item.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      onClick={() => {
+                        if (onNavigate) onNavigate(item.id);
+                        scrollToSection(item.id);
+                        setModalType(null);
+                      }}
+                      className="w-full flex items-center space-x-3 p-3 rounded-2xl text-left hover:bg-white/50 transition-all duration-200 group"
+                    >
+                      <span className="text-xl">{item.icon}</span>
+                      <span className="font-medium text-gray-800 group-hover:text-gray-900">{item.label}</span>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

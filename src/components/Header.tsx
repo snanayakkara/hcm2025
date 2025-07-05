@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, FileText, Video, Search, BookOpen, Mic, Camera } from 'lucide-react';
+import { Menu, X, FileText, Search, BookOpen, Video } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import ReferralForm from './ReferralForm';
@@ -11,7 +11,6 @@ const Header: React.FC = () => {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [searchQuery, setSearchQuery] = useState('');
-  const [showTelehealthTooltip, setShowTelehealthTooltip] = useState(false);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [showSearchPopover, setShowSearchPopover] = useState(false);
@@ -229,9 +228,6 @@ const Header: React.FC = () => {
     setIsReferralFormOpen(true);
   };
 
-  const handleTelehealthClick = () => {
-    window.open('https://doxy.me/hcm21', '_blank');
-  };
 
   const navItems = [
     { id: 'about', label: 'About' },
@@ -244,174 +240,9 @@ const Header: React.FC = () => {
 
   return (
     <>
-      {/* Enhanced Floating Telehealth Button */}
-      <motion.div
-        className={`fixed right-6 z-50 ${isMobile ? 'top-20' : 'top-6'}`}
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1, duration: 0.5 }}
-      >
-        <div className="relative">
-          <motion.button
-            onClick={handleTelehealthClick}
-            onMouseEnter={() => setShowTelehealthTooltip(true)}
-            onMouseLeave={() => setShowTelehealthTooltip(false)}
-            className="w-20 h-20 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center group relative overflow-hidden"
-            whileHover={{ 
-              scale: 1.15,
-              rotate: [0, -3, 3, 0],
-              boxShadow: "0 20px 40px rgba(16, 185, 129, 0.6)"
-            }}
-            whileTap={{ scale: 0.9 }}
-            animate={{
-              boxShadow: [
-                "0 8px 25px rgba(16, 185, 129, 0.4)",
-                "0 12px 35px rgba(16, 185, 129, 0.5)",
-                "0 8px 25px rgba(16, 185, 129, 0.4)"
-              ]
-            }}
-            transition={{
-              boxShadow: {
-                duration: 2.5,
-                repeat: Infinity,
-                ease: "easeInOut"
-              },
-              hover: {
-                duration: 0.3,
-                ease: "easeOut"
-              }
-            }}
-          >
-            {/* Animated background pulse */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-emerald-400 via-teal-400 to-cyan-400 rounded-full"
-              animate={{
-                scale: [1, 1.3, 1],
-                opacity: [0.4, 0.7, 0.4]
-              }}
-              transition={{
-                duration: 2.5,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-            
-            {/* Outer ring pulse */}
-            <motion.div
-              className="absolute inset-0 border-2 border-white/30 rounded-full"
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.8, 0.3, 0.8]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.5
-              }}
-            />
-            
-            {/* Curved Text */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg className="w-full h-full" viewBox="0 0 80 80">
-                <defs>
-                  <path
-                    id="circle-path"
-                    d="M 40,40 m -28,0 a 28,28 0 1,1 56,0 a 28,28 0 1,1 -56,0"
-                  />
-                </defs>
-                <text className="fill-white text-[8px] font-semibold tracking-wider" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                  <textPath href="#circle-path" startOffset="0%">
-                    TELEHEALTH • TELEHEALTH • 
-                  </textPath>
-                </text>
-              </svg>
-            </div>
-            
-            {/* Content */}
-            <div className="relative z-10 flex items-center justify-center">
-              <motion.div
-                animate={{ 
-                  rotate: [0, 8, -8, 0],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{ 
-                  duration: 2.5, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                whileHover={{
-                  rotate: [0, 15, -15, 0],
-                  scale: 1.3,
-                  transition: { duration: 0.4, repeat: Infinity }
-                }}
-              >
-                <Video className="w-5 h-5" />
-              </motion.div>
-            </div>
 
-            {/* Enhanced shimmer effect */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"
-              animate={{
-                rotate: [0, 360]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-            />
-
-            {/* Hover glow effect */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-emerald-300 via-teal-300 to-cyan-300 rounded-full opacity-0"
-              whileHover={{
-                opacity: [0, 0.4, 0],
-                scale: [1, 1.2, 1],
-                transition: { duration: 0.8, repeat: Infinity }
-              }}
-            />
-          </motion.button>
-
-          {/* Enhanced Tooltip - Now positioned below */}
-          <AnimatePresence>
-            {showTelehealthTooltip && (
-              <motion.div
-                initial={{ opacity: 0, y: -10, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                className="absolute top-full right-0 mt-3 w-72 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl border border-gray-200/50 p-4 z-60"
-              >
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-800 flex items-center space-x-2">
-                    <Video className="w-4 h-4 text-emerald-600" />
-                    <span>Telehealth Consultation</span>
-                  </h4>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    Please ensure your device has permission to use microphone and camera for the best consultation experience.
-                  </p>
-                  <div className="flex items-center space-x-4 text-xs text-gray-500">
-                    <div className="flex items-center space-x-1">
-                      <Mic className="w-3 h-3" />
-                      <span>Microphone</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Camera className="w-3 h-3" />
-                      <span>Camera</span>
-                    </div>
-                  </div>
-                </div>
-                {/* Arrow pointing up */}
-                <div className="absolute bottom-full right-6 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-white/95"></div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-
-      <div className="fixed top-0 left-0 right-0 z-40 px-4 pt-4">
-        <div className="mx-auto max-w-7xl relative">
+      <div className="fixed top-0 left-0 right-0 z-40 pt-4">
+        <div className="mx-auto max-w-7xl relative px-4">
           {/* Floating Logo Image - Positioned relative to header */}
           <motion.div
             className="absolute left-4 top-0 bottom-0 flex items-center z-50"
@@ -789,7 +620,7 @@ const Header: React.FC = () => {
                       </motion.button>
                     ))}
 
-                    {/* Mobile Learning Library Link */}
+                    {/* Mobile Library Link */}
                     <motion.button
                       onClick={() => {
                         navigate('/learning-library');
@@ -806,23 +637,11 @@ const Header: React.FC = () => {
                       whileHover={{ x: 4 }}
                     >
                       <BookOpen className="w-4 h-4" />
-                      <span>Learning Library</span>
+                      <span>Library</span>
                     </motion.button>
                     
                     {/* Mobile Action Buttons */}
                     <div className="pt-4 space-y-2 border-t border-secondary-200/50">
-                      <motion.button
-                        onClick={handleTelehealthClick}
-                        className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-3 rounded-lg font-semibold shadow-sm"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.15 }}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <Video className="w-4 h-4" />
-                        <span>Join Telehealth Call</span>
-                      </motion.button>
 
                       <motion.button
                         onClick={handleReferralClick}
@@ -857,6 +676,86 @@ const Header: React.FC = () => {
           </motion.header>
         </div>
       </div>
+
+      {/* Floating Telehealth Button - Desktop Only */}
+      {!isMobile && (
+        <div className="fixed top-6 right-6 z-50">
+          <motion.div
+            className="relative group"
+            initial={{ opacity: 0, scale: 0.8, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.5, type: "spring", stiffness: 300 }}
+          >
+            {/* Tooltip */}
+            <div className="absolute top-full left-0 mt-2 -ml-32 bg-white text-gray-800 text-sm px-4 py-3 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none z-20 shadow-xl border border-gray-100">
+              <div className="text-teal-600 font-semibold text-xs mb-1">Camera & Microphone</div>
+              <div className="text-gray-600 text-xs">Allow permissions when prompted</div>
+              <div className="absolute -top-2 left-8 w-0 h-0 border-l-[8px] border-r-[8px] border-b-[8px] border-l-transparent border-r-transparent border-b-white"></div>
+            </div>
+
+          <motion.button
+            onClick={() => {
+              window.open('https://doxy.me/hcm21', '_blank');
+            }}
+            className="relative w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group overflow-hidden"
+            whileHover={{ 
+              scale: 1.1,
+              boxShadow: "0 20px 40px rgba(16, 185, 129, 0.4)"
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {/* Curved Text */}
+            <svg
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              viewBox="0 0 80 80"
+              style={{ overflow: 'visible' }}
+            >
+              <defs>
+                <path
+                  id="circle-path"
+                  d="M 40 40 m -30 0 a 30 30 0 1 1 60 0 a 30 30 0 1 1 -60 0"
+                />
+              </defs>
+              <text className="fill-white text-[7px] font-semibold">
+                <textPath href="#circle-path" startOffset="0%">
+                  JOIN TELEHEALTH • JOIN TELEHEALTH • 
+                </textPath>
+              </text>
+            </svg>
+
+            {/* Center Video Icon */}
+            <motion.div
+              className="relative z-10"
+              animate={{ 
+                scale: [1, 1.1, 1],
+                rotate: [0, 5, -5, 0]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              <Video className="w-7 h-7" />
+            </motion.div>
+
+            {/* Pulsing Ring */}
+            <motion.div
+              className="absolute inset-2 border-2 border-white/30 rounded-full"
+              animate={{ 
+                scale: [1, 1.1, 1],
+                opacity: [0.3, 0.6, 0.3]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          </motion.button>
+          </motion.div>
+        </div>
+      )}
 
       {/* Referral Form Modal */}
       <ReferralForm
