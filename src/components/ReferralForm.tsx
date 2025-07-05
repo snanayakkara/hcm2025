@@ -317,7 +317,7 @@ Provider Number: ${formData.providerNumber}`;
                   <FileText className="w-5 h-5 text-blue-600" />
                   <h3 className="text-lg font-semibold text-gray-900">What is this referral for? (choose all that apply)</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                   {referralTypes.map((type) => (
                     <button
                       key={type.value}
@@ -374,7 +374,7 @@ Provider Number: ${formData.providerNumber}`;
                   <User className="w-5 h-5 text-blue-600" />
                   <h3 className="text-lg font-semibold text-gray-900">Patient Details</h3>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Patient Name *
@@ -494,7 +494,7 @@ Provider Number: ${formData.providerNumber}`;
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       Preferred Location
                     </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-3">
                       {locations.map((location) => (
                         <button
                           key={location}
@@ -522,7 +522,7 @@ Provider Number: ${formData.providerNumber}`;
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       Urgency
                     </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-3">
                       {urgencyLevels.map((level) => (
                         <button
                           key={level.value}
@@ -553,7 +553,7 @@ Provider Number: ${formData.providerNumber}`;
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       Preferred Cardiologist
                     </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                       {availableCardiologists.map((cardiologist) => (
                         <button
                           key={cardiologist.name}
@@ -653,7 +653,7 @@ Provider Number: ${formData.providerNumber}`;
                   <Mail className="w-5 h-5 text-blue-600" />
                   <h3 className="text-lg font-semibold text-gray-900">Referring Doctor Details</h3>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Doctor Name *
