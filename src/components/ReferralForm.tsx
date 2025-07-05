@@ -272,7 +272,7 @@ Provider Number: ${formData.providerNumber}`;
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center p-2 sm:p-4 pt-4 sm:pt-8 overflow-y-auto"
+          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto"
           onClick={onClose}
         >
           <motion.div
@@ -280,11 +280,11 @@ Provider Number: ${formData.providerNumber}`;
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-sm sm:max-w-2xl lg:max-w-5xl xl:max-w-6xl my-4 overflow-hidden"
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl my-4 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-t-2xl z-10">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 rounded-t-2xl z-10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2 sm:space-x-3">
                   <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-2 sm:p-3 rounded-lg">
@@ -295,7 +295,7 @@ Provider Number: ${formData.providerNumber}`;
                     />
                   </div>
                   <div>
-                    <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Patient Referral Form</h2>
+                    <h2 className="text-lg sm:text-xl font-bold text-gray-900">Patient Referral Form</h2>
                     <p className="text-xs sm:text-sm text-gray-600">Heart Clinic Melbourne</p>
                   </div>
                 </div>
@@ -310,22 +310,22 @@ Provider Number: ${formData.providerNumber}`;
 
             {/* Scrollable Form Content */}
             <div className="max-h-[75vh] sm:max-h-[80vh] overflow-y-auto">
-              <form onSubmit={handleSubmit} className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
+              <form onSubmit={handleSubmit} className="p-6 space-y-6">
               {/* Referral Types Section */}
               <section>
                 <div className="flex items-center space-x-2 mb-4">
                   <FileText className="w-5 h-5 text-blue-600" />
                   <h3 className="text-lg font-semibold text-gray-900">What is this referral for? (choose all that apply)</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {referralTypes.map((type) => (
                     <button
                       key={type.value}
                       type="button"
                       onClick={() => handleReferralTypeToggle(type.value)}
-                      className={`relative overflow-hidden px-4 py-6 sm:px-6 sm:py-8 text-sm font-medium rounded-xl border-2 transition-all duration-300 flex flex-col items-center justify-center space-y-2 sm:space-y-3 min-h-[100px] sm:min-h-[120px] ${
+                      className={`relative overflow-hidden px-4 py-6 text-sm font-medium rounded-xl border-2 transition-all duration-300 flex flex-col items-center justify-center space-y-2 min-h-[100px] ${
                         formData.referralTypes.includes(type.value)
-                          ? 'border-blue-600 shadow-lg transform scale-105'
+                          ? 'border-blue-600 shadow-lg'
                           : 'border-gray-300 hover:border-blue-300 hover:shadow-md'
                       }`}
                       style={{
@@ -374,8 +374,8 @@ Provider Number: ${formData.providerNumber}`;
                   <User className="w-5 h-5 text-blue-600" />
                   <h3 className="text-lg font-semibold text-gray-900">Patient Details</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-                  <div className="lg:col-span-1">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Patient Name *
                     </label>
@@ -389,7 +389,7 @@ Provider Number: ${formData.providerNumber}`;
                       placeholder="Full name"
                     />
                   </div>
-                  <div className="lg:col-span-1">
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Date of Birth *
                     </label>
@@ -402,7 +402,7 @@ Provider Number: ${formData.providerNumber}`;
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
-                  <div className="lg:col-span-1">
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Phone Number
                     </label>
@@ -415,11 +415,11 @@ Provider Number: ${formData.providerNumber}`;
                       placeholder="0412 345 678"
                     />
                   </div>
-                  <div className="sm:col-span-2 lg:col-span-2">
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Gender
                     </label>
-                    <div className="grid grid-cols-3 gap-2 max-w-md">
+                    <div className="flex gap-2 flex-wrap">
                       {genderOptions.map((option) => (
                         <button
                           key={option.value}
@@ -430,7 +430,7 @@ Provider Number: ${formData.providerNumber}`;
                               gender: option.value
                             });
                           }}
-                          className={`px-2 py-2.5 text-sm font-medium rounded-lg border-2 transition-all duration-200 flex items-center justify-center space-x-1 ${
+                          className={`px-3 py-2.5 text-sm font-medium rounded-lg border-2 transition-all duration-200 flex items-center justify-center space-x-1 flex-1 min-w-0 ${
                             formData.gender === option.value
                               ? 'bg-blue-600 text-white border-blue-600 shadow-md'
                               : 'bg-white text-gray-700 border-gray-300 hover:border-blue-300 hover:bg-blue-50'
@@ -442,7 +442,7 @@ Provider Number: ${formData.providerNumber}`;
                       ))}
                     </div>
                   </div>
-                  <div className="sm:col-span-2 lg:col-span-3">
+                  <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Address
                     </label>
@@ -653,7 +653,7 @@ Provider Number: ${formData.providerNumber}`;
                   <Mail className="w-5 h-5 text-blue-600" />
                   <h3 className="text-lg font-semibold text-gray-900">Referring Doctor Details</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Doctor Name *
@@ -683,19 +683,6 @@ Provider Number: ${formData.providerNumber}`;
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Provider Number
-                    </label>
-                    <input
-                      type="text"
-                      name="providerNumber"
-                      value={formData.providerNumber}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Provider Number"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Phone Number
                     </label>
                     <input
@@ -707,7 +694,20 @@ Provider Number: ${formData.providerNumber}`;
                       placeholder="Contact number"
                     />
                   </div>
-                  <div className="sm:col-span-2">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Provider Number
+                    </label>
+                    <input
+                      type="text"
+                      name="providerNumber"
+                      value={formData.providerNumber}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Provider Number"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Email Address
                     </label>
