@@ -299,7 +299,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
 
       {/* More Menu Dropdown */}
       <AnimatePresence>
-        {showMoreMenu && isScrolled && (
+        {showMoreMenu && (
           <>
             {/* Backdrop */}
             <motion.div

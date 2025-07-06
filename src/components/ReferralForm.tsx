@@ -366,7 +366,7 @@ Provider Number: ${formData.providerNumber}`;
               alt="Heart Clinic Melbourne Logo" 
               className="h-8 w-8"
             />
-            <h2 className="text-lg font-semibold text-black">Patient Referral Form</h2>
+            <h2 className="text-lg font-semibold text-black">Patient Referral Form for Doctors</h2>
           </div>
           <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
             <X className="w-5 h-5" />
@@ -491,20 +491,27 @@ Provider Number: ${formData.providerNumber}`;
             {/* Suggestion for Cardiology Consult when Stress Echo is selected */}
             {formData.referralTypes.includes("Stress Echocardiogram") && 
              !formData.referralTypes.includes("Cardiology Consult") && (
-              <div className="mt-4 p-3 bg-blue-600/85 border border-blue-600 rounded-lg animate-pulse">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span className="text-sm text-white font-medium">
-                    Note: If you would also like your patient to have a bulk-billed consultation with Dr. Ngu, please click here. 
-                  </span>
+              <div 
+                className="mt-4 p-3 border border-gray-300 rounded-lg hover:border-blue-300 hover:shadow-md transition-all duration-300 relative overflow-hidden cursor-pointer animate-pulse"
+                style={{
+                  backgroundImage: "url(/images/consult.png)",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+                onClick={() => handleReferralTypeToggle("Cardiology Consult")}
+              >
+                {/* Background overlay */}
+                <div className="absolute inset-0 bg-white/75 hover:bg-white/95 transition-all duration-300"></div>
+                
+                {/* Content */}
+                <div className="relative z-10">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                    <span className="text-lg text-gray-800 font-bold">
+                      Note: If you would also like your patient to have a bulk-billed consultation with Dr. Ngu, please click here. 
+                    </span>
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => handleReferralTypeToggle("Cardiology Consult")}
-                  className="mt-2 text-xs text-white hover:text-blue-100 underline"
-                >
-                  Click here to add Cardiology Consult
-                </button>
               </div>
             )}
           </div>
@@ -521,7 +528,7 @@ Provider Number: ${formData.providerNumber}`;
                   required
                   value={formData.patientName}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   placeholder="Full name"
                 />
               </div>
@@ -533,7 +540,7 @@ Provider Number: ${formData.providerNumber}`;
                   required
                   value={formData.dateOfBirth}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
               </div>
               <div>
@@ -568,7 +575,7 @@ Provider Number: ${formData.providerNumber}`;
                   name="phoneNumber"
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   placeholder="0412 345 678"
                 />
               </div>
@@ -579,7 +586,7 @@ Provider Number: ${formData.providerNumber}`;
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   placeholder="patient@example.com"
                 />
               </div>
@@ -597,7 +604,7 @@ Provider Number: ${formData.providerNumber}`;
                 rows={8}
                 value={formData.clinicalInformation}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 placeholder="Please include:
 • Reason for referral
 • Relevant medical history
@@ -762,7 +769,7 @@ Provider Number: ${formData.providerNumber}`;
                   rows={3}
                   value={formData.additionalComments}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   placeholder="Any additional information or special requests..."
                 />
               </div>
@@ -781,7 +788,7 @@ Provider Number: ${formData.providerNumber}`;
                   required
                   value={formData.doctorName}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   placeholder="Dr. [Your Name]"
                 />
               </div>
@@ -792,7 +799,7 @@ Provider Number: ${formData.providerNumber}`;
                   name="practiceName"
                   value={formData.practiceName}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   placeholder="Practice name"
                 />
               </div>
@@ -803,7 +810,7 @@ Provider Number: ${formData.providerNumber}`;
                   name="doctorPhone"
                   value={formData.doctorPhone}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   placeholder="Contact number"
                 />
               </div>
@@ -814,7 +821,7 @@ Provider Number: ${formData.providerNumber}`;
                   name="doctorEmail"
                   value={formData.doctorEmail}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   placeholder="your.email@example.com"
                 />
               </div>
@@ -825,7 +832,7 @@ Provider Number: ${formData.providerNumber}`;
                   name="providerNumber"
                   value={formData.providerNumber}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   placeholder="Provider Number"
                 />
               </div>

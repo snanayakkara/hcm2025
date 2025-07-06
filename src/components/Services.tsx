@@ -138,7 +138,7 @@ const Services: React.FC = () => {
       shortDescription: "Comprehensive cardiac assessment and specialist consultation",
       duration: "45-60 minutes",
       preparation: "Minimal preparation required",
-      locations: ["Malvern", "Pakenham", "Clyde"],
+      locations: ["Cabrini Malvern", "Pakenham", "Clyde"],
       description: "A comprehensive cardiac consultation is your first step towards understanding and managing your heart health. Our experienced cardiologists will review your medical history, perform a thorough examination, and discuss your symptoms and concerns.",
       cost: "Medicare rebates available",
       image: "/images/consult.png"
@@ -164,7 +164,7 @@ const Services: React.FC = () => {
       shortDescription: "Continuous cardiac rhythm monitoring over 24 hours",
       duration: "24 hours continuous",
       preparation: "Normal daily activities",
-      locations: ["Malvern", "Pakenham", "Clyde"],
+      locations: ["Cabrini Malvern", "Pakenham", "Clyde"],
       description: "Holter monitoring involves wearing a small, portable device that continuously records your heart rhythm for 24 hours. This helps detect irregular heartbeats that may not occur during a brief office visit.",
       cost: "Medicare rebates available",
       image: "/images/holter.png"
@@ -177,7 +177,7 @@ const Services: React.FC = () => {
       shortDescription: "Advanced imaging of coronary arteries to detect blockages",
       duration: "30-60 minutes",
       preparation: "Fasting required",
-      locations: ["Malvern", "Berwick"],
+      locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "Coronary angiography is a specialized X-ray procedure that uses contrast dye to visualize the coronary arteries. This gold-standard test can detect blockages and assess the need for intervention.",
       cost: "Hospital admission may be required",
       image: "/images/angio.png"
@@ -203,7 +203,7 @@ const Services: React.FC = () => {
       shortDescription: "Advanced cardiac imaging via esophageal probe for detailed assessment",
       duration: "30-45 minutes",
       preparation: "Fasting required, light sedation available",
-      locations: ["Malvern", "Berwick"],
+      locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "TOE provides superior cardiac images by placing an ultrasound probe in the oesophagus. This advanced technique offers detailed views of heart structures, particularly useful for valve assessment and detecting blood clots.",
       cost: "Day procedure charges apply",
       image: "/images/toe_drawn.png"
@@ -216,7 +216,7 @@ const Services: React.FC = () => {
       shortDescription: "Electrical cardioversion with TOE guidance for atrial fibrillation",
       duration: "2-3 hours including recovery",
       preparation: "Fasting and pre-procedure assessments required",
-      locations: ["Malvern", "Berwick"],
+      locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "TOE-guided cardioversion combines transesophageal echocardiography with electrical cardioversion to safely restore normal heart rhythm in patients with atrial fibrillation.",
       cost: "Day procedure charges apply",
       image: "https://images.pexels.com/photos/4386476/pexels-photo-4386476.jpeg?auto=compress&cs=tinysrgb&w=600"
@@ -229,7 +229,7 @@ const Services: React.FC = () => {
       shortDescription: "Advanced catheter ablation including Pulsed Field Ablation (PFA)",
       duration: "3-5 hours",
       preparation: "Hospital admission required",
-      locations: ["Malvern", "Berwick"],
+      locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "Catheter ablation for atrial fibrillation uses advanced techniques including the latest Pulsed Field Ablation (PFA) technology to eliminate abnormal electrical pathways causing irregular heart rhythm.",
       cost: "Overnight hospital admission required",
       image: "/images/afabl_drawn.png"
@@ -242,7 +242,7 @@ const Services: React.FC = () => {
       shortDescription: "Minimally invasive aortic valve replacement via catheter",
       duration: "2-3 hours",
       preparation: "Comprehensive pre-procedure assessment required",
-      locations: ["Malvern"],
+      locations: ["Cabrini Malvern", "The Alfred"],
       description: "TAVI is a minimally invasive procedure to replace a diseased aortic valve without open heart surgery. A new valve is delivered via catheter, typically through the groin artery.",
       cost: "Private health insurance recommended",
       image: "/images/tavi.png"
@@ -255,7 +255,7 @@ const Services: React.FC = () => {
       shortDescription: "Minimally invasive mitral valve repair using keyhole technology",
       duration: "2-4 hours",
       preparation: "Multidisciplinary team assessment required",
-      locations: ["Malvern"],
+      locations: ["Cabrini Malvern", "The Alfred"],
       description: "mTEER is a minimally invasive procedure to repair a leaking mitral valve using advanced clip technology. This procedure can significantly improve symptoms without open heart surgery.",
       cost: "Private health insurance recommended",
       image: "/images/mteer_drawn.png"
@@ -268,7 +268,7 @@ const Services: React.FC = () => {
       shortDescription: "Permanent pacemaker implantation for heart rhythm disorders",
       duration: "1-2 hours",
       preparation: "Day procedure or overnight stay",
-      locations: ["Malvern", "Berwick"],
+      locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "Pacemaker insertion is a procedure to implant a small electronic device that helps regulate your heart rhythm. The pacemaker monitors your heart rate and delivers electrical impulses when needed to maintain a normal rhythm.",
       cost: "Private health insurance recommended",
       image: "/images/pacemaker.png"

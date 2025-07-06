@@ -63,7 +63,7 @@ const ReceptionTeam: React.FC = () => {
     },
     {
       name: "Michelle Goodier",
-      title: "Patient Care Coordinator",
+      title: "Medical Receptionist",
       experience: "Extensive Customer Service",
       description: "Michelle joined our team in 2022. Michelle has a long career in customer service roles including aged care as a personal carer. She is caring, friendly and brings a bright demeanour to the practice.",
       qualities: ["Caring & Friendly", "Bright Demeanour", "Patient Comfort", "Customer Service"],
@@ -73,7 +73,7 @@ const ReceptionTeam: React.FC = () => {
     },
     {
       name: "Jennifer Haywood",
-      title: "Administrative Assistant",
+      title: "Medical Receptionist",
       experience: "Medical Office Support",
       description: "Jennifer provides essential administrative support to our clinical team. Her organizational skills and warm personality help create a welcoming environment for all patients visiting our clinic.",
       qualities: ["Organized", "Warm Personality", "Supportive", "Efficient"],
@@ -83,7 +83,7 @@ const ReceptionTeam: React.FC = () => {
     },
     {
       name: "Georgie Kerr",
-      title: "Reception Coordinator",
+      title: "Medical Receptionist",
       experience: "Front Office Management",
       description: "The newest member of our team, Georgie coordinates our front office operations with enthusiasm and professionalism. She ensures that every patient interaction is positive and that our reception area runs smoothly throughout the day.",
       qualities: ["Enthusiastic", "Coordinated", "Professional", "Team Player"],
@@ -93,7 +93,7 @@ const ReceptionTeam: React.FC = () => {
     },
     {
       name: "Alison Hodgens",
-      title: "Patient Services Specialist",
+      title: "Medical Receptionist",
       experience: "Healthcare Support",
       description: "Alison specializes in patient services and support, helping patients navigate their healthcare journey with confidence. Her compassionate approach ensures every patient feels heard and supported.",
       qualities: ["Compassionate", "Supportive", "Knowledgeable", "Patient Advocate"],
@@ -103,7 +103,7 @@ const ReceptionTeam: React.FC = () => {
     },
     {
       name: "Leanne Marshall",
-      title: "Administrative Coordinator",
+      title: "Medical Receptionist",
       experience: "Medical Administration",
       description: "Leanne coordinates various administrative functions across our multiple locations. Her attention to detail and systematic approach help maintain consistency and quality in all our administrative processes.",
       qualities: ["Systematic", "Detail-Focused", "Multi-Location Coordinator", "Quality-Driven"],
