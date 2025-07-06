@@ -45,7 +45,7 @@ const MobileDoctorCarousel: React.FC = () => {
     {
       id: 'nanayakkara',
       name: 'Dr Shane Nanayakkara',
-      specialty: 'Heart Failure & Interventional Cardiologist',
+      specialty: 'Interventional/Structural and Heart Failure Cardiologist',
       qualifications: 'MBBS FRACP PhD',
       image: '/images/nanayakkara.png',
       experience: '14+ years',
