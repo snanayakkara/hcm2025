@@ -48,35 +48,53 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
 
   useEffect(() => {
     let ticking = false;
+    let lastScrollY = 0;
+    let timeoutId: NodeJS.Timeout;
     
+    const updateScrollState = () => {
+      const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      const scrolled = currentScrollY > 50;
+      setIsScrolled(scrolled);
+      lastScrollY = currentScrollY;
+    };
+
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-          const scrolled = currentScrollY > 50;
-          
-          setIsScrolled(scrolled);
+          updateScrollState();
           ticking = false;
         });
         ticking = true;
       }
     };
 
-    // iOS Safari specific scroll detection
+    // iOS Safari specific handlers
+    const handleTouchStart = () => {
+      clearTimeout(timeoutId);
+    };
+
     const handleTouchMove = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-          const scrolled = currentScrollY > 50;
-          
-          setIsScrolled(scrolled);
+          updateScrollState();
           ticking = false;
         });
         ticking = true;
       }
     };
 
-    // Use Intersection Observer as fallback for iOS
+    const handleTouchEnd = () => {
+      // Delayed check for iOS momentum scrolling
+      timeoutId = setTimeout(() => {
+        updateScrollState();
+      }, 100);
+    };
+
+    // Detect if we're on iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    // Use Intersection Observer as primary method for iOS
     const observerOptions = {
       root: null,
       rootMargin: '-50px 0px 0px 0px',
@@ -85,7 +103,6 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        // When the top section is out of view, show scrolled header
         setIsScrolled(!entry.isIntersecting);
       });
     }, observerOptions);
@@ -97,28 +114,47 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     sentinel.style.height = '1px';
     sentinel.style.width = '100%';
     sentinel.style.pointerEvents = 'none';
+    sentinel.style.zIndex = '-1';
     document.body.appendChild(sentinel);
     observer.observe(sentinel);
 
     const options = { passive: true };
     
-    // Multiple event listeners for better iOS compatibility
+    // Add event listeners with iOS-specific handling
+    if (isIOS) {
+      // For iOS, rely more on touch events and intersection observer
+      window.addEventListener('touchstart', handleTouchStart, options);
+      window.addEventListener('touchmove', handleTouchMove, options);
+      window.addEventListener('touchend', handleTouchEnd, options);
+      document.addEventListener('touchmove', handleTouchMove, options);
+      document.addEventListener('touchend', handleTouchEnd, options);
+    }
+    
+    // Standard scroll events for all devices
     window.addEventListener('scroll', handleScroll, options);
     document.addEventListener('scroll', handleScroll, options);
-    window.addEventListener('touchmove', handleTouchMove, options);
-    window.addEventListener('touchend', handleScroll, options);
     
     // Force initial check
-    const timeoutId = setTimeout(handleScroll, 100);
+    const initialTimeoutId = setTimeout(updateScrollState, 100);
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleScroll);
+      
+      if (isIOS) {
+        window.removeEventListener('touchstart', handleTouchStart);
+        window.removeEventListener('touchmove', handleTouchMove);
+        window.removeEventListener('touchend', handleTouchEnd);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
+      }
+      
       observer.disconnect();
-      document.body.removeChild(sentinel);
+      if (document.body.contains(sentinel)) {
+        document.body.removeChild(sentinel);
+      }
       clearTimeout(timeoutId);
+      clearTimeout(initialTimeoutId);
     };
   }, []);
 

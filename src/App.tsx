@@ -9,7 +9,6 @@ import Doctors from './components/Doctors';
 import ReceptionTeam from './components/ReceptionTeam';
 import PatientInfo from './components/PatientInfo';
 import Contact from './components/Contact';
-import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import LearningLibrary from './pages/LearningLibrary';
 import MobileLayout from './components/mobile/MobileLayout';
@@ -171,7 +170,6 @@ function HomePage() {
         <Doctors />
         <ReceptionTeam />
         <PatientInfo />
-        <FAQ />
         <Contact />
       </main>
     </div>

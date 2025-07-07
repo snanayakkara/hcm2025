@@ -109,12 +109,12 @@ const MobileDoctorCarousel: React.FC = () => {
       </div>
 
       {/* Doctor Selection Buttons */}
-      <div className="flex overflow-x-auto gap-3 px-4 mb-6 scrollbar-hide">
+      <div className="flex gap-2 px-4 mb-6">
         {doctors.map((doctor) => (
           <motion.button
             key={doctor.id}
             onClick={() => setSelectedDoctorId(doctor.id)}
-            className={`flex flex-col items-center space-y-1 p-2 rounded-2xl min-w-[75px] max-w-[75px] transition-all duration-300 ${
+            className={`flex flex-col items-center space-y-1 p-2 rounded-2xl flex-1 transition-all duration-300 ${
               selectedDoctorId === doctor.id
                 ? 'bg-teal-50 border-2 border-teal-200'
                 : 'bg-gray-50 border-2 border-transparent'
