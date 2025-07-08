@@ -133,37 +133,87 @@ const LearningLibrary: React.FC = () => {
         'Risk factor management and monitoring',
         'Regular follow-up and preventive care'
       ],
+      tests: [
+        'Electrocardiogram (ECG)',
+        'Exercise Stress Test',
+        'Cardiac CT Angiography (CTCA)',
+        'Coronary Angiography',
+        'Echocardiogram',
+        'Blood tests (cholesterol, diabetes screening)'
+      ],
       icon: <Heart className="w-6 h-6 text-primary-500" />
     },
     {
-      name: 'Heart Failure',
-      description: 'A long-term condition in which the heart muscle cannot pump blood strongly enough to meet the body needs, causing fluid build-up, breathlessness and fatigue. With the right treatment plan, most people can live longer and feel better.',
+      name: 'Heart Failure with Reduced Ejection Fraction (HFrEF)',
+      description: 'A condition where the heart muscle is weakened and can’t pump enough blood around the body, leading to symptoms like tiredness and fluid retention. Effective treatments can help improve symptoms and quality of life.',
       symptoms: [
-        'Shortness of breath on exertion or when lying flat',
-        'Swollen ankles, legs or abdomen (fluid build-up)',
-        'Persistent cough or wheeze',
-        'Fatigue and reduced exercise capacity',
+        'Shortness of breath, especially with activity or when lying down',
+        'Swollen ankles, legs, or abdomen due to fluid retention',
+        'Persistent cough or wheezing',
+        'Fatigue or reduced exercise capacity',
         'Rapid or irregular heartbeat (palpitations)',
-        'Sudden weight gain or bloated stomach',
-        'Dizziness or light-headedness'
+        'Sudden weight gain due to fluid buildup'
       ],
       causes: [
-        'Coronary heart disease or previous heart attack',
+        'Previous heart attack (myocardial infarction)',
+        'Coronary artery disease',
         'High blood pressure (hypertension)',
-        'Damaged heart muscle (cardiomyopathy or myocarditis)',
-        'Faulty heart valves (valve disease)',
-        'Heart rhythm problems (e.g. atrial fibrillation)',
-        'Congenital heart disease',
-        'Long-standing conditions such as diabetes or thyroid disease'
+        'Heart muscle damage (cardiomyopathy)',
+        'Faulty heart valves',
+        'Long-term alcohol abuse or drug use'
       ],
       treatments: [
-        'Evidence-based medicines: ACE inhibitors/ARBs/ARNIs, beta-blockers, MRAs, SGLT2 inhibitors, diuretics',
-        'Heart-failure management program and cardiac rehabilitation',
-        'Lifestyle changes: low-salt diet, fluid balance, weight monitoring, limiting alcohol',
-        'Pacemaker, cardiac resynchronisation therapy (CRT) or implantable defibrillator if indicated',
-        'Surgery or procedures such as valve repair/replacement, coronary bypass or, rarely, heart transplant'
+        'Medications such as ACE inhibitors, beta-blockers, and diuretics',
+        'Lifestyle changes including a low-salt diet, regular gentle exercise, and fluid restriction',
+        'Cardiac rehabilitation programs',
+        'Pacemaker or defibrillator implantation, if needed',
+        'Surgery for valve repair or replacement, or in severe cases, heart transplant'
+      ],
+      tests: [
+        'Echocardiogram (ultrasound of the heart)',
+        'Electrocardiogram (ECG)',
+        'Cardiac MRI',
+        'Chest X-ray',
+        'Blood tests (BNP/NT-proBNP, kidney function)',
+        'Coronary angiography if indicated'
       ],
       icon: <Activity className="w-6 h-6 text-sage-500" />
+    },
+    {
+      name: 'Heart Failure with Preserved Ejection Fraction (HFpEF)',
+      description: 'A form of heart failure where the heart muscle is stiff and doesn’t relax properly, making it harder for the heart to fill with blood. With the right management plan, symptoms can be controlled effectively.',
+      symptoms: [
+        'Shortness of breath, especially during activity',
+        'Fatigue and reduced physical endurance',
+        'Swelling in ankles, legs, or abdomen',
+        'Difficulty breathing when lying flat',
+        'Persistent cough or wheeze',
+        'Rapid heartbeat (palpitations)'
+      ],
+      causes: [
+        'High blood pressure (hypertension)',
+        'Diabetes',
+        'Obesity and metabolic syndrome',
+        'Coronary artery disease',
+        'Atrial fibrillation',
+        'Aging and stiffening of heart muscle'
+      ],
+      treatments: [
+        'Blood pressure control medications like diuretics',
+        'Lifestyle modifications: healthy diet, weight loss, regular physical activity',
+        'Management of related conditions such as diabetes and high cholesterol',
+        'Cardiac rehabilitation to improve overall heart health',
+        'Regular monitoring by a cardiologist'
+      ],
+      tests: [
+        'Echocardiogram',
+        'Electrocardiogram (ECG)',
+        'Exercise Stress Echocardiogram',
+        'Cardiac MRI',
+        'Blood tests (BNP/NT-proBNP, diabetes and kidney screening)',
+        'Chest X-ray'
+      ],
+      icon: <Activity className="w-6 h-6 text-accent-500" />
     },
     {
       name: 'Atrial Fibrillation (AF)',
@@ -195,6 +245,13 @@ const LearningLibrary: React.FC = () => {
         'Catheter ablation for rhythm control',
         'Lifestyle changes: weight, alcohol, blood pressure, sleep apnoea'
       ],
+      tests: [
+        'Electrocardiogram (ECG)',
+        'Holter monitor or event monitor',
+        'Echocardiogram',
+        'Blood tests (thyroid function, kidney function)',
+        'Sleep study (for sleep apnoea screening)'
+      ],
       icon: <Activity className="w-6 h-6 text-accent-500" />
     },
     {
@@ -220,6 +277,13 @@ const LearningLibrary: React.FC = () => {
         'Medicines to control blood pressure, cholesterol and heart-failure symptoms',
         'Lifestyle measures: quit smoking, manage blood pressure and cholesterol'
       ],
+      tests: [
+        'Echocardiogram',
+        'Electrocardiogram (ECG)',
+        'Cardiac CT scan (for valve sizing)',
+        'Coronary angiography if valve replacement considered',
+        'Exercise Stress Test (in selected cases)'
+      ],
       icon: <Heart className="w-6 h-6 text-primary-500" />
     },
     {
@@ -228,6 +292,13 @@ const LearningLibrary: React.FC = () => {
       symptoms: ['Shortness of breath', 'Fatigue', 'Heart palpitations', 'Swelling in feet/ankles', 'Heart murmur'],
       causes: ['Mitral valve prolapse', 'Heart attack', 'Infection', 'Age-related wear', 'Rheumatic heart disease'],
       treatments: ['Monitoring', 'Medications', 'Valve repair', 'Valve replacement', 'MitraClip procedure'],
+      tests: [
+        'Echocardiogram',
+        'Electrocardiogram (ECG)',
+        'Transesophageal Echocardiogram (TOE)',
+        'Cardiac MRI',
+        'Exercise Stress Echocardiogram'
+      ],
       icon: <Heart className="w-6 h-6 text-sage-500" />
     },
     {
@@ -236,15 +307,137 @@ const LearningLibrary: React.FC = () => {
       symptoms: ['Often no symptoms', 'Headaches', 'Shortness of breath', 'Nosebleeds (severe cases)'],
       causes: ['Genetics', 'Poor diet', 'Lack of exercise', 'Stress', 'Obesity'],
       treatments: ['Lifestyle changes', 'Blood pressure medications', 'Regular monitoring', 'Dietary modifications'],
+      tests: [
+        'Blood pressure monitoring (home or ambulatory)',
+        'Blood tests (kidney function, cholesterol, diabetes screening)',
+        'Electrocardiogram (ECG)',
+        'Echocardiogram (in selected cases)'
+      ],
       icon: <AlertCircle className="w-6 h-6 text-cream-600" />
     },
+    // --- removed "Arrhythmias" entry ---
     {
-      name: 'Arrhythmias',
-      description: 'Abnormal heart rhythms that can cause the heart to beat too fast, too slow, or irregularly.',
-      symptoms: ['Palpitations', 'Dizziness', 'Shortness of breath', 'Chest pain', 'Fainting'],
-      causes: ['Heart disease', 'Electrolyte imbalances', 'Medications', 'Stress', 'Caffeine'],
-      treatments: ['Lifestyle changes', 'Medications', 'Cardioversion', 'Ablation', 'Pacemaker'],
-      icon: <Activity className="w-6 h-6 text-primary-500" />
+      name: 'Supraventricular Tachycardia (SVT)',
+      description: 'A condition causing the heart to beat very rapidly due to abnormal electrical signals in the upper heart chambers. It can feel uncomfortable, but treatments are highly effective.',
+      symptoms: [
+        'Sudden rapid heartbeat',
+        'Palpitations or a fluttering sensation',
+        'Shortness of breath',
+        'Dizziness or lightheadedness',
+        'Chest discomfort',
+        'Feeling anxious or panicky'
+      ],
+      causes: [
+        'Abnormal electrical pathways in the heart',
+        'Stress or anxiety',
+        'Excessive caffeine or alcohol intake',
+        'Certain medications or stimulants',
+        'Underlying heart conditions'
+      ],
+      treatments: [
+        'Vagal maneuvers (techniques to slow heart rate)',
+        'Medications to control heart rhythm',
+        'Catheter ablation procedure (highly effective)',
+        'Lifestyle adjustments to avoid triggers'
+      ],
+      tests: [
+        'Electrocardiogram (ECG)',
+        'Holter monitor or event monitor',
+        'Electrophysiology study (EPS)',
+        'Echocardiogram'
+      ],
+      icon: <Zap className="w-6 h-6 text-primary-500" />
+    },
+    {
+      name: 'Spontaneous Coronary Artery Dissection (SCAD)',
+      description: 'An uncommon condition where a tear forms inside a coronary artery, potentially restricting blood flow to the heart. While it can be frightening, most people recover well with proper care.',
+      symptoms: [
+        'Chest pain or discomfort, often sudden',
+        'Pain radiating to arms, neck, or back',
+        'Shortness of breath',
+        'Sweating or nausea',
+        'Extreme fatigue'
+      ],
+      causes: [
+        'Often occurs spontaneously without clear cause',
+        'More common in younger women, especially after pregnancy',
+        'Extreme physical exertion or emotional stress',
+        'Underlying blood vessel conditions'
+      ],
+      treatments: [
+        'Careful monitoring and medications to aid healing',
+        'Blood pressure control and stress management',
+        'Cardiac rehabilitation and lifestyle changes',
+        'Procedures or surgery in severe cases'
+      ],
+      tests: [
+        'Coronary Angiography',
+        'Cardiac CT Angiography (CTCA)',
+        'Electrocardiogram (ECG)',
+        'Echocardiogram'
+      ],
+      icon: <Heart className="w-6 h-6 text-primary-500" />
+    },
+    {
+      name: 'Heart Block',
+      description: 'A condition where electrical signals in the heart are delayed or blocked, causing a slower heartbeat. Many people manage it effectively with treatment.',
+      symptoms: [
+        'Slow or irregular heartbeat',
+        'Dizziness or fainting',
+        'Fatigue or shortness of breath',
+        'Chest discomfort',
+        'Reduced ability to exercise'
+      ],
+      causes: [
+        'Aging-related changes in the heart’s electrical system',
+        'Previous heart attack or heart surgery',
+        'Certain medications',
+        'Conditions like Lyme disease or rheumatic fever'
+      ],
+      treatments: [
+        'Regular monitoring by a cardiologist',
+        'Adjusting medications that may cause blockages',
+        'Pacemaker implantation, if needed, to regulate heart rhythm',
+        'Lifestyle advice and cardiac rehabilitation'
+      ],
+      tests: [
+        'Electrocardiogram (ECG)',
+        'Holter monitor or event monitor',
+        'Echocardiogram',
+        'Electrophysiology study (in selected cases)'
+      ],
+      icon: <Monitor className="w-6 h-6 text-sage-500" />
+    },
+    {
+      name: 'Atrial Flutter',
+      description: 'A rapid, regular heart rhythm caused by abnormal electrical signals in the heart’s upper chambers. It’s treatable and can often be effectively controlled.',
+      symptoms: [
+        'Rapid, regular heartbeat',
+        'Palpitations or fluttering sensation',
+        'Shortness of breath or chest discomfort',
+        'Fatigue or reduced exercise ability',
+        'Dizziness or faintness'
+      ],
+      causes: [
+        'Underlying heart conditions like coronary artery disease',
+        'High blood pressure',
+        'Heart valve disease',
+        'Recent heart surgery',
+        'Alcohol or stimulant use'
+      ],
+      treatments: [
+        'Medications to control heart rate and rhythm',
+        'Electrical cardioversion to restore normal rhythm',
+        'Catheter ablation procedure for lasting relief',
+        'Blood-thinning medications to reduce stroke risk'
+      ],
+      tests: [
+        'Electrocardiogram (ECG)',
+        'Holter monitor or event monitor',
+        'Echocardiogram',
+        'Electrophysiology study (EPS)'
+      ],
+      icon: <Activity className="w-6 h-6 text-accent-500" />
     }
   ];
 
@@ -263,12 +456,63 @@ const LearningLibrary: React.FC = () => {
     return matchesSearch;
   });
 
+  /**
+   * Maps the plain‑language test names shown in each condition card
+   * to the corresponding key in `procedureJourneys`.
+   * When a test appears in this map, we can jump straight to the
+   * “Tests & Procedures” tab and open the matching card.
+   */
+  const testToProcedureMap: Record<string, string> = {
+    'Cardiac CT Angiography (CTCA)': 'ctca',
+    'Cardiac CT scan (for valve sizing)': 'ctca',
+    'Coronary Angiography': 'angiogram_pci',
+    'Exercise Stress Test': 'exercise_stress_echo',
+    'Exercise Stress Echocardiogram': 'exercise_stress_echo',
+    'Echocardiogram (ultrasound of the heart)': 'general',
+    'Echocardiogram': 'general',
+    'Cardiac MRI': 'cardiac_mri',
+    'PYP Scan': 'pyp_scan',
+    'SPECT/CT imaging': 'pyp_scan',
+    'Electrophysiology study (EPS)': 'svt_ablation',
+    'Pacemaker implantation': 'pacemaker',
+    
+    // Procedures/Treatments
+    'Pacemaker or defibrillator implantation, if needed': 'pacemaker',
+    'Coronary angioplasty and stent placement (PCI)': 'angiogram_pci',
+    'Catheter ablation': 'af_ablation',
+    'Catheter ablation for rhythm control': 'af_ablation',
+    'Catheter ablation procedure (highly effective)': 'svt_ablation',
+    'Aortic valve replacement — either surgical (open-heart) or transcatheter (TAVI)': 'tavi',
+    'Transcatheter (TAVI)': 'tavi',
+    'TAVI': 'tavi',
+    'Valve repair': 'mteer',
+    'Valve replacement': 'tavi',
+    'MitraClip procedure': 'mteer',
+    'Electrical cardioversion to restore normal rhythm': 'toe_dcr',
+    'Medicines or electrical cardioversion to restore normal rhythm': 'toe_dcr'
+  };
+
+  /**
+   * When a test “pill” is clicked we switch to the
+   * Tests & Procedures tab, open the relevant journey,
+   * and smoothly scroll to the top.
+   */
+  const handleTestClick = (testName: string) => {
+    const target = testToProcedureMap[testName];
+    if (target) {
+      setActiveTab('journeys');
+      setSelectedProcedure(target);
+      scrollToDetailCard();
+    }
+  };
+
   const procedureJourneys = {
     general: {
       name: 'General Patient Journey',
       description: 'Overview of the standard patient care process',
       color: 'from-primary-500 to-accent-500',
       category: 'consultation',
+      type: 'procedure',
       image: '/images/consult.png',
       summary: 'A comprehensive cardiac consultation and diagnostic process designed to assess your heart health and develop a personalized treatment plan.',
       needToKnow: [
@@ -370,10 +614,11 @@ const LearningLibrary: React.FC = () => {
       description: 'Minimally invasive aortic valve replacement procedure',
       color: 'from-accent-500 to-primary-500',
       category: 'interventional',
+      type: 'procedure',
       image: '/images/tavi.png',
       summary: 'A minimally invasive procedure to replace a diseased aortic valve using a catheter, typically through the groin artery, avoiding the need for open heart surgery.',
       needToKnow: [
-        'Procedure takes 2-3 hours under general anesthesia',
+        'Procedure takes 2-3 hours under general anaesthesia',
         'Usually requires 1-2 day hospital stay',
         'Pre-procedure CT scan and tests required',
         'Recovery is faster than surgical valve replacement',
@@ -402,7 +647,7 @@ const LearningLibrary: React.FC = () => {
           icon: <Heart className="w-5 h-5" />,
           duration: "2-3 hours",
           details: [
-            "Local anesthesia with sedation",
+            "Local a with sedation",
             "Catheter-based valve delivery",
             "Real-time imaging guidance",
             "Immediate function assessment"
@@ -443,6 +688,7 @@ const LearningLibrary: React.FC = () => {
       description: 'Electrical cardioversion with advanced cardiac imaging guidance',
       color: 'from-sage-500 to-accent-500',
       category: 'procedures',
+      type: 'procedure',
       image: '/images/toe_drawn.png',
       summary: 'A procedure combining advanced cardiac imaging with electrical cardioversion to safely restore normal heart rhythm in patients with atrial fibrillation.',
       needToKnow: [
@@ -463,7 +709,7 @@ const LearningLibrary: React.FC = () => {
           details: [
             "Anticoagulation therapy optimization",
             "Pre-procedure echocardiography",
-            "Anesthetic assessment",
+            "Anaesthetic assessment",
             "Consent and education process"
           ],
         },
@@ -489,7 +735,7 @@ const LearningLibrary: React.FC = () => {
           icon: <Zap className="w-5 h-5" />,
           duration: "15-30 minutes",
           details: [
-            "General anesthesia administration",
+            "General anaesthesia administration",
             "Synchronized electrical cardioversion",
             "Continuous cardiac monitoring",
             "Immediate rhythm assessment"
@@ -516,14 +762,15 @@ const LearningLibrary: React.FC = () => {
       description: 'Diagnostic coronary imaging with potential intervention',
       color: 'from-primary-500 to-cream-500',
       category: 'interventional',
+      type: 'procedure',
       image: '/images/angio.png',
       summary: 'Diagnostic procedure to visualize coronary arteries using contrast dye, with potential for immediate treatment (angioplasty/stenting) if blockages are found.',
       needToKnow: [
         'Procedure duration: 30-90 minutes depending on complexity',
-        'Local anesthetic via wrist or groin access',
+        'Local anaesthetic via wrist or groin access',
         'May require overnight stay if intervention needed',
         'Kidney function tests required beforehand',
-        'Dual antiplatelet therapy if stent placed'
+        'Two blood thinning tablets if stent placed'
       ],
       steps: [
         {
@@ -548,7 +795,7 @@ const LearningLibrary: React.FC = () => {
           icon: <Activity className="w-5 h-5" />,
           duration: "30-60 minutes",
           details: [
-            "Local anesthetic and catheter insertion",
+            "Local anaesthetic and catheter insertion",
             "Contrast injection and X-ray imaging",
             "Coronary artery assessment",
             "Decision making for intervention"
@@ -589,11 +836,12 @@ const LearningLibrary: React.FC = () => {
       description: 'Permanent cardiac rhythm device insertion',
       color: 'from-primary-500 to-cream-500',
       category: 'electrophysiology',
+      type: 'procedure',
       image: '/images/pacemaker.png',
       summary: 'Surgical implantation of a small electronic device that helps regulate heart rhythm by delivering electrical impulses when needed.',
       needToKnow: [
         'Day procedure or overnight stay',
-        'Local anesthetic below left collarbone',
+        'Local anaesthetic below left collarbone',
         'Arm movement restrictions for 4-6 weeks',
         'Regular device checks every 3-6 months',
         'Battery replacement needed every 8-12 years'
@@ -621,7 +869,7 @@ const LearningLibrary: React.FC = () => {
           icon: <Zap className="w-5 h-5" />,
           duration: "1-2 hours",
           details: [
-            "Local anesthesia and sterile preparation",
+            "Local a and sterile preparation",
             "Lead positioning using X-ray guidance",
             "Generator placement in chest pocket",
             "Initial device testing and programming"
@@ -662,11 +910,12 @@ const LearningLibrary: React.FC = () => {
       description: 'Advanced catheter ablation for rhythm control',
       color: 'from-sage-500 to-primary-500',
       category: 'electrophysiology',
+      type: 'procedure',
       image: '/images/afabl_drawn.png',
       summary: 'Advanced catheter-based procedure using radiofrequency or pulsed field technology to eliminate abnormal electrical pathways causing atrial fibrillation.',
       needToKnow: [
         'Complex procedure taking 3-5 hours',
-        'General anesthesia required',
+        'General anaesthesia required',
         'Overnight hospital stay',
         'Blood thinning management crucial',
         '3-6 months monitoring period for success assessment'
@@ -683,7 +932,7 @@ const LearningLibrary: React.FC = () => {
             "Cardiac MRI or CT for anatomical mapping",
             "Anticoagulation optimization",
             "Pre-procedural echocardiography",
-            "Anesthetic consultation and preparation"
+            "Anaesthetic consultation and preparation"
           ],
         },
         {
@@ -694,7 +943,7 @@ const LearningLibrary: React.FC = () => {
           icon: <Zap className="w-5 h-5" />,
           duration: "3-5 hours",
           details: [
-            "General anesthesia and catheter positioning",
+            "General anaesthesia and catheter positioning",
             "3D mapping of electrical activity",
             "Pulmonary vein isolation",
             "Additional lesion sets if required"
@@ -735,11 +984,12 @@ const LearningLibrary: React.FC = () => {
       description: 'Minimally invasive mitral valve repair using MitraClip technology',
       color: 'from-cream-500 to-accent-500',
       category: 'interventional',
+      type: 'procedure',
       image: '/images/mteer_drawn.png',
       summary: 'Minimally invasive procedure using MitraClip technology to repair a leaking mitral valve without open heart surgery.',
       needToKnow: [
         'Heart team evaluation required',
-        'General anesthesia with TEE guidance',
+        'General anaesthesia with TOE guidance',
         '2-4 hour procedure via groin access',
         '1-2 day hospital stay',
         'Significant symptom improvement expected'
@@ -761,13 +1011,13 @@ const LearningLibrary: React.FC = () => {
         },
         {
           id: 2,
-          title: "MitraClip Procedure",
+          title: "mTEER Procedure",
           subtitle: "Transcatheter valve repair intervention",
-          description: "Minimally invasive placement of MitraClip device to reduce mitral valve leakage.",
+          description: "Minimally invasive placement of MitraClip or PASCAL device to reduce mitral valve leakage.",
           icon: <Activity className="w-5 h-5" />,
           duration: "2-4 hours",
           details: [
-            "General anesthesia and TEE guidance",
+            "General anaesthesia and TEE guidance",
             "Transseptal catheter access",
             "Clip positioning and deployment",
             "Real-time assessment of repair adequacy"
@@ -808,12 +1058,13 @@ const LearningLibrary: React.FC = () => {
       description: 'Non-invasive coronary artery imaging using advanced CT technology',
       color: 'from-sage-500 to-primary-500',
       category: 'imaging',
+      type: 'test',
       summary: 'High-resolution CT scan with contrast to visualize coronary arteries and assess for blockages without invasive catheterization.',
       needToKnow: [
         'Fast for 4 hours, avoid caffeine day of scan',
         'Heart rate control with medication if needed',
         'Quick 15-30 minute procedure',
-        'Results available same day',
+        'Results available within a few days',
         'Excellent alternative to invasive angiography'
       ],
       steps: [
@@ -880,6 +1131,7 @@ const LearningLibrary: React.FC = () => {
       description: 'Specialized nuclear imaging to detect cardiac amyloidosis',
       color: 'from-accent-500 to-sage-500',
       category: 'imaging',
+      type: 'test',
       summary: 'Specialized nuclear imaging study to detect and quantify cardiac amyloid deposits using radiotracer technology.',
       needToKnow: [
         'No fasting required, total time 3 hours',
@@ -952,6 +1204,7 @@ const LearningLibrary: React.FC = () => {
       description: 'Catheter ablation for supraventricular tachycardia treatment',
       color: 'from-primary-500 to-accent-500',
       category: 'electrophysiology',
+      type: 'procedure',
       summary: 'Precise catheter-based procedure to eliminate abnormal electrical pathways causing supraventricular tachycardia episodes.',
       needToKnow: [
         'High success rate (>95% for most SVT types)',
@@ -1024,13 +1277,14 @@ const LearningLibrary: React.FC = () => {
       description: 'Advanced magnetic resonance imaging for detailed cardiac assessment',
       color: 'from-sage-500 to-cream-500',
       category: 'imaging',
+      type: 'test',
       summary: 'Advanced magnetic resonance imaging providing detailed assessment of cardiac structure, function, and tissue characteristics.',
       needToKnow: [
         'MRI safety screening essential',
-        '45-60 minute scan with breath holds',
-        'Contrast injection may be required',
-        'Results available within 24-48 hours',
-        'Most detailed cardiac imaging available'
+        '60 minute scan with breath holds',
+        'Contrast (non-iodine) injection may be required',
+        'Results available within a week',
+        'Most detailed cardiac imaging available for the heart muscle'
       ],
       steps: [
         {
@@ -1044,7 +1298,6 @@ const LearningLibrary: React.FC = () => {
             "MRI safety questionnaire completion",
             "Metallic implant assessment",
             "Claustrophobia evaluation and management",
-            "Contrast allergy screening"
           ],
         },
         {
@@ -1096,6 +1349,7 @@ const LearningLibrary: React.FC = () => {
       description: 'Combined exercise testing with cardiac ultrasound imaging',
       color: 'from-cream-500 to-sage-500',
       category: 'imaging',
+      type: 'test',
       image: '/images/stressecho.png',
       summary: 'Exercise test combined with cardiac ultrasound to assess heart function under stress and detect coronary artery disease.',
       needToKnow: [
@@ -1191,10 +1445,55 @@ const LearningLibrary: React.FC = () => {
              step.title.toLowerCase().includes(searchLower) ||
              step.subtitle.toLowerCase().includes(searchLower) ||
              step.description.toLowerCase().includes(searchLower) ||
-             step.details.some(detail => detail.toLowerCase().includes(searchLower)) ||
-             step.quickStart.some(qs => qs.toLowerCase().includes(searchLower))
+             step.details.some(detail => detail.toLowerCase().includes(searchLower))
            );
   });
+
+  const groupedProcedures = filteredProcedures.reduce((acc, [key, procedure]) => {
+    if (key === 'general') {
+      // Handle general separately - it will be shown at the top
+      return acc;
+    }
+    const type = procedure.type || 'procedure';
+    if (!acc[type]) {
+      acc[type] = [];
+    }
+    acc[type].push([key, procedure]);
+    return acc;
+  }, {} as Record<string, Array<[string, any]>>);
+
+  // Extract general procedure separately for top display
+  const generalProcedure = filteredProcedures.find(([key]) => key === 'general');
+
+  /**
+   * Scrolls to the detailed procedure card section with offset for sticky header
+   */
+  const scrollToDetailCard = () => {
+    setTimeout(() => {
+      const detailCard = document.querySelector('[data-testid="selected-journey-display"]');
+      if (detailCard) {
+        const headerHeight = 100; // Account for sticky header height
+        const elementPosition = detailCard.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      } else {
+        // Fallback: scroll to a reasonable position that shows the detail card
+        window.scrollTo({ top: 700, behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
+  /**
+   * When a procedure button is clicked, select it and scroll to the detail card
+   */
+  const handleProcedureClick = (procedureKey: string) => {
+    setSelectedProcedure(procedureKey);
+    scrollToDetailCard();
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -1312,61 +1611,189 @@ const LearningLibrary: React.FC = () => {
               {/* Procedure Selection */}
               <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200/50 p-8">
                 <h3 className="text-2xl font-bold text-secondary-800 mb-8 text-center">
-                  Select a Procedure Journey
+                  Select a Test or Procedure
                 </h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredProcedures.map(([key, procedure]) => (
-                    <motion.button
-                      key={key}
-                      onClick={() => setSelectedProcedure(key)}
-                      className={`relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
-                        selectedProcedure === key
-                          ? 'shadow-xl scale-105 border-transparent' 
-                          : 'shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-200'
-                      }`}
-                      style={{
-                        backgroundImage: procedure.image ? `url(${procedure.image})` : 'none',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat'
-                      }}
-                      whileHover={{ y: -4 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      {/* Background overlay */}
-                      <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
-                        selectedProcedure === key
-                          ? `bg-gradient-to-r ${procedure.color} opacity-95`
-                          : 'bg-white/95 hover:bg-white/90'
-                      }`} />
-                      
-                      {/* Content */}
-                      <div className="relative z-10 space-y-4">
-                        <h4 className={`font-semibold text-lg leading-tight ${
-                          selectedProcedure === key ? 'text-white' : 'text-secondary-900'
-                        }`}>
-                          {procedure.name}
-                        </h4>
-                        <p className={`text-sm ${
-                          selectedProcedure === key ? 'text-white/90' : 'text-secondary-600'
-                        }`}>
-                          {procedure.description}
-                        </p>
-                        {selectedProcedure === key && (
-                          <div className="flex items-center space-x-2 text-white/90">
-                            <CheckCircle className="w-4 h-4" />
-                            <span className="text-sm font-medium">Selected</span>
+                
+                <div className="space-y-12">
+                  {/* General Patient Journey - Top Section */}
+                  {generalProcedure && (
+                    <div>
+                      <h4 className="text-xl font-semibold text-secondary-700 mb-6 flex items-center">
+                        <BookOpen className="w-5 h-5 mr-2 text-primary-500" />
+                        Getting Started
+                      </h4>
+                      <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-6 max-w-md mx-auto">
+                        <motion.button
+                          onClick={() => handleProcedureClick('general')}
+                          className={`relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
+                            selectedProcedure === 'general'
+                              ? 'shadow-xl scale-105 border-transparent' 
+                              : 'shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-300'
+                          }`}
+                          style={{
+                            backgroundImage: generalProcedure[1].image ? `url(${generalProcedure[1].image})` : 'none',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat'
+                          }}
+                          whileHover={{ y: -4, scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          {/* Background overlay */}
+                          <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
+                            selectedProcedure === 'general'
+                              ? `bg-gradient-to-r ${generalProcedure[1].color} opacity-85`
+                              : 'bg-white/75 hover:bg-white/85'
+                          }`} />
+                          
+                          {/* Selection indicator */}
+                          {selectedProcedure === 'general' && (
+                            <div className="absolute top-3 right-3 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg">
+                              <div className="w-3 h-3 bg-primary-500 rounded-full"></div>
+                            </div>
+                          )}
+                          
+                          {/* Content */}
+                          <div className="relative z-10 space-y-4">
+                            <h4 className={`font-semibold text-lg leading-tight ${
+                              selectedProcedure === 'general' ? 'text-white' : 'text-secondary-900'
+                            }`}>
+                              {generalProcedure[1].name}
+                            </h4>
+                            <p className={`text-sm ${
+                              selectedProcedure === 'general' ? 'text-white/90' : 'text-secondary-600'
+                            }`}>
+                              {generalProcedure[1].description}
+                            </p>
                           </div>
-                        )}
+                        </motion.button>
                       </div>
-                    </motion.button>
-                  ))}
+                    </div>
+                  )}
+
+                  {/* Tests Section */}
+                  {groupedProcedures.test && groupedProcedures.test.length > 0 && (
+                    <div>
+                      <h4 className="text-xl font-semibold text-secondary-700 mb-6 flex items-center">
+                        <Search className="w-5 h-5 mr-2 text-primary-500" />
+                        Diagnostic Tests
+                      </h4>
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {groupedProcedures.test.map(([key, procedure]) => (
+                          <motion.button
+                            key={key}
+                            onClick={() => handleProcedureClick(key)}
+                            className={`relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
+                              selectedProcedure === key
+                                ? 'shadow-xl scale-105 border-transparent' 
+                                : 'shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-300'
+                            }`}
+                            style={{
+                              backgroundImage: procedure.image ? `url(${procedure.image})` : 'none',
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                              backgroundRepeat: 'no-repeat'
+                            }}
+                            whileHover={{ y: -4, scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            {/* Background overlay */}
+                            <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
+                              selectedProcedure === key
+                                ? `bg-gradient-to-r ${procedure.color} opacity-85`
+                                : 'bg-white/75 hover:bg-white/85'
+                            }`} />
+                            
+                            {/* Selection indicator */}
+                            {selectedProcedure === key && (
+                              <div className="absolute top-3 right-3 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg">
+                                <div className="w-3 h-3 bg-primary-500 rounded-full"></div>
+                              </div>
+                            )}
+                            
+                            {/* Content */}
+                            <div className="relative z-10 space-y-4">
+                              <h4 className={`font-semibold text-lg leading-tight ${
+                                selectedProcedure === key ? 'text-white' : 'text-secondary-900'
+                              }`}>
+                                {procedure.name}
+                              </h4>
+                              <p className={`text-sm ${
+                                selectedProcedure === key ? 'text-white/90' : 'text-secondary-600'
+                              }`}>
+                                {procedure.description}
+                              </p>
+                            </div>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Procedures Section */}
+                  {groupedProcedures.procedure && groupedProcedures.procedure.length > 0 && (
+                    <div>
+                      <h4 className="text-xl font-semibold text-secondary-700 mb-6 flex items-center">
+                        <Heart className="w-5 h-5 mr-2 text-primary-500" />
+                        Therapeutic Procedures
+                      </h4>
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {groupedProcedures.procedure.map(([key, procedure]) => (
+                          <motion.button
+                            key={key}
+                            onClick={() => handleProcedureClick(key)}
+                            className={`relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
+                              selectedProcedure === key
+                                ? 'shadow-xl scale-105 border-transparent' 
+                                : 'shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-300'
+                            }`}
+                            style={{
+                              backgroundImage: procedure.image ? `url(${procedure.image})` : 'none',
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                              backgroundRepeat: 'no-repeat'
+                            }}
+                            whileHover={{ y: -4, scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            {/* Background overlay */}
+                            <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
+                              selectedProcedure === key
+                                ? `bg-gradient-to-r ${procedure.color} opacity-85`
+                                : 'bg-white/75 hover:bg-white/85'
+                            }`} />
+                            
+                            {/* Selection indicator */}
+                            {selectedProcedure === key && (
+                              <div className="absolute top-3 right-3 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg">
+                                <div className="w-3 h-3 bg-primary-500 rounded-full"></div>
+                              </div>
+                            )}
+                            
+                            {/* Content */}
+                            <div className="relative z-10 space-y-4">
+                              <h4 className={`font-semibold text-lg leading-tight ${
+                                selectedProcedure === key ? 'text-white' : 'text-secondary-900'
+                              }`}>
+                                {procedure.name}
+                              </h4>
+                              <p className={`text-sm ${
+                                selectedProcedure === key ? 'text-white/90' : 'text-secondary-600'
+                              }`}>
+                                {procedure.description}
+                              </p>
+                            </div>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* Selected Journey Display */}
               {selectedProcedure && procedureJourneys[selectedProcedure] && (
-                <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200/50 p-8">
+                <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200/50 p-8" data-testid="selected-journey-display">
                   {/* Header Section */}
                   <div className="text-center mb-8">
                     <h3 className="text-3xl font-bold text-secondary-800 mb-4">
@@ -1602,7 +2029,20 @@ const LearningLibrary: React.FC = () => {
                         {(isExpanded ? condition.treatments : condition.treatments.slice(0, 3)).map((treatment, idx) => (
                           <li key={idx} className="text-sm text-secondary-600 flex items-start">
                             <span className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                            {treatment}
+                            {testToProcedureMap[treatment] ? (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleTestClick(treatment);
+                                }}
+                                className="inline-flex items-center space-x-1 bg-green-50 hover:bg-green-100 text-green-700 px-2 py-1 rounded-full shadow transition"
+                              >
+                                <PlayCircle className="w-3 h-3" />
+                                <span>{treatment}</span>
+                              </button>
+                            ) : (
+                              <span>{treatment}</span>
+                            )}
                           </li>
                         ))}
                         {!isExpanded && condition.treatments.length > 3 && (
@@ -1613,6 +2053,43 @@ const LearningLibrary: React.FC = () => {
                         )}
                       </ul>
                     </div>
+
+                    {/* Tests */}
+                    {condition.tests && condition.tests.length > 0 && (
+                      <div className="mb-4">
+                        <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
+                          <Search className="w-4 h-4 mr-2 text-purple-500" />
+                          Common Tests
+                        </h4>
+                        <ul className="space-y-1">
+                          {(isExpanded ? condition.tests : condition.tests.slice(0, 3)).map((test, idx) => (
+                            <li key={idx} className="text-sm text-secondary-600 flex items-start">
+                              <span className="w-1.5 h-1.5 bg-purple-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                              {testToProcedureMap[test] ? (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();            // prevent expanding/collapsing when pill clicked
+                                    handleTestClick(test);
+                                  }}
+                                  className="inline-flex items-center space-x-1 bg-purple-50 hover:bg-purple-100 text-purple-700 px-2 py-1 rounded-full shadow transition"
+                                >
+                                  <PlayCircle className="w-3 h-3" />
+                                  <span>{test}</span>
+                                </button>
+                              ) : (
+                                <span>{test}</span>
+                              )}
+                            </li>
+                          ))}
+                          {!isExpanded && condition.tests.length > 3 && (
+                            <li className="text-xs text-secondary-500 italic flex items-center">
+                              <ChevronDown className="w-3 h-3 mr-1" />
+                              +{condition.tests.length - 3} more tests (click to expand)
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    )}
 
                     {/* Expand/Collapse Indicator */}
                     <div className="mt-4 pt-3 border-t border-secondary-200/50">
