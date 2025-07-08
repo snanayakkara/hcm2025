@@ -57,6 +57,19 @@ const Doctors: React.FC = () => {
       appointments: ["Cabrini Hospital Malvern", "Alfred Hospital"],
       description: "Dr Nanayakkara is an interventional and structural cardiologist with expertise in advanced procedures including transcatheter valve interventions. He combines clinical excellence with research innovation and has a passion for both face-to-face and telemedicine care.",
       color: '#79e7e1',
+    },
+    {
+      name: "Dr Kate Rowe",
+      title: "General Cardiologist & Cardiac Imaging Specialist",
+      specialization: "Cardiac Imaging & Valvular Heart Disease",
+      education: "MBBS (Hons) Monash University 2013, Advanced training in cardiology at Alfred Hospital and Royal Darwin Hospital",
+      degrees: "MBBS FRACP",
+      expertise: ["Cardiac CT", "Cardiac MRI", "Echocardiography (resting, stress, TOE)", "Valvular heart disease", "Indigenous health"],
+      image: "/images/katerowe.png",
+      locations: ["Cabrini Hospital Malvern", "Pakenham"],
+      appointments: ["Alfred Hospital", "Sunshine Hospital"],
+      description: "Dr Rowe is a general cardiologist and cardiac imaging specialist with particular expertise in valvular heart disease and Indigenous health. She has undertaken advanced training in cardiac CT, MRI and all forms of echocardiography.",
+      color: '#2dd4bf',
     }
   ];
 
