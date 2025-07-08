@@ -32,7 +32,7 @@ const Header: React.FC = () => {
     { type: 'service', title: 'TOE-Guided Cardioversion', description: 'Electrical cardioversion with TOE guidance for atrial fibrillation', section: 'services', keywords: ['cardioversion', 'dcr', 'atrial fibrillation', 'rhythm', 'toe guided'] },
     { type: 'service', title: 'Atrial Fibrillation Ablation', description: 'Advanced catheter ablation including Pulsed Field Ablation (PFA)', section: 'services', keywords: ['ablation', 'af ablation', 'atrial fibrillation', 'pfa', 'pulsed field', 'electrophysiology'] },
     { type: 'service', title: 'TAVI', description: 'Transcatheter Aortic Valve Implantation - minimally invasive valve replacement', section: 'services', keywords: ['tavi', 'transcatheter', 'aortic valve', 'valve replacement', 'minimally invasive'] },
-    { type: 'service', title: 'Mitral TEER', description: 'Mitral Transcatheter Edge-to-Edge Repair using MitraClip technology', section: 'services', keywords: ['mteer', 'mitraclip', 'mitral valve', 'valve repair', 'transcatheter'] },
+    { type: 'service', title: 'Mitral TEER', description: 'Mitral Transcatheter Edge-to-Edge Repair using MitraClip or PASCAL technology', section: 'services', keywords: ['mteer', 'mitraclip', 'mitral valve', 'PASCAL', 'valve repair', 'transcatheter'] },
     { type: 'service', title: 'Pacemaker Insertion', description: 'Permanent pacemaker implantation for heart rhythm disorders', section: 'services', keywords: ['pacemaker', 'device', 'implant', 'bradycardia', 'heart rhythm'] },
     
     // Doctors
@@ -53,7 +53,34 @@ const Header: React.FC = () => {
     { type: 'page', title: 'Emergency Contact', description: 'Emergency cardiac care information', section: 'patients', keywords: ['emergency', 'urgent', 'after hours', 'contact'] },
     { type: 'page', title: 'Telehealth', description: 'Virtual consultations', section: 'services', keywords: ['telehealth', 'video', 'online', 'virtual', 'remote'] },
     { type: 'page', title: 'Referrals', description: 'Information for referring doctors', section: 'contact', keywords: ['referral', 'referring', 'doctor', 'GP'] },
-    { type: 'page', title: 'FAQ', description: 'Frequently asked questions', section: 'faq', keywords: ['faq', 'questions', 'answers', 'help', 'frequently asked'] }
+    { type: 'page', title: 'FAQ', description: 'Frequently asked questions', section: 'faq', keywords: ['faq', 'questions', 'answers', 'help', 'frequently asked'] },
+    
+    // Library - Heart Conditions
+    { type: 'condition', title: 'Coronary Artery Disease (CAD)', description: 'Narrowing of the coronary arteries that supply blood to the heart muscle', section: 'library-conditions', keywords: ['coronary', 'cad', 'heart attack', 'chest pain', 'angina', 'atherosclerosis', 'stent', 'bypass'] },
+    { type: 'condition', title: 'Heart Failure with Reduced Ejection Fraction (HFrEF)', description: 'A condition where the heart muscle is weakened and can\'t pump enough blood around the body', section: 'library-conditions', keywords: ['heart failure', 'hfref', 'reduced ejection fraction', 'weak heart', 'fluid retention', 'shortness of breath'] },
+    { type: 'condition', title: 'Heart Failure with Preserved Ejection Fraction (HFpEF)', description: 'A form of heart failure where the heart muscle is stiff and doesn\'t relax properly', section: 'library-conditions', keywords: ['heart failure', 'hfpef', 'preserved ejection fraction', 'stiff heart', 'diastolic', 'fatigue'] },
+    { type: 'condition', title: 'Atrial Fibrillation (AF)', description: 'A fast, irregular heartbeat that can come and go', section: 'library-conditions', keywords: ['atrial fibrillation', 'af', 'irregular heartbeat', 'palpitations', 'stroke risk', 'blood thinners', 'ablation'] },
+    { type: 'condition', title: 'Aortic Stenosis', description: 'Narrowing of the aortic valve opening that obstructs blood flow from the heart to the body', section: 'library-conditions', keywords: ['aortic stenosis', 'valve narrowing', 'valve replacement', 'tavi', 'chest pain', 'fainting'] },
+    { type: 'condition', title: 'Mitral Regurgitation', description: 'A condition where the mitral valve does not close properly, allowing blood to leak backward', section: 'library-conditions', keywords: ['mitral regurgitation', 'leaky valve', 'valve repair', 'PASCAL', 'mitraclip', 'heart murmur'] },
+    { type: 'condition', title: 'Hypertension (High Blood Pressure)', description: 'A condition where blood pressure in the arteries is persistently elevated', section: 'library-conditions', keywords: ['hypertension', 'high blood pressure', 'bp', 'headaches', 'medication'] },
+    { type: 'condition', title: 'Supraventricular Tachycardia (SVT)', description: 'A condition causing the heart to beat very rapidly due to abnormal electrical signals', section: 'library-conditions', keywords: ['svt', 'supraventricular tachycardia', 'rapid heartbeat', 'ablation', 'palpitations'] },
+    { type: 'condition', title: 'Spontaneous Coronary Artery Dissection (SCAD)', description: 'An uncommon condition where a tear forms inside a coronary artery', section: 'library-conditions', keywords: ['scad', 'coronary dissection', 'tear', 'chest pain', 'women', 'pregnancy'] },
+    { type: 'condition', title: 'Heart Block', description: 'A condition where electrical signals in the heart are delayed or blocked', section: 'library-conditions', keywords: ['heart block', 'slow heartbeat', 'pacemaker', 'bradycardia', 'fainting'] },
+    { type: 'condition', title: 'Atrial Flutter', description: 'A rapid, regular heart rhythm caused by abnormal electrical signals', section: 'library-conditions', keywords: ['atrial flutter', 'rapid rhythm', 'ablation', 'cardioversion', 'palpitations'] },
+    
+    // Library - Tests and Procedures
+    { type: 'procedure', title: 'General Patient Journey', description: 'Overview of the standard patient care process', section: 'library-procedures', keywords: ['consultation', 'first visit', 'cardiac assessment', 'ecg', 'echocardiogram'] },
+    { type: 'procedure', title: 'TAVI (Transcatheter Aortic Valve Implantation)', description: 'Minimally invasive aortic valve replacement procedure', section: 'library-procedures', keywords: ['tavi', 'valve replacement', 'minimally invasive', 'aortic valve', 'catheter'] },
+    { type: 'procedure', title: 'TOE-Guided Cardioversion', description: 'Electrical cardioversion with advanced cardiac imaging guidance', section: 'library-procedures', keywords: ['cardioversion', 'toe', 'dcr', 'atrial fibrillation', 'rhythm conversion'] },
+    { type: 'procedure', title: 'Coronary Angiography & PCI', description: 'Diagnostic coronary imaging with potential intervention', section: 'library-procedures', keywords: ['angiography', 'angiogram', 'pci', 'stent', 'balloon', 'coronary', 'catheter'] },
+    { type: 'procedure', title: 'Pacemaker Implantation', description: 'Permanent cardiac rhythm device insertion', section: 'library-procedures', keywords: ['pacemaker', 'device implant', 'bradycardia', 'heart rhythm', 'battery'] },
+    { type: 'procedure', title: 'Atrial Fibrillation Ablation', description: 'Advanced catheter ablation for rhythm control', section: 'library-procedures', keywords: ['af ablation', 'catheter ablation', 'atrial fibrillation', 'rhythm control', 'pfa'] },
+    { type: 'procedure', title: 'Mitral TEER (Transcatheter Edge-to-Edge Repair)', description: 'Minimally invasive mitral valve repair using MitraClip or PASCAL technology', section: 'library-procedures', keywords: ['mteer', 'mitraclip', 'valve repair', 'mitral', 'transcatheter'] },
+    { type: 'procedure', title: 'Cardiac CT Angiography (CTCA)', description: 'Non-invasive coronary artery imaging using advanced CT technology', section: 'library-procedures', keywords: ['ctca', 'ct scan', 'coronary ct', 'non-invasive', 'contrast'] },
+    { type: 'procedure', title: 'PYP Scan (Cardiac Amyloidosis Imaging)', description: 'Specialized nuclear imaging to detect cardiac amyloidosis', section: 'library-procedures', keywords: ['pyp scan', 'amyloidosis', 'nuclear imaging', 'heart muscle disease'] },
+    { type: 'procedure', title: 'SVT Ablation (Supraventricular Tachycardia)', description: 'Catheter ablation for supraventricular tachycardia treatment', section: 'library-procedures', keywords: ['svt ablation', 'rapid heartbeat', 'catheter ablation', 'electrophysiology'] },
+    { type: 'procedure', title: 'Cardiac MRI', description: 'Advanced magnetic resonance imaging for detailed cardiac assessment', section: 'library-procedures', keywords: ['cardiac mri', 'magnetic resonance', 'heart scan', 'detailed imaging'] },
+    { type: 'procedure', title: 'Exercise Stress Echocardiography', description: 'Combined exercise testing with cardiac ultrasound imaging', section: 'library-procedures', keywords: ['stress echo', 'exercise test', 'treadmill', 'stress test', 'echo'] }
   ];
 
   // Search function
@@ -121,7 +148,16 @@ const Header: React.FC = () => {
 
   // Handle search result click
   const handleSearchResultClick = (result: any) => {
-    scrollToSection(result.section);
+    if (result.section === 'library-conditions') {
+      // Navigate to Library page with conditions tab and search term
+      navigate(`/library?tab=conditions&search=${encodeURIComponent(result.title)}`);
+    } else if (result.section === 'library-procedures') {
+      // Navigate to Library page with procedures tab and search term
+      navigate(`/library?tab=journeys&search=${encodeURIComponent(result.title)}`);
+    } else {
+      // Handle regular homepage sections
+      scrollToSection(result.section);
+    }
     setSearchQuery('');
     setShowSearchResults(false);
     setIsMenuOpen(false);
@@ -159,6 +195,8 @@ const Header: React.FC = () => {
       case 'service': return '🏥';
       case 'location': return '📍';
       case 'page': return '📄';
+      case 'condition': return '🫀';
+      case 'procedure': return '🔬';
       default: return '🔍';
     }
   };

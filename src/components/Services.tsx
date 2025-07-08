@@ -136,7 +136,7 @@ const Services: React.FC = () => {
       category: 'consultation',
       icon: <Stethoscope className="w-5 h-5" />,
       shortDescription: "Comprehensive cardiac assessment and specialist consultation",
-      duration: "45-60 minutes",
+      duration: "20-40 minutes",
       preparation: "Minimal preparation required",
       locations: ["Cabrini Malvern", "Pakenham", "Clyde"],
       description: "A comprehensive cardiac consultation is your first step towards understanding and managing your heart health. Our experienced cardiologists will review your medical history, perform a thorough examination, and discuss your symptoms and concerns.",

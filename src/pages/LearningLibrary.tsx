@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   BookOpen, 
   Heart, 
@@ -23,27 +23,34 @@ import {
   Calendar,
   Zap
 } from 'lucide-react';
-import ProgressivePatientJourney from '../components/ProgressivePatientJourney';
 
 const LearningLibrary: React.FC = () => {
   const [activeTab, setActiveTab] = useState('journeys');
   const [selectedProcedure, setSelectedProcedure] = useState('general');
   const [isVisible, setIsVisible] = useState(false);
   const [visibleSteps, setVisibleSteps] = useState<number[]>([]);
-  const [activeStep, setActiveStep] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedConditions, setExpandedConditions] = useState<string[]>([]);
   const sectionRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  // Handle URL parameters from services page
+  // Handle URL parameters from services page and main search
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const focus = urlParams.get('focus');
+    const tab = urlParams.get('tab');
+    const search = urlParams.get('search');
     
     if (focus) {
       setSelectedProcedure(focus);
+    }
+    
+    if (tab) {
+      setActiveTab(tab);
+    }
+    
+    if (search) {
+      setSearchTerm(search);
     }
   }, []);
 
@@ -82,7 +89,6 @@ const LearningLibrary: React.FC = () => {
           const stepIndex = stepRefs.current.findIndex(ref => ref === entry.target);
           if (stepIndex !== -1 && !visibleSteps.includes(stepIndex)) {
             setVisibleSteps(prev => [...prev, stepIndex].sort((a, b) => a - b));
-            setActiveStep(stepIndex);
           }
         }
       });
@@ -291,7 +297,7 @@ const LearningLibrary: React.FC = () => {
       description: 'A condition where the mitral valve does not close properly, allowing blood to leak backward into the left atrium.',
       symptoms: ['Shortness of breath', 'Fatigue', 'Heart palpitations', 'Swelling in feet/ankles', 'Heart murmur'],
       causes: ['Mitral valve prolapse', 'Heart attack', 'Infection', 'Age-related wear', 'Rheumatic heart disease'],
-      treatments: ['Monitoring', 'Medications', 'Valve repair', 'Valve replacement', 'MitraClip procedure'],
+      treatments: ['Monitoring', 'Medications', 'Valve repair', 'Valve replacement', 'PASCAL procedure', 'MitraClip procedure'],
       tests: [
         'Echocardiogram',
         'Electrocardiogram (ECG)',
@@ -468,8 +474,8 @@ const LearningLibrary: React.FC = () => {
     'Coronary Angiography': 'angiogram_pci',
     'Exercise Stress Test': 'exercise_stress_echo',
     'Exercise Stress Echocardiogram': 'exercise_stress_echo',
-    'Echocardiogram (ultrasound of the heart)': 'general',
-    'Echocardiogram': 'general',
+    'Echocardiogram (ultrasound of the heart)': 'echocardiogram',
+    'Echocardiogram': 'echocardiogram',
     'Cardiac MRI': 'cardiac_mri',
     'PYP Scan': 'pyp_scan',
     'SPECT/CT imaging': 'pyp_scan',
@@ -516,7 +522,7 @@ const LearningLibrary: React.FC = () => {
       image: '/images/consult.png',
       summary: 'A comprehensive cardiac consultation and diagnostic process designed to assess your heart health and develop a personalized treatment plan.',
       needToKnow: [
-        'Consultation typically takes 45-60 minutes',
+        'Consultation typically takes 20-40 minutes',
         'Bring Medicare card, referral letter, and medication list',
         'May include ECG, echocardiogram, or other tests',
         'Results and treatment plan discussed same day',
@@ -557,7 +563,7 @@ const LearningLibrary: React.FC = () => {
           subtitle: "Expert cardiovascular assessment",
           description: "Comprehensive evaluation by our qualified cardiologists with personalized treatment planning.",
           icon: <Stethoscope className="w-5 h-5" />,
-          duration: "45-60 minutes",
+          duration: "20-40 minutes",
           details: [
             "Comprehensive medical history review",
             "Thorough cardiovascular examination",
@@ -689,7 +695,7 @@ const LearningLibrary: React.FC = () => {
       color: 'from-sage-500 to-accent-500',
       category: 'procedures',
       type: 'procedure',
-      image: '/images/toe_drawn.png',
+      image: '/images/toe.png',
       summary: 'A procedure combining advanced cardiac imaging with electrical cardioversion to safely restore normal heart rhythm in patients with atrial fibrillation.',
       needToKnow: [
         'Day procedure with light sedation',
@@ -981,18 +987,19 @@ const LearningLibrary: React.FC = () => {
     },
     mteer: {
       name: 'Mitral TEER (Transcatheter Edge-to-Edge Repair)',
-      description: 'Minimally invasive mitral valve repair using MitraClip technology',
+      description: 'Minimally invasive mitral valve repair using MitraClip or PASCAL technology',
       color: 'from-cream-500 to-accent-500',
       category: 'interventional',
       type: 'procedure',
       image: '/images/mteer_drawn.png',
-      summary: 'Minimally invasive procedure using MitraClip technology to repair a leaking mitral valve without open heart surgery.',
+      summary: 'A catheter‑based, minimally invasive procedure that implants a small clip on the mitral valve leaflets to reduce mitral regurgitation. The procedure usually takes 1–3 hours, avoids open‑heart surgery, and most people leave hospital within 1–3 days with rapid improvement in symptoms and quality of life.',
       needToKnow: [
-        'Heart team evaluation required',
-        'General anaesthesia with TOE guidance',
-        '2-4 hour procedure via groin access',
-        '1-2 day hospital stay',
-        'Significant symptom improvement expected'
+        'Heart‑team (cardiologist & cardiothoracic surgeon) evaluation confirms suitability',
+        'Performed through a vein in the groin with trans‑septal access to the heart',
+        'General anaesthesia and transoesophageal echocardiography (TOE) guidance (some centres use deep sedation)',
+        'Typical procedure time is 1–3 hours',
+        'Most patients go home within 1–3 days',
+        'Symptoms and exercise capacity often improve quickly'
       ],
       steps: [
         {
@@ -1053,12 +1060,70 @@ const LearningLibrary: React.FC = () => {
         }
       ]
     },
+    echocardiogram: {
+      name: 'Resting Echocardiogram',
+      description: 'Non‑invasive ultrasound scan of the heart at rest',
+      color: 'from-sage-500 to-cream-500',
+      category: 'imaging',
+      type: 'test',
+      image: '/images/echo.png',
+      summary: 'A painless ultrasound that creates live images of your heart chambers, valves and blood flow, helping diagnose structure, function and overall pumping performance.',
+      needToKnow: [
+        'No fasting or special preparation required',
+        'Takes about 30–45 minutes',
+        'A small probe with gel is moved across the chest',
+        'Uses safe, radiation‑free ultrasound waves',
+        'Results reviewed by a cardiologist within 24–48 hours'
+      ],
+      steps: [
+        {
+          id: 1,
+          title: 'Check‑in & Preparation',
+          subtitle: 'Brief medical history and setup',
+          description: 'You change into a gown and lie on an exam table; ECG dots may be placed to synchronise images.',
+          icon: <Clipboard className="w-5 h-5" />,
+          duration: '5‑10 minutes',
+          details: [
+            'Verification of referral and Medicare details',
+            'Explanation of the scan process',
+            'Removal of upper‑body clothing and jewellery'
+          ]
+        },
+        {
+          id: 2,
+          title: 'Image Acquisition',
+          subtitle: 'Ultrasound imaging of heart structures',
+          description: 'The sonographer moves the probe over the chest to collect moving pictures and Doppler blood‑flow signals.',
+          icon: <Activity className="w-5 h-5" />,
+          duration: '20‑30 minutes',
+          details: [
+            'Multiple views taken from left side and below sternum',
+            'Colour Doppler to assess valve leakage',
+            'Live measurements of chamber size & heart function'
+          ]
+        },
+        {
+          id: 3,
+          title: 'Review & Results',
+          subtitle: 'Cardiologist interpretation',
+          description: 'Images are analysed and a detailed report is sent to your referring doctor.',
+          icon: <FileText className="w-5 h-5" />,
+          duration: 'Same or next day',
+          details: [
+            'Quantitative measurements of pumping strength (EF)',
+            'Valve function grading',
+            'Recommendation for further tests or treatment if needed'
+          ]
+        }
+      ]
+    },
     ctca: {
       name: 'Cardiac CT Angiography (CTCA)',
       description: 'Non-invasive coronary artery imaging using advanced CT technology',
       color: 'from-sage-500 to-primary-500',
       category: 'imaging',
       type: 'test',
+      image: '/images/ctca.png',
       summary: 'High-resolution CT scan with contrast to visualize coronary arteries and assess for blockages without invasive catheterization.',
       needToKnow: [
         'Fast for 4 hours, avoid caffeine day of scan',
@@ -1132,6 +1197,7 @@ const LearningLibrary: React.FC = () => {
       color: 'from-accent-500 to-sage-500',
       category: 'imaging',
       type: 'test',
+      image: '/images/pyp.png',
       summary: 'Specialized nuclear imaging study to detect and quantify cardiac amyloid deposits using radiotracer technology.',
       needToKnow: [
         'No fasting required, total time 3 hours',
@@ -1205,6 +1271,7 @@ const LearningLibrary: React.FC = () => {
       color: 'from-primary-500 to-accent-500',
       category: 'electrophysiology',
       type: 'procedure',
+      image: '/images/afabl_drawn.png',
       summary: 'Precise catheter-based procedure to eliminate abnormal electrical pathways causing supraventricular tachycardia episodes.',
       needToKnow: [
         'High success rate (>95% for most SVT types)',
@@ -1278,6 +1345,7 @@ const LearningLibrary: React.FC = () => {
       color: 'from-sage-500 to-cream-500',
       category: 'imaging',
       type: 'test',
+      image: '/images/mri.png',
       summary: 'Advanced magnetic resonance imaging providing detailed assessment of cardiac structure, function, and tissue characteristics.',
       needToKnow: [
         'MRI safety screening essential',
@@ -1306,7 +1374,7 @@ const LearningLibrary: React.FC = () => {
           subtitle: "Advanced cardiac imaging",
           description: "High-resolution magnetic resonance imaging to assess cardiac structure and function.",
           icon: <Heart className="w-5 h-5" />,
-          duration: "45-60 minutes",
+          duration: "20-40 minutes",
           details: [
             "ECG-gated cardiac imaging sequences",
             "Cine imaging for function assessment",
@@ -1417,6 +1485,80 @@ const LearningLibrary: React.FC = () => {
           ],
         }
       ]
+    },
+    holter: {
+      name: '24 Hour Holter Monitoring',
+      description: 'Continuous cardiac rhythm monitoring over 24 hours',
+      color: 'from-cream-500 to-accent-500',
+      category: 'monitoring',
+      type: 'test',
+      image: '/images/holter.png',
+      summary: 'Holter monitoring involves wearing a small, portable device that continuously records your heart rhythm for 24 hours. This helps detect irregular heartbeats that may not occur during a brief office visit.',
+      needToKnow: [
+        'Wear the device continuously for 24 hours',
+        'Keep a diary of symptoms and activities',
+        'Normal daily activities encouraged',
+        'Avoid getting the device wet',
+        'Return device the following day'
+      ],
+      steps: [
+        {
+          id: 1,
+          title: "Device Application",
+          subtitle: "Holter monitor setup and instruction",
+          description: "Attachment of the portable cardiac monitoring device with patient education on proper use.",
+          icon: <Monitor className="w-5 h-5" />,
+          duration: "15-20 minutes",
+          details: [
+            "Skin preparation and electrode placement",
+            "Device attachment and testing",
+            "Patient education on device care",
+            "Diary instruction for symptom recording"
+          ],
+        },
+        {
+          id: 2,
+          title: "24 Hour Monitoring",
+          subtitle: "Continuous rhythm recording",
+          description: "24 hour period of continuous cardiac rhythm monitoring during normal daily activities.",
+          icon: <Clock className="w-5 h-5" />,
+          duration: "24 hours",
+          details: [
+            "Continuous ECG recording",
+            "Normal daily activity maintenance",
+            "Symptom diary completion",
+            "Device care and protection"
+          ],
+        },
+        {
+          id: 3,
+          title: "Device Return",
+          subtitle: "Monitor removal and data download",
+          description: "Return of the monitoring device with data download and initial technical analysis.",
+          icon: <UserCheck className="w-5 h-5" />,
+          duration: "10-15 minutes",
+          details: [
+            "Device removal and electrode cleanup",
+            "Data download and verification",
+            "Diary collection and review",
+            "Technical analysis initiation"
+          ],
+        },
+        {
+          id: 4,
+          title: "Results and Follow-up",
+          subtitle: "Analysis interpretation and recommendations",
+          description: "Comprehensive analysis of 24-hour recording with clinical correlation and treatment planning.",
+          icon: <FileText className="w-5 h-5" />,
+          duration: "1-3 days",
+          details: [
+            "Detailed rhythm analysis",
+            "Symptom correlation assessment",
+            "Clinical interpretation",
+            "Follow-up planning and recommendations"
+          ],
+        }
+      ]
     }
   };
 
@@ -1436,7 +1578,7 @@ const LearningLibrary: React.FC = () => {
     return colorMap[category] || 'from-primary-500 to-accent-500';
   };
 
-  const filteredProcedures = Object.entries(procedureJourneys).filter(([key, procedure]) => {
+  const filteredProcedures = Object.entries(procedureJourneys).filter(([, procedure]) => {
     if (searchTerm === '') return true;
     const searchLower = searchTerm.toLowerCase();
     return procedure.name.toLowerCase().includes(searchLower) ||
@@ -1622,7 +1764,7 @@ const LearningLibrary: React.FC = () => {
                         <BookOpen className="w-5 h-5 mr-2 text-primary-500" />
                         Getting Started
                       </h4>
-                      <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-6 max-w-md mx-auto">
+                      <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-6">
                         <motion.button
                           onClick={() => handleProcedureClick('general')}
                           className={`relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
@@ -1634,7 +1776,8 @@ const LearningLibrary: React.FC = () => {
                             backgroundImage: generalProcedure[1].image ? `url(${generalProcedure[1].image})` : 'none',
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat'
+                            backgroundRepeat: 'no-repeat',
+                            imageRendering: '-webkit-optimize-contrast'
                           }}
                           whileHover={{ y: -4, scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
@@ -1642,8 +1785,8 @@ const LearningLibrary: React.FC = () => {
                           {/* Background overlay */}
                           <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
                             selectedProcedure === 'general'
-                              ? `bg-gradient-to-r ${generalProcedure[1].color} opacity-85`
-                              : 'bg-white/75 hover:bg-white/85'
+                              ? `bg-gradient-to-r ${generalProcedure[1].color} opacity-80`
+                              : 'bg-white/70 hover:bg-white/80'
                           }`} />
                           
                           {/* Selection indicator */}
@@ -1654,7 +1797,7 @@ const LearningLibrary: React.FC = () => {
                           )}
                           
                           {/* Content */}
-                          <div className="relative z-10 space-y-4">
+                          <div className="relative z-10 space-y-4 pointer-events-none">
                             <h4 className={`font-semibold text-lg leading-tight ${
                               selectedProcedure === 'general' ? 'text-white' : 'text-secondary-900'
                             }`}>
@@ -1692,7 +1835,8 @@ const LearningLibrary: React.FC = () => {
                               backgroundImage: procedure.image ? `url(${procedure.image})` : 'none',
                               backgroundSize: 'cover',
                               backgroundPosition: 'center',
-                              backgroundRepeat: 'no-repeat'
+                              backgroundRepeat: 'no-repeat',
+                              imageRendering: '-webkit-optimize-contrast'
                             }}
                             whileHover={{ y: -4, scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
@@ -1700,8 +1844,8 @@ const LearningLibrary: React.FC = () => {
                             {/* Background overlay */}
                             <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
                               selectedProcedure === key
-                                ? `bg-gradient-to-r ${procedure.color} opacity-85`
-                                : 'bg-white/75 hover:bg-white/85'
+                                ? `bg-gradient-to-r ${procedure.color} opacity-80`
+                                : 'bg-white/70 hover:bg-white/80'
                             }`} />
                             
                             {/* Selection indicator */}
@@ -1712,7 +1856,7 @@ const LearningLibrary: React.FC = () => {
                             )}
                             
                             {/* Content */}
-                            <div className="relative z-10 space-y-4">
+                            <div className="relative z-10 space-y-4 pointer-events-none">
                               <h4 className={`font-semibold text-lg leading-tight ${
                                 selectedProcedure === key ? 'text-white' : 'text-secondary-900'
                               }`}>
@@ -1751,7 +1895,8 @@ const LearningLibrary: React.FC = () => {
                               backgroundImage: procedure.image ? `url(${procedure.image})` : 'none',
                               backgroundSize: 'cover',
                               backgroundPosition: 'center',
-                              backgroundRepeat: 'no-repeat'
+                              backgroundRepeat: 'no-repeat',
+                              imageRendering: '-webkit-optimize-contrast'
                             }}
                             whileHover={{ y: -4, scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
@@ -1759,8 +1904,8 @@ const LearningLibrary: React.FC = () => {
                             {/* Background overlay */}
                             <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
                               selectedProcedure === key
-                                ? `bg-gradient-to-r ${procedure.color} opacity-85`
-                                : 'bg-white/75 hover:bg-white/85'
+                                ? `bg-gradient-to-r ${procedure.color} opacity-80`
+                                : 'bg-white/70 hover:bg-white/80'
                             }`} />
                             
                             {/* Selection indicator */}
@@ -1771,7 +1916,7 @@ const LearningLibrary: React.FC = () => {
                             )}
                             
                             {/* Content */}
-                            <div className="relative z-10 space-y-4">
+                            <div className="relative z-10 space-y-4 pointer-events-none">
                               <h4 className={`font-semibold text-lg leading-tight ${
                                 selectedProcedure === key ? 'text-white' : 'text-secondary-900'
                               }`}>
@@ -1792,31 +1937,49 @@ const LearningLibrary: React.FC = () => {
               </div>
 
               {/* Selected Journey Display */}
-              {selectedProcedure && procedureJourneys[selectedProcedure] && (
+              {selectedProcedure && procedureJourneys[selectedProcedure as keyof typeof procedureJourneys] && (
                 <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200/50 p-8" data-testid="selected-journey-display">
                   {/* Header Section */}
                   <div className="text-center mb-8">
                     <h3 className="text-3xl font-bold text-secondary-800 mb-4">
-                      {procedureJourneys[selectedProcedure].name}
+                      {procedureJourneys[selectedProcedure as keyof typeof procedureJourneys].name}
                     </h3>
                     <p className="text-lg text-secondary-600 max-w-3xl mx-auto leading-relaxed mb-6">
-                      {procedureJourneys[selectedProcedure].summary}
+                      {procedureJourneys[selectedProcedure as keyof typeof procedureJourneys].summary}
                     </p>
                   </div>
 
                   {/* Need to Know Section */}
-                  <div className="bg-primary-50/80 rounded-2xl p-6 mb-8 border border-primary-100">
-                    <h4 className="text-xl font-bold text-secondary-800 mb-4 flex items-center">
-                      <AlertCircle className="w-5 h-5 mr-2 text-primary-600" />
-                      Key Information
-                    </h4>
-                    <div className="grid md:grid-cols-2 gap-3">
-                      {procedureJourneys[selectedProcedure].needToKnow.map((item, idx) => (
-                        <div key={idx} className="flex items-start space-x-2">
-                          <CheckCircle className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
-                          <span className="text-secondary-700 text-sm">{item}</span>
-                        </div>
-                      ))}
+                  <div className="flex gap-6 mb-8">
+                    {/* Key Information - 2/3 width */}
+                    <div className="flex-1 max-w-[66.666%] bg-primary-50/80 rounded-2xl p-6 border border-primary-100">
+                      <h4 className="text-xl font-bold text-secondary-800 mb-4 flex items-center">
+                        <AlertCircle className="w-5 h-5 mr-2 text-primary-600" />
+                        Key Information
+                      </h4>
+                      <div className="grid md:grid-cols-2 gap-3">
+                        {procedureJourneys[selectedProcedure as keyof typeof procedureJourneys].needToKnow.map((item: string, idx: number) => (
+                          <div key={idx} className="flex items-start space-x-2">
+                            <CheckCircle className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
+                            <span className="text-secondary-700 text-sm">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Procedure Image - 1/3 width */}
+                    <div className="flex-1 max-w-[33.333%]">
+                      <div className="bg-white rounded-2xl p-4 border border-primary-100 shadow-sm h-full flex items-center justify-center">
+                        <img
+                          src={(procedureJourneys[selectedProcedure as keyof typeof procedureJourneys] as any)?.image || '/images/placeholder1.png'}
+                          alt={procedureJourneys[selectedProcedure as keyof typeof procedureJourneys].name}
+                          className="w-full h-full object-cover rounded-xl"
+                          style={{ 
+                            maxHeight: '200px',
+                            imageRendering: '-webkit-optimize-contrast'
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -1829,7 +1992,7 @@ const LearningLibrary: React.FC = () => {
 
                   {/* Journey Steps */}
                   <div className="space-y-12">
-                    {procedureJourneys[selectedProcedure].steps.map((step, index) => (
+                    {procedureJourneys[selectedProcedure as keyof typeof procedureJourneys].steps.map((step: any, index: number) => (
                       <motion.div
                         key={step.id}
                         ref={el => stepRefs.current[index] = el}
@@ -1872,7 +2035,7 @@ const LearningLibrary: React.FC = () => {
                           <div className="grid sm:grid-cols-1 gap-3">
                             <div>
                               <h5 className="font-semibold text-secondary-800 mb-2">What to Expect:</h5>
-                              {step.details.map((detail, idx) => (
+                              {step.details.map((detail: string, idx: number) => (
                                 <div key={idx} className="flex items-start space-x-2 mb-1">
                                   <div className="w-1.5 h-1.5 bg-secondary-400 rounded-full mt-2 flex-shrink-0"></div>
                                   <span className="text-secondary-600 text-sm">{detail}</span>
@@ -1975,120 +2138,101 @@ const LearningLibrary: React.FC = () => {
                     </div>
                   </div>
 
-                    {/* Symptoms */}
-                    <div className="mb-4">
-                      <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
-                        <AlertCircle className="w-4 h-4 mr-2 text-red-500" />
-                        Symptoms
-                      </h4>
-                      <ul className="space-y-1">
-                        {(isExpanded ? condition.symptoms : condition.symptoms.slice(0, 3)).map((symptom, idx) => (
-                          <li key={idx} className="text-sm text-secondary-600 flex items-start">
-                            <span className="w-1.5 h-1.5 bg-red-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                            {symptom}
-                          </li>
-                        ))}
-                        {!isExpanded && condition.symptoms.length > 3 && (
-                          <li className="text-xs text-secondary-500 italic flex items-center">
-                            <ChevronDown className="w-3 h-3 mr-1" />
-                            +{condition.symptoms.length - 3} more symptoms (click to expand)
-                          </li>
-                        )}
-                      </ul>
-                    </div>
+                    {/* Expanded Content */}
+                    {isExpanded && (
+                      <>
+                        {/* Symptoms */}
+                        <div className="mb-4">
+                          <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
+                            <AlertCircle className="w-4 h-4 mr-2 text-red-500" />
+                            Symptoms
+                          </h4>
+                          <ul className="space-y-1">
+                            {condition.symptoms.map((symptom, idx) => (
+                              <li key={idx} className="text-sm text-secondary-600 flex items-start">
+                                <span className="w-1.5 h-1.5 bg-red-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                                {symptom}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
 
-                    {/* Causes */}
-                    <div className="mb-4">
-                      <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
-                        <Info className="w-4 h-4 mr-2 text-blue-500" />
-                        Common Causes
-                      </h4>
-                      <ul className="space-y-1">
-                        {(isExpanded ? condition.causes : condition.causes.slice(0, 3)).map((cause, idx) => (
-                          <li key={idx} className="text-sm text-secondary-600 flex items-start">
-                            <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                            {cause}
-                          </li>
-                        ))}
-                        {!isExpanded && condition.causes.length > 3 && (
-                          <li className="text-xs text-secondary-500 italic flex items-center">
-                            <ChevronDown className="w-3 h-3 mr-1" />
-                            +{condition.causes.length - 3} more causes (click to expand)
-                          </li>
-                        )}
-                      </ul>
-                    </div>
+                        {/* Causes */}
+                        <div className="mb-4">
+                          <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
+                            <Info className="w-4 h-4 mr-2 text-blue-500" />
+                            Common Causes
+                          </h4>
+                          <ul className="space-y-1">
+                            {condition.causes.map((cause, idx) => (
+                              <li key={idx} className="text-sm text-secondary-600 flex items-start">
+                                <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                                {cause}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
 
-                    {/* Treatments */}
-                    <div className="mb-4">
-                      <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
-                        <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
-                        Treatment Options
-                      </h4>
-                      <ul className="space-y-1">
-                        {(isExpanded ? condition.treatments : condition.treatments.slice(0, 3)).map((treatment, idx) => (
-                          <li key={idx} className="text-sm text-secondary-600 flex items-start">
-                            <span className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                            {testToProcedureMap[treatment] ? (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleTestClick(treatment);
-                                }}
-                                className="inline-flex items-center space-x-1 bg-green-50 hover:bg-green-100 text-green-700 px-2 py-1 rounded-full shadow transition"
-                              >
-                                <PlayCircle className="w-3 h-3" />
-                                <span>{treatment}</span>
-                              </button>
-                            ) : (
-                              <span>{treatment}</span>
-                            )}
-                          </li>
-                        ))}
-                        {!isExpanded && condition.treatments.length > 3 && (
-                          <li className="text-xs text-secondary-500 italic flex items-center">
-                            <ChevronDown className="w-3 h-3 mr-1" />
-                            +{condition.treatments.length - 3} more treatments (click to expand)
-                          </li>
-                        )}
-                      </ul>
-                    </div>
+                        {/* Treatments */}
+                        <div className="mb-4">
+                          <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
+                            <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                            Treatment Options
+                          </h4>
+                          <ul className="space-y-1">
+                            {condition.treatments.map((treatment, idx) => (
+                              <li key={idx} className="text-sm text-secondary-600 flex items-start">
+                                <span className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                                {testToProcedureMap[treatment] ? (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleTestClick(treatment);
+                                    }}
+                                    className="flex items-center space-x-1 bg-green-50 hover:bg-green-100 text-green-700 px-2 py-1 rounded-full shadow transition text-left"
+                                  >
+                                    <PlayCircle className="w-3 h-3 flex-shrink-0" />
+                                    <span>{treatment}</span>
+                                  </button>
+                                ) : (
+                                  <span>{treatment}</span>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
 
-                    {/* Tests */}
-                    {condition.tests && condition.tests.length > 0 && (
-                      <div className="mb-4">
-                        <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
-                          <Search className="w-4 h-4 mr-2 text-purple-500" />
-                          Common Tests
-                        </h4>
-                        <ul className="space-y-1">
-                          {(isExpanded ? condition.tests : condition.tests.slice(0, 3)).map((test, idx) => (
-                            <li key={idx} className="text-sm text-secondary-600 flex items-start">
-                              <span className="w-1.5 h-1.5 bg-purple-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                              {testToProcedureMap[test] ? (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();            // prevent expanding/collapsing when pill clicked
-                                    handleTestClick(test);
-                                  }}
-                                  className="inline-flex items-center space-x-1 bg-purple-50 hover:bg-purple-100 text-purple-700 px-2 py-1 rounded-full shadow transition"
-                                >
-                                  <PlayCircle className="w-3 h-3" />
-                                  <span>{test}</span>
-                                </button>
-                              ) : (
-                                <span>{test}</span>
-                              )}
-                            </li>
-                          ))}
-                          {!isExpanded && condition.tests.length > 3 && (
-                            <li className="text-xs text-secondary-500 italic flex items-center">
-                              <ChevronDown className="w-3 h-3 mr-1" />
-                              +{condition.tests.length - 3} more tests (click to expand)
-                            </li>
-                          )}
-                        </ul>
-                      </div>
+                        {/* Tests */}
+                        {condition.tests && condition.tests.length > 0 && (
+                          <div className="mb-4">
+                            <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
+                              <Search className="w-4 h-4 mr-2 text-purple-500" />
+                              Common Tests
+                            </h4>
+                            <ul className="space-y-1">
+                              {condition.tests.map((test, idx) => (
+                                <li key={idx} className="text-sm text-secondary-600 flex items-start">
+                                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                                  {testToProcedureMap[test] ? (
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();            // prevent expanding/collapsing when pill clicked
+                                        handleTestClick(test);
+                                      }}
+                                      className="flex items-center space-x-1 bg-purple-50 hover:bg-purple-100 text-purple-700 px-2 py-1 rounded-full shadow transition text-left"
+                                    >
+                                      <PlayCircle className="w-3 h-3 flex-shrink-0" />
+                                      <span>{test}</span>
+                                    </button>
+                                  ) : (
+                                    <span>{test}</span>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </>
                     )}
 
                     {/* Expand/Collapse Indicator */}
