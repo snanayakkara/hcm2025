@@ -21,7 +21,7 @@ const Doctors: React.FC = () => {
     },
     {
       name: "Dr Phillip Ngu",
-      title: "Non-invasive Imaging",
+      title: "General Cardiologist & Cardiac Imaging Specialist",
       specialization: "Cardiac Imaging & General Cardiology",
       education: "MBBS (Hons) Monash University 2007, Cardiac Imaging Fellowship Alfred Hospital 2017",
       degrees: "MBBS FRACP",
@@ -47,7 +47,7 @@ const Doctors: React.FC = () => {
     },
     {
       name: "Dr Shane Nanayakkara",
-      title: "Interventional & Structural Cardiologist",
+      title: "General Cardiologist, Interventional & Structural Cardiologist and Heart Failure Specialist",
       specialization: "Coronary and Structural Heart Interventions, Heart Failure",
       education: "MBBS Monash University, PhD Heart Failure, Advanced Fellowships in Coronary Intervention and Structural Intervention",
       degrees: "MBBS PhD FRACP",

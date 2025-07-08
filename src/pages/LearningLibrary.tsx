@@ -32,6 +32,7 @@ const LearningLibrary: React.FC = () => {
   const [visibleSteps, setVisibleSteps] = useState<number[]>([]);
   const [activeStep, setActiveStep] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [expandedConditions, setExpandedConditions] = useState<string[]>([]);
   const sectionRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
@@ -93,6 +94,14 @@ const LearningLibrary: React.FC = () => {
 
     return () => observer.disconnect();
   }, [visibleSteps]);
+
+  const toggleConditionExpansion = (conditionName: string) => {
+    setExpandedConditions(prev => 
+      prev.includes(conditionName)
+        ? prev.filter(name => name !== conditionName)
+        : [...prev, conditionName]
+    );
+  };
 
   const heartConditions = [
     {
@@ -261,6 +270,14 @@ const LearningLibrary: React.FC = () => {
       color: 'from-primary-500 to-accent-500',
       category: 'consultation',
       image: '/images/consult.png',
+      summary: 'A comprehensive cardiac consultation and diagnostic process designed to assess your heart health and develop a personalized treatment plan.',
+      needToKnow: [
+        'Consultation typically takes 45-60 minutes',
+        'Bring Medicare card, referral letter, and medication list',
+        'May include ECG, echocardiogram, or other tests',
+        'Results and treatment plan discussed same day',
+        'Follow-up appointments scheduled as needed'
+      ],
       steps: [
         {
           id: 1,
@@ -275,12 +292,6 @@ const LearningLibrary: React.FC = () => {
             "Insurance verification assistance",
             "Immediate appointment confirmation"
           ],
-          quickStart: [
-            "Call (03) 9509 5009 to book",
-            "Have Medicare card ready",
-            "Prepare medical history summary",
-            "Note preferred appointment times"
-          ]
         },
         {
           id: 2,
@@ -295,12 +306,6 @@ const LearningLibrary: React.FC = () => {
             "Clear facility directions",
             "Consultation expectations overview"
           ],
-          quickStart: [
-            "Bring referral letter if applicable",
-            "Complete any pre-consultation forms",
-            "Prepare list of current medications",
-            "Plan route to clinic location"
-          ]
         },
         {
           id: 3,
@@ -315,12 +320,6 @@ const LearningLibrary: React.FC = () => {
             "Risk factor assessment",
             "Clear medical explanations"
           ],
-          quickStart: [
-            "Arrive 15 minutes early",
-            "Bring Medicare card and referral",
-            "Wear comfortable, accessible clothing",
-            "Prepare questions for discussion"
-          ]
         },
         {
           id: 4,
@@ -335,12 +334,6 @@ const LearningLibrary: React.FC = () => {
             "Exercise stress testing",
             "Same-day results discussion"
           ],
-          quickStart: [
-            "Follow any specific preparation instructions",
-            "Wear comfortable clothing",
-            "Avoid caffeine if stress testing",
-            "Bring medication list"
-          ]
         },
         {
           id: 5,
@@ -355,12 +348,6 @@ const LearningLibrary: React.FC = () => {
             "Medication management protocols",
             "Follow-up care scheduling"
           ],
-          quickStart: [
-            "Take notes during consultation",
-            "Ask about lifestyle changes",
-            "Understand medication instructions",
-            "Schedule follow-up appointments"
-          ]
         },
         {
           id: 6,
@@ -375,12 +362,6 @@ const LearningLibrary: React.FC = () => {
             "Emergency consultation access",
             "Patient education resources"
           ],
-          quickStart: [
-            "Keep regular check-up appointments",
-            "Monitor symptoms and report changes",
-            "Maintain prescribed medications",
-            "Follow lifestyle recommendations"
-          ]
         }
       ]
     },
@@ -390,6 +371,14 @@ const LearningLibrary: React.FC = () => {
       color: 'from-accent-500 to-primary-500',
       category: 'interventional',
       image: '/images/tavi.png',
+      summary: 'A minimally invasive procedure to replace a diseased aortic valve using a catheter, typically through the groin artery, avoiding the need for open heart surgery.',
+      needToKnow: [
+        'Procedure takes 2-3 hours under general anesthesia',
+        'Usually requires 1-2 day hospital stay',
+        'Pre-procedure CT scan and tests required',
+        'Recovery is faster than surgical valve replacement',
+        'Regular follow-up appointments essential'
+      ],
       steps: [
         {
           id: 1,
@@ -404,12 +393,6 @@ const LearningLibrary: React.FC = () => {
             "Heart team consultation",
             "Risk assessment and planning"
           ],
-          quickStart: [
-            "Attend all pre-procedure appointments",
-            "Complete required imaging studies",
-            "Review procedure risks and benefits",
-            "Arrange post-procedure support"
-          ]
         },
         {
           id: 2,
@@ -424,12 +407,6 @@ const LearningLibrary: React.FC = () => {
             "Real-time imaging guidance",
             "Immediate function assessment"
           ],
-          quickStart: [
-            "Fast from midnight before procedure",
-            "Arrive 2 hours early for preparation",
-            "Bring overnight bag for observation",
-            "Have emergency contact available"
-          ]
         },
         {
           id: 3,
@@ -444,12 +421,6 @@ const LearningLibrary: React.FC = () => {
             "Medication optimization",
             "Discharge planning and education"
           ],
-          quickStart: [
-            "Follow activity restrictions carefully",
-            "Monitor puncture site for complications",
-            "Take prescribed medications as directed",
-            "Report any concerning symptoms immediately"
-          ]
         },
         {
           id: 4,
@@ -464,12 +435,6 @@ const LearningLibrary: React.FC = () => {
             "Medication management",
             "Lifestyle optimization guidance"
           ],
-          quickStart: [
-            "Attend all follow-up appointments",
-            "Maintain heart-healthy lifestyle",
-            "Monitor symptoms and report changes",
-            "Keep medication compliance high"
-          ]
         }
       ]
     },
@@ -479,6 +444,14 @@ const LearningLibrary: React.FC = () => {
       color: 'from-sage-500 to-accent-500',
       category: 'procedures',
       image: '/images/toe_drawn.png',
+      summary: 'A procedure combining advanced cardiac imaging with electrical cardioversion to safely restore normal heart rhythm in patients with atrial fibrillation.',
+      needToKnow: [
+        'Day procedure with light sedation',
+        'Fast for 6 hours before procedure',
+        'Blood thinning medication management required',
+        'TOE imaging ensures safety before cardioversion',
+        'Transport home required after procedure'
+      ],
       steps: [
         {
           id: 1,
@@ -493,12 +466,6 @@ const LearningLibrary: React.FC = () => {
             "Anesthetic assessment",
             "Consent and education process"
           ],
-          quickStart: [
-            "Start anticoagulation as prescribed",
-            "Attend pre-admission appointments",
-            "Fast from midnight before procedure",
-            "Arrange transportation home"
-          ]
         },
         {
           id: 2,
@@ -513,12 +480,6 @@ const LearningLibrary: React.FC = () => {
             "Valve function evaluation",
             "Safety confirmation for cardioversion"
           ],
-          quickStart: [
-            "Cooperate with sedation team",
-            "Remain still during imaging",
-            "Communicate any discomfort",
-            "Follow post-procedure instructions"
-          ]
         },
         {
           id: 3,
@@ -533,12 +494,6 @@ const LearningLibrary: React.FC = () => {
             "Continuous cardiac monitoring",
             "Immediate rhythm assessment"
           ],
-          quickStart: [
-            "Remain calm during preparation",
-            "Follow anesthetic instructions",
-            "Expect brief unconsciousness",
-            "Recovery in monitored environment"
-          ]
         },
         {
           id: 4,
@@ -553,12 +508,6 @@ const LearningLibrary: React.FC = () => {
             "Anticoagulation planning",
             "Discharge education and follow-up"
           ],
-          quickStart: [
-            "Rest until fully awake",
-            "Continue anticoagulation as directed",
-            "Monitor symptoms and rhythm",
-            "Attend follow-up appointments"
-          ]
         }
       ]
     },
@@ -568,6 +517,14 @@ const LearningLibrary: React.FC = () => {
       color: 'from-primary-500 to-cream-500',
       category: 'interventional',
       image: '/images/angio.png',
+      summary: 'Diagnostic procedure to visualize coronary arteries using contrast dye, with potential for immediate treatment (angioplasty/stenting) if blockages are found.',
+      needToKnow: [
+        'Procedure duration: 30-90 minutes depending on complexity',
+        'Local anesthetic via wrist or groin access',
+        'May require overnight stay if intervention needed',
+        'Kidney function tests required beforehand',
+        'Dual antiplatelet therapy if stent placed'
+      ],
       steps: [
         {
           id: 1,
@@ -582,12 +539,6 @@ const LearningLibrary: React.FC = () => {
             "Bleeding risk evaluation",
             "Consent process and education"
           ],
-          quickStart: [
-            "Complete all required blood tests",
-            "Stop certain medications as instructed",
-            "Arrange time off work if needed",
-            "Plan for potential overnight stay"
-          ]
         },
         {
           id: 2,
@@ -602,12 +553,6 @@ const LearningLibrary: React.FC = () => {
             "Coronary artery assessment",
             "Decision making for intervention"
           ],
-          quickStart: [
-            "Fast from midnight before procedure",
-            "Arrive early for preparation",
-            "Communicate any allergies or concerns",
-            "Remain still during imaging"
-          ]
         },
         {
           id: 3,
@@ -622,12 +567,6 @@ const LearningLibrary: React.FC = () => {
             "Blood flow restoration",
             "Procedural success confirmation"
           ],
-          quickStart: [
-            "Understand procedure may extend if intervention needed",
-            "Expect pressure sensation during balloon inflation",
-            "Communicate any chest discomfort",
-            "Follow instructions about movement restrictions"
-          ]
         },
         {
           id: 4,
@@ -642,12 +581,6 @@ const LearningLibrary: React.FC = () => {
             "Medication initiation or adjustment",
             "Activity restriction and discharge planning"
           ],
-          quickStart: [
-            "Keep affected leg straight initially",
-            "Report any bleeding or swelling immediately",
-            "Start dual antiplatelet therapy as prescribed",
-            "Follow lifting and activity restrictions"
-          ]
         }
       ]
     },
@@ -657,6 +590,14 @@ const LearningLibrary: React.FC = () => {
       color: 'from-primary-500 to-cream-500',
       category: 'electrophysiology',
       image: '/images/pacemaker.png',
+      summary: 'Surgical implantation of a small electronic device that helps regulate heart rhythm by delivering electrical impulses when needed.',
+      needToKnow: [
+        'Day procedure or overnight stay',
+        'Local anesthetic below left collarbone',
+        'Arm movement restrictions for 4-6 weeks',
+        'Regular device checks every 3-6 months',
+        'Battery replacement needed every 8-12 years'
+      ],
       steps: [
         {
           id: 1,
@@ -671,12 +612,6 @@ const LearningLibrary: React.FC = () => {
             "Pre-operative medical optimization",
             "Patient education and consent process"
           ],
-          quickStart: [
-            "Complete all pre-operative assessments",
-            "Review pacemaker function and limitations",
-            "Arrange time off work for recovery",
-            "Prepare questions about device function"
-          ]
         },
         {
           id: 2,
@@ -691,12 +626,6 @@ const LearningLibrary: React.FC = () => {
             "Generator placement in chest pocket",
             "Initial device testing and programming"
           ],
-          quickStart: [
-            "Fast from midnight before procedure",
-            "Wear comfortable, loose-fitting clothing",
-            "Bring entertainment for waiting periods",
-            "Arrange for responsible adult to drive home"
-          ]
         },
         {
           id: 3,
@@ -711,12 +640,6 @@ const LearningLibrary: React.FC = () => {
             "Device function monitoring",
             "Gradual return to normal activities"
           ],
-          quickStart: [
-            "Keep incision site clean and dry",
-            "Avoid raising arm above shoulder initially",
-            "No lifting more than 5kg for 6 weeks",
-            "Report any signs of infection promptly"
-          ]
         },
         {
           id: 4,
@@ -731,12 +654,6 @@ const LearningLibrary: React.FC = () => {
             "Lead function assessment",
             "Activity and lifestyle optimization"
           ],
-          quickStart: [
-            "Attend all scheduled device checks",
-            "Carry pacemaker identification card",
-            "Inform medical providers about pacemaker",
-            "Monitor symptoms and report changes"
-          ]
         }
       ]
     },
@@ -746,6 +663,14 @@ const LearningLibrary: React.FC = () => {
       color: 'from-sage-500 to-primary-500',
       category: 'electrophysiology',
       image: '/images/afabl_drawn.png',
+      summary: 'Advanced catheter-based procedure using radiofrequency or pulsed field technology to eliminate abnormal electrical pathways causing atrial fibrillation.',
+      needToKnow: [
+        'Complex procedure taking 3-5 hours',
+        'General anesthesia required',
+        'Overnight hospital stay',
+        'Blood thinning management crucial',
+        '3-6 months monitoring period for success assessment'
+      ],
       steps: [
         {
           id: 1,
@@ -760,12 +685,6 @@ const LearningLibrary: React.FC = () => {
             "Pre-procedural echocardiography",
             "Anesthetic consultation and preparation"
           ],
-          quickStart: [
-            "Complete all required imaging studies",
-            "Maintain anticoagulation as prescribed",
-            "Arrange extended time off work",
-            "Prepare for potential overnight stay"
-          ]
         },
         {
           id: 2,
@@ -780,12 +699,6 @@ const LearningLibrary: React.FC = () => {
             "Pulmonary vein isolation",
             "Additional lesion sets if required"
           ],
-          quickStart: [
-            "Fast from midnight before procedure",
-            "Expect to be under general anesthesia",
-            "Procedure may take several hours",
-            "Post-procedure monitoring required"
-          ]
         },
         {
           id: 3,
@@ -800,12 +713,6 @@ const LearningLibrary: React.FC = () => {
             "Pain management and comfort measures",
             "Early rhythm assessment and optimization"
           ],
-          quickStart: [
-            "Remain on bed rest initially",
-            "Report any chest pain or bleeding",
-            "Continue anticoagulation as directed",
-            "Expect some irregular rhythms initially"
-          ]
         },
         {
           id: 4,
@@ -820,12 +727,6 @@ const LearningLibrary: React.FC = () => {
             "Activity progression and lifestyle counseling",
             "Assessment for additional procedures if needed"
           ],
-          quickStart: [
-            "Attend all follow-up appointments",
-            "Complete rhythm monitoring as requested",
-            "Report any symptomatic arrhythmias",
-            "Maintain heart-healthy lifestyle"
-          ]
         }
       ]
     },
@@ -835,6 +736,14 @@ const LearningLibrary: React.FC = () => {
       color: 'from-cream-500 to-accent-500',
       category: 'interventional',
       image: '/images/mteer_drawn.png',
+      summary: 'Minimally invasive procedure using MitraClip technology to repair a leaking mitral valve without open heart surgery.',
+      needToKnow: [
+        'Heart team evaluation required',
+        'General anesthesia with TEE guidance',
+        '2-4 hour procedure via groin access',
+        '1-2 day hospital stay',
+        'Significant symptom improvement expected'
+      ],
       steps: [
         {
           id: 1,
@@ -849,12 +758,6 @@ const LearningLibrary: React.FC = () => {
             "Risk-benefit analysis",
             "Patient education and consent process"
           ],
-          quickStart: [
-            "Complete comprehensive cardiac imaging",
-            "Attend heart team consultation",
-            "Review procedure risks and benefits",
-            "Optimize medical therapy before procedure"
-          ]
         },
         {
           id: 2,
@@ -869,12 +772,6 @@ const LearningLibrary: React.FC = () => {
             "Clip positioning and deployment",
             "Real-time assessment of repair adequacy"
           ],
-          quickStart: [
-            "Fast from midnight before procedure",
-            "Expect general anesthesia",
-            "Procedure performed via groin access",
-            "Multiple clips may be needed"
-          ]
         },
         {
           id: 3,
@@ -889,12 +786,6 @@ const LearningLibrary: React.FC = () => {
             "Gradual activity progression",
             "Discharge planning and education"
           ],
-          quickStart: [
-            "Rest and gradual mobilization",
-            "Monitor for any chest discomfort",
-            "Continue heart failure medications",
-            "Report any concerning symptoms"
-          ]
         },
         {
           id: 4,
@@ -909,12 +800,6 @@ const LearningLibrary: React.FC = () => {
             "Activity and exercise recommendations",
             "Long-term durability assessment"
           ],
-          quickStart: [
-            "Attend regular cardiology follow-up",
-            "Monitor symptoms and exercise tolerance",
-            "Maintain heart failure medications",
-            "Report any symptom deterioration"
-          ]
         }
       ]
     },
@@ -923,6 +808,14 @@ const LearningLibrary: React.FC = () => {
       description: 'Non-invasive coronary artery imaging using advanced CT technology',
       color: 'from-sage-500 to-primary-500',
       category: 'imaging',
+      summary: 'High-resolution CT scan with contrast to visualize coronary arteries and assess for blockages without invasive catheterization.',
+      needToKnow: [
+        'Fast for 4 hours, avoid caffeine day of scan',
+        'Heart rate control with medication if needed',
+        'Quick 15-30 minute procedure',
+        'Results available same day',
+        'Excellent alternative to invasive angiography'
+      ],
       steps: [
         {
           id: 1,
@@ -937,12 +830,6 @@ const LearningLibrary: React.FC = () => {
             "Allergy screening and premedication if needed",
             "Patient positioning and monitoring setup"
           ],
-          quickStart: [
-            "Fast for 4 hours before scan",
-            "Avoid caffeine on day of scan",
-            "Bring list of medications",
-            "Arrive early for heart rate preparation"
-          ]
         },
         {
           id: 2,
@@ -957,12 +844,6 @@ const LearningLibrary: React.FC = () => {
             "Breath-hold instructions during scanning",
             "Multiple cardiac cycle imaging"
           ],
-          quickStart: [
-            "Follow breathing instructions carefully",
-            "Remain still during scan acquisition",
-            "Communicate any chest discomfort",
-            "Expect warm sensation from contrast"
-          ]
         },
         {
           id: 3,
@@ -977,12 +858,6 @@ const LearningLibrary: React.FC = () => {
             "Plaque characterization and analysis",
             "Cardiac function evaluation"
           ],
-          quickStart: [
-            "Wait for results processing",
-            "Drink plenty of fluids to clear contrast",
-            "Resume normal activities immediately",
-            "Results typically available same day"
-          ]
         },
         {
           id: 4,
@@ -997,12 +872,6 @@ const LearningLibrary: React.FC = () => {
             "Risk stratification and prognosis discussion",
             "Follow-up planning and recommendations"
           ],
-          quickStart: [
-            "Attend results consultation",
-            "Understand findings and implications",
-            "Discuss treatment options if needed",
-            "Plan appropriate follow-up care"
-          ]
         }
       ]
     },
@@ -1011,6 +880,14 @@ const LearningLibrary: React.FC = () => {
       description: 'Specialized nuclear imaging to detect cardiac amyloidosis',
       color: 'from-accent-500 to-sage-500',
       category: 'imaging',
+      summary: 'Specialized nuclear imaging study to detect and quantify cardiac amyloid deposits using radiotracer technology.',
+      needToKnow: [
+        'No fasting required, total time 3 hours',
+        'Safe radiotracer injection followed by wait period',
+        'SPECT/CT imaging after uptake period',
+        'Results typically available within 48 hours',
+        'Important for diagnosing cardiac amyloidosis'
+      ],
       steps: [
         {
           id: 1,
@@ -1025,12 +902,6 @@ const LearningLibrary: React.FC = () => {
             "Patient education about procedure",
             "Consent process and preparation"
           ],
-          quickStart: [
-            "Bring current medication list",
-            "No specific fasting required",
-            "Plan for 3-hour total appointment",
-            "Bring reading material for waiting"
-          ]
         },
         {
           id: 2,
@@ -1045,12 +916,6 @@ const LearningLibrary: React.FC = () => {
             "Radiotracer distribution period",
             "Safety monitoring and comfort measures"
           ],
-          quickStart: [
-            "Minimal discomfort from injection",
-            "No immediate side effects expected",
-            "Radiotracer is safe and well-tolerated",
-            "Normal activities during uptake period"
-          ]
         },
         {
           id: 3,
@@ -1065,12 +930,6 @@ const LearningLibrary: React.FC = () => {
             "Heart and thorax imaging",
             "High-resolution cardiac assessment"
           ],
-          quickStart: [
-            "Lie still during image acquisition",
-            "Arms positioned above head",
-            "Camera rotates around chest",
-            "Communicate any discomfort"
-          ]
         },
         {
           id: 4,
@@ -1085,12 +944,6 @@ const LearningLibrary: React.FC = () => {
             "Grading of amyloid burden if present",
             "Correlation with clinical findings"
           ],
-          quickStart: [
-            "Results typically available within 48 hours",
-            "Follow-up appointment for result discussion",
-            "Additional testing may be recommended",
-            "Treatment planning if positive results"
-          ]
         }
       ]
     },
@@ -1099,6 +952,14 @@ const LearningLibrary: React.FC = () => {
       description: 'Catheter ablation for supraventricular tachycardia treatment',
       color: 'from-primary-500 to-accent-500',
       category: 'electrophysiology',
+      summary: 'Precise catheter-based procedure to eliminate abnormal electrical pathways causing supraventricular tachycardia episodes.',
+      needToKnow: [
+        'High success rate (>95% for most SVT types)',
+        'Day procedure with conscious sedation',
+        '1-3 hour procedure via groin access',
+        'Same-day discharge in most cases',
+        'Immediate cure of SVT episodes expected'
+      ],
       steps: [
         {
           id: 1,
@@ -1113,12 +974,6 @@ const LearningLibrary: React.FC = () => {
             "Risk assessment and patient education",
             "Consent process and pre-procedure preparation"
           ],
-          quickStart: [
-            "Complete rhythm monitoring studies",
-            "Review SVT episodes and triggers",
-            "Understand procedure goals and risks",
-            "Arrange time off work for procedure"
-          ]
         },
         {
           id: 2,
@@ -1133,12 +988,6 @@ const LearningLibrary: React.FC = () => {
             "SVT induction and characterization",
             "Precise localization of abnormal pathway"
           ],
-          quickStart: [
-            "Conscious sedation for comfort",
-            "Multiple catheters for detailed mapping",
-            "SVT may be induced during study",
-            "Communicate any symptoms during procedure"
-          ]
         },
         {
           id: 3,
@@ -1153,12 +1002,6 @@ const LearningLibrary: React.FC = () => {
             "Testing for complete pathway elimination",
             "Confirmation of procedural success"
           ],
-          quickStart: [
-            "Ablation typically causes minimal discomfort",
-            "Immediate testing of treatment effect",
-            "Multiple ablation points may be needed",
-            "Success rate is very high for most SVTs"
-          ]
         },
         {
           id: 4,
@@ -1173,12 +1016,6 @@ const LearningLibrary: React.FC = () => {
             "Rhythm monitoring for complications",
             "Discharge planning and follow-up"
           ],
-          quickStart: [
-            "Keep leg straight for several hours",
-            "Monitor puncture site for bleeding",
-            "Most patients go home same day",
-            "Resume normal activities within 24-48 hours"
-          ]
         }
       ]
     },
@@ -1187,6 +1024,14 @@ const LearningLibrary: React.FC = () => {
       description: 'Advanced magnetic resonance imaging for detailed cardiac assessment',
       color: 'from-sage-500 to-cream-500',
       category: 'imaging',
+      summary: 'Advanced magnetic resonance imaging providing detailed assessment of cardiac structure, function, and tissue characteristics.',
+      needToKnow: [
+        'MRI safety screening essential',
+        '45-60 minute scan with breath holds',
+        'Contrast injection may be required',
+        'Results available within 24-48 hours',
+        'Most detailed cardiac imaging available'
+      ],
       steps: [
         {
           id: 1,
@@ -1201,12 +1046,6 @@ const LearningLibrary: React.FC = () => {
             "Claustrophobia evaluation and management",
             "Contrast allergy screening"
           ],
-          quickStart: [
-            "Complete MRI safety questionnaire honestly",
-            "Bring list of all medical implants",
-            "Inform staff of any claustrophobia",
-            "Remove all metallic items before scan"
-          ]
         },
         {
           id: 2,
@@ -1221,12 +1060,6 @@ const LearningLibrary: React.FC = () => {
             "Contrast-enhanced imaging if indicated",
             "Specialized sequences for tissue characterization"
           ],
-          quickStart: [
-            "Lie still during image acquisition",
-            "Follow breathing instructions carefully",
-            "Loud noise is normal during scanning",
-            "Communicate via intercom if needed"
-          ]
         },
         {
           id: 3,
@@ -1241,12 +1074,6 @@ const LearningLibrary: React.FC = () => {
             "Tissue characterization and fibrosis assessment",
             "Valve function evaluation"
           ],
-          quickStart: [
-            "Results require specialized analysis",
-            "Complex post-processing needed",
-            "Report typically available within 24-48 hours",
-            "Follow-up appointment for result discussion"
-          ]
         },
         {
           id: 4,
@@ -1261,12 +1088,6 @@ const LearningLibrary: React.FC = () => {
             "Treatment recommendations based on findings",
             "Follow-up imaging planning if needed"
           ],
-          quickStart: [
-            "Attend follow-up appointment for results",
-            "Understand imaging findings and implications",
-            "Discuss treatment options if abnormalities found",
-            "Plan appropriate ongoing care"
-          ]
         }
       ]
     },
@@ -1276,6 +1097,14 @@ const LearningLibrary: React.FC = () => {
       color: 'from-cream-500 to-sage-500',
       category: 'imaging',
       image: '/images/stressecho.png',
+      summary: 'Exercise test combined with cardiac ultrasound to assess heart function under stress and detect coronary artery disease.',
+      needToKnow: [
+        'Wear comfortable exercise clothing and shoes',
+        'Light meal 2-3 hours before test',
+        'Progressive treadmill exercise with monitoring',
+        'Immediate post-exercise imaging required',
+        'Results discussed immediately after test'
+      ],
       steps: [
         {
           id: 1,
@@ -1290,12 +1119,6 @@ const LearningLibrary: React.FC = () => {
             "Exercise protocol selection",
             "Safety monitoring setup"
           ],
-          quickStart: [
-            "Wear comfortable exercise clothing and shoes",
-            "Light meal 2-3 hours before test",
-            "Continue most medications unless instructed otherwise",
-            "Arrive well-rested and hydrated"
-          ]
         },
         {
           id: 2,
@@ -1310,12 +1133,6 @@ const LearningLibrary: React.FC = () => {
             "Symptom assessment during exercise",
             "Peak exercise achievement"
           ],
-          quickStart: [
-            "Exercise will start slowly and gradually increase",
-            "Communicate any symptoms immediately",
-            "Continue until instructed to stop",
-            "Staff will monitor you continuously"
-          ]
         },
         {
           id: 3,
@@ -1330,12 +1147,6 @@ const LearningLibrary: React.FC = () => {
             "Wall motion assessment at peak stress",
             "Comparison with resting images"
           ],
-          quickStart: [
-            "Move quickly to imaging bed after exercise",
-            "Remain still during post-exercise imaging",
-            "Breathing may be rapid initially",
-            "Imaging must be completed quickly"
-          ]
         },
         {
           id: 4,
@@ -1350,12 +1161,6 @@ const LearningLibrary: React.FC = () => {
             "Exercise capacity assessment",
             "Results discussion and recommendations"
           ],
-          quickStart: [
-            "Continue monitoring until heart rate normalizes",
-            "Cool down gradually with walking",
-            "Results typically available immediately",
-            "Discuss findings and implications with cardiologist"
-          ]
         }
       ]
     }
@@ -1562,13 +1367,37 @@ const LearningLibrary: React.FC = () => {
               {/* Selected Journey Display */}
               {selectedProcedure && procedureJourneys[selectedProcedure] && (
                 <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-secondary-200/50 p-8">
-                  <div className="text-center mb-12">
+                  {/* Header Section */}
+                  <div className="text-center mb-8">
                     <h3 className="text-3xl font-bold text-secondary-800 mb-4">
                       {procedureJourneys[selectedProcedure].name}
                     </h3>
-                    <p className="text-lg text-secondary-600 max-w-2xl mx-auto">
-                      {procedureJourneys[selectedProcedure].description}
+                    <p className="text-lg text-secondary-600 max-w-3xl mx-auto leading-relaxed mb-6">
+                      {procedureJourneys[selectedProcedure].summary}
                     </p>
+                  </div>
+
+                  {/* Need to Know Section */}
+                  <div className="bg-primary-50/80 rounded-2xl p-6 mb-8 border border-primary-100">
+                    <h4 className="text-xl font-bold text-secondary-800 mb-4 flex items-center">
+                      <AlertCircle className="w-5 h-5 mr-2 text-primary-600" />
+                      Key Information
+                    </h4>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      {procedureJourneys[selectedProcedure].needToKnow.map((item, idx) => (
+                        <div key={idx} className="flex items-start space-x-2">
+                          <CheckCircle className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-secondary-700 text-sm">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Detailed Steps Section */}
+                  <div className="mb-6">
+                    <h4 className="text-xl font-bold text-secondary-800 mb-6 text-center">
+                      Detailed Process Steps
+                    </h4>
                   </div>
 
                   {/* Journey Steps */}
@@ -1582,7 +1411,7 @@ const LearningLibrary: React.FC = () => {
                         animate={visibleSteps.includes(index) ? "visible" : "hidden"}
                         whileInView="visible"
                         viewport={{ once: true, margin: "-100px" }}
-                        className="grid lg:grid-cols-12 gap-8 items-start"
+                        className="grid lg:grid-cols-10 gap-8 items-start"
                       >
                         {/* Step Number */}
                         <div className="lg:col-span-1">
@@ -1592,7 +1421,7 @@ const LearningLibrary: React.FC = () => {
                         </div>
 
                         {/* Content */}
-                        <div className="lg:col-span-7 space-y-4">
+                        <div className="lg:col-span-9 space-y-4">
                           <div className="flex items-center space-x-3">
                             <div className="bg-secondary-800 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-sm">
                               {step.icon}
@@ -1623,22 +1452,6 @@ const LearningLibrary: React.FC = () => {
                                 </div>
                               ))}
                             </div>
-                          </div>
-                        </div>
-
-                        {/* Quick Start Guide */}
-                        <div className="lg:col-span-4">
-                          <div className="bg-primary-50/80 rounded-2xl p-6 border border-primary-100">
-                            <h5 className="font-semibold text-secondary-800 mb-4 flex items-center">
-                              <CheckCircle className="w-4 h-4 mr-2 text-primary-500" />
-                              Quick Start Checklist
-                            </h5>
-                            {step.quickStart.map((item, idx) => (
-                              <div key={idx} className="flex items-start space-x-2 mb-2">
-                                <div className="w-1.5 h-1.5 bg-primary-500 rounded-full mt-2 flex-shrink-0"></div>
-                                <span className="text-secondary-700 text-sm">{item}</span>
-                              </div>
-                            ))}
                           </div>
                         </div>
                       </motion.div>
@@ -1712,15 +1525,18 @@ const LearningLibrary: React.FC = () => {
           {/* Heart Conditions Tab */}
           {activeTab === 'conditions' && (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredConditions.map((condition, index) => (
-                <motion.div
-                  key={condition.name}
-                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-secondary-200/50 hover:shadow-xl transition-all duration-300"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -4 }}
-                >
+              {filteredConditions.map((condition, index) => {
+                const isExpanded = expandedConditions.includes(condition.name);
+                return (
+                  <motion.div
+                    key={condition.name}
+                    className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-secondary-200/50 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ y: -4 }}
+                    onClick={() => toggleConditionExpansion(condition.name)}
+                  >
                   {/* Header */}
                   <div className="flex items-start space-x-3 mb-4">
                     <div className="p-2 rounded-lg bg-primary-50">
@@ -1732,70 +1548,91 @@ const LearningLibrary: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Symptoms */}
-                  <div className="mb-4">
-                    <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
-                      <AlertCircle className="w-4 h-4 mr-2 text-red-500" />
-                      Symptoms
-                    </h4>
-                    <ul className="space-y-1">
-                      {condition.symptoms.slice(0, 3).map((symptom, idx) => (
-                        <li key={idx} className="text-sm text-secondary-600 flex items-start">
-                          <span className="w-1.5 h-1.5 bg-red-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                          {symptom}
-                        </li>
-                      ))}
-                      {condition.symptoms.length > 3 && (
-                        <li className="text-xs text-secondary-500 italic">
-                          +{condition.symptoms.length - 3} more symptoms
-                        </li>
-                      )}
-                    </ul>
-                  </div>
+                    {/* Symptoms */}
+                    <div className="mb-4">
+                      <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
+                        <AlertCircle className="w-4 h-4 mr-2 text-red-500" />
+                        Symptoms
+                      </h4>
+                      <ul className="space-y-1">
+                        {(isExpanded ? condition.symptoms : condition.symptoms.slice(0, 3)).map((symptom, idx) => (
+                          <li key={idx} className="text-sm text-secondary-600 flex items-start">
+                            <span className="w-1.5 h-1.5 bg-red-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                            {symptom}
+                          </li>
+                        ))}
+                        {!isExpanded && condition.symptoms.length > 3 && (
+                          <li className="text-xs text-secondary-500 italic flex items-center">
+                            <ChevronDown className="w-3 h-3 mr-1" />
+                            +{condition.symptoms.length - 3} more symptoms (click to expand)
+                          </li>
+                        )}
+                      </ul>
+                    </div>
 
-                  {/* Causes */}
-                  <div className="mb-4">
-                    <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
-                      <Info className="w-4 h-4 mr-2 text-blue-500" />
-                      Common Causes
-                    </h4>
-                    <ul className="space-y-1">
-                      {condition.causes.slice(0, 3).map((cause, idx) => (
-                        <li key={idx} className="text-sm text-secondary-600 flex items-start">
-                          <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                          {cause}
-                        </li>
-                      ))}
-                      {condition.causes.length > 3 && (
-                        <li className="text-xs text-secondary-500 italic">
-                          +{condition.causes.length - 3} more causes
-                        </li>
-                      )}
-                    </ul>
-                  </div>
+                    {/* Causes */}
+                    <div className="mb-4">
+                      <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
+                        <Info className="w-4 h-4 mr-2 text-blue-500" />
+                        Common Causes
+                      </h4>
+                      <ul className="space-y-1">
+                        {(isExpanded ? condition.causes : condition.causes.slice(0, 3)).map((cause, idx) => (
+                          <li key={idx} className="text-sm text-secondary-600 flex items-start">
+                            <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                            {cause}
+                          </li>
+                        ))}
+                        {!isExpanded && condition.causes.length > 3 && (
+                          <li className="text-xs text-secondary-500 italic flex items-center">
+                            <ChevronDown className="w-3 h-3 mr-1" />
+                            +{condition.causes.length - 3} more causes (click to expand)
+                          </li>
+                        )}
+                      </ul>
+                    </div>
 
-                  {/* Treatments */}
-                  <div>
-                    <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
-                      <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
-                      Treatment Options
-                    </h4>
-                    <ul className="space-y-1">
-                      {condition.treatments.slice(0, 3).map((treatment, idx) => (
-                        <li key={idx} className="text-sm text-secondary-600 flex items-start">
-                          <span className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                          {treatment}
-                        </li>
-                      ))}
-                      {condition.treatments.length > 3 && (
-                        <li className="text-xs text-secondary-500 italic">
-                          +{condition.treatments.length - 3} more treatments
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-                </motion.div>
-              ))}
+                    {/* Treatments */}
+                    <div className="mb-4">
+                      <h4 className="font-semibold text-secondary-800 mb-2 flex items-center">
+                        <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                        Treatment Options
+                      </h4>
+                      <ul className="space-y-1">
+                        {(isExpanded ? condition.treatments : condition.treatments.slice(0, 3)).map((treatment, idx) => (
+                          <li key={idx} className="text-sm text-secondary-600 flex items-start">
+                            <span className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                            {treatment}
+                          </li>
+                        ))}
+                        {!isExpanded && condition.treatments.length > 3 && (
+                          <li className="text-xs text-secondary-500 italic flex items-center">
+                            <ChevronDown className="w-3 h-3 mr-1" />
+                            +{condition.treatments.length - 3} more treatments (click to expand)
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+
+                    {/* Expand/Collapse Indicator */}
+                    <div className="mt-4 pt-3 border-t border-secondary-200/50">
+                      <div className="flex items-center justify-center text-xs text-secondary-500">
+                        {isExpanded ? (
+                          <>
+                            <ChevronUp className="w-3 h-3 mr-1" />
+                            Click to collapse
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="w-3 h-3 mr-1" />
+                            Click to see more details
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           )}
 
