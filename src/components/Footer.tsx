@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
             <div className="space-y-2 text-sm text-gray-600">
               <p>📍 183 Wattletree Rd, Malvern VIC 3144</p>
               <p>📞 (03) 9509 5009</p>
-              <p>🌐 doxy.me/hcm21</p>
+              <p>🌐 www.heartclinicmelbourne.com.au</p>
             </div>
           </div>
 

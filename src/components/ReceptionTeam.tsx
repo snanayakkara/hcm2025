@@ -581,13 +581,7 @@ const ReceptionTeam: React.FC = () => {
                     <Collapse isOpened={isExpanded}>
                       <div className="px-4 pb-4">
                         <div className="border-t pt-4 space-y-4">
-                          {/* Tech Badge */}
-                          <div className="bg-gradient-to-r from-sage-500/80 to-primary-500/80 backdrop-blur-sm p-3 rounded-xl text-white text-center">
-                            <div className="flex items-center justify-center space-x-2">
-                              <Activity className="w-5 h-5" />
-                              <span className="font-semibold">Cardiac Technologist</span>
-                            </div>
-                          </div>
+
 
                           {/* Full Image */}
                           <div className={`relative h-48 overflow-hidden rounded-xl bg-gradient-to-br ${tech.color}`}>
@@ -653,13 +647,7 @@ const ReceptionTeam: React.FC = () => {
                     transitionDelay: `${index * 150}ms` 
                   }}
                 >
-                  {/* Tech Header */}
-                  <div className="bg-gradient-to-r from-sage-500/80 to-primary-500/80 backdrop-blur-sm p-4 text-white">
-                    <div className="flex items-center space-x-2">
-                      <Activity className="w-5 h-5" />
-                      <span className="font-semibold">Cardiac Technologist</span>
-                    </div>
-                  </div>
+
 
                   <div className="p-6 space-y-6">
                     {/* Tech Image */}
