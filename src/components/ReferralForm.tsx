@@ -390,18 +390,30 @@ Provider Number: ${formData.providerNumber}`;
                       : 'border-gray-300 hover:border-blue-300 hover:shadow-md'
                   }`}
                   style={{
-                    height: '80px',
-                    backgroundImage: `url(${type.image})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
+                    height: '80px'
                   }}
                 >
+                  {/* Blurred background image */}
+                  <div 
+                    className="absolute inset-0 rounded-lg"
+                    style={{
+                      backgroundImage: `url(${type.image})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      imageRendering: '-webkit-optimize-contrast',
+                      filter: 'blur(2px)'
+                    }}
+                  />
+                  
                   {/* Background overlay */}
-                  <div className={`absolute inset-0 transition-all duration-300 ${
+                  <div className={`absolute inset-0 rounded-lg transition-all duration-300 ${
                     formData.referralTypes.includes(type.value)
                       ? 'bg-blue-600/85'
                       : 'bg-white/75 hover:bg-white/95'
-                  }`}></div>
+                  }`} style={{
+                    backdropFilter: 'blur(4px)',
+                    WebkitBackdropFilter: 'blur(4px)'
+                  }}></div>
                   
                   {/* Content */}
                   <div className="relative z-10 flex flex-col items-center justify-center">

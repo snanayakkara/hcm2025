@@ -495,7 +495,9 @@ const LearningLibrary: React.FC = () => {
     'Valve replacement': 'tavi',
     'MitraClip procedure': 'mteer',
     'Electrical cardioversion to restore normal rhythm': 'toe_dcr',
-    'Medicines or electrical cardioversion to restore normal rhythm': 'toe_dcr'
+    'Medicines or electrical cardioversion to restore normal rhythm': 'toe_dcr',
+    'Transoesophageal Echocardiogram (TOE)': 'toe',
+    'TOE': 'toe'
   };
 
   /**
@@ -760,6 +762,68 @@ const LearningLibrary: React.FC = () => {
             "Anticoagulation planning",
             "Discharge education and follow-up"
           ],
+        }
+      ]
+    },
+    toe: {
+      name: 'Transoesophageal Echocardiogram (TOE)',
+      description: 'High-resolution ultrasound of the heart via the oesophagus',
+      color: 'from-sage-500 to-accent-500',
+      category: 'procedures',
+      type: 'procedure',
+      image: '/images/toe_scan.png',
+      summary:
+        'A specialised ultrasound test in which a thin probe is passed down the oesophagus under light sedation. This close vantage point provides crystal-clear images of the heart valves, atria and implanted devices without interference from ribs or lungs.',
+      needToKnow: [
+        'Fast for 6 hours before the test',
+        'Throat spray and light IV sedation keep you comfortable',
+        'The probe is about the width of a little finger',
+        'Actual imaging time is 10–15 minutes; total visit 60–90 minutes',
+        'You will need a responsible adult to drive you home',
+        'Normal eating and drinking can resume after the throat is no longer numb'
+      ],
+      steps: [
+        {
+          id: 1,
+          title: 'Preparation & Sedation',
+          subtitle: 'Ensuring comfort and safety',
+          description:
+            'Consent review, IV cannula insertion and throat-numbing spray. Light sedation helps you relax while maintaining breathing.',
+          icon: <Clipboard className="w-5 h-5" />,
+          duration: '10 minutes',
+          details: [
+            'Fasting status confirmed',
+            'Removal of dentures if present',
+            'Continuous oxygen and blood-pressure monitoring'
+          ]
+        },
+        {
+          id: 2,
+          title: 'Probe Insertion & Imaging',
+          subtitle: 'High-definition valve assessment',
+          description:
+            'The lubricated probe is gently guided into the oesophagus; live images are recorded from multiple depths and angles.',
+          icon: <Activity className="w-5 h-5" />,
+          duration: '10–15 minutes',
+          details: [
+            'Mitral, aortic and tricuspid valves in close detail',
+            'Assessment for clots, infection or prosthetic-valve issues',
+            'Colour Doppler to measure leak severity'
+          ]
+        },
+        {
+          id: 3,
+          title: 'Recovery & Results',
+          subtitle: 'Observation and discussion',
+          description:
+            'You relax in recovery for ~30 minutes until the sedation wears off. Preliminary findings are explained before discharge.',
+          icon: <FileText className="w-5 h-5" />,
+          duration: '30–45 minutes',
+          details: [
+            'Monitoring until swallowing is safe',
+            'Written report sent to your doctor within 24–48 hours',
+            'Arrange follow-up if abnormalities are found'
+          ]
         }
       ]
     },
@@ -1351,6 +1415,8 @@ const LearningLibrary: React.FC = () => {
         'MRI safety screening essential',
         '60 minute scan with breath holds',
         'Contrast (non-iodine) injection may be required',
+        'Notify if you have claustrophobia',
+        'No metal implants or devices allowed',
         'Results available within a week',
         'Most detailed cardiac imaging available for the heart muscle'
       ],
@@ -1422,7 +1488,7 @@ const LearningLibrary: React.FC = () => {
       summary: 'Exercise test combined with cardiac ultrasound to assess heart function under stress and detect coronary artery disease.',
       needToKnow: [
         'Wear comfortable exercise clothing and shoes',
-        'Light meal 2-3 hours before test',
+        'Light meal at least 2-3 hours before test',
         'Progressive treadmill exercise with monitoring',
         'Immediate post-exercise imaging required',
         'Results discussed immediately after test'
@@ -1772,22 +1838,31 @@ const LearningLibrary: React.FC = () => {
                               ? 'shadow-xl scale-105 border-transparent' 
                               : 'shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-300'
                           }`}
-                          style={{
-                            backgroundImage: generalProcedure[1].image ? `url(${generalProcedure[1].image})` : 'none',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                            imageRendering: '-webkit-optimize-contrast'
-                          }}
                           whileHover={{ y: -4, scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
+                          {/* Blurred background image */}
+                          <div 
+                            className="absolute inset-0 rounded-2xl"
+                            style={{
+                              backgroundImage: generalProcedure[1].image ? `url(${generalProcedure[1].image})` : 'none',
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                              backgroundRepeat: 'no-repeat',
+                              imageRendering: '-webkit-optimize-contrast',
+                              filter: 'blur(2px)'
+                            }}
+                          />
+                          
                           {/* Background overlay */}
                           <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
                             selectedProcedure === 'general'
                               ? `bg-gradient-to-r ${generalProcedure[1].color} opacity-80`
                               : 'bg-white/70 hover:bg-white/80'
-                          }`} />
+                          }`} style={{
+                            backdropFilter: 'blur(4px)',
+                            WebkitBackdropFilter: 'blur(4px)'
+                          }} />
                           
                           {/* Selection indicator */}
                           {selectedProcedure === 'general' && (
@@ -1819,7 +1894,7 @@ const LearningLibrary: React.FC = () => {
                     <div>
                       <h4 className="text-xl font-semibold text-secondary-700 mb-6 flex items-center">
                         <Search className="w-5 h-5 mr-2 text-primary-500" />
-                        Diagnostic Tests
+                        Tests
                       </h4>
                       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {groupedProcedures.test.map(([key, procedure]) => (
@@ -1831,22 +1906,31 @@ const LearningLibrary: React.FC = () => {
                                 ? 'shadow-xl scale-105 border-transparent' 
                                 : 'shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-300'
                             }`}
-                            style={{
-                              backgroundImage: procedure.image ? `url(${procedure.image})` : 'none',
-                              backgroundSize: 'cover',
-                              backgroundPosition: 'center',
-                              backgroundRepeat: 'no-repeat',
-                              imageRendering: '-webkit-optimize-contrast'
-                            }}
                             whileHover={{ y: -4, scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                           >
+                            {/* Blurred background image */}
+                            <div 
+                              className="absolute inset-0 rounded-2xl"
+                              style={{
+                                backgroundImage: procedure.image ? `url(${procedure.image})` : 'none',
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                backgroundRepeat: 'no-repeat',
+                                imageRendering: '-webkit-optimize-contrast',
+                                filter: 'blur(2px)'
+                              }}
+                            />
+                            
                             {/* Background overlay */}
                             <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
                               selectedProcedure === key
                                 ? `bg-gradient-to-r ${procedure.color} opacity-80`
                                 : 'bg-white/70 hover:bg-white/80'
-                            }`} />
+                            }`} style={{
+                              backdropFilter: 'blur(4px)',
+                              WebkitBackdropFilter: 'blur(4px)'
+                            }} />
                             
                             {/* Selection indicator */}
                             {selectedProcedure === key && (
@@ -1879,7 +1963,7 @@ const LearningLibrary: React.FC = () => {
                     <div>
                       <h4 className="text-xl font-semibold text-secondary-700 mb-6 flex items-center">
                         <Heart className="w-5 h-5 mr-2 text-primary-500" />
-                        Therapeutic Procedures
+                        Procedures
                       </h4>
                       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {groupedProcedures.procedure.map(([key, procedure]) => (
@@ -1891,22 +1975,31 @@ const LearningLibrary: React.FC = () => {
                                 ? 'shadow-xl scale-105 border-transparent' 
                                 : 'shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-300'
                             }`}
-                            style={{
-                              backgroundImage: procedure.image ? `url(${procedure.image})` : 'none',
-                              backgroundSize: 'cover',
-                              backgroundPosition: 'center',
-                              backgroundRepeat: 'no-repeat',
-                              imageRendering: '-webkit-optimize-contrast'
-                            }}
                             whileHover={{ y: -4, scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                           >
+                            {/* Blurred background image */}
+                            <div 
+                              className="absolute inset-0 rounded-2xl"
+                              style={{
+                                backgroundImage: procedure.image ? `url(${procedure.image})` : 'none',
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                backgroundRepeat: 'no-repeat',
+                                imageRendering: '-webkit-optimize-contrast',
+                                filter: 'blur(2px)'
+                              }}
+                            />
+                            
                             {/* Background overlay */}
                             <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
                               selectedProcedure === key
                                 ? `bg-gradient-to-r ${procedure.color} opacity-80`
                                 : 'bg-white/70 hover:bg-white/80'
-                            }`} />
+                            }`} style={{
+                              backdropFilter: 'blur(4px)',
+                              WebkitBackdropFilter: 'blur(4px)'
+                            }} />
                             
                             {/* Selection indicator */}
                             {selectedProcedure === key && (
