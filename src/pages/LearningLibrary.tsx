@@ -664,7 +664,8 @@ const LearningLibrary: React.FC = () => {
           description: procedure.description,
           summary: procedure.summary,
           needToKnow: procedure.needToKnow,
-          steps: procedure.steps
+          steps: procedure.steps,
+          image: (procedure as any)?.image
         } : null;
       }).filter((item): item is NonNullable<typeof item> => item !== null);
 
@@ -1345,15 +1346,16 @@ const LearningLibrary: React.FC = () => {
                       >
                         Call (03) 9509 5009
                       </motion.button>
-                      <motion.button 
-                        className="border border-slate-600 text-white px-8 py-4 rounded-2xl font-medium text-lg hover:bg-slate-700/50"
+                      <motion.a 
+                        href="#request-appointment"
+                        className="border border-slate-600 text-white px-8 py-4 rounded-2xl font-medium text-lg hover:bg-slate-700/50 inline-block text-center"
                         whileHover={{ 
                           scale: 1.02
                         }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        Schedule Online
-                      </motion.button>
+                        Request An Appointment
+                      </motion.a>
                     </motion.div>
                   </div>
                 </motion.div>
@@ -1629,7 +1631,8 @@ const LearningLibrary: React.FC = () => {
                           description: procedure.description,
                           summary: procedure.summary,
                           needToKnow: procedure.needToKnow,
-                          steps: procedure.steps
+                          steps: procedure.steps,
+                          image: (procedure as any)?.image
                         }];
                         const pdfBytes = await generateLearningLibraryPDF(procedureData);
                         downloadPDF(pdfBytes, `${procedure.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-guide.pdf`);

@@ -7,6 +7,7 @@ interface ProcedureData {
   description: string;
   summary: string;
   needToKnow: string[];
+  image?: string;
   steps: {
     id: number;
     title: string;
@@ -54,6 +55,19 @@ async function fetchLogo(): Promise<ArrayBuffer> {
   } catch (error) {
     console.warn('Failed to load logo:', error);
     throw error;
+  }
+}
+
+async function fetchProcedureImage(imagePath: string): Promise<ArrayBuffer | null> {
+  try {
+    const response = await fetch(imagePath);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image: ${response.status}`);
+    }
+    return await response.arrayBuffer();
+  } catch (error) {
+    console.warn(`Failed to load procedure image ${imagePath}:`, error);
+    return null;
   }
 }
 
@@ -654,13 +668,51 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     size: 16, 
     color: primaryTeal 
   });
-  coverY -= 30;
+  coverY -= 40;
+
+  // Load procedure images for table of contents
+  const procedureImages: { [key: string]: any } = {};
+  for (const procedure of procedures) {
+    if (procedure.image) {
+      try {
+        const imageBytes = await fetchProcedureImage(procedure.image);
+        if (imageBytes) {
+          // Determine image type and embed accordingly
+          const isPng = procedure.image.toLowerCase().includes('.png');
+          procedureImages[procedure.name] = isPng 
+            ? await pdfDoc.embedPng(imageBytes)
+            : await pdfDoc.embedJpg(imageBytes);
+        }
+      } catch (error) {
+        console.warn(`Failed to embed image for ${procedure.name}:`, error);
+      }
+    }
+  }
 
   procedures.forEach((procedure, index) => {
-    drawText(coverPage, `${index + 1}. ${procedure.name}`, marginLeft + 20, coverY, { 
+    const imageSize = 24;
+    const rowHeight = 32;
+    
+    // Draw procedure image if available
+    if (procedureImages[procedure.name]) {
+      const image = procedureImages[procedure.name];
+      const imageScale = Math.min(imageSize / image.width, imageSize / image.height);
+      const scaledWidth = image.width * imageScale;
+      const scaledHeight = image.height * imageScale;
+      
+      coverPage.drawImage(image, {
+        x: marginLeft + 20,
+        y: coverY - scaledHeight + 5,
+        width: scaledWidth,
+        height: scaledHeight,
+      });
+    }
+    
+    // Draw procedure name with image offset
+    drawText(coverPage, `${index + 1}. ${procedure.name}`, marginLeft + 20 + imageSize + 10, coverY, { 
       size: 12 
     });
-    coverY -= 20;
+    coverY -= rowHeight;
   });
 
   // Date
@@ -676,33 +728,90 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     color: lightGray 
   });
 
-  // Add procedure pages
+  // Add procedure pages with proper page management
   procedures.forEach((procedure) => {
-    const page = pdfDoc.addPage([595.28, 841.89]);
+    let page = pdfDoc.addPage([595.28, 841.89]);
     const { width, height } = page.getSize();
     let currentY = height - marginTop;
-
-    // Header
-    if (logo) {
-      const logoScale = Math.min(logoWidth / logo.width, logoHeight / logo.height);
-      const scaledLogoWidth = logo.width * logoScale;
-      const scaledLogoHeight = logo.height * logoScale;
-      
-      page.drawImage(logo, {
-        x: marginLeft,
-        y: currentY - scaledLogoHeight,
-        width: scaledLogoWidth,
-        height: scaledLogoHeight,
+    const procedurePages: any[] = [page]; // Track all pages for this procedure
+    
+    // Helper function to check if we need a new page
+    const checkPageBreak = (requiredSpace: number): boolean => {
+      return currentY - requiredSpace < marginBottom + 50; // 50px buffer above footer
+    };
+    
+    // Helper function to add a new page
+    const addNewPage = (): void => {
+      page = pdfDoc.addPage([595.28, 841.89]);
+      procedurePages.push(page);
+      currentY = height - marginTop;
+      addHeader(page); // Add header to new page
+      currentY -= 80; // Adjust for header space
+    };
+    
+    // Helper function to add footer to a page
+    const addFooter = (currentPage: any) => {
+      drawLine(currentPage, marginLeft, marginBottom + 35, width - marginRight, marginBottom + 35, lightGray, 1);
+      drawText(currentPage, 'Heart Clinic Melbourne', marginLeft, marginBottom + 20, { 
+        font: boldFont, 
+        size: 10, 
+        color: primaryTeal 
       });
-    }
+      drawText(currentPage, 'Suite 21/183 Wattletree Rd, Malvern VIC 3144', marginLeft, marginBottom + 8, { 
+        size: 8, 
+        color: lightGray 
+      });
+      drawText(currentPage, 'Phone: (03) 9509 5009  |  Email: reception@heartclinicmelbourne.com.au', marginLeft, marginBottom - 4, { 
+        size: 8, 
+        color: lightGray 
+      });
+    };
 
-    // Procedure name
-    const titleX = marginLeft + (logo ? logoWidth + 20 : 0);
-    drawText(page, procedure.name, titleX, currentY - 10, { 
-      font: boldFont, 
-      size: 20, 
-      color: primaryTeal 
-    });
+    // Helper function to add header with logo and procedure image
+    const addHeader = (currentPage: any) => {
+      let headerY = height - marginTop;
+      
+      // Draw logo
+      if (logo) {
+        const logoScale = Math.min(logoWidth / logo.width, logoHeight / logo.height);
+        const scaledLogoWidth = logo.width * logoScale;
+        const scaledLogoHeight = logo.height * logoScale;
+        
+        currentPage.drawImage(logo, {
+          x: marginLeft,
+          y: headerY - scaledLogoHeight,
+          width: scaledLogoWidth,
+          height: scaledLogoHeight,
+        });
+      }
+
+      // Draw procedure image in header (top right)
+      if (procedureImages[procedure.name]) {
+        const procedureImage = procedureImages[procedure.name];
+        const procedureImageSize = 40;
+        const imageScale = Math.min(procedureImageSize / procedureImage.width, procedureImageSize / procedureImage.height);
+        const scaledWidth = procedureImage.width * imageScale;
+        const scaledHeight = procedureImage.height * imageScale;
+        
+        currentPage.drawImage(procedureImage, {
+          x: width - marginRight - scaledWidth,
+          y: headerY - scaledHeight,
+          width: scaledWidth,
+          height: scaledHeight,
+        });
+      }
+
+      // Procedure name
+      const titleX = marginLeft + (logo ? logoWidth + 20 : 0);
+      drawText(currentPage, procedure.name, titleX, headerY - 10, { 
+        font: boldFont, 
+        size: 20, 
+        color: primaryTeal 
+      });
+    };
+    
+    // Add header to first page
+    addHeader(page);
 
     currentY -= 60;
     drawLine(page, marginLeft, currentY, width - marginRight, currentY, primaryTeal, 2);
@@ -710,7 +819,13 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
     // Description
     const descriptionLines = wrapText(procedure.description, width - marginLeft - marginRight, 12);
+    if (checkPageBreak(descriptionLines.length * 18 + 15)) {
+      addNewPage();
+    }
     descriptionLines.forEach(line => {
+      if (checkPageBreak(18)) {
+        addNewPage();
+      }
       drawText(page, line, marginLeft, currentY, { size: 12 });
       currentY -= 18;
     });
@@ -719,6 +834,13 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
     // Summary section
     if (procedure.summary) {
+      const summaryLines = wrapText(procedure.summary, width - marginLeft - marginRight - 20, 11);
+      const summaryHeight = 60 + (summaryLines.length * 16) + 20; // Header + content + spacing
+      
+      if (checkPageBreak(summaryHeight)) {
+        addNewPage();
+      }
+      
       drawRectangle(page, marginLeft - 10, currentY - 5, width - marginLeft - marginRight + 20, 25, lightTeal);
       drawText(page, 'Overview', marginLeft, currentY, { 
         font: boldFont, 
@@ -727,8 +849,10 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
       });
       currentY -= 35;
 
-      const summaryLines = wrapText(procedure.summary, width - marginLeft - marginRight - 20, 11);
       summaryLines.forEach(line => {
+        if (checkPageBreak(16)) {
+          addNewPage();
+        }
         drawText(page, line, marginLeft + 10, currentY, { size: 11 });
         currentY -= 16;
       });
@@ -738,6 +862,13 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
     // Need to know section
     if (procedure.needToKnow && procedure.needToKnow.length > 0) {
+      // Calculate approximate height needed
+      const estimatedHeight = 60 + (procedure.needToKnow.length * 40); // Header + items
+      
+      if (checkPageBreak(estimatedHeight)) {
+        addNewPage();
+      }
+      
       drawRectangle(page, marginLeft - 10, currentY - 5, width - marginLeft - marginRight + 20, 25, lightTeal);
       drawText(page, 'Key Information', marginLeft, currentY, { 
         font: boldFont, 
@@ -747,13 +878,22 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
       currentY -= 35;
 
       procedure.needToKnow.forEach(item => {
+        const itemLines = wrapText(item, width - marginLeft - marginRight - 40, 11);
+        const itemHeight = itemLines.length * 16 + 20;
+        
+        if (checkPageBreak(itemHeight)) {
+          addNewPage();
+        }
+        
         drawText(page, '•', marginLeft + 10, currentY, { 
           color: primaryTeal, 
           size: 12, 
           font: boldFont 
         });
-        const itemLines = wrapText(item, width - marginLeft - marginRight - 40, 11);
         itemLines.forEach((line, index) => {
+          if (checkPageBreak(16)) {
+            addNewPage();
+          }
           drawText(page, line, marginLeft + 25, currentY, { size: 11 });
           if (index < itemLines.length - 1) currentY -= 16;
         });
@@ -765,6 +905,10 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
     // Steps section
     if (procedure.steps && procedure.steps.length > 0) {
+      if (checkPageBreak(60)) { // Check for section header space
+        addNewPage();
+      }
+      
       drawRectangle(page, marginLeft - 10, currentY - 5, width - marginLeft - marginRight + 20, 25, lightTeal);
       drawText(page, 'Procedure Steps', marginLeft, currentY, { 
         font: boldFont, 
@@ -774,6 +918,15 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
       currentY -= 35;
 
       procedure.steps.forEach((step, index) => {
+        // Calculate approximate step height
+        const descLines = wrapText(step.description, width - marginLeft - marginRight - 40, 11);
+        const detailsHeight = step.details ? step.details.length * 26 : 0; // Approximate
+        const stepHeight = 50 + (descLines.length * 14) + detailsHeight;
+        
+        if (checkPageBreak(stepHeight)) {
+          addNewPage();
+        }
+        
         // Step number and title
         drawText(page, `${step.id}.`, marginLeft + 10, currentY, { 
           color: primaryTeal, 
@@ -788,6 +941,9 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
         // Subtitle and duration
         if (step.subtitle) {
+          if (checkPageBreak(16)) {
+            addNewPage();
+          }
           drawText(page, step.subtitle, marginLeft + 30, currentY, { 
             size: 10, 
             color: lightGray 
@@ -802,8 +958,10 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
         currentY -= 16;
 
         // Description
-        const descLines = wrapText(step.description, width - marginLeft - marginRight - 40, 11);
         descLines.forEach(line => {
+          if (checkPageBreak(14)) {
+            addNewPage();
+          }
           drawText(page, line, marginLeft + 30, currentY, { size: 11 });
           currentY -= 14;
         });
@@ -811,12 +969,21 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
         // Details
         if (step.details && step.details.length > 0) {
           step.details.forEach(detail => {
+            const detailLines = wrapText(detail, width - marginLeft - marginRight - 60, 10);
+            const detailHeight = detailLines.length * 12 + 14;
+            
+            if (checkPageBreak(detailHeight)) {
+              addNewPage();
+            }
+            
             drawText(page, '◦', marginLeft + 40, currentY, { 
               color: lightGray, 
               size: 10 
             });
-            const detailLines = wrapText(detail, width - marginLeft - marginRight - 60, 10);
             detailLines.forEach((line, lineIndex) => {
+              if (checkPageBreak(12)) {
+                addNewPage();
+              }
               drawText(page, line, marginLeft + 50, currentY, { 
                 size: 10, 
                 color: lightGray 
@@ -830,21 +997,10 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
         currentY -= 10;
       });
     }
-
-    // Footer
-    drawLine(page, marginLeft, marginBottom + 35, width - marginRight, marginBottom + 35, lightGray, 1);
-    drawText(page, 'Heart Clinic Melbourne', marginLeft, marginBottom + 20, { 
-      font: boldFont, 
-      size: 10, 
-      color: primaryTeal 
-    });
-    drawText(page, 'Suite 21/183 Wattletree Rd, Malvern VIC 3144', marginLeft, marginBottom + 8, { 
-      size: 8, 
-      color: lightGray 
-    });
-    drawText(page, 'Phone: (03) 9509 5009  |  Email: reception@heartclinicmelbourne.com.au', marginLeft, marginBottom - 4, { 
-      size: 8, 
-      color: lightGray 
+    
+    // Add footers to all pages created for this procedure
+    procedurePages.forEach(pageToFooter => {
+      addFooter(pageToFooter);
     });
   });
 

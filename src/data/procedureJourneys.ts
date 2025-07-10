@@ -1703,7 +1703,7 @@ export const procedureJourneys: ProcedureJourneys = {
     color: 'from-sage-500 to-primary-500',
     category: 'imaging',
     type: 'test',
-    image: '/images/stressecho.png',
+    image: '/images/mps.png',
     summary: 'A nuclear medicine test that uses radioactive tracers to evaluate blood flow to the heart muscle during rest and stress conditions.',
     needToKnow: [
       'Two-day procedure: stress and rest imaging',

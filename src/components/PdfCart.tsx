@@ -33,7 +33,8 @@ const PdfCart: React.FC = () => {
           description: procedure.description,
           summary: procedure.summary,
           needToKnow: procedure.needToKnow,
-          steps: procedure.steps
+          steps: procedure.steps,
+          image: (procedure as any)?.image
         } : null;
       }).filter((item): item is NonNullable<typeof item> => item !== null);
 
@@ -69,7 +70,8 @@ const PdfCart: React.FC = () => {
           description: procedure.description,
           summary: procedure.summary,
           needToKnow: procedure.needToKnow,
-          steps: procedure.steps
+          steps: procedure.steps,
+          image: (procedure as any)?.image
         } : null;
       }).filter((item): item is NonNullable<typeof item> => item !== null);
 
