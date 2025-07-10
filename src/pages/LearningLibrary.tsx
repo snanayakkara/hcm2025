@@ -37,6 +37,7 @@ const LearningLibrary: React.FC = () => {
   const [showDeepDive, setShowDeepDive] = useState(false);
   const [faqData, setFaqData] = useState<FaqData>({});
   const [currentProcedureFaq, setCurrentProcedureFaq] = useState<ProcedureFaq | null>(null);
+  const [deepDiveProcedureId, setDeepDiveProcedureId] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const { selectedProcedures, addProcedure, removeProcedure, clearSelection } = usePdfSelection();
@@ -666,12 +667,14 @@ const LearningLibrary: React.FC = () => {
   const handleOpenDeepDive = (procedureId: string) => {
     const procedureFaq = faqData[procedureId];
     setCurrentProcedureFaq(procedureFaq || null);
+    setDeepDiveProcedureId(procedureId);
     setShowDeepDive(true);
   };
 
   const handleCloseDeepDive = () => {
     setShowDeepDive(false);
     setCurrentProcedureFaq(null);
+    setDeepDiveProcedureId(null);
   };
 
   const handleGeneratePdf = async () => {
@@ -681,13 +684,15 @@ const LearningLibrary: React.FC = () => {
       // Convert selected procedure IDs to procedure data
       const procedureData = Array.from(selectedProcedures).map(id => {
         const procedure = procedureJourneys[id as keyof typeof procedureJourneys];
+        const procedureFaq = faqData[id];
         return procedure ? {
           name: procedure.name,
           description: procedure.description,
           summary: procedure.summary,
           needToKnow: procedure.needToKnow,
           steps: procedure.steps,
-          image: (procedure as any)?.image
+          image: (procedure as any)?.image,
+          faqs: procedureFaq?.faqs || []
         } : null;
       }).filter((item): item is NonNullable<typeof item> => item !== null);
 
@@ -912,41 +917,19 @@ const LearningLibrary: React.FC = () => {
                         <Search className="w-5 h-5 mr-2 text-primary-500" />
                         Tests
                       </h4>
-                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
                         {groupedProcedures.test.map(([key, procedure]) => (
-                          <div key={`wrapper-${key}`} className="group/card">
+                          <div key={`wrapper-${key}`} className="group/card h-full">
                           <motion.button
                             key={key}
                             onClick={() => handleProcedureClick(key)}
-                            className={`relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-500 transform hover:-translate-y-2 border group hover:shadow-2xl hover:shadow-primary-500/20 ${
+                            className={`w-full h-full relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-500 transform hover:-translate-y-2 border group hover:shadow-2xl hover:shadow-primary-500/20 ${
                               selectedProcedure === key
                                 ? 'shadow-2xl scale-105 border-transparent ring-2 ring-primary-300 ring-opacity-50 shadow-primary-500/30' 
                                 : 'shadow-sm hover:shadow-2xl border-secondary-200 hover:border-primary-300 hover:scale-102'
                             }`}
-                            whileHover={{ 
-                              y: -6, 
-                              scale: 1.03,
-                              transition: { 
-                                type: "spring", 
-                                stiffness: 400, 
-                                damping: 25 
-                              }
-                            }}
-                            whileTap={{ 
-                              scale: 0.97,
-                              transition: { 
-                                type: "spring", 
-                                stiffness: 600, 
-                                damping: 30 
-                              }
-                            }}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ 
-                              delay: groupedProcedures.test.findIndex(([k]) => k === key) * 0.1,
-                              duration: 0.6,
-                              ease: "easeOut"
-                            }}
+                            whileHover={{ y: -4, scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                           >
                             {/* Blurred background image */}
                             {procedure.image && (
@@ -1061,13 +1044,13 @@ const LearningLibrary: React.FC = () => {
                         <Heart className="w-5 h-5 mr-2 text-primary-500" />
                         Procedures
                       </h4>
-                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
                         {groupedProcedures.procedure.map(([key, procedure]) => (
-                          <div key={`wrapper-${key}`} className="group/card">
+                          <div key={`wrapper-${key}`} className="group/card h-full">
                           <motion.button
                             key={key}
                             onClick={() => handleProcedureClick(key)}
-                            className={`relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-500 transform hover:-translate-y-2 border group hover:shadow-2xl hover:shadow-primary-500/20 ${
+                            className={`w-full h-full relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-500 transform hover:-translate-y-2 border group hover:shadow-2xl hover:shadow-primary-500/20 ${
                               selectedProcedure === key
                                 ? 'shadow-2xl scale-105 border-transparent ring-2 ring-primary-300 ring-opacity-50 shadow-primary-500/30' 
                                 : 'shadow-sm hover:shadow-2xl border-secondary-200 hover:border-primary-300 hover:scale-102'
@@ -1454,7 +1437,7 @@ const LearningLibrary: React.FC = () => {
                         Call (03) 9509 5009
                       </motion.button>
                       <motion.a 
-                        href="#request-appointment"
+                        href="/#request-appointment"
                         className="border border-slate-600 text-white px-8 py-4 rounded-2xl font-medium text-lg hover:bg-slate-700/50 inline-block text-center"
                         whileHover={{ 
                           scale: 1.02
@@ -1848,13 +1831,15 @@ const LearningLibrary: React.FC = () => {
                     const procedure = procedureJourneys[showRelatedCards];
                     if (procedure) {
                       try {
+                        const procedureFaq = faqData[showRelatedCards];
                         const procedureData = [{
                           name: procedure.name,
                           description: procedure.description,
                           summary: procedure.summary,
                           needToKnow: procedure.needToKnow,
                           steps: procedure.steps,
-                          image: (procedure as any)?.image
+                          image: (procedure as any)?.image,
+                          faqs: procedureFaq?.faqs || []
                         }];
                         const pdfBytes = await generateLearningLibraryPDF(procedureData);
                         downloadPDF(pdfBytes, `${procedure.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-guide.pdf`);
@@ -1921,7 +1906,7 @@ const LearningLibrary: React.FC = () => {
         isOpen={showDeepDive}
         onClose={handleCloseDeepDive}
         procedureFaq={currentProcedureFaq}
-        procedureName={selectedProcedure ? procedureJourneys[selectedProcedure as keyof typeof procedureJourneys]?.name || '' : ''}
+        procedureName={deepDiveProcedureId ? procedureJourneys[deepDiveProcedureId as keyof typeof procedureJourneys]?.name || '' : ''}
       />
     </div>
   );

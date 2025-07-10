@@ -25,10 +25,10 @@ const Footer: React.FC = () => {
           <div className={isMobile ? 'block' : 'block'}>
             <h4 className="text-md font-semibold text-gray-900 mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm text-gray-600">
-              <li><a href="#about" className="hover:text-primary-600 transition-colors">About Us</a></li>
-              <li><a href="#services" className="hover:text-primary-600 transition-colors">Services</a></li>
-              <li><a href="#doctors" className="hover:text-primary-600 transition-colors">Our Doctors</a></li>
-              <li><a href="#contact" className="hover:text-primary-600 transition-colors">Contact</a></li>
+              <li><a href="/#about" className="hover:text-primary-600 transition-colors">About Us</a></li>
+              <li><a href="/#services" className="hover:text-primary-600 transition-colors">Services</a></li>
+              <li><a href="/#doctors" className="hover:text-primary-600 transition-colors">Our Doctors</a></li>
+              <li><a href="/#contact" className="hover:text-primary-600 transition-colors">Contact</a></li>
             </ul>
           </div>
 

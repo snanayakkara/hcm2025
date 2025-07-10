@@ -6,8 +6,7 @@ import {
   ChevronUp, 
   Search, 
   BookOpen,
-  FileText,
-  Printer
+  FileText
 } from 'lucide-react';
 import { ProcedureFaq } from '../utils/parseFaqData';
 
@@ -50,38 +49,6 @@ const DeepDiveModal: React.FC<DeepDiveModalProps> = ({
     }
   }, [isOpen, procedureName, procedureFaq]);
 
-  const handlePrint = () => {
-    const printContent = document.getElementById('deep-dive-content');
-    if (printContent) {
-      const printWindow = window.open('', '_blank');
-      if (printWindow) {
-        printWindow.document.write(`
-          <html>
-            <head>
-              <title>${procedureName} - Deep Dive</title>
-              <style>
-                body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
-                h1 { color: #2563eb; border-bottom: 2px solid #2563eb; padding-bottom: 10px; }
-                h2 { color: #1e40af; margin-top: 30px; }
-                .question { font-weight: bold; margin-top: 20px; color: #1e40af; }
-                .answer { margin-bottom: 20px; padding-left: 20px; }
-                @media print { body { margin: 0; } }
-              </style>
-            </head>
-            <body>
-              <h1>${procedureName} - Detailed Information</h1>
-              ${procedureFaq?.faqs.map(faq => `
-                <div class="question">${faq.question}</div>
-                <div class="answer">${faq.answer}</div>
-              `).join('')}
-            </body>
-          </html>
-        `);
-        printWindow.document.close();
-        printWindow.print();
-      }
-    }
-  };
 
   if (!isOpen) return null;
 
@@ -113,21 +80,12 @@ const DeepDiveModal: React.FC<DeepDiveModalProps> = ({
                   <p className="text-white/90 text-lg">{procedureName}</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={handlePrint}
-                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-                  title="Print this information"
-                >
-                  <Printer className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={onClose}
-                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
             </div>
           </div>
 

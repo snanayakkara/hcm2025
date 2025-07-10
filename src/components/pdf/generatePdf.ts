@@ -1,6 +1,7 @@
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import * as fontkit from 'fontkit';
 import { IntakeForm } from '../../types/intake';
+import { FaqItem } from '../../utils/parseFaqData';
 
 interface ProcedureData {
   name: string;
@@ -16,6 +17,7 @@ interface ProcedureData {
     duration: string;
     details: string[];
   }[];
+  faqs?: FaqItem[];
 }
 
 // Inter font URLs from Google Fonts
@@ -557,8 +559,8 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     console.warn('Logo not available, proceeding without logo:', error);
   }
 
-  const marginLeft = 60;
-  const marginRight = 60;
+  const marginLeft = 30;
+  const marginRight = 30;
   const marginTop = 60;
   const marginBottom = 80;
   const logoHeight = 50;
@@ -694,15 +696,10 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
   drawLine(coverPage, marginLeft, coverY, coverWidth - marginRight, coverY, primaryTeal, 2);
   coverY -= 40;
 
-  // Table of contents
-  drawText(coverPage, 'Contents', marginLeft, coverY, { 
-    font: boldFont, 
-    size: 16, 
-    color: primaryTeal 
-  });
-  coverY -= 40;
-
-  // Load procedure images for table of contents
+  // Only show table of contents if there are multiple procedures
+  const showTableOfContents = procedures.length > 1;
+  
+  // Load procedure images for table of contents (or single procedure header)
   const procedureImages: { [key: string]: any } = {};
   for (const procedure of procedures) {
     if (procedure.image) {
@@ -721,43 +718,152 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     }
   }
 
-  procedures.forEach((procedure, index) => {
-    const imageSize = 24;
-    const rowHeight = 32;
+  if (showTableOfContents) {
+    // Table of contents
+    drawText(coverPage, 'Contents', marginLeft, coverY, { 
+      font: boldFont, 
+      size: 16, 
+      color: primaryTeal 
+    });
+    coverY -= 40;
+
+    procedures.forEach((procedure, index) => {
+      const imageSize = 24;
+      const rowHeight = 32;
+      
+      // Draw procedure image if available
+      if (procedureImages[procedure.name]) {
+        const image = procedureImages[procedure.name];
+        const imageScale = Math.min(imageSize / image.width, imageSize / image.height);
+        const scaledWidth = image.width * imageScale;
+        const scaledHeight = image.height * imageScale;
+        
+        // Draw rounded rectangle border around image
+        const imagePadding = 2;
+        const borderRadius = 4;
+        drawRectangle(coverPage, 
+          marginLeft + 20 - imagePadding, 
+          coverY - scaledHeight + 5 - imagePadding, 
+          scaledWidth + (imagePadding * 2), 
+          scaledHeight + (imagePadding * 2), 
+          rgb(1, 1, 1), // white background
+          lightGray // border color
+        );
+        
+        coverPage.drawImage(image, {
+          x: marginLeft + 20,
+          y: coverY - scaledHeight + 5,
+          width: scaledWidth,
+          height: scaledHeight,
+        });
+      }
+      
+      // Draw procedure name with image offset
+      drawText(coverPage, procedure.name, marginLeft + 20 + imageSize + 10, coverY, { 
+        size: 12 
+      });
+      coverY -= rowHeight;
+    });
+  } else {
+    // For single procedure, create an attractive centered layout
+    const singleProcedure = procedures[0];
+    const centerX = coverWidth / 2;
     
-    // Draw procedure image if available
-    if (procedureImages[procedure.name]) {
-      const image = procedureImages[procedure.name];
-      const imageScale = Math.min(imageSize / image.width, imageSize / image.height);
+    // Focus Topic header - centered
+    const focusTopicText = 'Focus Topic';
+    const focusTopicWidth = focusTopicText.length * 9; // Approximate width for font size 16
+    drawText(coverPage, focusTopicText, centerX - (focusTopicWidth / 2), coverY, { 
+      font: boldFont, 
+      size: 16, 
+      color: primaryTeal 
+    });
+    coverY -= 50;
+    
+    // Procedure name - centered and larger
+    const procedureNameWidth = singleProcedure.name.length * 11; // Approximate width for font size 18
+    drawText(coverPage, singleProcedure.name, centerX - (procedureNameWidth / 2), coverY, { 
+      font: boldFont, 
+      size: 18, 
+      color: darkGray 
+    });
+    coverY -= 60;
+    
+    // Large procedure image in the center with rounded container
+    if (procedureImages[singleProcedure.name]) {
+      const image = procedureImages[singleProcedure.name];
+      const maxImageSize = 200; // Large featured image
+      const imageScale = Math.min(maxImageSize / image.width, maxImageSize / image.height);
       const scaledWidth = image.width * imageScale;
       const scaledHeight = image.height * imageScale;
       
-      // Draw rounded rectangle border around image
-      const imagePadding = 2;
-      const borderRadius = 4;
+      // Calculate centered position
+      const imageX = centerX - (scaledWidth / 2);
+      const imageY = coverY - scaledHeight;
+      
+      // Draw rounded rectangle container with shadow effect
+      const containerPadding = 20;
+      const containerX = imageX - containerPadding;
+      const containerY = imageY - containerPadding;
+      const containerWidth = scaledWidth + (containerPadding * 2);
+      const containerHeight = scaledHeight + (containerPadding * 2);
+      
+      // Shadow effect (slightly offset gray rectangle)
       drawRectangle(coverPage, 
-        marginLeft + 20 - imagePadding, 
-        coverY - scaledHeight + 5 - imagePadding, 
-        scaledWidth + (imagePadding * 2), 
-        scaledHeight + (imagePadding * 2), 
-        rgb(1, 1, 1), // white background
+        containerX + 3, 
+        containerY - 3, 
+        containerWidth, 
+        containerHeight, 
+        rgb(0.9, 0.9, 0.9)
+      );
+      
+      // Main container with light background and border
+      drawRectangle(coverPage, 
+        containerX, 
+        containerY, 
+        containerWidth, 
+        containerHeight, 
+        rgb(0.98, 0.98, 0.98), // Very light gray background
         lightGray // border color
       );
       
+      // Draw the image centered in the container
       coverPage.drawImage(image, {
-        x: marginLeft + 20,
-        y: coverY - scaledHeight + 5,
+        x: imageX,
+        y: imageY,
         width: scaledWidth,
         height: scaledHeight,
       });
+      
+      coverY -= (scaledHeight + containerPadding * 2 + 30); // Move below image
+    } else {
+      // If no image, add more space
+      coverY -= 80;
     }
     
-    // Draw procedure name with image offset
-    drawText(coverPage, procedure.name, marginLeft + 20 + imageSize + 10, coverY, { 
-      size: 12 
-    });
-    coverY -= rowHeight;
-  });
+    // Add centered description if available
+    if (singleProcedure.summary) {
+      const maxDescWidth = 400; // Narrower centered text block
+      const summaryLines = wrapText(singleProcedure.summary, maxDescWidth, 12);
+      
+      summaryLines.slice(0, 4).forEach(line => { // Show more lines since we have space
+        const lineWidth = line.length * 7; // Approximate width for font size 12
+        drawText(coverPage, line, centerX - (lineWidth / 2), coverY, { 
+          size: 12, 
+          color: darkGray 
+        });
+        coverY -= 18;
+      });
+      
+      // Add "..." if there are more lines
+      if (summaryLines.length > 4) {
+        const dotsWidth = 3 * 7;
+        drawText(coverPage, '...', centerX - (dotsWidth / 2), coverY, { 
+          size: 12, 
+          color: lightGray 
+        });
+      }
+    }
+  }
 
 
   // Add procedure pages with proper page management
@@ -971,7 +1077,7 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
         });
         currentY -= 18;
 
-        // Subtitle and duration
+        // Subtitle and duration (only add spacing if subtitle exists)
         if (step.subtitle) {
           if (checkPageBreak(16)) {
             addNewPage();
@@ -980,14 +1086,22 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
             size: 10, 
             color: lightGray 
           });
-        }
-        if (step.duration) {
-          drawText(page, `Duration: ${step.duration}`, width - marginRight - 100, currentY, { 
+          if (step.duration) {
+            drawText(page, `Duration: ${step.duration}`, width - marginRight - 100, currentY, { 
+              size: 10, 
+              color: lightGray 
+            });
+          }
+          currentY -= 16;
+        } else if (step.duration) {
+          // Only duration, no subtitle
+          drawText(page, `Duration: ${step.duration}`, marginLeft + 30, currentY, { 
             size: 10, 
             color: lightGray 
           });
+          currentY -= 16;
         }
-        currentY -= 16;
+        // If neither subtitle nor duration, don't add extra spacing
 
         // Description
         descLines.forEach(line => {
@@ -1028,6 +1142,73 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
         currentY -= 10;
       });
+    }
+
+    // FAQ section
+    if (procedure.faqs && procedure.faqs.length > 0) {
+      if (checkPageBreak(60)) { // Check for section header space
+        addNewPage();
+      }
+      
+      drawRectangle(page, marginLeft - 10, currentY - 5, width - marginLeft - marginRight + 20, 25, lightTeal);
+      drawText(page, 'Frequently Asked Questions', marginLeft, currentY, { 
+        font: boldFont, 
+        size: 14, 
+        color: primaryTeal 
+      });
+      currentY -= 35;
+
+      procedure.faqs.forEach((faq, index) => {
+        // Calculate approximate FAQ height
+        const questionLines = wrapText(faq.question, width - marginLeft - marginRight - 35, 12);
+        const answerLines = wrapText(faq.answer, width - marginLeft - marginRight - 25, 11);
+        const faqHeight = 30 + (questionLines.length * 16) + (answerLines.length * 14) + 20;
+        
+        if (checkPageBreak(faqHeight)) {
+          addNewPage();
+        }
+        
+        // Question with teal color
+        drawText(page, `Q${index + 1}:`, marginLeft + 10, currentY, { 
+          color: primaryTeal, 
+          size: 12, 
+          font: boldFont 
+        });
+        
+        questionLines.forEach((line, lineIndex) => {
+          if (checkPageBreak(16)) {
+            addNewPage();
+          }
+          drawText(page, line, marginLeft + (lineIndex === 0 ? 35 : 25), currentY, { 
+            font: boldFont, 
+            size: 12 
+          });
+          currentY -= 16;
+        });
+
+        currentY -= 5;
+
+        // Answer
+        drawText(page, 'A:', marginLeft + 10, currentY, { 
+          color: lightGray, 
+          size: 11, 
+          font: boldFont 
+        });
+        
+        answerLines.forEach((line, lineIndex) => {
+          if (checkPageBreak(14)) {
+            addNewPage();
+          }
+          drawText(page, line, marginLeft + (lineIndex === 0 ? 25 : 25), currentY, { 
+            size: 11 
+          });
+          currentY -= 14;
+        });
+
+        currentY -= 15;
+      });
+
+      currentY -= 10;
     }
     
     // Add footers to all pages created for this procedure

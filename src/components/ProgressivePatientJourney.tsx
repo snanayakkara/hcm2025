@@ -375,7 +375,7 @@ const ProgressivePatientJourney: React.FC = () => {
                   Call (03) 9509 5009
                 </motion.button>
                 <motion.a 
-                  href="#request-appointment"
+                  href="/#request-appointment"
                   className="border border-slate-600 text-white px-8 py-4 rounded-2xl font-medium text-lg hover:bg-slate-700/50 inline-block text-center"
                   whileHover={{ 
                     scale: 1.02
