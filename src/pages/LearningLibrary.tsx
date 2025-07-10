@@ -23,6 +23,11 @@ import {
   Calendar,
   Zap
 } from 'lucide-react';
+import { procedureJourneys } from '../data/procedureJourneys';
+import { usePdfSelection } from '../contexts/PdfSelectionContext';
+import { starterPacks } from '../data/starterPacks';
+import { relatedCards } from '../data/relatedCards';
+import { generateLearningLibraryPDF, downloadPDF } from '../components/pdf/generatePdf';
 
 const LearningLibrary: React.FC = () => {
   const [activeTab, setActiveTab] = useState('journeys');
@@ -31,8 +36,10 @@ const LearningLibrary: React.FC = () => {
   const [visibleSteps, setVisibleSteps] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedConditions, setExpandedConditions] = useState<string[]>([]);
+  const [showRelatedCards, setShowRelatedCards] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const { selectedProcedures, addProcedure, removeProcedure, clearSelection } = usePdfSelection();
 
   // Handle URL parameters from services page and main search
   useEffect(() => {
@@ -135,7 +142,7 @@ const LearningLibrary: React.FC = () => {
         'Medications: statins, blood pressure medications, antiplatelets',
         'Coronary angioplasty and stent placement (PCI)',
         'Coronary artery bypass grafting (CABG) surgery',
-        'Cardiac rehabilitation programs',
+        'Cardiac rehabilitation programmes',
         'Risk factor management and monitoring',
         'Regular follow-up and preventive care'
       ],
@@ -145,6 +152,7 @@ const LearningLibrary: React.FC = () => {
         'Cardiac CT Angiography (CTCA)',
         'Coronary Angiography',
         'Echocardiogram',
+        'Ambulatory Blood Pressure Monitor',
         'Blood tests (cholesterol, diabetes screening)'
       ],
       icon: <Heart className="w-6 h-6 text-primary-500" />
@@ -171,7 +179,7 @@ const LearningLibrary: React.FC = () => {
       treatments: [
         'Medications such as ACE inhibitors, beta-blockers, and diuretics',
         'Lifestyle changes including a low-salt diet, regular gentle exercise, and fluid restriction',
-        'Cardiac rehabilitation programs',
+        'Cardiac rehabilitation programmes',
         'Pacemaker or defibrillator implantation, if needed',
         'Surgery for valve repair or replacement, or in severe cases, heart transplant'
       ],
@@ -180,6 +188,7 @@ const LearningLibrary: React.FC = () => {
         'Electrocardiogram (ECG)',
         'Cardiac MRI',
         'Chest X-ray',
+        'Ambulatory Blood Pressure Monitor',
         'Blood tests (BNP/NT-proBNP, kidney function)',
         'Coronary angiography if indicated'
       ],
@@ -481,6 +490,9 @@ const LearningLibrary: React.FC = () => {
     'SPECT/CT imaging': 'pyp_scan',
     'Electrophysiology study (EPS)': 'svt_ablation',
     'Pacemaker implantation': 'pacemaker',
+    'Ambulatory Blood Pressure Monitor': 'abpm',
+    '24 Hour Ambulatory Blood Pressure Monitor': 'abpm',
+    'Ambulatory Blood Pressure Monitoring': 'abpm',
     
     // Procedures/Treatments
     'Pacemaker or defibrillator implantation, if needed': 'pacemaker',
@@ -514,1723 +526,6 @@ const LearningLibrary: React.FC = () => {
     }
   };
 
-  const procedureJourneys = {
-    general: {
-      name: 'General Patient Journey',
-      description: 'Overview of the standard patient care process',
-      color: 'from-primary-500 to-accent-500',
-      category: 'consultation',
-      type: 'procedure',
-      image: '/images/consult.png',
-      summary: 'A comprehensive cardiac consultation and diagnostic process designed to assess your heart health and develop a personalized treatment plan.',
-      needToKnow: [
-        'Consultation typically takes 20-40 minutes',
-        'Bring Medicare card, referral letter, and medication list',
-        'May include ECG, echocardiogram, or other tests',
-        'Results and treatment plan discussed same day',
-        'Follow-up appointments scheduled as needed'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Initial Contact",
-          subtitle: "Professional consultation begins",
-          description: "Contact our medical reception team for appointment scheduling and initial consultation guidance.",
-          icon: <Phone className="w-5 h-5" />,
-          duration: "5 minutes",
-          details: [
-            "Professional reception service",
-            "Flexible appointment scheduling", 
-            "Insurance verification assistance",
-            "Immediate appointment confirmation"
-          ],
-        },
-        {
-          id: 2,
-          title: "Pre-Visit Preparation",
-          subtitle: "Comprehensive preparation support",
-          description: "Receive detailed preparation instructions and complete necessary documentation for your consultation.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "1-2 days",
-          details: [
-            "Detailed preparation guidelines",
-            "Digital patient forms",
-            "Clear facility directions",
-            "Consultation expectations overview"
-          ],
-        },
-        {
-          id: 3,
-          title: "Medical Consultation",
-          subtitle: "Expert cardiovascular assessment",
-          description: "Comprehensive evaluation by our qualified cardiologists with personalized treatment planning.",
-          icon: <Stethoscope className="w-5 h-5" />,
-          duration: "20-40 minutes",
-          details: [
-            "Comprehensive medical history review",
-            "Thorough cardiovascular examination",
-            "Risk factor assessment",
-            "Clear medical explanations"
-          ],
-        },
-        {
-          id: 4,
-          title: "Diagnostic Testing",
-          subtitle: "Advanced cardiac diagnostics",
-          description: "State-of-the-art diagnostic testing to provide comprehensive insights into cardiovascular function.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "30-90 minutes",
-          details: [
-            "Electrocardiogram monitoring",
-            "Echocardiography imaging",
-            "Exercise stress testing",
-            "Same-day results discussion"
-          ],
-        },
-        {
-          id: 5,
-          title: "Treatment Planning",
-          subtitle: "Personalized medical care",
-          description: "Evidence-based treatment recommendations tailored to your specific cardiovascular health needs.",
-          icon: <Heart className="w-5 h-5" />,
-          duration: "Ongoing",
-          details: [
-            "Evidence-based treatment recommendations",
-            "Lifestyle modification guidance",
-            "Medication management protocols",
-            "Follow-up care scheduling"
-          ],
-        },
-        {
-          id: 6,
-          title: "Continuing Care",
-          subtitle: "Long-term health partnership",
-          description: "Ongoing cardiovascular monitoring and support for optimal long-term heart health outcomes.",
-          icon: <CheckCircle className="w-5 h-5" />,
-          duration: "Lifelong",
-          details: [
-            "Regular health monitoring",
-            "Preventive care strategies",
-            "Emergency consultation access",
-            "Patient education resources"
-          ],
-        }
-      ]
-    },
-    tavi: {
-      name: 'TAVI (Transcatheter Aortic Valve Implantation)',
-      description: 'Minimally invasive aortic valve replacement procedure',
-      color: 'from-accent-500 to-primary-500',
-      category: 'interventional',
-      type: 'procedure',
-      image: '/images/tavi.png',
-      summary: 'A minimally invasive procedure to replace a diseased aortic valve using a catheter, typically through the groin artery, avoiding the need for open heart surgery.',
-      needToKnow: [
-        'Procedure takes 2-3 hours under general anaesthesia',
-        'Usually requires 1-2 day hospital stay',
-        'Pre-procedure CT scan and tests required',
-        'Recovery is faster than surgical valve replacement',
-        'Regular follow-up appointments essential'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Procedure Assessment",
-          subtitle: "Comprehensive evaluation and planning",
-          description: "Detailed cardiac imaging and multidisciplinary team evaluation to determine TAVI suitability.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "1-2 weeks",
-          details: [
-            "CT angiography for valve sizing",
-            "Comprehensive echocardiography",
-            "Heart team consultation",
-            "Risk assessment and planning"
-          ],
-        },
-        {
-          id: 2,
-          title: "Day of Procedure",
-          subtitle: "Minimally invasive valve replacement",
-          description: "TAVI procedure performed via small catheter insertion, typically through the groin artery.",
-          icon: <Heart className="w-5 h-5" />,
-          duration: "2-3 hours",
-          details: [
-            "Local a with sedation",
-            "Catheter-based valve delivery",
-            "Real-time imaging guidance",
-            "Immediate function assessment"
-          ],
-        },
-        {
-          id: 3,
-          title: "Post-Procedure Care",
-          subtitle: "Recovery and monitoring",
-          description: "Careful monitoring and gradual mobilization following successful valve implantation.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "1-2 days",
-          details: [
-            "Cardiac monitoring and observation",
-            "Gradual activity progression",
-            "Medication optimization",
-            "Discharge planning and education"
-          ],
-        },
-        {
-          id: 4,
-          title: "Long-term Follow-up",
-          subtitle: "Ongoing valve function monitoring",
-          description: "Regular assessment to ensure optimal valve function and long-term heart health.",
-          icon: <Calendar className="w-5 h-5" />,
-          duration: "Lifelong",
-          details: [
-            "Regular echocardiographic monitoring",
-            "Clinical assessment at intervals",
-            "Medication management",
-            "Lifestyle optimization guidance"
-          ],
-        }
-      ]
-    },
-    toe_dcr: {
-      name: 'TOE-Guided Cardioversion',
-      description: 'Electrical cardioversion with advanced cardiac imaging guidance',
-      color: 'from-sage-500 to-accent-500',
-      category: 'procedures',
-      type: 'procedure',
-      image: '/images/toe.png',
-      summary: 'A procedure combining advanced cardiac imaging with electrical cardioversion to safely restore normal heart rhythm in patients with atrial fibrillation.',
-      needToKnow: [
-        'Day procedure with light sedation',
-        'Fast for 6 hours before procedure',
-        'Blood thinning medication management required',
-        'TOE imaging ensures safety before cardioversion',
-        'Transport home required after procedure'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Procedure Preparation",
-          subtitle: "Assessment and anticoagulation",
-          description: "Comprehensive evaluation including anticoagulation management and procedure planning.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "2-4 weeks",
-          details: [
-            "Anticoagulation therapy optimization",
-            "Pre-procedure echocardiography",
-            "Anaesthetic assessment",
-            "Consent and education process"
-          ],
-        },
-        {
-          id: 2,
-          title: "TOE Assessment",
-          subtitle: "Advanced cardiac imaging evaluation",
-          description: "Transesophageal echocardiography to assess heart function and exclude blood clots.",
-          icon: <Search className="w-5 h-5" />,
-          duration: "30-45 minutes",
-          details: [
-            "Detailed left atrial assessment",
-            "Blood clot exclusion",
-            "Valve function evaluation",
-            "Safety confirmation for cardioversion"
-          ],
-        },
-        {
-          id: 3,
-          title: "Electrical Cardioversion",
-          subtitle: "Rhythm restoration procedure",
-          description: "Controlled electrical shock to restore normal heart rhythm under careful monitoring.",
-          icon: <Zap className="w-5 h-5" />,
-          duration: "15-30 minutes",
-          details: [
-            "General anaesthesia administration",
-            "Synchronized electrical cardioversion",
-            "Continuous cardiac monitoring",
-            "Immediate rhythm assessment"
-          ],
-        },
-        {
-          id: 4,
-          title: "Recovery and Follow-up",
-          subtitle: "Post-procedure monitoring and care",
-          description: "Careful observation and planning for ongoing rhythm management and anticoagulation.",
-          icon: <UserCheck className="w-5 h-5" />,
-          duration: "2-4 hours",
-          details: [
-            "Recovery room monitoring",
-            "Rhythm stability assessment",
-            "Anticoagulation planning",
-            "Discharge education and follow-up"
-          ],
-        }
-      ]
-    },
-    toe: {
-      name: 'Transoesophageal Echocardiogram (TOE)',
-      description: 'High-resolution ultrasound of the heart via the oesophagus',
-      color: 'from-sage-500 to-accent-500',
-      category: 'procedures',
-      type: 'procedure',
-      image: '/images/toe_scan.png',
-      summary:
-        'A specialised ultrasound test in which a thin probe is passed down the oesophagus under light sedation. This close vantage point provides crystal-clear images of the heart valves, atria and implanted devices without interference from ribs or lungs.',
-      needToKnow: [
-        'Fast for 6 hours before the test',
-        'Throat spray and light IV sedation keep you comfortable',
-        'The probe is about the width of a little finger',
-        'Actual imaging time is 10–15 minutes; total visit 60–90 minutes',
-        'You will need a responsible adult to drive you home',
-        'Normal eating and drinking can resume after the throat is no longer numb'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: 'Preparation & Sedation',
-          subtitle: 'Ensuring comfort and safety',
-          description:
-            'Consent review, IV cannula insertion and throat-numbing spray. Light sedation helps you relax while maintaining breathing.',
-          icon: <Clipboard className="w-5 h-5" />,
-          duration: '10 minutes',
-          details: [
-            'Fasting status confirmed',
-            'Removal of dentures if present',
-            'Continuous oxygen and blood-pressure monitoring'
-          ]
-        },
-        {
-          id: 2,
-          title: 'Probe Insertion & Imaging',
-          subtitle: 'High-definition valve assessment',
-          description:
-            'The lubricated probe is gently guided into the oesophagus; live images are recorded from multiple depths and angles.',
-          icon: <Activity className="w-5 h-5" />,
-          duration: '10–15 minutes',
-          details: [
-            'Mitral, aortic and tricuspid valves in close detail',
-            'Assessment for clots, infection or prosthetic-valve issues',
-            'Colour Doppler to measure leak severity'
-          ]
-        },
-        {
-          id: 3,
-          title: 'Recovery & Results',
-          subtitle: 'Observation and discussion',
-          description:
-            'You relax in recovery for ~30 minutes until the sedation wears off. Preliminary findings are explained before discharge.',
-          icon: <FileText className="w-5 h-5" />,
-          duration: '30–45 minutes',
-          details: [
-            'Monitoring until swallowing is safe',
-            'Written report sent to your doctor within 24–48 hours',
-            'Arrange follow-up if abnormalities are found'
-          ]
-        }
-      ]
-    },
-    angiogram_pci: {
-      name: 'Coronary Angiography & PCI',
-      description: 'Diagnostic coronary imaging with potential intervention',
-      color: 'from-primary-500 to-cream-500',
-      category: 'interventional',
-      type: 'procedure',
-      image: '/images/angio.png',
-      summary: 'Diagnostic procedure to visualize coronary arteries using contrast dye, with potential for immediate treatment (angioplasty/stenting) if blockages are found.',
-      needToKnow: [
-        'Procedure duration: 30-90 minutes depending on complexity',
-        'Local anaesthetic via wrist or groin access',
-        'May require overnight stay if intervention needed',
-        'Kidney function tests required beforehand',
-        'Two blood thinning tablets if stent placed'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Procedure Assessment",
-          subtitle: "Comprehensive evaluation and preparation",
-          description: "Detailed assessment including kidney function, bleeding risk, and procedure planning.",
-          icon: <Clipboard className="w-5 h-5" />,
-          duration: "1-7 days",
-          details: [
-            "Blood tests and kidney function assessment",
-            "Medication review and adjustment",
-            "Bleeding risk evaluation",
-            "Consent process and education"
-          ],
-        },
-        {
-          id: 2,
-          title: "Coronary Angiography",
-          subtitle: "Diagnostic coronary artery imaging",
-          description: "Contrast injection through cardiac catheter to visualize coronary arteries and identify blockages.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "30-60 minutes",
-          details: [
-            "Local anaesthetic and catheter insertion",
-            "Contrast injection and X-ray imaging",
-            "Coronary artery assessment",
-            "Decision making for intervention"
-          ],
-        },
-        {
-          id: 3,
-          title: "Percutaneous Coronary Intervention (PCI)",
-          subtitle: "Coronary artery treatment if required",
-          description: "Balloon angioplasty and stent placement to open blocked coronary arteries if indicated.",
-          icon: <Heart className="w-5 h-5" />,
-          duration: "30-90 minutes",
-          details: [
-            "Balloon angioplasty if blockages found",
-            "Stent deployment for artery support",
-            "Blood flow restoration",
-            "Procedural success confirmation"
-          ],
-        },
-        {
-          id: 4,
-          title: "Post-Procedure Recovery",
-          subtitle: "Monitoring and discharge planning",
-          description: "Careful observation for complications and medication optimization before discharge.",
-          icon: <Bed className="w-5 h-5" />,
-          duration: "4-24 hours",
-          details: [
-            "Puncture site monitoring and pressure",
-            "Cardiac rhythm and vital sign monitoring",
-            "Medication initiation or adjustment",
-            "Activity restriction and discharge planning"
-          ],
-        }
-      ]
-    },
-    pacemaker: {
-      name: 'Pacemaker Implantation',
-      description: 'Permanent cardiac rhythm device insertion',
-      color: 'from-primary-500 to-cream-500',
-      category: 'electrophysiology',
-      type: 'procedure',
-      image: '/images/pacemaker.png',
-      summary: 'Surgical implantation of a small electronic device that helps regulate heart rhythm by delivering electrical impulses when needed.',
-      needToKnow: [
-        'Day procedure or overnight stay',
-        'Local anaesthetic below left collarbone',
-        'Arm movement restrictions for 4-6 weeks',
-        'Regular device checks every 3-6 months',
-        'Battery replacement needed every 8-12 years'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Implant Assessment",
-          subtitle: "Device selection and preparation",
-          description: "Comprehensive evaluation to determine optimal pacemaker type and settings for individual needs.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "1-2 weeks",
-          details: [
-            "Detailed rhythm analysis and indication review",
-            "Device type selection and programming planning",
-            "Pre-operative medical optimization",
-            "Patient education and consent process"
-          ],
-        },
-        {
-          id: 2,
-          title: "Pacemaker Implantation",
-          subtitle: "Device and lead placement procedure",
-          description: "Surgical implantation of pacemaker generator and positioning of leads in the heart.",
-          icon: <Zap className="w-5 h-5" />,
-          duration: "1-2 hours",
-          details: [
-            "Local a and sterile preparation",
-            "Lead positioning using X-ray guidance",
-            "Generator placement in chest pocket",
-            "Initial device testing and programming"
-          ],
-        },
-        {
-          id: 3,
-          title: "Post-Implant Recovery",
-          subtitle: "Initial healing and device optimization",
-          description: "Recovery period with activity restrictions to allow proper healing and device settling.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "4-6 weeks",
-          details: [
-            "Wound care and infection prevention",
-            "Activity restrictions to protect leads",
-            "Device function monitoring",
-            "Gradual return to normal activities"
-          ],
-        },
-        {
-          id: 4,
-          title: "Long-term Device Management",
-          subtitle: "Ongoing monitoring and optimization",
-          description: "Regular device checks and programming adjustments to ensure optimal function throughout device life.",
-          icon: <CheckCircle className="w-5 h-5" />,
-          duration: "Device lifetime",
-          details: [
-            "Regular device interrogation and programming",
-            "Battery status monitoring",
-            "Lead function assessment",
-            "Activity and lifestyle optimization"
-          ],
-        }
-      ]
-    },
-    af_ablation: {
-      name: 'Atrial Fibrillation Ablation',
-      description: 'Advanced catheter ablation for rhythm control',
-      color: 'from-sage-500 to-primary-500',
-      category: 'electrophysiology',
-      type: 'procedure',
-      image: '/images/afabl_drawn.png',
-      summary: 'Advanced catheter-based procedure using radiofrequency or pulsed field technology to eliminate abnormal electrical pathways causing atrial fibrillation.',
-      needToKnow: [
-        'Complex procedure taking 3-5 hours',
-        'General anaesthesia required',
-        'Overnight hospital stay',
-        'Blood thinning management crucial',
-        '3-6 months monitoring period for success assessment'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Ablation Preparation",
-          subtitle: "Comprehensive evaluation and optimization",
-          description: "Detailed assessment including imaging studies and anticoagulation management before ablation.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "2-4 weeks",
-          details: [
-            "Cardiac MRI or CT for anatomical mapping",
-            "Anticoagulation optimization",
-            "Pre-procedural echocardiography",
-            "Anaesthetic consultation and preparation"
-          ],
-        },
-        {
-          id: 2,
-          title: "Catheter Ablation Procedure",
-          subtitle: "Advanced electrophysiology intervention",
-          description: "Catheter-based ablation using radiofrequency or pulsed field technology to eliminate abnormal electrical pathways.",
-          icon: <Zap className="w-5 h-5" />,
-          duration: "3-5 hours",
-          details: [
-            "General anaesthesia and catheter positioning",
-            "3D mapping of electrical activity",
-            "Pulmonary vein isolation",
-            "Additional lesion sets if required"
-          ],
-        },
-        {
-          id: 3,
-          title: "Post-Ablation Recovery",
-          subtitle: "Initial healing and rhythm monitoring",
-          description: "Recovery period with careful monitoring for complications and early rhythm assessment.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "24-48 hours",
-          details: [
-            "Cardiac monitoring and observation",
-            "Puncture site care and bed rest",
-            "Pain management and comfort measures",
-            "Early rhythm assessment and optimization"
-          ],
-        },
-        {
-          id: 4,
-          title: "Long-term Follow-up",
-          subtitle: "Rhythm monitoring and optimization",
-          description: "Extended follow-up period to assess ablation success and manage ongoing rhythm control.",
-          icon: <Calendar className="w-5 h-5" />,
-          duration: "6-12 months",
-          details: [
-            "Regular rhythm monitoring with Holter studies",
-            "Anticoagulation management decisions",
-            "Activity progression and lifestyle counseling",
-            "Assessment for additional procedures if needed"
-          ],
-        }
-      ]
-    },
-    mteer: {
-      name: 'Mitral TEER (Transcatheter Edge-to-Edge Repair)',
-      description: 'Minimally invasive mitral valve repair using MitraClip or PASCAL technology',
-      color: 'from-cream-500 to-accent-500',
-      category: 'interventional',
-      type: 'procedure',
-      image: '/images/mteer_drawn.png',
-      summary: 'A catheter‑based, minimally invasive procedure that implants a small clip on the mitral valve leaflets to reduce mitral regurgitation. The procedure usually takes 1–3 hours, avoids open‑heart surgery, and most people leave hospital within 1–3 days with rapid improvement in symptoms and quality of life.',
-      needToKnow: [
-        'Heart‑team (cardiologist & cardiothoracic surgeon) evaluation confirms suitability',
-        'Performed through a vein in the groin with trans‑septal access to the heart',
-        'General anaesthesia and transoesophageal echocardiography (TOE) guidance (some centres use deep sedation)',
-        'Typical procedure time is 1–3 hours',
-        'Most patients go home within 1–3 days',
-        'Symptoms and exercise capacity often improve quickly'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Heart Team Evaluation",
-          subtitle: "Multidisciplinary assessment for candidacy",
-          description: "Comprehensive evaluation by heart team to determine suitability for transcatheter mitral valve repair.",
-          icon: <Heart className="w-5 h-5" />,
-          duration: "1-2 weeks",
-          details: [
-            "Detailed echocardiographic assessment",
-            "Heart team discussion and planning",
-            "Risk-benefit analysis",
-            "Patient education and consent process"
-          ],
-        },
-        {
-          id: 2,
-          title: "mTEER Procedure",
-          subtitle: "Transcatheter valve repair intervention",
-          description: "Minimally invasive placement of MitraClip or PASCAL device to reduce mitral valve leakage.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "2-4 hours",
-          details: [
-            "General anaesthesia and TEE guidance",
-            "Transseptal catheter access",
-            "Clip positioning and deployment",
-            "Real-time assessment of repair adequacy"
-          ],
-        },
-        {
-          id: 3,
-          title: "Post-Procedure Monitoring",
-          subtitle: "Recovery and initial assessment",
-          description: "Careful monitoring following clip deployment with assessment of procedural success.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "1-2 days",
-          details: [
-            "Cardiac monitoring and observation",
-            "Post-procedure echocardiography",
-            "Gradual activity progression",
-            "Discharge planning and education"
-          ],
-        },
-        {
-          id: 4,
-          title: "Long-term Follow-up",
-          subtitle: "Ongoing valve function assessment",
-          description: "Regular monitoring to assess durability of repair and optimize heart failure management.",
-          icon: <CheckCircle className="w-5 h-5" />,
-          duration: "Lifelong",
-          details: [
-            "Serial echocardiographic monitoring",
-            "Heart failure management optimization",
-            "Activity and exercise recommendations",
-            "Long-term durability assessment"
-          ],
-        }
-      ]
-    },
-    echocardiogram: {
-      name: 'Resting Echocardiogram',
-      description: 'Non‑invasive ultrasound scan of the heart at rest',
-      color: 'from-sage-500 to-cream-500',
-      category: 'imaging',
-      type: 'test',
-      image: '/images/echo.png',
-      summary: 'A painless ultrasound that creates live images of your heart chambers, valves and blood flow, helping diagnose structure, function and overall pumping performance.',
-      needToKnow: [
-        'No fasting or special preparation required',
-        'Takes about 30–45 minutes',
-        'A small probe with gel is moved across the chest',
-        'Uses safe, radiation‑free ultrasound waves',
-        'Results reviewed by a cardiologist within 24–48 hours'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: 'Check‑in & Preparation',
-          subtitle: 'Brief medical history and setup',
-          description: 'You change into a gown and lie on an exam table; ECG dots may be placed to synchronise images.',
-          icon: <Clipboard className="w-5 h-5" />,
-          duration: '5‑10 minutes',
-          details: [
-            'Verification of referral and Medicare details',
-            'Explanation of the scan process',
-            'Removal of upper‑body clothing and jewellery'
-          ]
-        },
-        {
-          id: 2,
-          title: 'Image Acquisition',
-          subtitle: 'Ultrasound imaging of heart structures',
-          description: 'The sonographer moves the probe over the chest to collect moving pictures and Doppler blood‑flow signals.',
-          icon: <Activity className="w-5 h-5" />,
-          duration: '20‑30 minutes',
-          details: [
-            'Multiple views taken from left side and below sternum',
-            'Colour Doppler to assess valve leakage',
-            'Live measurements of chamber size & heart function'
-          ]
-        },
-        {
-          id: 3,
-          title: 'Review & Results',
-          subtitle: 'Cardiologist interpretation',
-          description: 'Images are analysed and a detailed report is sent to your referring doctor.',
-          icon: <FileText className="w-5 h-5" />,
-          duration: 'Same or next day',
-          details: [
-            'Quantitative measurements of pumping strength (EF)',
-            'Valve function grading',
-            'Recommendation for further tests or treatment if needed'
-          ]
-        }
-      ]
-    },
-    ctca: {
-      name: 'Cardiac CT Angiography (CTCA)',
-      description: 'Non-invasive coronary artery imaging using advanced CT technology',
-      color: 'from-sage-500 to-primary-500',
-      category: 'imaging',
-      type: 'test',
-      image: '/images/ctca.png',
-      summary: 'High-resolution CT scan with contrast to visualize coronary arteries and assess for blockages without invasive catheterization.',
-      needToKnow: [
-        'Fast for 4 hours, avoid caffeine day of scan',
-        'Heart rate control with medication if needed',
-        'Quick 15-30 minute procedure',
-        'Results available within a few days',
-        'Excellent alternative to invasive angiography'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Scan Preparation",
-          subtitle: "Optimization for optimal image quality",
-          description: "Heart rate control and preparation to ensure optimal image quality for coronary assessment.",
-          icon: <Clock className="w-5 h-5" />,
-          duration: "1-2 hours",
-          details: [
-            "Heart rate optimization with beta-blockers",
-            "IV access for contrast administration",
-            "Allergy screening and premedication if needed",
-            "Patient positioning and monitoring setup"
-          ],
-        },
-        {
-          id: 2,
-          title: "CT Coronary Angiography",
-          subtitle: "Advanced cardiac imaging acquisition",
-          description: "High-resolution CT scanning with contrast to visualize coronary arteries and assess for blockages.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "15-30 minutes",
-          details: [
-            "ECG-gated cardiac CT acquisition",
-            "Contrast injection for coronary visualization",
-            "Breath-hold instructions during scanning",
-            "Multiple cardiac cycle imaging"
-          ],
-        },
-        {
-          id: 3,
-          title: "Image Analysis",
-          subtitle: "Detailed coronary assessment",
-          description: "Comprehensive analysis of coronary anatomy and identification of any significant narrowing.",
-          icon: <Search className="w-5 h-5" />,
-          duration: "1-2 hours",
-          details: [
-            "3D reconstruction of coronary arteries",
-            "Stenosis assessment and quantification",
-            "Plaque characterization and analysis",
-            "Cardiac function evaluation"
-          ],
-        },
-        {
-          id: 4,
-          title: "Results and Follow-up",
-          subtitle: "Treatment planning based on findings",
-          description: "Review of results with cardiologist and planning of appropriate treatment strategy if needed.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "Same day",
-          details: [
-            "Results review with cardiologist",
-            "Treatment recommendations if abnormal",
-            "Risk stratification and prognosis discussion",
-            "Follow-up planning and recommendations"
-          ],
-        }
-      ]
-    },
-    pyp_scan: {
-      name: 'PYP Scan (Cardiac Amyloidosis Imaging)',
-      description: 'Specialized nuclear imaging to detect cardiac amyloidosis',
-      color: 'from-accent-500 to-sage-500',
-      category: 'imaging',
-      type: 'test',
-      image: '/images/pyp.png',
-      summary: 'Specialized nuclear imaging study to detect and quantify cardiac amyloid deposits using radiotracer technology.',
-      needToKnow: [
-        'No fasting required, total time 3 hours',
-        'Safe radiotracer injection followed by wait period',
-        'SPECT/CT imaging after uptake period',
-        'Results typically available within 48 hours',
-        'Important for diagnosing cardiac amyloidosis'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Scan Assessment",
-          subtitle: "Clinical evaluation and preparation",
-          description: "Clinical assessment and preparation for specialized nuclear cardiac imaging study.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "30 minutes",
-          details: [
-            "Clinical history and examination",
-            "Review of indications for scan",
-            "Patient education about procedure",
-            "Consent process and preparation"
-          ],
-        },
-        {
-          id: 2,
-          title: "Radiotracer Injection",
-          subtitle: "PYP radiotracer administration",
-          description: "Injection of Technetium-99m pyrophosphate (PYP) radiotracer for cardiac amyloid detection.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "5 minutes",
-          details: [
-            "IV access and radiotracer preparation",
-            "PYP injection via peripheral vein",
-            "Radiotracer distribution period",
-            "Safety monitoring and comfort measures"
-          ],
-        },
-        {
-          id: 3,
-          title: "Imaging Acquisition",
-          subtitle: "SPECT/CT cardiac imaging",
-          description: "Specialized nuclear imaging to detect and quantify cardiac amyloid deposits.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "45 minutes",
-          details: [
-            "SPECT/CT camera positioning",
-            "Multiple angle image acquisition",
-            "Heart and thorax imaging",
-            "High-resolution cardiac assessment"
-          ],
-        },
-        {
-          id: 4,
-          title: "Results and Interpretation",
-          subtitle: "Amyloidosis assessment and reporting",
-          description: "Specialized interpretation to determine presence and extent of cardiac amyloidosis.",
-          icon: <CheckCircle className="w-5 h-5" />,
-          duration: "1-2 days",
-          details: [
-            "Quantitative analysis of cardiac uptake",
-            "Comparison with normal reference values",
-            "Grading of amyloid burden if present",
-            "Correlation with clinical findings"
-          ],
-        }
-      ]
-    },
-    svt_ablation: {
-      name: 'SVT Ablation (Supraventricular Tachycardia)',
-      description: 'Catheter ablation for supraventricular tachycardia treatment',
-      color: 'from-primary-500 to-accent-500',
-      category: 'electrophysiology',
-      type: 'procedure',
-      image: '/images/afabl_drawn.png',
-      summary: 'Precise catheter-based procedure to eliminate abnormal electrical pathways causing supraventricular tachycardia episodes.',
-      needToKnow: [
-        'High success rate (>95% for most SVT types)',
-        'Day procedure with conscious sedation',
-        '1-3 hour procedure via groin access',
-        'Same-day discharge in most cases',
-        'Immediate cure of SVT episodes expected'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Ablation Assessment",
-          subtitle: "Electrophysiology study planning",
-          description: "Comprehensive evaluation to identify the specific type of SVT and plan ablation strategy.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "1-2 weeks",
-          details: [
-            "Detailed rhythm analysis and characterization",
-            "Electrophysiology study planning",
-            "Risk assessment and patient education",
-            "Consent process and pre-procedure preparation"
-          ],
-        },
-        {
-          id: 2,
-          title: "Electrophysiology Study",
-          subtitle: "Diagnostic mapping and localization",
-          description: "Detailed electrical mapping to identify the exact location of abnormal electrical pathways.",
-          icon: <Search className="w-5 h-5" />,
-          duration: "1-2 hours",
-          details: [
-            "Catheter positioning via groin access",
-            "Electrical mapping of heart chambers",
-            "SVT induction and characterization",
-            "Precise localization of abnormal pathway"
-          ],
-        },
-        {
-          id: 3,
-          title: "Catheter Ablation",
-          subtitle: "Elimination of abnormal electrical pathway",
-          description: "Precise radiofrequency ablation to permanently eliminate the SVT causing electrical pathway.",
-          icon: <Zap className="w-5 h-5" />,
-          duration: "30-60 minutes",
-          details: [
-            "Radiofrequency energy delivery",
-            "Real-time monitoring of ablation effect",
-            "Testing for complete pathway elimination",
-            "Confirmation of procedural success"
-          ],
-        },
-        {
-          id: 4,
-          title: "Post-Ablation Recovery",
-          subtitle: "Recovery and follow-up care",
-          description: "Recovery period with monitoring and assessment of long-term success.",
-          icon: <CheckCircle className="w-5 h-5" />,
-          duration: "4-6 hours",
-          details: [
-            "Post-procedure monitoring and observation",
-            "Puncture site care and bed rest",
-            "Rhythm monitoring for complications",
-            "Discharge planning and follow-up"
-          ],
-        }
-      ]
-    },
-    cardiac_mri: {
-      name: 'Cardiac MRI',
-      description: 'Advanced magnetic resonance imaging for detailed cardiac assessment',
-      color: 'from-sage-500 to-cream-500',
-      category: 'imaging',
-      type: 'test',
-      image: '/images/mri.png',
-      summary: 'Advanced magnetic resonance imaging providing detailed assessment of cardiac structure, function, and tissue characteristics.',
-      needToKnow: [
-        'MRI safety screening essential',
-        '60 minute scan with breath holds',
-        'Contrast (non-iodine) injection may be required',
-        'Results available within a week',
-        'Most detailed cardiac imaging available for the heart muscle'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-MRI Screening",
-          subtitle: "Safety assessment and preparation",
-          description: "Comprehensive screening for MRI safety and preparation for optimal image quality.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "30 minutes",
-          details: [
-            "MRI safety questionnaire completion",
-            "Metallic implant assessment",
-            "Claustrophobia evaluation and management",
-          ],
-        },
-        {
-          id: 2,
-          title: "Cardiac MRI Acquisition",
-          subtitle: "Advanced cardiac imaging",
-          description: "High-resolution magnetic resonance imaging to assess cardiac structure and function.",
-          icon: <Heart className="w-5 h-5" />,
-          duration: "20-40 minutes",
-          details: [
-            "ECG-gated cardiac imaging sequences",
-            "Cine imaging for function assessment",
-            "Contrast-enhanced imaging if indicated",
-            "Specialized sequences for tissue characterization"
-          ],
-        },
-        {
-          id: 3,
-          title: "Image Analysis",
-          subtitle: "Detailed cardiac assessment",
-          description: "Comprehensive analysis of cardiac structure, function, and tissue characteristics.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "1-2 hours",
-          details: [
-            "Cardiac function quantification",
-            "Wall motion and thickening analysis",
-            "Tissue characterization and fibrosis assessment",
-            "Valve function evaluation"
-          ],
-        },
-        {
-          id: 4,
-          title: "Results and Clinical Correlation",
-          subtitle: "Treatment planning based on findings",
-          description: "Review of MRI findings with clinical correlation and treatment planning.",
-          icon: <CheckCircle className="w-5 h-5" />,
-          duration: "Variable",
-          details: [
-            "Detailed review of cardiac structure and function",
-            "Correlation with clinical presentation",
-            "Treatment recommendations based on findings",
-            "Follow-up imaging planning if needed"
-          ],
-        }
-      ]
-    },
-    exercise_stress_echo: {
-      name: 'Exercise Stress Echocardiography',
-      description: 'Combined exercise testing with cardiac ultrasound imaging',
-      color: 'from-cream-500 to-sage-500',
-      category: 'imaging',
-      type: 'test',
-      image: '/images/stressecho.png',
-      summary: 'Exercise test combined with cardiac ultrasound to assess heart function under stress and detect coronary artery disease.',
-      needToKnow: [
-        'Wear comfortable exercise clothing and shoes',
-        'Light meal 2-3 hours before test',
-        'Progressive treadmill exercise with monitoring',
-        'Immediate post-exercise imaging required',
-        'Results discussed immediately after test'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Test Preparation",
-          subtitle: "Baseline assessment and preparation",
-          description: "Baseline cardiac assessment and preparation for safe exercise testing.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "30 minutes",
-          details: [
-            "Baseline ECG and vital signs",
-            "Resting echocardiography",
-            "Exercise protocol selection",
-            "Safety monitoring setup"
-          ],
-        },
-        {
-          id: 2,
-          title: "Exercise Testing",
-          subtitle: "Progressive exercise with monitoring",
-          description: "Graded exercise testing with continuous cardiac monitoring and imaging.",
-          icon: <Heart className="w-5 h-5" />,
-          duration: "15-20 minutes",
-          details: [
-            "Progressive treadmill exercise protocol",
-            "Continuous ECG and blood pressure monitoring",
-            "Symptom assessment during exercise",
-            "Peak exercise achievement"
-          ],
-        },
-        {
-          id: 3,
-          title: "Post-Exercise Imaging",
-          subtitle: "Immediate post-exercise echocardiography",
-          description: "Rapid echocardiographic imaging immediately after peak exercise to assess cardiac function.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "5-10 minutes",
-          details: [
-            "Immediate transfer to echo bed",
-            "Rapid cardiac imaging acquisition",
-            "Wall motion assessment at peak stress",
-            "Comparison with resting images"
-          ],
-        },
-        {
-          id: 4,
-          title: "Recovery and Results",
-          subtitle: "Recovery monitoring and interpretation",
-          description: "Recovery period with continued monitoring and interpretation of test results.",
-          icon: <CheckCircle className="w-5 h-5" />,
-          duration: "15-30 minutes",
-          details: [
-            "Continuous monitoring during recovery",
-            "Comparison of rest and stress images",
-            "Exercise capacity assessment",
-            "Results discussion and recommendations"
-          ],
-        }
-      ]
-    },
-    holter: {
-      name: '24 Hour Holter Monitoring',
-      description: 'Continuous cardiac rhythm monitoring over 24 hours',
-      color: 'from-cream-500 to-accent-500',
-      category: 'monitoring',
-      type: 'test',
-      image: '/images/holter.png',
-      summary: 'Holter monitoring involves wearing a small, portable device that continuously records your heart rhythm for 24 hours. This helps detect irregular heartbeats that may not occur during a brief office visit.',
-      needToKnow: [
-        'Wear the device continuously for 24 hours',
-        'Keep a diary of symptoms and activities',
-        'Normal daily activities encouraged',
-        'Avoid getting the device wet',
-        'Return device the following day'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Device Application",
-          subtitle: "Holter monitor setup and instruction",
-          description: "Attachment of the portable cardiac monitoring device with patient education on proper use.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "15-20 minutes",
-          details: [
-            "Skin preparation and electrode placement",
-            "Device attachment and testing",
-            "Patient education on device care",
-            "Diary instruction for symptom recording"
-          ],
-        },
-        {
-          id: 2,
-          title: "24 Hour Monitoring",
-          subtitle: "Continuous rhythm recording",
-          description: "24 hour period of continuous cardiac rhythm monitoring during normal daily activities.",
-          icon: <Clock className="w-5 h-5" />,
-          duration: "24 hours",
-          details: [
-            "Continuous ECG recording",
-            "Normal daily activity maintenance",
-            "Symptom diary completion",
-            "Device care and protection"
-          ],
-        },
-        {
-          id: 3,
-          title: "Device Return",
-          subtitle: "Monitor removal and data download",
-          description: "Return of the monitoring device with data download and initial technical analysis.",
-          icon: <UserCheck className="w-5 h-5" />,
-          duration: "10-15 minutes",
-          details: [
-            "Device removal and electrode cleanup",
-            "Data download and verification",
-            "Diary collection and review",
-            "Technical analysis initiation"
-          ],
-        },
-        {
-          id: 4,
-          title: "Results and Follow-up",
-          subtitle: "Analysis interpretation and recommendations",
-          description: "Comprehensive analysis of 24-hour recording with clinical correlation and treatment planning.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "1-3 days",
-          details: [
-            "Detailed rhythm analysis",
-            "Symptom correlation assessment",
-            "Clinical interpretation",
-            "Follow-up planning and recommendations"
-          ],
-        }
-      ]
-    },
-    bav: {
-      name: 'Balloon Aortic Valvuloplasty (BAV)',
-      description: 'Balloon dilation procedure for aortic valve stenosis',
-      color: 'from-primary-500 to-cream-500',
-      category: 'interventional',
-      type: 'procedure',
-      image: '/images/tavi.png',
-      summary: 'A minimally invasive procedure where a balloon catheter is used to widen a narrowed aortic valve, improving blood flow from the heart to the body.',
-      needToKnow: [
-        'Procedure duration: 1-2 hours',
-        'Performed via catheter through groin or wrist',
-        'Local anaesthetic with conscious sedation',
-        'Usually day procedure or overnight stay',
-        'Temporary improvement - may need repeat procedure'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Procedure Assessment",
-          subtitle: "Comprehensive evaluation and planning",
-          description: "Detailed cardiac assessment to determine suitability for balloon valvuloplasty and procedure planning.",
-          icon: <Clipboard className="w-5 h-5" />,
-          duration: "1-2 weeks",
-          details: [
-            "Echocardiography to assess valve severity",
-            "Cardiac catheterization for detailed measurements",
-            "Risk assessment and patient selection",
-            "Anaesthetic consultation and consent process"
-          ],
-        },
-        {
-          id: 2,
-          title: "Balloon Valvuloplasty",
-          subtitle: "Valve dilation procedure",
-          description: "Catheter-based balloon inflation to stretch and open the narrowed aortic valve.",
-          icon: <Heart className="w-5 h-5" />,
-          duration: "1-2 hours",
-          details: [
-            "Arterial access and catheter positioning",
-            "Balloon positioning across aortic valve",
-            "Rapid ventricular pacing during inflation",
-            "Immediate assessment of valve function"
-          ],
-        },
-        {
-          id: 3,
-          title: "Post-Procedure Recovery",
-          subtitle: "Monitoring and assessment",
-          description: "Recovery period with monitoring for complications and assessment of procedure success.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "4-24 hours",
-          details: [
-            "Access site monitoring and care",
-            "Echocardiography to assess improvement",
-            "Symptom assessment and monitoring",
-            "Discharge planning and follow-up"
-          ],
-        },
-        {
-          id: 4,
-          title: "Follow-up Care",
-          subtitle: "Long-term monitoring and planning",
-          description: "Regular follow-up to monitor valve function and plan for future interventions if needed.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "Ongoing",
-          details: [
-            "Regular echocardiographic monitoring",
-            "Symptom assessment and functional capacity",
-            "Planning for definitive valve replacement",
-            "Medication optimization"
-          ],
-        }
-      ]
-    },
-    cabg: {
-      name: 'Coronary Artery Bypass Grafting (CABG)',
-      description: 'Surgical revascularization using vessel grafts',
-      color: 'from-primary-500 to-cream-500',
-      category: 'surgery',
-      type: 'procedure',
-      image: '/images/angio.png',
-      summary: 'Major cardiac surgery where blood vessels from other parts of the body are used to create alternate pathways around blocked coronary arteries.',
-      needToKnow: [
-        'Major surgery requiring 3-7 days hospital stay',
-        'General anaesthesia with heart-lung machine',
-        '6-12 week recovery period',
-        'Long-term medication management required',
-        'Excellent long-term outcomes for suitable patients'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Operative Assessment",
-          subtitle: "Comprehensive surgical planning",
-          description: "Detailed evaluation to assess surgical risk and plan the optimal revascularization strategy.",
-          icon: <Clipboard className="w-5 h-5" />,
-          duration: "1-2 weeks",
-          details: [
-            "Coronary angiography for surgical planning",
-            "Cardiac function assessment",
-            "Risk stratification and surgical consultation",
-            "Pre-operative optimization and education"
-          ],
-        },
-        {
-          id: 2,
-          title: "Surgical Procedure",
-          subtitle: "Coronary artery bypass surgery",
-          description: "Complex cardiac surgery to create new pathways for blood flow around blocked arteries.",
-          icon: <Heart className="w-5 h-5" />,
-          duration: "3-6 hours",
-          details: [
-            "Harvesting of graft vessels (mammary, radial, saphenous)",
-            "Cardiopulmonary bypass initiation",
-            "Coronary anastomoses creation",
-            "Weaning from bypass and chest closure"
-          ],
-        },
-        {
-          id: 3,
-          title: "Intensive Care Recovery",
-          subtitle: "Critical care monitoring",
-          description: "Initial recovery period in intensive care with close monitoring of cardiac and respiratory function.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "1-3 days",
-          details: [
-            "Mechanical ventilation and gradual weaning",
-            "Hemodynamic monitoring and support",
-            "Pain management and early mobilization",
-            "Complication surveillance and management"
-          ],
-        },
-        {
-          id: 4,
-          title: "Hospital Recovery",
-          subtitle: "Progressive rehabilitation",
-          description: "Ward-based recovery with progressive activity increase and preparation for discharge.",
-          icon: <UserCheck className="w-5 h-5" />,
-          duration: "3-5 days",
-          details: [
-            "Progressive mobilization and physiotherapy",
-            "Wound care and infection prevention",
-            "Medication optimization",
-            "Discharge planning and education"
-          ],
-        },
-        {
-          id: 5,
-          title: "Long-term Recovery",
-          subtitle: "Rehabilitation and follow-up",
-          description: "Extended recovery period with cardiac rehabilitation and long-term follow-up care.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "6-12 weeks",
-          details: [
-            "Cardiac rehabilitation program participation",
-            "Progressive return to normal activities",
-            "Regular follow-up appointments",
-            "Long-term medication management"
-          ],
-        }
-      ]
-    },
-    pfo_closure: {
-      name: 'PFO Closure',
-      description: 'Patent foramen ovale closure device implantation',
-      color: 'from-primary-500 to-cream-500',
-      category: 'structural',
-      type: 'procedure',
-      image: '/images/angio.png',
-      summary: 'Minimally invasive procedure to close a small opening between the heart\'s upper chambers that failed to close naturally after birth.',
-      needToKnow: [
-        'Day procedure with conscious sedation',
-        'Performed via catheter through leg vein',
-        'Device permanently seals the opening',
-        'Prevents stroke risk from paradoxical embolism',
-        'Blood thinning medication for 3-6 months'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Procedure Assessment",
-          subtitle: "Detailed cardiac evaluation",
-          description: "Comprehensive assessment to confirm PFO diagnosis and evaluate suitability for closure.",
-          icon: <Search className="w-5 h-5" />,
-          duration: "1-2 weeks",
-          details: [
-            "Transoesophageal echocardiography",
-            "Bubble contrast study confirmation",
-            "Risk-benefit assessment for closure",
-            "Patient education and consent process"
-          ],
-        },
-        {
-          id: 2,
-          title: "Device Implantation",
-          subtitle: "Catheter-based closure procedure",
-          description: "Minimally invasive placement of a closure device to seal the patent foramen ovale.",
-          icon: <Heart className="w-5 h-5" />,
-          duration: "1-2 hours",
-          details: [
-            "Venous access and catheter advancement",
-            "TEE guidance for device positioning",
-            "Device deployment and position confirmation",
-            "Final assessment of closure"
-          ],
-        },
-        {
-          id: 3,
-          title: "Post-Procedure Recovery",
-          subtitle: "Monitoring and discharge",
-          description: "Recovery period with monitoring for complications and assessment of successful closure.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "4-6 hours",
-          details: [
-            "Access site monitoring",
-            "Echocardiographic confirmation of device position",
-            "Neurological assessment",
-            "Discharge planning and medication initiation"
-          ],
-        },
-        {
-          id: 4,
-          title: "Follow-up Care",
-          subtitle: "Long-term monitoring",
-          description: "Regular follow-up to ensure successful closure and monitor for any complications.",
-          icon: <Calendar className="w-5 h-5" />,
-          duration: "Lifelong",
-          details: [
-            "Echocardiography at 1, 6, and 12 months",
-            "Antiplatelet therapy management",
-            "Endocarditis prophylaxis education",
-            "Long-term stroke prevention assessment"
-          ],
-        }
-      ]
-    },
-    asd_closure: {
-      name: 'ASD Closure',
-      description: 'Atrial septal defect closure device implantation',
-      color: 'from-primary-500 to-cream-500',
-      category: 'structural',
-      type: 'procedure',
-      image: '/images/angio.png',
-      summary: 'Minimally invasive procedure to close an abnormal opening between the heart\'s upper chambers using a specialized closure device.',
-      needToKnow: [
-        'Day procedure or overnight stay',
-        'Performed via catheter through leg vein',
-        'Device grows into heart tissue over time',
-        'Prevents right heart volume overload',
-        'Blood thinning medication for 6 months'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Procedure Assessment",
-          subtitle: "Comprehensive evaluation",
-          description: "Detailed assessment to evaluate ASD size, location, and suitability for device closure.",
-          icon: <Search className="w-5 h-5" />,
-          duration: "1-2 weeks",
-          details: [
-            "Transoesophageal echocardiography sizing",
-            "Right heart catheterization if indicated",
-            "Assessment of surrounding structures",
-            "Device size selection and planning"
-          ],
-        },
-        {
-          id: 2,
-          title: "Device Implantation",
-          subtitle: "Transcatheter ASD closure",
-          description: "Catheter-based placement of an occlusion device to close the atrial septal defect.",
-          icon: <Heart className="w-5 h-5" />,
-          duration: "1-3 hours",
-          details: [
-            "Venous access and transseptal approach",
-            "Balloon sizing of defect",
-            "Device deployment and positioning",
-            "Stability testing and final release"
-          ],
-        },
-        {
-          id: 3,
-          title: "Post-Procedure Recovery",
-          subtitle: "Monitoring and assessment",
-          description: "Recovery period with monitoring for complications and confirmation of successful closure.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "4-24 hours",
-          details: [
-            "Continuous cardiac monitoring",
-            "Echocardiographic assessment",
-            "Neurological monitoring",
-            "Access site care and mobilization"
-          ],
-        },
-        {
-          id: 4,
-          title: "Long-term Follow-up",
-          subtitle: "Endothelialization monitoring",
-          description: "Regular follow-up to monitor device integration and assess for residual shunting.",
-          icon: <Calendar className="w-5 h-5" />,
-          duration: "Lifelong",
-          details: [
-            "Serial echocardiography at defined intervals",
-            "Assessment of device position and function",
-            "Antiplatelet therapy management",
-            "Endocarditis prophylaxis recommendations"
-          ],
-        }
-      ]
-    },
-    icd: {
-      name: 'Implantable Cardioverter Defibrillator (ICD) Implantation',
-      description: 'Life-saving device implantation for arrhythmia protection',
-      color: 'from-primary-500 to-cream-500',
-      category: 'electrophysiology',
-      type: 'procedure',
-      image: '/images/pacemaker.png',
-      summary: 'Surgical implantation of a sophisticated device that monitors heart rhythm and delivers life-saving therapy for dangerous arrhythmias.',
-      needToKnow: [
-        'Day procedure or overnight stay',
-        'Local anaesthetic below left collarbone',
-        'Device monitors rhythm 24/7',
-        'Can deliver pacing, cardioversion, or defibrillation',
-        'Regular device checks every 3-6 months required'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Implant Assessment",
-          subtitle: "Risk stratification and device selection",
-          description: "Comprehensive evaluation to determine ICD indication and optimal device configuration.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "1-2 weeks",
-          details: [
-            "Arrhythmia risk assessment and indication review",
-            "Echocardiography for lead placement planning",
-            "Device type selection (single/dual/CRT-D)",
-            "Patient education and expectation setting"
-          ],
-        },
-        {
-          id: 2,
-          title: "ICD Implantation",
-          subtitle: "Device and lead placement",
-          description: "Surgical implantation of ICD generator and positioning of defibrillation leads.",
-          icon: <Zap className="w-5 h-5" />,
-          duration: "1-3 hours",
-          details: [
-            "Local anaesthesia and sterile preparation",
-            "Lead positioning using fluoroscopic guidance",
-            "Defibrillation threshold testing",
-            "Generator placement and system testing"
-          ],
-        },
-        {
-          id: 3,
-          title: "Post-Implant Recovery",
-          subtitle: "Initial monitoring and optimization",
-          description: "Recovery period with device programming optimization and patient education.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "4-24 hours",
-          details: [
-            "Wound care and infection prevention",
-            "Device interrogation and programming",
-            "Patient education on device function",
-            "Activity restrictions and discharge planning"
-          ],
-        },
-        {
-          id: 4,
-          title: "Long-term Management",
-          subtitle: "Device monitoring and optimization",
-          description: "Ongoing device management with regular checks and therapy optimization.",
-          icon: <Calendar className="w-5 h-5" />,
-          duration: "Device lifetime",
-          details: [
-            "Regular device interrogations and programming",
-            "Battery monitoring and replacement planning",
-            "Therapy optimization based on clinical needs",
-            "Remote monitoring capability utilization"
-          ],
-        }
-      ]
-    },
-    eps: {
-      name: 'Electrophysiology Study (EPS)',
-      description: 'Diagnostic study of heart\'s electrical conduction system',
-      color: 'from-primary-500 to-cream-500',
-      category: 'electrophysiology',
-      type: 'test',
-      image: '/images/angio.png',
-      summary: 'Specialized catheter-based test to evaluate the heart\'s electrical system, diagnose arrhythmias, and guide treatment decisions.',
-      needToKnow: [
-        'Procedure duration: 1-4 hours depending on complexity',
-        'Local anaesthetic with conscious sedation',
-        'May include ablation therapy if indicated',
-        'Multiple catheters placed through leg veins',
-        'Day procedure with 4-6 hour recovery'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Study Preparation",
-          subtitle: "Evaluation and planning",
-          description: "Comprehensive assessment to plan the electrophysiology study and potential interventions.",
-          icon: <Clipboard className="w-5 h-5" />,
-          duration: "1-2 weeks",
-          details: [
-            "Arrhythmia history and symptom correlation",
-            "Baseline ECG and rhythm monitoring review",
-            "Medication management and anticoagulation",
-            "Consent process and procedure planning"
-          ],
-        },
-        {
-          id: 2,
-          title: "Catheter Positioning",
-          subtitle: "Electrophysiology catheter placement",
-          description: "Placement of specialized catheters to map the heart\'s electrical system.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "30-60 minutes",
-          details: [
-            "Venous access and catheter insertion",
-            "Catheter positioning using fluoroscopy",
-            "Baseline electrical measurements",
-            "Mapping catheter placement if needed"
-          ],
-        },
-        {
-          id: 3,
-          title: "Electrical Testing",
-          subtitle: "Arrhythmia induction and mapping",
-          description: "Detailed electrical testing to induce and characterize arrhythmias.",
-          icon: <Zap className="w-5 h-5" />,
-          duration: "1-3 hours",
-          details: [
-            "Programmed electrical stimulation",
-            "Arrhythmia induction and characterization",
-            "Detailed electrical mapping",
-            "Assessment of conduction system function"
-          ],
-        },
-        {
-          id: 4,
-          title: "Results and Treatment",
-          subtitle: "Analysis and therapeutic decisions",
-          description: "Analysis of findings and implementation of appropriate therapy if indicated.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "Variable",
-          details: [
-            "Real-time analysis of electrical findings",
-            "Ablation therapy if appropriate substrate found",
-            "Treatment recommendation formulation",
-            "Follow-up planning based on results"
-          ],
-        }
-      ]
-    },
-    myocardial_perfusion: {
-      name: 'Myocardial Perfusion Scan',
-      description: 'Nuclear stress test to assess heart muscle blood flow',
-      color: 'from-sage-500 to-primary-500',
-      category: 'imaging',
-      type: 'test',
-      image: '/images/stressecho.png',
-      summary: 'A nuclear medicine test that uses radioactive tracers to evaluate blood flow to the heart muscle during rest and stress conditions.',
-      needToKnow: [
-        'Two-day procedure: stress and rest imaging',
-        'Radioactive tracer injection (very safe, low dose)',
-        'Exercise stress test or medication-induced stress',
-        'No eating for 4 hours before each scan',
-        'Avoid caffeine 24 hours before test'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Pre-Test Preparation",
-          subtitle: "Patient preparation and education",
-          description: "Comprehensive preparation including dietary restrictions and medication management for optimal test results.",
-          icon: <Clipboard className="w-5 h-5" />,
-          duration: "24 hours prior",
-          details: [
-            "Caffeine restriction for 24 hours",
-            "Fasting for 4 hours before each visit",
-            "Medication review and adjustment",
-            "Comfortable exercise clothing for stress day"
-          ],
-        },
-        {
-          id: 2,
-          title: "Stress Test Day",
-          subtitle: "Stress imaging with radiotracer",
-          description: "Exercise or pharmacological stress testing with radioactive tracer injection and imaging.",
-          icon: <Activity className="w-5 h-5" />,
-          duration: "3-4 hours",
-          details: [
-            "Baseline ECG and vital signs",
-            "Stress test (exercise or medication)",
-            "Radiotracer injection at peak stress",
-            "SPECT imaging 15-60 minutes post-injection"
-          ],
-        },
-        {
-          id: 3,
-          title: "Rest Test Day",
-          subtitle: "Resting comparison imaging",
-          description: "Resting radiotracer injection and imaging to compare with stress images.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "2-3 hours",
-          details: [
-            "Second radiotracer injection at rest",
-            "Resting SPECT imaging",
-            "Comparison with stress images",
-            "Additional views if required"
-          ],
-        },
-        {
-          id: 4,
-          title: "Results and Interpretation",
-          subtitle: "Image analysis and reporting",
-          description: "Comprehensive analysis comparing stress and rest images to assess coronary artery disease.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "1-3 days",
-          details: [
-            "Computer-assisted image analysis",
-            "Stress vs rest perfusion comparison",
-            "Correlation with stress test findings",
-            "Detailed report with recommendations"
-          ],
-        }
-      ]
-    },
-    heartbug: {
-      name: 'HeartBug',
-      description: 'Extended cardiac patch monitor (1-4 weeks)',
-      color: 'from-cream-500 to-accent-500',
-      category: 'monitoring',
-      type: 'test',
-      image: '/images/holter.png',
-      summary: 'Advanced wearable patch monitor that continuously records heart rhythm for 1-4 weeks, with mobile app integration for symptom correlation.',
-      needToKnow: [
-        'Worn continuously for 1-4 weeks as prescribed',
-        'Waterproof - wear in shower, avoid swimming/bathing',
-        'Mobile app allows symptom recording',
-        'Automatically detects abnormal heart rhythms',
-        'Not an emergency device - call 000 for urgent issues'
-      ],
-      steps: [
-        {
-          id: 1,
-          title: "Device Application",
-          subtitle: "Patch placement and app setup",
-          description: "Application of the HeartBug patch monitor with mobile app installation and patient education.",
-          icon: <Monitor className="w-5 h-5" />,
-          duration: "15-20 minutes",
-          details: [
-            "Skin preparation and patch placement",
-            "Mobile app download and setup",
-            "Device pairing and testing",
-            "Patient education on device use and care"
-          ],
-        },
-        {
-          id: 2,
-          title: "Extended Monitoring Period",
-          subtitle: "Continuous heart rhythm recording",
-          description: "Extended monitoring period with continuous ECG recording and symptom correlation capability.",
-          icon: <Clock className="w-5 h-5" />,
-          duration: "1-4 weeks",
-          details: [
-            "Continuous ECG monitoring 24/7",
-            "Automatic abnormal rhythm detection",
-            "Manual symptom recording via app",
-            "Bluetooth data transmission to monitoring service"
-          ],
-        },
-        {
-          id: 3,
-          title: "Symptom Documentation",
-          subtitle: "Patient-activated recording",
-          description: "Patient can manually record symptoms using the mobile app for precise symptom-rhythm correlation.",
-          icon: <UserCheck className="w-5 h-5" />,
-          duration: "As needed",
-          details: [
-            "Tap 'Make a Recording' when experiencing symptoms",
-            "Records 20 seconds before and 60 seconds after button press",
-            "Time and date stamped recordings",
-            "Symptom diary integration"
-          ],
-        },
-        {
-          id: 4,
-          title: "Device Return and Reporting",
-          subtitle: "Data analysis and clinical correlation",
-          description: "Return of device with comprehensive analysis and reporting to referring physician.",
-          icon: <FileText className="w-5 h-5" />,
-          duration: "1-2 weeks post-return",
-          details: [
-            "Device data download and analysis",
-            "Rhythm-symptom correlation assessment",
-            "Comprehensive report generation",
-            "Results sent to referring doctor for discussion"
-          ],
-        }
-      ]
-    }
-  };
 
   const goBack = () => {
     window.history.back();
@@ -2307,6 +602,96 @@ const LearningLibrary: React.FC = () => {
   const handleProcedureClick = (procedureKey: string) => {
     setSelectedProcedure(procedureKey);
     scrollToDetailCard();
+  };
+
+  /**
+   * Add procedure to PDF and show feedback
+   */
+  const handleAddToPdf = (procedureKey: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    addProcedure(procedureKey);
+    
+    // Create animated element that flies to bottom bar
+    const button = event.currentTarget as HTMLElement;
+    const rect = button.getBoundingClientRect();
+    
+    const flyingElement = document.createElement('div');
+    flyingElement.className = 'fixed z-50 w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white pointer-events-none';
+    flyingElement.style.left = `${rect.left + rect.width / 2 - 16}px`;
+    flyingElement.style.top = `${rect.top + rect.height / 2 - 16}px`;
+    flyingElement.innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>';
+    document.body.appendChild(flyingElement);
+    
+    // Animate to bottom bar
+    setTimeout(() => {
+      flyingElement.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      flyingElement.style.transform = 'translateY(50vh) scale(0.5)';
+      flyingElement.style.opacity = '0';
+    }, 100);
+    
+    // Remove element after animation
+    setTimeout(() => {
+      if (document.body.contains(flyingElement)) {
+        document.body.removeChild(flyingElement);
+      }
+    }, 700);
+  };
+
+  const handleDownloadClick = (procedureKey: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    addProcedure(procedureKey);
+    setShowRelatedCards(procedureKey);
+  };
+
+  const handleAddRelatedCard = (procedureKey: string) => {
+    addProcedure(procedureKey);
+    setShowRelatedCards(null);
+  };
+
+  const handleCloseRelatedCards = () => {
+    setShowRelatedCards(null);
+  };
+
+  const handleGeneratePdf = async () => {
+    if (selectedProcedures.size === 0) return;
+    
+    try {
+      // Convert selected procedure IDs to procedure data
+      const procedureData = Array.from(selectedProcedures).map(id => {
+        const procedure = procedureJourneys[id as keyof typeof procedureJourneys];
+        return procedure ? {
+          name: procedure.name,
+          description: procedure.description,
+          summary: procedure.summary,
+          needToKnow: procedure.needToKnow,
+          steps: procedure.steps
+        } : null;
+      }).filter((item): item is NonNullable<typeof item> => item !== null);
+
+      if (procedureData.length === 0) {
+        throw new Error('No valid procedures found');
+      }
+
+      const pdfBytes = await generateLearningLibraryPDF(procedureData);
+      downloadPDF(pdfBytes, 'heart-clinic-procedures.pdf');
+      
+      // Show success message
+      showToast('PDF generated successfully!');
+      
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      showToast('Error generating PDF. Please try again.');
+    }
+  };
+
+  const showToast = (message: string) => {
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-4 right-4 bg-primary-600 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      document.body.removeChild(toast);
+    }, 3000);
   };
 
   const containerVariants = {
@@ -2416,6 +801,45 @@ const LearningLibrary: React.FC = () => {
           </div>
         </div>
 
+        {/* Contextual PDF Selection Helper */}
+        {selectedProcedures.size > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <div className="bg-gradient-to-r from-accent-50 to-primary-50 rounded-2xl p-4 border border-primary-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    {selectedProcedures.size} procedure{selectedProcedures.size !== 1 ? 's' : ''} selected
+                  </div>
+                  <span className="text-secondary-600 text-sm">
+                    Ready to generate your personalized PDF guide
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  {/* Starter Packs Quick Add */}
+                  <div className="flex space-x-1">
+                    {starterPacks.slice(0, 2).map((pack) => (
+                      <button
+                        key={pack.id}
+                        onClick={() => {
+                          pack.procedureIds.forEach(id => addProcedure(id));
+                        }}
+                        className="px-2 py-1 text-xs bg-primary-100 hover:bg-primary-200 text-primary-700 rounded-md transition-colors duration-200"
+                        title={`Add ${pack.name}`}
+                      >
+                        +{pack.procedureIds.length} {pack.name.split(' ')[0]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Content */}
         <div className={`transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           
@@ -2444,22 +868,32 @@ const LearningLibrary: React.FC = () => {
                               ? 'shadow-xl scale-105 border-transparent' 
                               : 'shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-300'
                           }`}
-                          style={{
-                            backgroundImage: generalProcedure[1].image ? `url(${generalProcedure[1].image})` : 'none',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                            imageRendering: '-webkit-optimize-contrast'
-                          }}
                           whileHover={{ y: -4, scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
-                          {/* Background overlay */}
+                          {/* Blurred background image */}
+                          {generalProcedure[1].image && (
+                            <div 
+                              className="absolute inset-0 rounded-2xl"
+                              style={{
+                                backgroundImage: `url(${generalProcedure[1].image})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                imageRendering: '-webkit-optimize-contrast',
+                                filter: 'blur(2px)'
+                              }}
+                            />
+                          )}
+                          
+                          {/* Backdrop filter overlay */}
                           <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
                             selectedProcedure === 'general'
                               ? `bg-gradient-to-r ${generalProcedure[1].color} opacity-80`
                               : 'bg-white/70 hover:bg-white/80'
-                          }`} />
+                          }`} style={{
+                            backdropFilter: 'blur(4px)',
+                            WebkitBackdropFilter: 'blur(4px)'
+                          }} />
                           
                           {/* Selection indicator */}
                           {selectedProcedure === 'general' && (
@@ -2498,27 +932,80 @@ const LearningLibrary: React.FC = () => {
                           <motion.button
                             key={key}
                             onClick={() => handleProcedureClick(key)}
-                            className={`relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
+                            className={`relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-500 transform hover:-translate-y-2 border group hover:shadow-2xl hover:shadow-primary-500/20 ${
                               selectedProcedure === key
-                                ? 'shadow-xl scale-105 border-transparent' 
-                                : 'shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-300'
+                                ? 'shadow-2xl scale-105 border-transparent ring-2 ring-primary-300 ring-opacity-50 shadow-primary-500/30' 
+                                : 'shadow-sm hover:shadow-2xl border-secondary-200 hover:border-primary-300 hover:scale-102'
                             }`}
-                            style={{
-                              backgroundImage: procedure.image ? `url(${procedure.image})` : 'none',
-                              backgroundSize: 'cover',
-                              backgroundPosition: 'center',
-                              backgroundRepeat: 'no-repeat',
-                              imageRendering: '-webkit-optimize-contrast'
+                            whileHover={{ 
+                              y: -6, 
+                              scale: 1.03,
+                              transition: { 
+                                type: "spring", 
+                                stiffness: 400, 
+                                damping: 25 
+                              }
                             }}
-                            whileHover={{ y: -4, scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                            whileTap={{ 
+                              scale: 0.97,
+                              transition: { 
+                                type: "spring", 
+                                stiffness: 600, 
+                                damping: 30 
+                              }
+                            }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ 
+                              delay: groupedProcedures.test.findIndex(([k]) => k === key) * 0.1,
+                              duration: 0.6,
+                              ease: "easeOut"
+                            }}
                           >
-                            {/* Background overlay */}
+                            {/* Blurred background image */}
+                            {procedure.image && (
+                              <div 
+                                className="absolute inset-0 rounded-2xl"
+                                style={{
+                                  backgroundImage: `url(${procedure.image})`,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                  imageRendering: '-webkit-optimize-contrast',
+                                  filter: 'blur(2px)'
+                                }}
+                              />
+                            )}
+                            
+                            {/* Backdrop filter overlay */}
                             <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
                               selectedProcedure === key
                                 ? `bg-gradient-to-r ${procedure.color} opacity-80`
                                 : 'bg-white/70 hover:bg-white/80'
-                            }`} />
+                            }`} style={{
+                              backdropFilter: 'blur(4px)',
+                              WebkitBackdropFilter: 'blur(4px)'
+                            }} />
+                            
+                            {/* Quick add to PDF button */}
+                            <button
+                              onClick={(e) => handleAddToPdf(key, e)}
+                              className="absolute bottom-3 right-3 w-8 h-8 bg-accent-600 hover:bg-accent-700 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 hover:scale-110"
+                              title="Quick add to PDF"
+                            >
+                              <FileText className="w-4 h-4" />
+                            </button>
+                            
+                            {/* Download button with text */}
+                            <button
+                              onClick={(e) => handleDownloadClick(key, e)}
+                              className="absolute bottom-3 left-3 bg-white/90 hover:bg-white text-primary-600 px-3 py-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 flex items-center space-x-1 text-sm font-medium hover:shadow-lg"
+                              title="Download and see related procedures"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                              </svg>
+                              <span>Download</span>
+                            </button>
                             
                             {/* Selection indicator */}
                             {selectedProcedure === key && (
@@ -2558,27 +1045,58 @@ const LearningLibrary: React.FC = () => {
                           <motion.button
                             key={key}
                             onClick={() => handleProcedureClick(key)}
-                            className={`relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 border ${
+                            className={`relative overflow-hidden p-6 rounded-2xl text-left transition-all duration-500 transform hover:-translate-y-2 border group hover:shadow-2xl hover:shadow-primary-500/20 ${
                               selectedProcedure === key
-                                ? 'shadow-xl scale-105 border-transparent' 
-                                : 'shadow-sm hover:shadow-lg border-secondary-200 hover:border-primary-300'
+                                ? 'shadow-2xl scale-105 border-transparent ring-2 ring-primary-300 ring-opacity-50 shadow-primary-500/30' 
+                                : 'shadow-sm hover:shadow-2xl border-secondary-200 hover:border-primary-300 hover:scale-102'
                             }`}
-                            style={{
-                              backgroundImage: procedure.image ? `url(${procedure.image})` : 'none',
-                              backgroundSize: 'cover',
-                              backgroundPosition: 'center',
-                              backgroundRepeat: 'no-repeat',
-                              imageRendering: '-webkit-optimize-contrast'
-                            }}
                             whileHover={{ y: -4, scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                           >
-                            {/* Background overlay */}
+                            {/* Blurred background image */}
+                            {procedure.image && (
+                              <div 
+                                className="absolute inset-0 rounded-2xl"
+                                style={{
+                                  backgroundImage: `url(${procedure.image})`,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                  imageRendering: '-webkit-optimize-contrast',
+                                  filter: 'blur(2px)'
+                                }}
+                              />
+                            )}
+                            
+                            {/* Backdrop filter overlay */}
                             <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
                               selectedProcedure === key
                                 ? `bg-gradient-to-r ${procedure.color} opacity-80`
                                 : 'bg-white/70 hover:bg-white/80'
-                            }`} />
+                            }`} style={{
+                              backdropFilter: 'blur(4px)',
+                              WebkitBackdropFilter: 'blur(4px)'
+                            }} />
+                            
+                            {/* Quick add to PDF button */}
+                            <button
+                              onClick={(e) => handleAddToPdf(key, e)}
+                              className="absolute bottom-3 right-3 w-8 h-8 bg-accent-600 hover:bg-accent-700 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 hover:scale-110"
+                              title="Quick add to PDF"
+                            >
+                              <FileText className="w-4 h-4" />
+                            </button>
+                            
+                            {/* Download button with text */}
+                            <button
+                              onClick={(e) => handleDownloadClick(key, e)}
+                              className="absolute bottom-3 left-3 bg-white/90 hover:bg-white text-primary-600 px-3 py-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 flex items-center space-x-1 text-sm font-medium hover:shadow-lg"
+                              title="Download and see related procedures"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                              </svg>
+                              <span>Download</span>
+                            </button>
                             
                             {/* Selection indicator */}
                             {selectedProcedure === key && (
@@ -2686,7 +1204,7 @@ const LearningLibrary: React.FC = () => {
                         <div className="lg:col-span-9 space-y-4">
                           <div className="flex items-center space-x-3">
                             <div className="bg-secondary-800 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-sm">
-                              {step.icon}
+                              {step.icon()}
                             </div>
                             <div>
                               <h4 className="text-xl font-bold text-secondary-800">{step.title}</h4>
@@ -2792,11 +1310,20 @@ const LearningLibrary: React.FC = () => {
                 return (
                   <motion.div
                     key={condition.name}
-                    className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-secondary-200/50 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                    className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-secondary-200/50 hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-500 cursor-pointer group hover:border-primary-300"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    whileHover={{ y: -4 }}
+                    whileHover={{ 
+                      y: -6,
+                      scale: 1.02,
+                      transition: { 
+                        type: "spring", 
+                        stiffness: 400, 
+                        damping: 25 
+                      }
+                    }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => toggleConditionExpansion(condition.name)}
                   >
                   {/* Header */}
@@ -2931,6 +1458,123 @@ const LearningLibrary: React.FC = () => {
 
         </div>
       </div>
+
+      {/* Floating Bottom Bar - PDF Cart */}
+      {selectedProcedures.size > 0 && (
+      <motion.div
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 100, opacity: 0 }}
+        className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-2xl z-40 p-4"
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <FileText className="w-5 h-5 text-primary-600" />
+              <span className="font-semibold text-gray-800">
+                PDF Guide ({selectedProcedures.size} procedure{selectedProcedures.size !== 1 ? 's' : ''})
+              </span>
+            </div>
+            <div className="flex items-center space-x-2 max-w-md overflow-x-auto">
+              {Array.from(selectedProcedures).slice(0, 3).map((procedureId) => (
+                <div
+                  key={procedureId}
+                  className="bg-primary-50 text-primary-700 px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap flex items-center space-x-1"
+                >
+                  <span>{procedureJourneys[procedureId]?.name || procedureId}</span>
+                  <button
+                    onClick={() => removeProcedure(procedureId)}
+                    className="ml-1 hover:text-primary-900"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              {selectedProcedures.size > 3 && (
+                <div className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">
+                  +{selectedProcedures.size - 3} more
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={clearSelection}
+              className="text-gray-500 hover:text-gray-700 px-3 py-1 text-sm"
+            >
+              Clear All
+            </button>
+            <button
+              onClick={handleGeneratePdf}
+              className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Generate PDF</span>
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    )}
+
+    {/* Related Cards Modal */}
+    {showRelatedCards && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        onClick={handleCloseRelatedCards}
+      >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-gray-800">
+                You might also want to learn about:
+              </h3>
+              <button
+                onClick={handleCloseRelatedCards}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-4">
+              {relatedCards[showRelatedCards]?.map((relatedId) => {
+                const procedure = procedureJourneys[relatedId];
+                if (!procedure) return null;
+                
+                return (
+                  <div
+                    key={relatedId}
+                    className="bg-gray-50 rounded-xl p-4 hover:bg-gray-100 transition-colors"
+                  >
+                    <h4 className="font-semibold text-gray-800 mb-2">{procedure.name}</h4>
+                    <p className="text-sm text-gray-600 mb-3">{procedure.description}</p>
+                    <button
+                      onClick={() => handleAddRelatedCard(relatedId)}
+                      className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                    >
+                      Add to PDF
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+      )}
     </div>
   );
 };

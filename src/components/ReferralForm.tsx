@@ -366,7 +366,7 @@ Provider Number: ${formData.providerNumber}`;
               alt="Heart Clinic Melbourne Logo" 
               className="h-8 w-8"
             />
-            <h2 className="text-lg font-semibold text-black">Patient Referral Form for Doctors</h2>
+            <h2 className="text-lg font-semibold text-black">Patient Referral Form for Referring Doctors</h2>
           </div>
           <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
             <X className="w-5 h-5" />

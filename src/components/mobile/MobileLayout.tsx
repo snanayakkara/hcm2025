@@ -95,7 +95,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
       case 'home':
         return (
           <div className="pb-24">
-            {/* Mobile-optimized hero with parallax */}
+            {/* Mobile-optimised hero with parallax */}
             <section id="home" className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
               {/* No separate background - uses the unified light background */}
               
@@ -149,7 +149,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               </div>
             </section>
 
-            {/* Mobile-optimized sections with enhanced spacing */}
+            {/* Mobile-optimised sections with enhanced spacing */}
             <section id="about" className="py-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

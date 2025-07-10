@@ -11,7 +11,7 @@ const About: React.FC = () => {
     {
       icon: <Award className="w-6 h-6 text-primary-600" />,
       title: "Clinical Excellence",
-      description: "Recognized expertise in cardiovascular medicine with evidence-based treatment protocols.",
+      description: "Recognised expertise in cardiovascular medicine with evidence-based treatment protocols.",
       color: "bg-primary-50/80",
       hoverColor: "hover:bg-primary-100/80"
     },

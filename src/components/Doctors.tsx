@@ -16,7 +16,7 @@ const Doctors: React.FC = () => {
       image: "/images/freilich.png",
       locations: ["Cabrini Hospital Malvern"],
       appointments: ["Alfred Hospital", "Frankston Hospital"],
-      description: "Dr Freilich is a pioneer in radial approach coronary angiography in Melbourne, having trained in this advanced technique in the United States. He specializes in interventional cardiac procedures with extensive experience in coronary interventions.",
+      description: "Dr Freilich is a pioneer in radial approach coronary angiography in Melbourne, having trained in this advanced technique in the United States. He specialises in interventional cardiac procedures with extensive experience in coronary interventions.",
       color: '#148792',
     },
     {
@@ -29,7 +29,7 @@ const Doctors: React.FC = () => {
       image: "/images/ngu.png",
       locations: ["The Alfred Hospital"],
       appointments: ["Alfred Hospital"],
-      description: "Dr Ngu specializes in advanced cardiac imaging and uses multi-modality imaging techniques to better understand cardiac disease and improve patient outcomes. His expertise spans all forms of non-invasive cardiac assessment.",
+      description: "Dr Ngu specialises in advanced cardiac imaging and uses multi-modality imaging techniques to better understand cardiac disease and improve patient outcomes. His expertise spans all forms of non-invasive cardiac assessment.",
       color: '#4a787d',
     },
     {
@@ -113,7 +113,7 @@ const Doctors: React.FC = () => {
             </span>
           </h2>
           <p className="text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed">
-            Our team of highly qualified cardiologists brings extensive experience and specialized expertise in all aspects of cardiovascular care, from general cardiology to advanced interventional procedures.
+            Our team of highly qualified cardiologists brings extensive experience and specialised expertise in all aspects of cardiovascular care, from general cardiology to advanced interventional procedures.
           </p>
         </div>
 

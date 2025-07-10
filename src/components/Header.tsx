@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, FileText, Search, BookOpen, Video } from 'lucide-react';
+import { Menu, X, FileText, Search, BookOpen, Video, Plus } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import ReferralForm from './ReferralForm';
+import { usePdfSelection } from '../contexts/PdfSelectionContext';
+import { starterPacks } from '../data/starterPacks';
+import PdfCart from './PdfCart';
+
+interface SearchResult {
+  type: string;
+  title: string;
+  description: string;
+  section: string;
+  keywords: string[];
+}
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,13 +23,19 @@ const Header: React.FC = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [showSearchPopover, setShowSearchPopover] = useState(false);
   const [selectedResultIndex, setSelectedResultIndex] = useState(-1);
   const [isReferralFormOpen, setIsReferralFormOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isMobile } = useMobileDetection();
+  const { 
+    selectedProcedures, 
+    addProcedure, 
+    addStarterPack,
+    selectedPacks
+  } = usePdfSelection();
 
   // Search data - all searchable content
   const searchData = [
@@ -77,7 +94,7 @@ const Header: React.FC = () => {
     { type: 'procedure', title: 'Atrial Fibrillation Ablation', description: 'Advanced catheter ablation for rhythm control', section: 'library-procedures', keywords: ['af ablation', 'catheter ablation', 'atrial fibrillation', 'rhythm control', 'pfa'] },
     { type: 'procedure', title: 'Mitral TEER (Transcatheter Edge-to-Edge Repair)', description: 'Minimally invasive mitral valve repair using MitraClip or PASCAL technology', section: 'library-procedures', keywords: ['mteer', 'mitraclip', 'valve repair', 'mitral', 'transcatheter'] },
     { type: 'procedure', title: 'Cardiac CT Angiography (CTCA)', description: 'Non-invasive coronary artery imaging using advanced CT technology', section: 'library-procedures', keywords: ['ctca', 'ct scan', 'coronary ct', 'non-invasive', 'contrast'] },
-    { type: 'procedure', title: 'PYP Scan (Cardiac Amyloidosis Imaging)', description: 'Specialized nuclear imaging to detect cardiac amyloidosis', section: 'library-procedures', keywords: ['pyp scan', 'amyloidosis', 'nuclear imaging', 'heart muscle disease'] },
+    { type: 'procedure', title: 'PYP Scan (Cardiac Amyloidosis Imaging)', description: 'Specialised nuclear imaging to detect cardiac amyloidosis', section: 'library-procedures', keywords: ['pyp scan', 'amyloidosis', 'nuclear imaging', 'heart muscle disease'] },
     { type: 'procedure', title: 'SVT Ablation (Supraventricular Tachycardia)', description: 'Catheter ablation for supraventricular tachycardia treatment', section: 'library-procedures', keywords: ['svt ablation', 'rapid heartbeat', 'catheter ablation', 'electrophysiology'] },
     { type: 'procedure', title: 'Cardiac MRI', description: 'Advanced magnetic resonance imaging for detailed cardiac assessment', section: 'library-procedures', keywords: ['cardiac mri', 'magnetic resonance', 'heart scan', 'detailed imaging'] },
     { type: 'procedure', title: 'Exercise Stress Echocardiography', description: 'Combined exercise testing with cardiac ultrasound imaging', section: 'library-procedures', keywords: ['stress echo', 'exercise test', 'treadmill', 'stress test', 'echo'] }
@@ -147,7 +164,7 @@ const Header: React.FC = () => {
   };
 
   // Handle search result click
-  const handleSearchResultClick = (result: any) => {
+  const handleSearchResultClick = (result: SearchResult) => {
     if (result.section === 'library-conditions') {
       // Navigate to Library page with conditions tab and search term
       navigate(`/library?tab=conditions&search=${encodeURIComponent(result.title)}`);
@@ -264,6 +281,56 @@ const Header: React.FC = () => {
 
   const handleReferralClick = () => {
     setIsReferralFormOpen(true);
+  };
+
+  const handleAddToPdf = (result: SearchResult) => {
+    if (result.type === 'procedure') {
+      // Extract procedure ID from the result
+      const procedureId = getProcedureIdFromResult(result);
+      if (procedureId) {
+        addProcedure(procedureId);
+        showToast(`Added "${result.title}" to PDF`);
+      }
+    }
+  };
+
+  const handleAddStarterPack = (pack: typeof starterPacks[0]) => {
+    addStarterPack(pack);
+    showToast(`Added "${pack.name}" (${pack.procedureIds.length} items) to PDF`);
+  };
+
+  const showToast = (message: string) => {
+    // Simple toast implementation - could be enhanced with a proper toast library
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-4 right-4 bg-primary-600 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      document.body.removeChild(toast);
+    }, 3000);
+  };
+
+  const getProcedureIdFromResult = (result: SearchResult) => {
+    // Map procedure titles to their IDs
+    const procedureMap: { [key: string]: string } = {
+      'General Patient Journey': 'general',
+      'TAVI (Transcatheter Aortic Valve Implantation)': 'tavi',
+      'TOE-Guided Cardioversion': 'toe_dcr',
+      'Coronary Angiography & PCI': 'angiogram_pci',
+      'Pacemaker Implantation': 'pacemaker',
+      'Atrial Fibrillation Ablation': 'af_ablation',
+      'Mitral TEER (Transcatheter Edge-to-Edge Repair)': 'mteer',
+      'Cardiac CT Angiography (CTCA)': 'ctca',
+      'PYP Scan (Cardiac Amyloidosis Imaging)': 'pyp_scan',
+      'SVT Ablation (Supraventricular Tachycardia)': 'svt_ablation',
+      'Cardiac MRI': 'cardiac_mri',
+      'Exercise Stress Echocardiography': 'exercise_stress_echo',
+      'Transoesophageal Echocardiography (TOE)': 'toe',
+      '24 Hour Holter Monitoring': 'holter',
+      'Echocardiography': 'echocardiogram'
+    };
+    
+    return procedureMap[result.title] || null;
   };
 
 
@@ -501,6 +568,33 @@ const Header: React.FC = () => {
                       </button>
                     </div>
 
+                    {/* Starter Pack Chips */}
+                    <div className="mb-4">
+                      <div className="text-sm font-medium text-secondary-700 mb-2">Quick Start Packs:</div>
+                      <div className="flex flex-wrap gap-2">
+                        {starterPacks.map((pack, index) => (
+                          <motion.button
+                            key={pack.id}
+                            onClick={() => handleAddStarterPack(pack)}
+                            className={`px-3 py-1 text-xs rounded-full transition-all duration-200 flex items-center space-x-1 ${
+                              selectedPacks.has(pack.id)
+                                ? 'bg-primary-600 text-white'
+                                : 'bg-primary-100 text-primary-700 hover:bg-primary-200'
+                            }`}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: index * 0.05 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <Plus className="w-3 h-3" />
+                            <span>{pack.name}</span>
+                            <span className="text-xs opacity-70">({pack.procedureIds.length})</span>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+
                     {/* Popover Search Results */}
                     <AnimatePresence>
                       {searchQuery && (
@@ -513,12 +607,8 @@ const Header: React.FC = () => {
                           {searchResults.length > 0 ? (
                             <div className="space-y-2 max-h-80 overflow-y-auto">
                               {searchResults.map((result, index) => (
-                                <motion.button
+                                <motion.div
                                   key={index}
-                                  onClick={() => {
-                                    handleSearchResultClick(result);
-                                    handleSearchPopoverClose();
-                                  }}
                                   className={`w-full text-left p-4 transition-all duration-200 flex items-start space-x-3 group rounded-xl ${
                                     index === selectedResultIndex
                                       ? 'bg-primary-100/80 border border-primary-200'
@@ -544,7 +634,30 @@ const Header: React.FC = () => {
                                       Go to {result.type} →
                                     </div>
                                   </div>
-                                </motion.button>
+                                  <div className="flex space-x-2">
+                                    <button
+                                      onClick={() => {
+                                        handleSearchResultClick(result);
+                                        handleSearchPopoverClose();
+                                      }}
+                                      className="px-3 py-1 text-sm bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
+                                    >
+                                      View
+                                    </button>
+                                    {result.type === 'procedure' && (
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleAddToPdf(result);
+                                        }}
+                                        className="px-3 py-1 text-sm bg-accent-600 text-white rounded-md hover:bg-accent-700 transition-colors flex items-center space-x-1"
+                                      >
+                                        <Plus className="w-3 h-3" />
+                                        <span>Add to PDF</span>
+                                      </button>
+                                    )}
+                                  </div>
+                                </motion.div>
                               ))}
                             </div>
                           ) : (
@@ -619,9 +732,8 @@ const Header: React.FC = () => {
                               className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl rounded-xl shadow-xl border border-secondary-200/50 py-2 z-50 max-h-60 overflow-y-auto"
                             >
                               {searchResults.map((result, index) => (
-                                <button
+                                <div
                                   key={index}
-                                  onClick={() => handleSearchResultClick(result)}
                                   className="w-full text-left px-3 py-2 hover:bg-primary-50/80 transition-all duration-200 flex items-center space-x-2"
                                 >
                                   <span className="text-sm">{getResultIcon(result.type)}</span>
@@ -633,7 +745,27 @@ const Header: React.FC = () => {
                                       {result.description}
                                     </div>
                                   </div>
-                                </button>
+                                  <div className="flex space-x-1">
+                                    <button
+                                      onClick={() => handleSearchResultClick(result)}
+                                      className="px-2 py-1 text-xs bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors"
+                                    >
+                                      View
+                                    </button>
+                                    {result.type === 'procedure' && (
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleAddToPdf(result);
+                                        }}
+                                        className="px-2 py-1 text-xs bg-accent-600 text-white rounded hover:bg-accent-700 transition-colors flex items-center space-x-1"
+                                      >
+                                        <Plus className="w-2 h-2" />
+                                        <span>PDF</span>
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
                               ))}
                               
                               {searchQuery && searchResults.length === 0 && (
@@ -810,6 +942,20 @@ const Header: React.FC = () => {
           </motion.div>
         </div>
       )}
+
+      {/* PDF Cart Floating Action Button */}
+      <AnimatePresence>
+        {selectedProcedures.size > 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            className="fixed bottom-6 left-6 z-50"
+          >
+            <PdfCart />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Referral Form Modal */}
       <ReferralForm

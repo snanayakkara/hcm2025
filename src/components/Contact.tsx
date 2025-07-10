@@ -324,15 +324,15 @@ const Contact: React.FC = () => {
                 className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-secondary-200 hover:shadow-lg transition-all duration-200"
               >
                 <div className="text-center">
-                  <div className="w-16 h-16 rounded-xl mx-auto mb-4 overflow-hidden">
+                  <div className="mx-auto mb-4 flex justify-center items-center h-20">
                     {hospital.icon ? (
                       <img
                         src={hospital.icon}
                         alt={`${hospital.name} logo`}
-                        className="w-full h-full object-cover"
+                        className="max-w-20 max-h-20 object-contain"
                       />
                     ) : (
-                      <div className="bg-primary-100 w-full h-full flex items-center justify-center">
+                      <div className="bg-primary-100 w-16 h-16 flex items-center justify-center rounded-xl">
                         <Building2 className="w-6 h-6 text-primary-600" />
                       </div>
                     )}

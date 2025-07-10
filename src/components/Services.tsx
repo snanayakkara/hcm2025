@@ -178,7 +178,7 @@ const Services: React.FC = () => {
       duration: "30-60 minutes",
       preparation: "Fasting required",
       locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
-      description: "Coronary angiography is a specialized X-ray procedure that uses contrast dye to visualize the coronary arteries. This gold-standard test can detect blockages and assess the need for intervention.",
+      description: "Coronary angiography is a specialised X-ray procedure that uses contrast dye to visualise the coronary arteries. This gold-standard test can detect blockages and assess the need for intervention.",
       cost: "Hospital admission may be required",
       image: "/images/angio.png"
     },
@@ -219,7 +219,7 @@ const Services: React.FC = () => {
       locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "TOE-guided cardioversion combines transesophageal echocardiography with electrical cardioversion to safely restore normal heart rhythm in patients with atrial fibrillation.",
       cost: "Day procedure charges apply",
-      image: "https://images.pexels.com/photos/4386476/pexels-photo-4386476.jpeg?auto=compress&cs=tinysrgb&w=600"
+      image: "/images/toe.png"
     },
     {
       id: 'af-ablation',

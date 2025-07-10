@@ -115,7 +115,7 @@ const MobileServiceCards: React.FC = () => {
       id: 'angiography',
       title: 'Coronary Angiography',
       subtitle: 'Advanced Imaging',
-      description: 'Coronary angiography is a specialized X-ray procedure that uses contrast dye to visualize the coronary arteries. This gold-standard test can detect blockages and assess the need for intervention.',
+      description: 'Coronary angiography is a specialised X-ray procedure that uses contrast dye to visualise the coronary arteries. This gold-standard test can detect blockages and assess the need for intervention.',
       icon: Heart,
       color: 'from-primary-500 to-primary-600',
       image: '/images/angio.png',
