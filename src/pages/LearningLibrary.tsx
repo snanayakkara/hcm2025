@@ -986,25 +986,14 @@ const LearningLibrary: React.FC = () => {
                               WebkitBackdropFilter: 'blur(4px)'
                             }} />
                             
-                            {/* Quick add to PDF button */}
+                            {/* Add to PDF button with text and icon */}
                             <button
                               onClick={(e) => handleAddToPdf(key, e)}
-                              className="absolute bottom-3 right-3 w-8 h-8 bg-accent-600 hover:bg-accent-700 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 hover:scale-110"
-                              title="Quick add to PDF"
+                              className="absolute bottom-3 right-3 bg-white/90 hover:bg-white text-primary-600 px-3 py-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 flex items-center space-x-1 text-sm font-medium hover:shadow-lg hover:scale-105"
+                              title="Add to PDF Guide"
                             >
                               <FileText className="w-4 h-4" />
-                            </button>
-                            
-                            {/* Download button with text */}
-                            <button
-                              onClick={(e) => handleDownloadClick(key, e)}
-                              className="absolute bottom-3 left-3 bg-white/90 hover:bg-white text-primary-600 px-3 py-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 flex items-center space-x-1 text-sm font-medium hover:shadow-lg"
-                              title="Download and see related procedures"
-                            >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                              </svg>
-                              <span>Download</span>
+                              <span>Add to PDF</span>
                             </button>
                             
                             {/* Selection indicator */}
@@ -1077,25 +1066,14 @@ const LearningLibrary: React.FC = () => {
                               WebkitBackdropFilter: 'blur(4px)'
                             }} />
                             
-                            {/* Quick add to PDF button */}
+                            {/* Add to PDF button with text and icon */}
                             <button
                               onClick={(e) => handleAddToPdf(key, e)}
-                              className="absolute bottom-3 right-3 w-8 h-8 bg-accent-600 hover:bg-accent-700 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 hover:scale-110"
-                              title="Quick add to PDF"
+                              className="absolute bottom-3 right-3 bg-white/90 hover:bg-white text-primary-600 px-3 py-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 flex items-center space-x-1 text-sm font-medium hover:shadow-lg hover:scale-105"
+                              title="Add to PDF Guide"
                             >
                               <FileText className="w-4 h-4" />
-                            </button>
-                            
-                            {/* Download button with text */}
-                            <button
-                              onClick={(e) => handleDownloadClick(key, e)}
-                              className="absolute bottom-3 left-3 bg-white/90 hover:bg-white text-primary-600 px-3 py-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 flex items-center space-x-1 text-sm font-medium hover:shadow-lg"
-                              title="Download and see related procedures"
-                            >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                              </svg>
-                              <span>Download</span>
+                              <span>Add to PDF</span>
                             </button>
                             
                             {/* Selection indicator */}
@@ -1137,6 +1115,34 @@ const LearningLibrary: React.FC = () => {
                     <p className="text-lg text-secondary-600 max-w-3xl mx-auto leading-relaxed mb-6">
                       {procedureJourneys[selectedProcedure as keyof typeof procedureJourneys].summary}
                     </p>
+                    
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                      <button
+                        onClick={(e) => handleAddToPdf(selectedProcedure, e)}
+                        className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-xl font-medium flex items-center space-x-2 transition-all duration-300 hover:scale-105 shadow-lg"
+                      >
+                        <FileText className="w-5 h-5" />
+                        <span>Add to PDF Guide</span>
+                      </button>
+                      
+                      <button
+                        onClick={(e) => handleDownloadClick(selectedProcedure, e)}
+                        className="bg-white hover:bg-gray-50 text-primary-600 border-2 border-primary-600 px-6 py-3 rounded-xl font-medium flex items-center space-x-2 transition-all duration-300 hover:scale-105 shadow-lg"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span>Download & View Related</span>
+                      </button>
+                      
+                      {selectedProcedures.has(selectedProcedure) && (
+                        <div className="flex items-center space-x-2 text-green-600 bg-green-50 px-4 py-2 rounded-lg">
+                          <CheckCircle className="w-5 h-5" />
+                          <span className="text-sm font-medium">Added to PDF Guide</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Need to Know Section */}
@@ -1236,6 +1242,59 @@ const LearningLibrary: React.FC = () => {
                         </div>
                       </motion.div>
                     ))}
+                  </div>
+                  
+                  {/* Related Procedures Section */}
+                  {selectedProcedure && relatedCards[selectedProcedure] && (
+                    <div className="mt-12 bg-gray-50/80 rounded-2xl p-6 border border-gray-200">
+                      <h4 className="text-xl font-bold text-secondary-800 mb-6 flex items-center">
+                        <Heart className="w-5 h-5 mr-2 text-primary-600" />
+                        You might also be interested in:
+                      </h4>
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {relatedCards[selectedProcedure].slice(0, 3).map((relatedId) => {
+                          const procedure = procedureJourneys[relatedId];
+                          if (!procedure) return null;
+                          
+                          return (
+                            <div
+                              key={relatedId}
+                              className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-102 border border-gray-100"
+                            >
+                              <h5 className="font-semibold text-gray-800 mb-2 text-sm">{procedure.name}</h5>
+                              <p className="text-xs text-gray-600 mb-3 line-clamp-2">{procedure.description}</p>
+                              <div className="flex space-x-2">
+                                <button
+                                  onClick={() => setSelectedProcedure(relatedId)}
+                                  className="text-primary-600 hover:text-primary-700 text-xs font-medium"
+                                >
+                                  Learn More
+                                </button>
+                                <button
+                                  onClick={(e) => handleAddToPdf(relatedId, e)}
+                                  className="bg-primary-50 hover:bg-primary-100 text-primary-600 px-2 py-1 rounded text-xs font-medium transition-colors"
+                                >
+                                  Add to PDF
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Floating Action Button for detailed view */}
+                  <div className="fixed bottom-20 right-6 z-30">
+                    <button
+                      onClick={(e) => handleDownloadClick(selectedProcedure, e)}
+                      className="bg-primary-600 hover:bg-primary-700 text-white p-4 rounded-full shadow-2xl hover:shadow-primary-500/30 transition-all duration-300 hover:scale-110"
+                      title="Download and see related procedures"
+                    >
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               )}
@@ -1535,9 +1594,9 @@ const LearningLibrary: React.FC = () => {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-gray-800">
-                You might also want to learn about:
+                Download Options
               </h3>
               <button
                 onClick={handleCloseRelatedCards}
@@ -1548,6 +1607,62 @@ const LearningLibrary: React.FC = () => {
                 </svg>
               </button>
             </div>
+            
+            {/* Original Procedure Download Option */}
+            <div className="mb-6 p-4 bg-gradient-to-r from-primary-50 to-primary-100 rounded-xl border-2 border-primary-200">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <h4 className="font-bold text-primary-800 mb-1">
+                    {procedureJourneys[showRelatedCards]?.name}
+                  </h4>
+                  <p className="text-sm text-primary-700">
+                    Download this procedure guide only
+                  </p>
+                </div>
+                <button
+                  onClick={async () => {
+                    const procedure = procedureJourneys[showRelatedCards];
+                    if (procedure) {
+                      try {
+                        const procedureData = [{
+                          name: procedure.name,
+                          description: procedure.description,
+                          summary: procedure.summary,
+                          needToKnow: procedure.needToKnow,
+                          steps: procedure.steps
+                        }];
+                        const pdfBytes = await generateLearningLibraryPDF(procedureData);
+                        downloadPDF(pdfBytes, `${procedure.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-guide.pdf`);
+                        showToast('PDF downloaded successfully!');
+                        handleCloseRelatedCards();
+                      } catch (error) {
+                        console.error('Error generating PDF:', error);
+                        showToast('Error generating PDF. Please try again.');
+                      }
+                    }
+                  }}
+                  className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 transition-all duration-300 hover:scale-105 shadow-lg"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span>Download Now</span>
+                </button>
+              </div>
+            </div>
+            
+            {/* Divider */}
+            <div className="mb-6">
+              <div className="flex items-center">
+                <div className="flex-1 border-t border-gray-200"></div>
+                <span className="px-3 text-sm text-gray-500 bg-white">Or add related procedures</span>
+                <div className="flex-1 border-t border-gray-200"></div>
+              </div>
+            </div>
+            
+            <h4 className="text-lg font-semibold text-gray-800 mb-4">
+              You might also want to learn about:
+            </h4>
             
             <div className="grid md:grid-cols-2 gap-4">
               {relatedCards[showRelatedCards]?.map((relatedId) => {
