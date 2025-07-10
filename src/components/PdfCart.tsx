@@ -46,11 +46,11 @@ const PdfCart: React.FC = () => {
       downloadPDF(pdfBytes, 'heart-clinic-procedures.pdf');
       
       // Show success message
-      showToast('PDF generated successfully!');
+      showToast('Guide generated successfully!');
       
     } catch (error) {
       console.error('Error generating PDF:', error);
-      showToast('Error generating PDF. Please try again.');
+      showToast('Error generating guide. Please try again.');
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -84,13 +84,13 @@ const PdfCart: React.FC = () => {
       
       createLearningLibraryMailtoLink(pdfBytes, procedureNames);
       
-      showToast('Email application opened with PDF attached!');
+      showToast('Email application opened with guide attached!');
       setShowEmailInput(false);
       setEmailAddress('');
       
     } catch (error) {
       console.error('Error generating PDF for email:', error);
-      showToast('Error generating PDF. Please try again.');
+      showToast('Error generating guide. Please try again.');
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -141,7 +141,7 @@ const PdfCart: React.FC = () => {
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-secondary-800 flex items-center space-x-2">
                   <FileText className="w-4 h-4" />
-                  <span>PDF Cart ({selectedProcedures.size})</span>
+                  <span>Your Guide ({selectedProcedures.size})</span>
                 </h3>
                 <button
                   onClick={() => setIsExpanded(false)}
@@ -208,7 +208,7 @@ const PdfCart: React.FC = () => {
                     className="flex-1 bg-primary-600 text-white py-2 px-3 rounded text-sm hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-1"
                   >
                     <Download className="w-4 h-4" />
-                    <span>{isGeneratingPdf ? 'Generating...' : 'Download PDF'}</span>
+                    <span>{isGeneratingPdf ? 'Generating...' : 'Download Guide'}</span>
                   </button>
                   <button
                     onClick={() => setShowEmailInput(true)}

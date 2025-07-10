@@ -5,7 +5,51 @@ Heart Clinic Melbourne is a comprehensive React/TypeScript medical website provi
 
 ## Recent Major Updates
 
-### 1. Liquid Glass Button Implementation (December 2024)
+### 1. Enhanced Learning Library with Action Buttons and New Procedures (July 2025)
+**Advanced interaction design with slide-out tooltips and improved user experience**
+
+#### New Features Added:
+- **Right Heart Catheterisation procedure** - Complete diagnostic procedure added to patient education
+- **Three-button action system** - Enhanced hover interactions on all procedure cards
+- **Slide-out text labels** - Contextual tooltips that appear on button hover
+- **Smart blur effects** - Main card content blurs while action buttons remain crisp
+
+#### Action Button System:
+1. **📄 Add to Guide** - Adds procedures to personal patient guide
+2. **▶️ View Process** - Opens detailed step-by-step procedure view
+3. **📖 Deep Dive Q&A** - Accesses comprehensive FAQ information
+
+#### Technical Implementation:
+```typescript
+// Three-button system with slide-out labels
+<div className="group/card">
+  <div className="relative group/button">
+    <button className="bg-white/90 hover:bg-white text-primary-600 p-2 rounded-full">
+      <FileText className="w-4 h-4" />
+    </button>
+    <div className="absolute right-full opacity-0 group-hover/button:opacity-100 
+                    transform translate-x-2 group-hover/button:translate-x-0 
+                    transition-all duration-200">
+      <div className="bg-gray-900 text-white px-3 py-1 rounded-lg">
+        Add to Guide
+      </div>
+    </div>
+  </div>
+</div>
+
+// Smart blur system for enhanced readability
+.group-hover/button:blur-sm {
+  filter: blur(4px);
+}
+```
+
+#### UI/UX Enhancements:
+- **Contextual clarity**: Button purposes immediately clear through slide-out text
+- **Visual hierarchy**: Card content blurs to emphasize action buttons and labels
+- **Smooth animations**: 200ms transitions for all hover states and blur effects
+- **Accessibility**: High contrast tooltips with proper ARIA labels
+
+### 2. Liquid Glass Button Implementation (December 2024)
 **Enhanced UI with iOS 18-style liquid glass effect for improved readability**
 
 #### Files Modified:

@@ -38,11 +38,30 @@ async function fetchFont(url: string): Promise<ArrayBuffer> {
 // Clean text function to handle special characters that can't be encoded in WinAnsi
 function cleanText(text: string): string {
   return text
-    .replace(/[\u2010-\u2015]/g, '-') // Replace various dash characters with regular hyphen
+    // Replace all types of dash characters with regular ASCII hyphen
+    .replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, '-') // Various dash and minus characters
+    // Replace smart quotes with regular quotes
     .replace(/[\u2018\u2019]/g, "'") // Replace smart quotes with regular apostrophe
     .replace(/[\u201C\u201D]/g, '"') // Replace smart quotes with regular quotes
+    // Replace various bracket characters with standard ASCII brackets
+    .replace(/[\u2768\u276A\u276C\u276E]/g, '(') // Various opening parentheses
+    .replace(/[\u2769\u276B\u276D\u276F]/g, ')') // Various closing parentheses
+    .replace(/[\u3008\u3010\u3014\u3016\u3018\u301A]/g, '(') // CJK opening brackets
+    .replace(/[\u3009\u3011\u3015\u3017\u3019\u301B]/g, ')') // CJK closing brackets
+    .replace(/[\u2039]/g, '<') // Single left-pointing angle quotation mark
+    .replace(/[\u203A]/g, '>') // Single right-pointing angle quotation mark
     .replace(/[\u2026]/g, '...') // Replace ellipsis with three dots
-    .replace(/[^\x00-\x7F]/g, ''); // Remove any remaining non-ASCII characters
+    // Remove zero-width and invisible characters that might cause spacing issues
+    .replace(/[\u200B\u200C\u200D\u2060\uFEFF]/g, '') // Zero-width spaces and BOM
+    .replace(/[\u00A0]/g, ' ') // Non-breaking spaces to regular spaces
+    // Handle specific patterns with special characters
+    .replace(/(\d+)\s*[\u2010-\u2015\u2212]\s*(\d+)/g, '$1-$2') // Numbers with dashes, no spaces
+    .replace(/\s*[\u2768-\u276F\u3008-\u301B]\s*/g, ' (') // Clean spacing around various brackets
+    // Clean up any remaining non-ASCII characters
+    .replace(/[^\x00-\x7F]/g, '')
+    // Normalize whitespace
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 async function fetchLogo(): Promise<ArrayBuffer> {
@@ -645,17 +664,30 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     });
   }
 
-  // Title
+  // Title - aligned with logo
   const titleX = marginLeft + (logo ? logoWidth + 20 : 0);
-  drawText(coverPage, 'Heart Clinic Melbourne', titleX, coverY - 10, { 
+  drawText(coverPage, 'Heart Clinic Melbourne', titleX, coverY - 15, { 
     font: boldFont, 
     size: 24, 
     color: primaryTeal 
   });
-  drawText(coverPage, 'Patient Education Guide', titleX, coverY - 35, { 
+  drawText(coverPage, 'Patient Education Guide', titleX, coverY - 40, { 
     font: boldFont, 
     size: 18, 
     color: darkGray 
+  });
+
+  // Date in header as subtitle
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('en-AU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+  
+  drawText(coverPage, `Generated: ${dateStr}`, titleX, coverY - 60, { 
+    size: 10, 
+    color: lightGray 
   });
 
   coverY -= 80;
@@ -700,6 +732,18 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
       const scaledWidth = image.width * imageScale;
       const scaledHeight = image.height * imageScale;
       
+      // Draw rounded rectangle border around image
+      const imagePadding = 2;
+      const borderRadius = 4;
+      drawRectangle(coverPage, 
+        marginLeft + 20 - imagePadding, 
+        coverY - scaledHeight + 5 - imagePadding, 
+        scaledWidth + (imagePadding * 2), 
+        scaledHeight + (imagePadding * 2), 
+        rgb(1, 1, 1), // white background
+        lightGray // border color
+      );
+      
       coverPage.drawImage(image, {
         x: marginLeft + 20,
         y: coverY - scaledHeight + 5,
@@ -709,24 +753,12 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     }
     
     // Draw procedure name with image offset
-    drawText(coverPage, `${index + 1}. ${procedure.name}`, marginLeft + 20 + imageSize + 10, coverY, { 
+    drawText(coverPage, procedure.name, marginLeft + 20 + imageSize + 10, coverY, { 
       size: 12 
     });
     coverY -= rowHeight;
   });
 
-  // Date
-  const today = new Date();
-  const dateStr = today.toLocaleDateString('en-AU', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-  
-  drawText(coverPage, `Generated: ${dateStr}`, marginLeft, marginBottom, { 
-    size: 10, 
-    color: lightGray 
-  });
 
   // Add procedure pages with proper page management
   procedures.forEach((procedure) => {
@@ -801,9 +833,9 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
         });
       }
 
-      // Procedure name
+      // Procedure name - aligned with logo
       const titleX = marginLeft + (logo ? logoWidth + 20 : 0);
-      drawText(currentPage, procedure.name, titleX, headerY - 10, { 
+      drawText(currentPage, procedure.name, titleX, headerY - 15, { 
         font: boldFont, 
         size: 20, 
         color: primaryTeal 

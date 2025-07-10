@@ -6,7 +6,6 @@ import { useMobileDetection } from '../hooks/useMobileDetection';
 import ReferralForm from './ReferralForm';
 import { usePdfSelection } from '../contexts/PdfSelectionContext';
 import { starterPacks } from '../data/starterPacks';
-import PdfCart from './PdfCart';
 
 interface SearchResult {
   type: string;
@@ -943,19 +942,6 @@ const Header: React.FC = () => {
         </div>
       )}
 
-      {/* PDF Cart Floating Action Button */}
-      <AnimatePresence>
-        {selectedProcedures.size > 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            className="fixed bottom-6 left-6 z-50"
-          >
-            <PdfCart />
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Referral Form Modal */}
       <ReferralForm

@@ -42,6 +42,11 @@ export interface ProcedureJourney {
   image: string;
   summary: string;
   needToKnow: string[];
+  /**
+   * Optional long‑form, patient‑friendly explainer in Markdown.  
+   * Shown when the “Want more detail?” toggle is opened.
+   */
+  details?: string;
   steps: ProcedureStep[];
 }
 
@@ -235,7 +240,7 @@ export const procedureJourneys: ProcedureJourneys = {
     needToKnow: [
       'Day procedure with light sedation',
       'Fast for 6 hours before procedure',
-      'Blood thinnings mandatory for four weeks prior',
+      'Blood thinners mandatory for four weeks prior',
       'TOE imaging ensures safety before cardioversion',
       'Transport home required after procedure'
     ],
@@ -375,6 +380,33 @@ export const procedureJourneys: ProcedureJourneys = {
       'Kidney function tests required beforehand',
       'Two blood thinning tablets if stent placed'
     ],
+    /** Deep‑dive content rendered in the expandable panel */
+    details: `
+## Coronary Angiography & PCI – deep dive
+**What is a coronary angiogram?**  
+A coronary angiogram is a special X‑ray test that visualises the blood flow in your heart’s arteries. A thin tube (catheter) is inserted, usually via the wrist or groin, and guided up to the heart. Contrast dye is injected to make the arteries visible on X‑ray. The test shows if there are any narrowings or blockages.
+
+**What is PCI (“stenting”)?**  
+If a significant blockage is found, it can often be treated immediately with percutaneous coronary intervention (PCI). This involves inflating a tiny balloon at the blockage site and placing a metal mesh stent to keep the artery open. PCI restores blood flow and reduces the risk of heart attack.
+
+**Why is this test done?**  
+You may be referred for angiography if you have symptoms like chest pain, shortness of breath, abnormal stress test results, or known coronary artery disease. It’s the gold standard for diagnosing blockages and planning treatment.
+
+**How do I prepare?**  
+You’ll need blood tests to check kidney function and clotting. Most people can take their usual medications, but blood thinners or diabetes medications may need adjustment—your doctor will advise. Fast for 4–6 hours before the procedure.
+
+**What happens on the day?**  
+You’ll change into a gown and have an IV inserted. The wrist or groin area is numbed with local anaesthetic. The procedure usually takes 30–90 minutes. You may feel a warm flush when contrast dye is injected, but there should be no pain. If PCI is needed, it adds extra time.
+
+**Recovery and aftercare**  
+Afterwards, you’ll be monitored while the access site is compressed to prevent bleeding. Most people can sit up and eat soon after. If a stent is placed, you’ll need to take antiplatelet medications (such as aspirin and ticagrelor) for several months. Bruising and mild discomfort at the access site are common.
+
+**Risks and complications**  
+Serious risks are uncommon but include bleeding, allergic reaction to dye, kidney injury, heart attack, stroke, or (very rarely) death. Your doctor will discuss your individual risk before the procedure.
+
+**Results**  
+Your cardiologist will review the images and explain the findings. If PCI was performed, you’ll receive instructions on medications, activity restrictions, and follow‑up. Most people return to normal activities within a few days.
+`,
     steps: [
       {
         id: 1,
@@ -1092,7 +1124,7 @@ export const procedureJourneys: ProcedureJourneys = {
     image: '/images/holter.png',
     summary: 'Holter monitoring involves wearing a small, portable device that continuously records your heart rhythm for 24 hours. This helps detect irregular heartbeats that may not occur during a brief office visit.',
     needToKnow: [
-      'Wear the device continuously for 24 hours',
+      'Wear the device continuously for 24 hours', 
       'Keep a diary of symptoms and activities',
       'Normal daily activities encouraged',
       'Avoid getting the device wet',
@@ -2403,6 +2435,81 @@ export const procedureJourneys: ProcedureJourneys = {
           "Verification of stent expansion and apposition",
           "Post-stenting IVUS to confirm optimal result",
           "Documentation for future follow-up"
+        ],
+      }
+    ]
+  },
+  right_heart_catheterisation: {
+    name: 'Right Heart Catheterisation',
+    description: 'Diagnostic procedure to evaluate right heart function and pulmonary circulation',
+    color: 'from-primary-500 to-sage-500',
+    category: 'interventional',
+    type: 'procedure',
+    image: '/images/catheter.png',
+    summary: 'A minimally invasive diagnostic procedure using a thin catheter to measure pressures and blood flow in the right side of the heart and pulmonary arteries, helping diagnose conditions like pulmonary hypertension and heart failure.',
+    needToKnow: [
+      'Usually performed as day procedure or overnight stay',
+      'Local anaesthetic and mild sedation typically used',
+      'Takes approximately 30-60 minutes',
+      'Access through neck or groin vein',
+      'Precise pressure measurements guide treatment decisions',
+      'Low-risk procedure with high diagnostic value'
+    ],
+    steps: [
+      {
+        id: 1,
+        title: "Pre-Procedure Preparation",
+        subtitle: "Assessment and setup for catheterisation",
+        description: "Comprehensive preparation including IV access, monitoring setup, and patient positioning for safe catheter insertion.",
+        icon: () => React.createElement(Clipboard, { className: "w-5 h-5" }),
+        duration: "30-45 minutes",
+        details: [
+          "IV line placement and medication administration",
+          "Continuous heart monitoring setup",
+          "Local anaesthetic to insertion site",
+          "Sterile draping and positioning"
+        ],
+      },
+      {
+        id: 2,
+        title: "Catheter Insertion and Navigation",
+        subtitle: "Accessing the right heart chambers",
+        description: "Insertion of a thin, flexible catheter through a vein and careful navigation to the right ventricle and pulmonary arteries.",
+        icon: () => React.createElement(Activity, { className: "w-5 h-5" }),
+        duration: "15-30 minutes",
+        details: [
+          "Venous access through neck or groin",
+          "X-ray guidance for catheter positioning",
+          "Navigation through right atrium to right ventricle",
+          "Advancement into pulmonary arteries"
+        ],
+      },
+      {
+        id: 3,
+        title: "Pressure Measurements and Data Collection",
+        subtitle: "Comprehensive hemodynamic assessment",
+        description: "Detailed measurement of pressures in different heart chambers and calculation of cardiac output and pulmonary resistance.",
+        icon: () => React.createElement(Monitor, { className: "w-5 h-5" }),
+        duration: "15-30 minutes",
+        details: [
+          "Right atrial pressure measurement",
+          "Right ventricular pressure recording",
+          "Pulmonary artery pressure assessment",
+          "Cardiac output and resistance calculations"
+        ],
+      },
+      {
+        id: 4,
+        title: "Recovery and Results Review",
+        subtitle: "Post-procedure monitoring and interpretation",
+        description: "Careful monitoring during recovery with prompt review of results to guide treatment recommendations.",
+        icon: () => React.createElement(CheckCircle, { className: "w-5 h-5" }),
+        duration: "2-4 hours",
+        details: [
+          "Observation for bleeding or complications",
+          "Gradual mobilisation when appropriate",
+          "Results interpretation and discussion",
+          "Treatment plan development based on findings"
         ],
       }
     ]

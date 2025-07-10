@@ -992,7 +992,7 @@ ${formData.name}`;
 
                   <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition-all duration-200 flex items-center justify-center space-x-2 font-semibold transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    className="w-full bg-teal-600 text-white py-4 rounded-lg hover:bg-teal-700 transition-all duration-200 flex items-center justify-center space-x-2 font-semibold transform hover:scale-105 shadow-lg hover:shadow-xl"
                   >
                     <span>Send Appointment Request</span>
                     <ArrowRight className="w-5 h-5" />

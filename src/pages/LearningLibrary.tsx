@@ -4,7 +4,6 @@ import {
   BookOpen, 
   Heart, 
   Activity, 
-  Stethoscope, 
   Search, 
   Clock,
   AlertCircle,
@@ -12,22 +11,19 @@ import {
   CheckCircle,
   PlayCircle,
   ArrowLeft,
-  Phone,
-  Clipboard,
   Monitor,
-  Bed,
-  UserCheck,
   ChevronDown,
   ChevronUp,
   FileText,
-  Calendar,
   Zap
 } from 'lucide-react';
 import { procedureJourneys } from '../data/procedureJourneys';
 import { usePdfSelection } from '../contexts/PdfSelectionContext';
-import { starterPacks } from '../data/starterPacks';
 import { relatedCards } from '../data/relatedCards';
 import { generateLearningLibraryPDF, downloadPDF } from '../components/pdf/generatePdf';
+import { useMobileDetection } from '../hooks/useMobileDetection';
+import DeepDiveModal from '../components/DeepDiveModal';
+import { loadFaqData, FaqData, ProcedureFaq } from '../utils/parseFaqData';
 
 const LearningLibrary: React.FC = () => {
   const [activeTab, setActiveTab] = useState('journeys');
@@ -37,9 +33,14 @@ const LearningLibrary: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedConditions, setExpandedConditions] = useState<string[]>([]);
   const [showRelatedCards, setShowRelatedCards] = useState<string | null>(null);
+  const [showMobileGuideMenu, setShowMobileGuideMenu] = useState(false);
+  const [showDeepDive, setShowDeepDive] = useState(false);
+  const [faqData, setFaqData] = useState<FaqData>({});
+  const [currentProcedureFaq, setCurrentProcedureFaq] = useState<ProcedureFaq | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const { selectedProcedures, addProcedure, removeProcedure, clearSelection } = usePdfSelection();
+  const { isMobile } = useMobileDetection();
 
   // Handle URL parameters from services page and main search
   useEffect(() => {
@@ -64,6 +65,16 @@ const LearningLibrary: React.FC = () => {
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // Load FAQ data when component mounts
+  useEffect(() => {
+    const loadFaq = async () => {
+      const data = await loadFaqData();
+      setFaqData(data);
+      console.log('FAQ data loaded in LearningLibrary:', data);
+    };
+    loadFaq();
   }, []);
 
   useEffect(() => {
@@ -652,6 +663,17 @@ const LearningLibrary: React.FC = () => {
     setShowRelatedCards(null);
   };
 
+  const handleOpenDeepDive = (procedureId: string) => {
+    const procedureFaq = faqData[procedureId];
+    setCurrentProcedureFaq(procedureFaq || null);
+    setShowDeepDive(true);
+  };
+
+  const handleCloseDeepDive = () => {
+    setShowDeepDive(false);
+    setCurrentProcedureFaq(null);
+  };
+
   const handleGeneratePdf = async () => {
     if (selectedProcedures.size === 0) return;
     
@@ -802,44 +824,6 @@ const LearningLibrary: React.FC = () => {
           </div>
         </div>
 
-        {/* Contextual PDF Selection Helper */}
-        {selectedProcedures.size > 0 && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="bg-gradient-to-r from-accent-50 to-primary-50 rounded-2xl p-4 border border-primary-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    {selectedProcedures.size} procedure{selectedProcedures.size !== 1 ? 's' : ''} selected
-                  </div>
-                  <span className="text-secondary-600 text-sm">
-                    Ready to generate your personalized PDF guide
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  {/* Starter Packs Quick Add */}
-                  <div className="flex space-x-1">
-                    {starterPacks.slice(0, 2).map((pack) => (
-                      <button
-                        key={pack.id}
-                        onClick={() => {
-                          pack.procedureIds.forEach(id => addProcedure(id));
-                        }}
-                        className="px-2 py-1 text-xs bg-primary-100 hover:bg-primary-200 text-primary-700 rounded-md transition-colors duration-200"
-                        title={`Add ${pack.name}`}
-                      >
-                        +{pack.procedureIds.length} {pack.name.split(' ')[0]}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
 
         {/* Content */}
         <div className={`transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
@@ -930,6 +914,7 @@ const LearningLibrary: React.FC = () => {
                       </h4>
                       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {groupedProcedures.test.map(([key, procedure]) => (
+                          <div key={`wrapper-${key}`} className="group/card">
                           <motion.button
                             key={key}
                             onClick={() => handleProcedureClick(key)}
@@ -966,7 +951,7 @@ const LearningLibrary: React.FC = () => {
                             {/* Blurred background image */}
                             {procedure.image && (
                               <div 
-                                className="absolute inset-0 rounded-2xl"
+                                className="absolute inset-0 rounded-2xl group-hover/button:blur-md transition-all duration-200"
                                 style={{
                                   backgroundImage: `url(${procedure.image})`,
                                   backgroundSize: 'cover',
@@ -978,7 +963,7 @@ const LearningLibrary: React.FC = () => {
                             )}
                             
                             {/* Backdrop filter overlay */}
-                            <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
+                            <div className={`absolute inset-0 rounded-2xl transition-all duration-300 group-hover/button:blur-sm ${
                               selectedProcedure === key
                                 ? `bg-gradient-to-r ${procedure.color} opacity-80`
                                 : 'bg-white/70 hover:bg-white/80'
@@ -987,25 +972,70 @@ const LearningLibrary: React.FC = () => {
                               WebkitBackdropFilter: 'blur(4px)'
                             }} />
                             
-                            {/* Add to PDF button with text and icon */}
-                            <button
-                              onClick={(e) => handleAddToPdf(key, e)}
-                              className="absolute bottom-3 right-3 bg-white/90 hover:bg-white text-primary-600 px-3 py-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 flex items-center space-x-1 text-sm font-medium hover:shadow-lg hover:scale-105"
-                              title="Add to PDF Guide"
-                            >
-                              <FileText className="w-4 h-4" />
-                              <span>Add to PDF</span>
-                            </button>
+                            {/* Action buttons */}
+                            <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20">
+                              <div className="relative group/button">
+                                <button
+                                  onClick={(e) => handleAddToPdf(key, e)}
+                                  className="bg-white/90 hover:bg-white text-primary-600 p-2 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200"
+                                  title="Add to Your Guide"
+                                >
+                                  <FileText className="w-4 h-4" />
+                                </button>
+                                <div className="absolute right-full top-1/2 -translate-y-1/2 mr-2 opacity-0 group-hover/button:opacity-100 transform translate-x-2 group-hover/button:translate-x-0 transition-all duration-200 pointer-events-none">
+                                  <div className="bg-gray-900 text-white px-3 py-1 rounded-lg text-sm font-medium whitespace-nowrap shadow-lg">
+                                    Add to Guide
+                                    <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-900"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="relative group/button">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleProcedureClick(key);
+                                  }}
+                                  className="bg-white/90 hover:bg-white text-primary-600 p-2 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200"
+                                  title="View Process"
+                                >
+                                  <PlayCircle className="w-4 h-4" />
+                                </button>
+                                <div className="absolute right-full top-1/2 -translate-y-1/2 mr-2 opacity-0 group-hover/button:opacity-100 transform translate-x-2 group-hover/button:translate-x-0 transition-all duration-200 pointer-events-none">
+                                  <div className="bg-gray-900 text-white px-3 py-1 rounded-lg text-sm font-medium whitespace-nowrap shadow-lg">
+                                    View Process
+                                    <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-900"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="relative group/button">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpenDeepDive(key);
+                                  }}
+                                  className="bg-white/90 hover:bg-white text-primary-600 p-2 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200"
+                                  title="Deep Dive Q&A"
+                                >
+                                  <BookOpen className="w-4 h-4" />
+                                </button>
+                                <div className="absolute right-full top-1/2 -translate-y-1/2 mr-2 opacity-0 group-hover/button:opacity-100 transform translate-x-2 group-hover/button:translate-x-0 transition-all duration-200 pointer-events-none">
+                                  <div className="bg-gray-900 text-white px-3 py-1 rounded-lg text-sm font-medium whitespace-nowrap shadow-lg">
+                                    Deep Dive Q&A
+                                    <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-900"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                             
                             {/* Selection indicator */}
                             {selectedProcedure === key && (
-                              <div className="absolute top-3 right-3 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg">
+                              <div className="absolute top-3 left-3 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg">
                                 <div className="w-3 h-3 bg-primary-500 rounded-full"></div>
                               </div>
                             )}
                             
                             {/* Content */}
-                            <div className="relative z-10 space-y-4 pointer-events-none">
+                            <div className="relative z-10 space-y-4 pointer-events-none group-hover/button:blur-sm transition-all duration-200">
                               <h4 className={`font-semibold text-lg leading-tight ${
                                 selectedProcedure === key ? 'text-white' : 'text-secondary-900'
                               }`}>
@@ -1018,6 +1048,7 @@ const LearningLibrary: React.FC = () => {
                               </p>
                             </div>
                           </motion.button>
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -1032,6 +1063,7 @@ const LearningLibrary: React.FC = () => {
                       </h4>
                       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {groupedProcedures.procedure.map(([key, procedure]) => (
+                          <div key={`wrapper-${key}`} className="group/card">
                           <motion.button
                             key={key}
                             onClick={() => handleProcedureClick(key)}
@@ -1046,7 +1078,7 @@ const LearningLibrary: React.FC = () => {
                             {/* Blurred background image */}
                             {procedure.image && (
                               <div 
-                                className="absolute inset-0 rounded-2xl"
+                                className="absolute inset-0 rounded-2xl group-hover/button:blur-md transition-all duration-200"
                                 style={{
                                   backgroundImage: `url(${procedure.image})`,
                                   backgroundSize: 'cover',
@@ -1058,7 +1090,7 @@ const LearningLibrary: React.FC = () => {
                             )}
                             
                             {/* Backdrop filter overlay */}
-                            <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
+                            <div className={`absolute inset-0 rounded-2xl transition-all duration-300 group-hover/button:blur-sm ${
                               selectedProcedure === key
                                 ? `bg-gradient-to-r ${procedure.color} opacity-80`
                                 : 'bg-white/70 hover:bg-white/80'
@@ -1067,25 +1099,70 @@ const LearningLibrary: React.FC = () => {
                               WebkitBackdropFilter: 'blur(4px)'
                             }} />
                             
-                            {/* Add to PDF button with text and icon */}
-                            <button
-                              onClick={(e) => handleAddToPdf(key, e)}
-                              className="absolute bottom-3 right-3 bg-white/90 hover:bg-white text-primary-600 px-3 py-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 flex items-center space-x-1 text-sm font-medium hover:shadow-lg hover:scale-105"
-                              title="Add to PDF Guide"
-                            >
-                              <FileText className="w-4 h-4" />
-                              <span>Add to PDF</span>
-                            </button>
+                            {/* Action buttons */}
+                            <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20">
+                              <div className="relative group/button">
+                                <button
+                                  onClick={(e) => handleAddToPdf(key, e)}
+                                  className="bg-white/90 hover:bg-white text-primary-600 p-2 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200"
+                                  title="Add to Your Guide"
+                                >
+                                  <FileText className="w-4 h-4" />
+                                </button>
+                                <div className="absolute right-full top-1/2 -translate-y-1/2 mr-2 opacity-0 group-hover/button:opacity-100 transform translate-x-2 group-hover/button:translate-x-0 transition-all duration-200 pointer-events-none">
+                                  <div className="bg-gray-900 text-white px-3 py-1 rounded-lg text-sm font-medium whitespace-nowrap shadow-lg">
+                                    Add to Guide
+                                    <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-900"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="relative group/button">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleProcedureClick(key);
+                                  }}
+                                  className="bg-white/90 hover:bg-white text-primary-600 p-2 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200"
+                                  title="View Process"
+                                >
+                                  <PlayCircle className="w-4 h-4" />
+                                </button>
+                                <div className="absolute right-full top-1/2 -translate-y-1/2 mr-2 opacity-0 group-hover/button:opacity-100 transform translate-x-2 group-hover/button:translate-x-0 transition-all duration-200 pointer-events-none">
+                                  <div className="bg-gray-900 text-white px-3 py-1 rounded-lg text-sm font-medium whitespace-nowrap shadow-lg">
+                                    View Process
+                                    <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-900"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="relative group/button">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpenDeepDive(key);
+                                  }}
+                                  className="bg-white/90 hover:bg-white text-primary-600 p-2 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200"
+                                  title="Deep Dive Q&A"
+                                >
+                                  <BookOpen className="w-4 h-4" />
+                                </button>
+                                <div className="absolute right-full top-1/2 -translate-y-1/2 mr-2 opacity-0 group-hover/button:opacity-100 transform translate-x-2 group-hover/button:translate-x-0 transition-all duration-200 pointer-events-none">
+                                  <div className="bg-gray-900 text-white px-3 py-1 rounded-lg text-sm font-medium whitespace-nowrap shadow-lg">
+                                    Deep Dive Q&A
+                                    <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-900"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                             
                             {/* Selection indicator */}
                             {selectedProcedure === key && (
-                              <div className="absolute top-3 right-3 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg">
+                              <div className="absolute top-3 left-3 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg">
                                 <div className="w-3 h-3 bg-primary-500 rounded-full"></div>
                               </div>
                             )}
                             
                             {/* Content */}
-                            <div className="relative z-10 space-y-4 pointer-events-none">
+                            <div className="relative z-10 space-y-4 pointer-events-none group-hover/button:blur-sm transition-all duration-200">
                               <h4 className={`font-semibold text-lg leading-tight ${
                                 selectedProcedure === key ? 'text-white' : 'text-secondary-900'
                               }`}>
@@ -1098,6 +1175,7 @@ const LearningLibrary: React.FC = () => {
                               </p>
                             </div>
                           </motion.button>
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -1124,7 +1202,7 @@ const LearningLibrary: React.FC = () => {
                         className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-xl font-medium flex items-center space-x-2 transition-all duration-300 hover:scale-105 shadow-lg"
                       >
                         <FileText className="w-5 h-5" />
-                        <span>Add to PDF Guide</span>
+                        <span>Add to Your Guide</span>
                       </button>
                       
                       <button
@@ -1140,7 +1218,7 @@ const LearningLibrary: React.FC = () => {
                       {selectedProcedures.has(selectedProcedure) && (
                         <div className="flex items-center space-x-2 text-green-600 bg-green-50 px-4 py-2 rounded-lg">
                           <CheckCircle className="w-5 h-5" />
-                          <span className="text-sm font-medium">Added to PDF Guide</span>
+                          <span className="text-sm font-medium">Added to Your Guide</span>
                         </div>
                       )}
                     </div>
@@ -1245,6 +1323,35 @@ const LearningLibrary: React.FC = () => {
                     ))}
                   </div>
                   
+                  {/* Deep Dive Button Section */}
+                  <div className="mt-12 mb-8 text-center">
+                    <div className="bg-gradient-to-r from-primary-50 to-accent-50 rounded-2xl p-8 border border-primary-200/50">
+                      <div className="max-w-2xl mx-auto">
+                        <h4 className="text-2xl font-bold text-secondary-800 mb-4">
+                          Want to Know More?
+                        </h4>
+                        <p className="text-secondary-600 mb-6 leading-relaxed">
+                          Get detailed answers to common questions about this procedure, including preparation, risks, recovery, and what to expect during each stage.
+                        </p>
+                        <button
+                          onClick={() => handleOpenDeepDive(selectedProcedure)}
+                          className="relative overflow-hidden bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-700 hover:to-accent-700 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center space-x-3 mx-auto"
+                        >
+                          <div className="bg-white/20 p-2 rounded-lg">
+                            <BookOpen className="w-6 h-6" />
+                          </div>
+                          <span>Deep Dive - Detailed Q&A</span>
+                          <div className="absolute inset-0 bg-white/10 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                        </button>
+                        {!faqData[selectedProcedure] && (
+                          <p className="text-sm text-secondary-500 mt-3 italic">
+                            Detailed information coming soon for this procedure
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
                   {/* Related Procedures Section */}
                   {selectedProcedure && relatedCards[selectedProcedure] && (
                     <div className="mt-12 bg-gray-50/80 rounded-2xl p-6 border border-gray-200">
@@ -1275,7 +1382,7 @@ const LearningLibrary: React.FC = () => {
                                   onClick={(e) => handleAddToPdf(relatedId, e)}
                                   className="bg-primary-50 hover:bg-primary-100 text-primary-600 px-2 py-1 rounded text-xs font-medium transition-colors"
                                 >
-                                  Add to PDF
+                                  Add to Guide
                                 </button>
                               </div>
                             </div>
@@ -1520,62 +1627,177 @@ const LearningLibrary: React.FC = () => {
         </div>
       </div>
 
-      {/* Floating Bottom Bar - PDF Cart */}
+      {/* Floating Capsule Bar - Your Guide */}
       {selectedProcedures.size > 0 && (
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
-        className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-2xl z-40 p-4"
+        className="fixed bottom-6 left-0 right-0 z-50"
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <FileText className="w-5 h-5 text-primary-600" />
-              <span className="font-semibold text-gray-800">
-                PDF Guide ({selectedProcedures.size} procedure{selectedProcedures.size !== 1 ? 's' : ''})
-              </span>
-            </div>
-            <div className="flex items-center space-x-2 max-w-md overflow-x-auto">
-              {Array.from(selectedProcedures).slice(0, 3).map((procedureId) => (
-                <div
-                  key={procedureId}
-                  className="bg-primary-50 text-primary-700 px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap flex items-center space-x-1"
-                >
-                  <span>{procedureJourneys[procedureId]?.name || procedureId}</span>
-                  <button
-                    onClick={() => removeProcedure(procedureId)}
-                    className="ml-1 hover:text-primary-900"
-                  >
-                    ×
-                  </button>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+          <div className="flex justify-center">
+            <div className="bg-gradient-to-r from-accent-50 to-primary-50 backdrop-blur-md border border-primary-200 shadow-2xl rounded-full max-w-5xl w-full">
+              
+              {/* Mobile View */}
+              {isMobile ? (
+                <div className="px-4 py-3">
+                  <div className="flex items-center justify-between">
+                    <button
+                      onClick={() => setShowMobileGuideMenu(!showMobileGuideMenu)}
+                      className="flex items-center space-x-3 flex-1"
+                    >
+                      <div className="bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {selectedProcedures.size}
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <FileText className="w-4 h-4 text-primary-600" />
+                        <span className="text-sm font-medium text-secondary-800">Your Guide</span>
+                        <ChevronUp className={`w-4 h-4 text-secondary-600 transition-transform ${showMobileGuideMenu ? 'rotate-180' : ''}`} />
+                      </div>
+                    </button>
+                    
+                    <button
+                      onClick={handleGeneratePdf}
+                      className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-full font-medium flex items-center space-x-1 transition-all duration-200"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <span className="text-sm">Generate</span>
+                    </button>
+                  </div>
                 </div>
-              ))}
-              {selectedProcedures.size > 3 && (
-                <div className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">
-                  +{selectedProcedures.size - 3} more
+              ) : (
+                /* Desktop View */
+                <div className="px-6 py-4">
+                  <div className="flex items-center justify-between space-x-6">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <div className="bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                          {selectedProcedures.size} in Your Guide
+                        </div>
+                        <FileText className="w-5 h-5 text-primary-600" />
+                      </div>
+                      <div className="flex items-center space-x-2 flex-wrap">
+                        {Array.from(selectedProcedures).map((procedureId) => (
+                          <div
+                            key={procedureId}
+                            className="bg-white/70 text-primary-700 px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap flex items-center space-x-1 border border-primary-200"
+                          >
+                            <span>{procedureJourneys[procedureId]?.name || procedureId}</span>
+                            <button
+                              onClick={() => removeProcedure(procedureId)}
+                              className="ml-1 hover:text-primary-900 text-lg leading-none"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <button
+                        onClick={clearSelection}
+                        className="text-secondary-600 hover:text-secondary-800 px-3 py-1 text-sm transition-colors"
+                      >
+                        Clear All
+                      </button>
+                      <button
+                        onClick={handleGeneratePdf}
+                        className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-full font-medium flex items-center space-x-2 transition-all duration-200 hover:scale-105"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span>Generate Your Guide</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={clearSelection}
-              className="text-gray-500 hover:text-gray-700 px-3 py-1 text-sm"
-            >
-              Clear All
-            </button>
-            <button
-              onClick={handleGeneratePdf}
-              className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <span>Generate PDF</span>
-            </button>
-          </div>
         </div>
+      </motion.div>
+    )}
+
+    {/* Mobile Guide Menu Modal */}
+    {isMobile && showMobileGuideMenu && selectedProcedures.size > 0 && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 flex items-end"
+        onClick={() => setShowMobileGuideMenu(false)}
+      >
+        <motion.div
+          initial={{ y: '100%' }}
+          animate={{ y: 0 }}
+          exit={{ y: '100%' }}
+          className="bg-white rounded-t-3xl w-full max-h-[70vh] overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-secondary-800 flex items-center space-x-2">
+                <FileText className="w-5 h-5 text-primary-600" />
+                <span>Your Guide ({selectedProcedures.size} procedures)</span>
+              </h3>
+              <button
+                onClick={() => setShowMobileGuideMenu(false)}
+                className="text-secondary-400 hover:text-secondary-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="space-y-3 max-h-[40vh] overflow-y-auto mb-6">
+              {Array.from(selectedProcedures).map((procedureId) => (
+                <div
+                  key={procedureId}
+                  className="bg-primary-50 border border-primary-200 rounded-xl p-4 flex items-center justify-between"
+                >
+                  <div className="flex-1">
+                    <h4 className="font-medium text-secondary-800">
+                      {procedureJourneys[procedureId]?.name || procedureId}
+                    </h4>
+                    <p className="text-sm text-secondary-600 mt-1 line-clamp-2">
+                      {procedureJourneys[procedureId]?.summary || ''}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => removeProcedure(procedureId)}
+                    className="ml-4 p-2 text-secondary-400 hover:text-red-500 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex space-x-3">
+              <button
+                onClick={clearSelection}
+                className="flex-1 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 py-3 rounded-xl font-medium transition-colors"
+              >
+                Clear All
+              </button>
+              <button
+                onClick={() => {
+                  handleGeneratePdf();
+                  setShowMobileGuideMenu(false);
+                }}
+                className="flex-2 bg-primary-600 hover:bg-primary-700 text-white py-3 px-6 rounded-xl font-medium flex items-center justify-center space-x-2 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>Generate Your Guide</span>
+              </button>
+            </div>
+          </div>
+        </motion.div>
       </motion.div>
     )}
 
@@ -1683,7 +1905,7 @@ const LearningLibrary: React.FC = () => {
                       onClick={() => handleAddRelatedCard(relatedId)}
                       className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                     >
-                      Add to PDF
+                      Add to Guide
                     </button>
                   </div>
                 );
@@ -1693,6 +1915,14 @@ const LearningLibrary: React.FC = () => {
         </motion.div>
       </motion.div>
       )}
+
+      {/* Deep Dive Modal */}
+      <DeepDiveModal
+        isOpen={showDeepDive}
+        onClose={handleCloseDeepDive}
+        procedureFaq={currentProcedureFaq}
+        procedureName={selectedProcedure ? procedureJourneys[selectedProcedure as keyof typeof procedureJourneys]?.name || '' : ''}
+      />
     </div>
   );
 };
