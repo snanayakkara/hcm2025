@@ -3,6 +3,7 @@ import { FileText, Clock, Shield, CreditCard, Phone, Mail, ArrowRight, CheckCirc
 import { motion, AnimatePresence } from 'framer-motion';
 import { faqData } from '../data/faqData';
 import Wizard from './Wizard/Wizard';
+import { parseMarkdown } from '../utils/markdownParser';
 
 const PatientInfo: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -610,7 +611,10 @@ ${formData.name}`;
                                     className="overflow-hidden"
                                   >
                                     <div className="px-4 py-3 bg-white">
-                                      <p className="text-gray-700 leading-relaxed text-sm">{faq.answer}</p>
+                                      <div 
+                                        className="text-gray-700 leading-relaxed text-sm"
+                                        dangerouslySetInnerHTML={{ __html: parseMarkdown(faq.answer) }}
+                                      />
                                     </div>
                                   </motion.div>
                                 )}

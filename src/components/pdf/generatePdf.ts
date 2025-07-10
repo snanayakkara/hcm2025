@@ -2,6 +2,7 @@ import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import * as fontkit from 'fontkit';
 import { IntakeForm } from '../../types/intake';
 import { FaqItem } from '../../utils/parseFaqData';
+import { parseMarkdownForPdf } from '../../utils/markdownParser';
 
 interface ProcedureData {
   name: string;
@@ -727,7 +728,7 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     });
     coverY -= 40;
 
-    procedures.forEach((procedure, index) => {
+    procedures.forEach((procedure) => {
       const imageSize = 24;
       const rowHeight = 32;
       
@@ -740,7 +741,6 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
         
         // Draw rounded rectangle border around image
         const imagePadding = 2;
-        const borderRadius = 4;
         drawRectangle(coverPage, 
           marginLeft + 20 - imagePadding, 
           coverY - scaledHeight + 5 - imagePadding, 
@@ -1055,7 +1055,7 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
       });
       currentY -= 35;
 
-      procedure.steps.forEach((step, index) => {
+      procedure.steps.forEach((step) => {
         // Calculate approximate step height
         const descLines = wrapText(step.description, width - marginLeft - marginRight - 40, 11);
         const detailsHeight = step.details ? step.details.length * 26 : 0; // Approximate
@@ -1159,10 +1159,15 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
       currentY -= 35;
 
       procedure.faqs.forEach((faq, index) => {
+        // Parse markdown for answer to get proper formatting
+        const { paragraphs } = parseMarkdownForPdf(faq.answer);
+        
         // Calculate approximate FAQ height
         const questionLines = wrapText(faq.question, width - marginLeft - marginRight - 35, 12);
-        const answerLines = wrapText(faq.answer, width - marginLeft - marginRight - 25, 11);
-        const faqHeight = 30 + (questionLines.length * 16) + (answerLines.length * 14) + 20;
+        const totalAnswerLines = paragraphs.reduce((total, para) => {
+          return total + wrapText(para.text, width - marginLeft - marginRight - 25, 11).length;
+        }, 0);
+        const faqHeight = 30 + (questionLines.length * 16) + (totalAnswerLines * 14) + (paragraphs.length * 8) + 20;
         
         if (checkPageBreak(faqHeight)) {
           addNewPage();
@@ -1188,21 +1193,49 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
         currentY -= 5;
 
-        // Answer
+        // Answer with markdown formatting
         drawText(page, 'A:', marginLeft + 10, currentY, { 
           color: lightGray, 
           size: 11, 
           font: boldFont 
         });
         
-        answerLines.forEach((line, lineIndex) => {
-          if (checkPageBreak(14)) {
-            addNewPage();
+        // Handle paragraphs in the answer
+        let isFirstAnswer = true;
+        
+        paragraphs.forEach((paragraph, paraIndex) => {
+          if (paragraph.text.trim()) {
+            const paragraphLines = wrapText(paragraph.text.trim(), width - marginLeft - marginRight - 25, 11);
+            
+            paragraphLines.forEach((line, lineIndex) => {
+              if (checkPageBreak(14)) {
+                addNewPage();
+              }
+              
+              // Determine if line should be bold based on formatting info
+              const lineStart = paragraphLines.slice(0, lineIndex).join(' ').length + (lineIndex > 0 ? lineIndex : 0);
+              const lineEnd = lineStart + line.length;
+              
+              const shouldBold = paragraph.formatting.some(format => 
+                format.bold && 
+                ((format.start >= lineStart && format.start < lineEnd) ||
+                 (format.end > lineStart && format.end <= lineEnd) ||
+                 (format.start <= lineStart && format.end >= lineEnd))
+              );
+              
+              drawText(page, line, marginLeft + (isFirstAnswer && lineIndex === 0 ? 25 : 25), currentY, { 
+                size: 11,
+                font: shouldBold ? boldFont : font
+              });
+              currentY -= 14;
+              isFirstAnswer = false;
+            });
+            
+            // Add paragraph spacing except for the last paragraph
+            if (paraIndex < paragraphs.length - 1) {
+              currentY -= 8;
+            }
           }
-          drawText(page, line, marginLeft + (lineIndex === 0 ? 25 : 25), currentY, { 
-            size: 11 
-          });
-          currentY -= 14;
         });
 
         currentY -= 15;
@@ -1220,7 +1253,7 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
   return await pdfDoc.save();
 }
 
-export function createLearningLibraryMailtoLink(pdfBytes: Uint8Array, selectedProcedures: string[]): void {
+export function createLearningLibraryMailtoLink(_pdfBytes: Uint8Array, selectedProcedures: string[]): void {
   const procedureList = selectedProcedures.join(', ');
   const subject = encodeURIComponent('Patient Education Materials Request');
   const body = encodeURIComponent(`Dear Heart Clinic Melbourne Team,

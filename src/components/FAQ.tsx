@@ -4,6 +4,7 @@ import { ChevronDown, FileText, Search, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import { faqData } from '../data/faqData';
+import { parseMarkdown } from '../utils/markdownParser';
 
 const FAQ: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -146,7 +147,10 @@ const FAQ: React.FC = () => {
                 >
                   {faq.question.includes('Where can I learn more') ? (
                     <div className="pt-6 space-y-4">
-                      <p className="text-secondary-600 leading-relaxed">{faq.answer}</p>
+                      <div 
+                        className="text-secondary-600 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: parseMarkdown(faq.answer) }}
+                      />
                       <button
                         onClick={handleLearningLibraryClick}
                         className={`inline-flex items-center space-x-2 bg-primary-500 text-white ${isMobile ? 'px-6 py-4 min-h-[44px] text-sm' : 'px-6 py-3 text-base'} rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium`}
@@ -156,7 +160,10 @@ const FAQ: React.FC = () => {
                       </button>
                     </div>
                   ) : (
-                    <p className="text-secondary-600 leading-relaxed pt-6">{faq.answer}</p>
+                    <div 
+                      className="text-secondary-600 leading-relaxed pt-6"
+                      dangerouslySetInnerHTML={{ __html: parseMarkdown(faq.answer) }}
+                    />
                   )}
                 </motion.div>
               )}

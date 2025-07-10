@@ -9,6 +9,7 @@ import {
   FileText
 } from 'lucide-react';
 import { ProcedureFaq } from '../utils/parseFaqData';
+import { parseMarkdown } from '../utils/markdownParser';
 
 interface DeepDiveModalProps {
   isOpen: boolean;
@@ -189,9 +190,10 @@ const DeepDiveModal: React.FC<DeepDiveModalProps> = ({
                               className="overflow-hidden"
                             >
                               <div className="p-4 bg-white border-t border-gray-200">
-                                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                                  {faq.answer}
-                                </p>
+                                <div 
+                                  className="text-gray-700 leading-relaxed"
+                                  dangerouslySetInnerHTML={{ __html: parseMarkdown(faq.answer) }}
+                                />
                               </div>
                             </motion.div>
                           )}
