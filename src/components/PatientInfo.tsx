@@ -3,7 +3,6 @@ import { FileText, Clock, Shield, CreditCard, Phone, Mail, ArrowRight, CheckCirc
 import { motion, AnimatePresence } from 'framer-motion';
 import { faqData } from '../data/faqData';
 import Wizard from './Wizard/Wizard';
-import { parseMarkdown } from '../utils/markdownParser';
 
 const PatientInfo: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -19,11 +18,11 @@ const PatientInfo: React.FC = () => {
   });
   const [isVisible, setIsVisible] = useState(false);
   const [activeResource, setActiveResource] = useState(0);
-  const [showIntakeWizard, setShowIntakeWizard] = useState(false);
   const [activeDetail, setActiveDetail] = useState<string | null>(null);
   const [expandedFaqItems, setExpandedFaqItems] = useState<Set<number>>(new Set());
   const [calendarDate, setCalendarDate] = useState(new Date());
   const [doctorPreSelected, setDoctorPreSelected] = useState(false);
+  const [showIntakeWizard, setShowIntakeWizard] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const handleCardClick = (cardType: string) => {
@@ -352,25 +351,22 @@ ${formData.name}`;
                         </li>
                       ))}
                     </ul>
+                    {resource.hasWizard && (
+                      <div className="pt-3">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowIntakeWizard(true);
+                          }}
+                          className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                          <FileText className="w-4 h-4" />
+                          <span>Start Intake Form</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
                   
-                  {/* Circular Start Button */}
-                  {resource.hasWizard && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowIntakeWizard(true);
-                      }}
-                      className="absolute right-0 top-1/2 transform -translate-y-1/2 w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center font-semibold text-sm hover:scale-105 group"
-                      style={{
-                        boxShadow: '4px 4px 12px rgba(59, 130, 246, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1)'
-                      }}
-                    >
-                      <span className="group-hover:scale-110 transition-transform duration-200">
-                        Start
-                      </span>
-                    </button>
-                  )}
                 </div>
               </div>
             ))}
@@ -454,25 +450,22 @@ ${formData.name}`;
                         </li>
                       ))}
                     </ul>
+                    {resource.hasWizard && (
+                      <div className="pt-3">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowIntakeWizard(true);
+                          }}
+                          className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                          <FileText className="w-4 h-4" />
+                          <span>Start Intake Form</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
                   
-                  {/* Circular Start Button */}
-                  {resource.hasWizard && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowIntakeWizard(true);
-                      }}
-                      className="absolute right-0 top-1/2 transform -translate-y-1/2 w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center font-semibold text-sm hover:scale-105 group"
-                      style={{
-                        boxShadow: '4px 4px 12px rgba(59, 130, 246, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1)'
-                      }}
-                    >
-                      <span className="group-hover:scale-110 transition-transform duration-200">
-                        Start
-                      </span>
-                    </button>
-                  )}
                 </div>
               </div>
             ))}
@@ -613,8 +606,9 @@ ${formData.name}`;
                                     <div className="px-4 py-3 bg-white">
                                       <div 
                                         className="text-gray-700 leading-relaxed text-sm"
-                                        dangerouslySetInnerHTML={{ __html: parseMarkdown(faq.answer) }}
-                                      />
+                                      >
+                                        {faq.answer}
+                                      </div>
                                     </div>
                                   </motion.div>
                                 )}
@@ -1009,11 +1003,14 @@ ${formData.name}`;
               </div>
         </div>        </motion.div>
 
-        {/* Patient Intake Wizard */}
+      </div>
+
+      {/* Patient Intake Wizard Modal */}
+      <AnimatePresence>
         {showIntakeWizard && (
           <Wizard onClose={() => setShowIntakeWizard(false)} />
         )}
-      </div>
+      </AnimatePresence>
     </section>
   );
 };

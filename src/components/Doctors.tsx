@@ -15,7 +15,6 @@ const Doctors: React.FC = () => {
       expertise: ["Radial (wrist) approach coronary angiography", "Interventional cardiology", "Coronary angiograms", "General cardiology"],
       image: "/images/freilich.png",
       locations: ["Cabrini Hospital Malvern"],
-      appointments: ["Alfred Hospital", "Frankston Hospital"],
       description: "Dr Freilich is a pioneer in radial approach coronary angiography in Melbourne, having trained in this advanced technique in the United States. He specialises in interventional cardiac procedures with extensive experience in coronary interventions.",
       color: '#148792',
     },
@@ -28,7 +27,6 @@ const Doctors: React.FC = () => {
       expertise: ["Echocardiography (resting, stress, TOE)", "CT coronary angiography", "Cardiac MRI", "Multi-modality imaging"],
       image: "/images/ngu.png",
       locations: ["The Alfred Hospital"],
-      appointments: ["Alfred Hospital"],
       description: "Dr Ngu specialises in advanced cardiac imaging and uses multi-modality imaging techniques to better understand cardiac disease and improve patient outcomes. His expertise spans all forms of non-invasive cardiac assessment.",
       color: '#4a787d',
     },
@@ -41,7 +39,6 @@ const Doctors: React.FC = () => {
       expertise: ["Pacemaker implantation", "Defibrillator implantation", "Catheter ablation", "Atrial fibrillation treatment"],
       image: "/images/vosko.png",
       locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
-      appointments: ["Cabrini Hospital Malvern", "Alfred Health"],
       description: "Associate Professor Voskoboinik is a leading electrophysiologist specializing in rhythm disorders. He has extensive research experience and has won prestigious awards including the Ralph Reader Prize for top young investigator.",
       color: '#3bd7d6',
     },
@@ -54,7 +51,6 @@ const Doctors: React.FC = () => {
       expertise: ["Coronary angiography", "Coronary stenting", "Transcatheter valve procedures", "Structural heart interventions"],
       image: "/images/nanayakkara.png",
       locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
-      appointments: ["Cabrini Hospital Malvern", "Alfred Hospital"],
       description: "Dr Nanayakkara is an interventional and structural cardiologist with expertise in advanced procedures including transcatheter valve interventions. He combines clinical excellence with research innovation and has a passion for both face-to-face and telemedicine care.",
       color: '#79e7e1',
     },
@@ -62,13 +58,12 @@ const Doctors: React.FC = () => {
       name: "Dr Kate Rowe",
       title: "General Cardiologist & Cardiac Imaging Specialist",
       specialization: "Cardiac Imaging & Valvular Heart Disease",
-      education: "MBBS (Hons) Monash University 2013, Advanced training in cardiology at Alfred Hospital and Royal Darwin Hospital",
+      education: "MBBS (Hons) Monash University 2013, Advanced Cardiac Imaging Fellowships in Echocardiography, Cardiac CT and Cardiac MRI Alfred Hospital",
       degrees: "MBBS FRACP",
-      expertise: ["Cardiac CT", "Cardiac MRI", "Echocardiography (resting, stress, TOE)", "Valvular heart disease", "Indigenous health"],
-      image: "/images/katerowe.png",
-      locations: ["Cabrini Hospital Malvern", "Pakenham"],
-      appointments: ["Alfred Hospital", "Sunshine Hospital"],
-      description: "Dr Rowe is a general cardiologist and cardiac imaging specialist with particular expertise in valvular heart disease and Indigenous health. She has undertaken advanced training in cardiac CT, MRI and all forms of echocardiography.",
+      expertise: ["Cardiac CT", "Echocardiography (resting, stress, TOE)"],
+      image: "/images/kate2png.png",
+      locations: ["Cabrini Hospital Malvern", "Pakenham", "Alfred Hospital"],
+      description: "Dr Rowe is a cardiac imaging specialist and general cardiologist. Her proficiency in multimodality cardiac imaging techniques guides appropriate care of her patients with a broad range of cardiac conditions.",
       color: '#2dd4bf',
     }
   ];
@@ -198,7 +193,7 @@ const Doctors: React.FC = () => {
               </InfoSection>
 
               {/* Locations */}
-              <InfoSection icon={MapPin} title="Primary Locations">
+              <InfoSection icon={MapPin} title="Locations">
                 <ul className="space-y-1">
                   {currentDoctor.locations.map((location, idx) => (
                     <li key={idx} className="text-sm">• {location}</li>

@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, FileText, Search, BookOpen, Video, Plus } from 'lucide-react';
+import { Menu, X, FileText, Search, Video, Plus } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import ReferralForm from './ReferralForm';
-import { usePdfSelection } from '../contexts/PdfSelectionContext';
-import { starterPacks } from '../data/starterPacks';
 
 interface SearchResult {
   type: string;
@@ -29,12 +27,6 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isMobile } = useMobileDetection();
-  const { 
-    selectedProcedures, 
-    addProcedure, 
-    addStarterPack,
-    selectedPacks
-  } = usePdfSelection();
 
   // Search data - all searchable content
   const searchData = [
@@ -293,10 +285,6 @@ const Header: React.FC = () => {
     }
   };
 
-  const handleAddStarterPack = (pack: typeof starterPacks[0]) => {
-    addStarterPack(pack);
-    showToast(`Added "${pack.name}" (${pack.procedureIds.length} items) to PDF`);
-  };
 
   const showToast = (message: string) => {
     // Simple toast implementation - could be enhanced with a proper toast library
@@ -448,20 +436,6 @@ const Header: React.FC = () => {
                   <span className="text-xs font-medium">Search</span>
                 </motion.button>
 
-                {/* Library Link */}
-                <motion.button
-                  onClick={() => navigate('/learning-library')}
-                  className={`flex items-center space-x-1 px-2 py-2 rounded-xl text-xs font-medium transition-all duration-200 whitespace-nowrap ${
-                    location.pathname === '/learning-library'
-                      ? 'text-primary-600 bg-primary-50/80'
-                      : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50/50'
-                  }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <BookOpen className="w-3 h-3" />
-                  <span>Library</span>
-                </motion.button>
               </nav>
 
               {/* Right side content */}
@@ -567,32 +541,6 @@ const Header: React.FC = () => {
                       </button>
                     </div>
 
-                    {/* Starter Pack Chips */}
-                    <div className="mb-4">
-                      <div className="text-sm font-medium text-secondary-700 mb-2">Quick Start Packs:</div>
-                      <div className="flex flex-wrap gap-2">
-                        {starterPacks.map((pack, index) => (
-                          <motion.button
-                            key={pack.id}
-                            onClick={() => handleAddStarterPack(pack)}
-                            className={`px-3 py-1 text-xs rounded-full transition-all duration-200 flex items-center space-x-1 ${
-                              selectedPacks.has(pack.id)
-                                ? 'bg-primary-600 text-white'
-                                : 'bg-primary-100 text-primary-700 hover:bg-primary-200'
-                            }`}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.05 }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            <Plus className="w-3 h-3" />
-                            <span>{pack.name}</span>
-                            <span className="text-xs opacity-70">({pack.procedureIds.length})</span>
-                          </motion.button>
-                        ))}
-                      </div>
-                    </div>
 
                     {/* Popover Search Results */}
                     <AnimatePresence>
@@ -798,25 +746,6 @@ const Header: React.FC = () => {
                       </motion.button>
                     ))}
 
-                    {/* Mobile Library Link */}
-                    <motion.button
-                      onClick={() => {
-                        navigate('/learning-library');
-                        setIsMenuOpen(false);
-                      }}
-                      className={`flex items-center space-x-2 w-full text-left py-3 px-4 rounded-lg text-sm font-medium transition-all duration-200 ${
-                        location.pathname === '/learning-library'
-                          ? 'bg-primary-50/80 text-primary-600'
-                          : 'text-secondary-600 hover:bg-primary-50/50 hover:text-primary-600'
-                      }`}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: navItems.length * 0.05 }}
-                      whileHover={{ x: 4 }}
-                    >
-                      <BookOpen className="w-4 h-4" />
-                      <span>Library</span>
-                    </motion.button>
                     
                     {/* Mobile Action Buttons */}
                     <div className="pt-4 space-y-2 border-t border-secondary-200/50">

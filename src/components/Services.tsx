@@ -1,82 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, BookOpen, Search } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, Search } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 
 const Services: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string | null>('consultation');
   const [isPaused, setIsPaused] = useState(false);
-  const navigate = useNavigate();
   const { isMobile } = useMobileDetection();
 
   // Check for reduced motion preference
   const prefersReducedMotion = typeof window !== 'undefined' && 
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Educational content mapping for services that have learning library content
-  const educationalLinks = {
-    'angiography': {
-      hasContent: true,
-      learningPath: 'journey-maps',
-      procedure: 'angiogram_pci',
-      title: 'Learn about the complete coronary angiography journey'
-    },
-    'tavi': {
-      hasContent: true,
-      learningPath: 'journey-maps', 
-      procedure: 'tavi',
-      title: 'Explore the TAVI procedure journey and what to expect'
-    },
-    'consultation': {
-      hasContent: true,
-      learningPath: 'tests',
-      procedure: 'consultation',
-      title: 'Common questions about cardiac consultations'
-    },
-    'toe': {
-      hasContent: true,
-      learningPath: 'journey-maps',
-      procedure: 'toe_dcr',
-      title: 'Learn more about TOE procedures and imaging'
-    },
-    'toe-dcr': {
-      hasContent: true,
-      learningPath: 'journey-maps',
-      procedure: 'toe_dcr',
-      title: 'Learn about TOE-guided cardioversion process'
-    },
-    'af-ablation': {
-      hasContent: true,
-      learningPath: 'journey-maps',
-      procedure: 'af_ablation',
-      title: 'Understand the AF ablation procedure journey'
-    },
-    'pacemaker': {
-      hasContent: true,
-      learningPath: 'journey-maps',
-      procedure: 'pacemaker',
-      title: 'Learn about pacemaker implantation process'
-    },
-    'echocardiography': {
-      hasContent: true,
-      learningPath: 'tests',
-      procedure: 'echocardiography',
-      title: 'Learn about echocardiography and cardiac imaging'
-    },
-    'stress-echo': {
-      hasContent: true,
-      learningPath: 'tests',
-      procedure: 'stress-test',
-      title: 'Understand stress echocardiography testing'
-    },
-    'holter': {
-      hasContent: true,
-      learningPath: 'tests',
-      procedure: 'holter',
-      title: 'Understanding heart rhythm monitoring'
-    }
-  };
 
   // Auto-cycling through services
   useEffect(() => {
@@ -100,17 +35,6 @@ const Services: React.FC = () => {
     setTimeout(() => setIsPaused(false), 10000);
   };
 
-  const handleLearnMore = (serviceId: string) => {
-    const linkInfo = educationalLinks[serviceId as keyof typeof educationalLinks];
-    if (linkInfo?.hasContent) {
-      const focusParam = linkInfo.procedure;
-      const targetUrl = `/learning-library?tab=${linkInfo.learningPath}&focus=${focusParam}`;
-      console.log('Navigating to:', targetUrl, 'for service:', serviceId, 'with linkInfo:', linkInfo);
-      navigate(targetUrl);
-    } else {
-      console.log('No educational content found for service:', serviceId);
-    }
-  };
 
   /** Small fact cell used in the expanded card */
   const QuickFact = ({
@@ -392,22 +316,6 @@ const Services: React.FC = () => {
                         <QuickFact icon={FileText} title="Cost" value={s.cost} />
                       </div>
 
-                      {/* Learn More Button */}
-                      {educationalLinks[s.id as keyof typeof educationalLinks]?.hasContent && (
-                        <motion.button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            console.log('Learn More button clicked for:', s.id);
-                            handleLearnMore(s.id);
-                          }}
-                          className={`w-full bg-sage-500 text-white ${isMobile ? 'py-4 min-h-[44px]' : 'py-3'} rounded-xl flex items-center justify-center space-x-2 hover:bg-sage-600 transition-colors duration-200`}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                        >
-                          <BookOpen className="w-4 h-4" />
-                          <span>Learn More in Library</span>
-                        </motion.button>
-                      )}
                     </motion.div>
                   );
                 })()}

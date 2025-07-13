@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, FileText, Search, ExternalLink } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { ChevronDown, FileText, Search } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import { faqData } from '../data/faqData';
-import { parseMarkdown } from '../utils/markdownParser';
 
 const FAQ: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,9 +11,6 @@ const FAQ: React.FC = () => {
   const navigate = useNavigate();
   const { isMobile } = useMobileDetection();
 
-  const handleLearningLibraryClick = () => {
-    navigate('/learning-library');
-  };
 
   const filteredFAQs = faqData.filter(faq => {
     const matchesCategory = selectedCategory === 'all' || faq.category === selectedCategory;
@@ -149,21 +144,16 @@ const FAQ: React.FC = () => {
                     <div className="pt-6 space-y-4">
                       <div 
                         className="text-secondary-600 leading-relaxed"
-                        dangerouslySetInnerHTML={{ __html: parseMarkdown(faq.answer) }}
-                      />
-                      <button
-                        onClick={handleLearningLibraryClick}
-                        className={`inline-flex items-center space-x-2 bg-primary-500 text-white ${isMobile ? 'px-6 py-4 min-h-[44px] text-sm' : 'px-6 py-3 text-base'} rounded-xl hover:bg-primary-600 transition-colors duration-200 font-medium`}
                       >
-                        <span>Visit Library</span>
-                        <ExternalLink className="w-4 h-4" />
-                      </button>
+                        {faq.answer}
+                      </div>
                     </div>
                   ) : (
                     <div 
                       className="text-secondary-600 leading-relaxed pt-6"
-                      dangerouslySetInnerHTML={{ __html: parseMarkdown(faq.answer) }}
-                    />
+                    >
+                      {faq.answer}
+                    </div>
                   )}
                 </motion.div>
               )}

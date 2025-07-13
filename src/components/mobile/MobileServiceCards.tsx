@@ -1,75 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Activity, Stethoscope, Zap, Clock, Search, MapPin, ArrowRight, Phone, FileText } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 const MobileServiceCards: React.FC = () => {
   const [selectedService, setSelectedService] = useState(0);
-  const navigate = useNavigate();
 
-  // Educational content mapping for services that have learning library content
-  const educationalLinks = {
-    'consultation': {
-      hasContent: true,
-      learningPath: 'tests',
-      procedure: 'consultation',
-      title: 'Common questions about cardiac consultations'
-    },
-    'echocardiography': {
-      hasContent: true,
-      learningPath: 'tests',
-      procedure: 'echocardiography',
-      title: 'Learn about echocardiography and cardiac imaging'
-    },
-    'holter': {
-      hasContent: true,
-      learningPath: 'tests',
-      procedure: 'holter',
-      title: 'Understanding heart rhythm monitoring'
-    },
-    'angiography': {
-      hasContent: true,
-      learningPath: 'journey-maps',
-      procedure: 'angiogram_pci',
-      title: 'Learn about the complete coronary angiography journey'
-    },
-    'stress-echo': {
-      hasContent: true,
-      learningPath: 'tests',
-      procedure: 'stress-test',
-      title: 'Understand stress echocardiography testing'
-    },
-    'toe': {
-      hasContent: true,
-      learningPath: 'journey-maps',
-      procedure: 'toe_dcr',
-      title: 'Learn more about TOE procedures and imaging'
-    },
-    'toe-dcr': {
-      hasContent: true,
-      learningPath: 'journey-maps',
-      procedure: 'toe_dcr',
-      title: 'Learn about TOE-guided cardioversion process'
-    },
-    'af-ablation': {
-      hasContent: true,
-      learningPath: 'journey-maps',
-      procedure: 'af_ablation',
-      title: 'Understand the AF ablation procedure journey'
-    },
-    'tavi': {
-      hasContent: true,
-      learningPath: 'journey-maps',
-      procedure: 'tavi',
-      title: 'Explore the TAVI procedure journey and what to expect'
-    },
-    'pacemaker': {
-      hasContent: true,
-      learningPath: 'journey-maps',
-      procedure: 'pacemaker',
-      title: 'Learn about pacemaker implantation process'
-    }
-  };
+  // Educational content mapping removed - Learning Library moved to separate site
 
   const services = [
     {
@@ -222,16 +158,9 @@ const MobileServiceCards: React.FC = () => {
     // Could navigate to service detail page or open modal
   };
 
-  const handleLearnMore = (serviceId: string) => {
-    const linkInfo = educationalLinks[serviceId as keyof typeof educationalLinks];
-    if (linkInfo?.hasContent) {
-      const focusParam = linkInfo.procedure;
-      const targetUrl = `/learning-library?tab=${linkInfo.learningPath}&focus=${focusParam}`;
-      console.log('Navigating to:', targetUrl, 'for service:', serviceId, 'with linkInfo:', linkInfo);
-      navigate(targetUrl);
-    } else {
-      console.log('No educational content found for service:', serviceId);
-    }
+  const handleLearnMore = (_serviceId: string) => {
+    // Learning Library has been moved to a separate site
+    console.log('Learning Library is now available as a separate application');
   };
 
   return (

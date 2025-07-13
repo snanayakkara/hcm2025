@@ -10,9 +10,7 @@ import ReceptionTeam from './components/ReceptionTeam';
 import PatientInfo from './components/PatientInfo';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import LearningLibrary from './pages/LearningLibrary';
 import MobileLayout from './components/mobile/MobileLayout';
-import { PdfSelectionProvider } from './contexts/PdfSelectionContext';
 
 function HomePage() {
   const { isMobile } = useMobileDetection();
@@ -188,91 +186,74 @@ function App() {
   // If mobile, use MobileLayout exclusively
   if (isMobile) {
     return (
-      <PdfSelectionProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={
-              <MobileLayout 
-                currentPage={currentPage} 
-                onPageChange={setCurrentPage} 
-              />
-            } />
-            <Route path="/learning-library" element={
-              <div className="min-h-screen overflow-x-hidden pb-24">
-                <div className="pt-20 px-4">
-                  <LearningLibrary />
-                </div>
-              </div>
-            } />
-          </Routes>
-        </Router>
-      </PdfSelectionProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={
+            <MobileLayout 
+              currentPage={currentPage} 
+              onPageChange={setCurrentPage} 
+            />
+          } />
+        </Routes>
+      </Router>
     );
   }
 
   // Desktop layout
   return (
-    <PdfSelectionProvider>
-      <Router>
-        <div className="min-h-screen relative overflow-x-hidden">
-          {/* Enhanced Animated Background */}
-          <div className="fixed inset-0 z-0">
-            {/* Base gradient with animation */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#fcdfbe] via-[#fef3e2] to-[#ffd3c2] animate-gradient-shift" 
-                 style={{ backgroundSize: '400% 400%' }} />
-            
-            {/* Floating orbs */}
-            <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-primary-200/20 to-accent-200/20 rounded-full blur-xl animate-floating-orbs" 
-                 style={{ animationDelay: '0s' }} />
-            <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-sage-200/15 to-primary-200/15 rounded-full blur-lg animate-floating-orbs" 
-                 style={{ animationDelay: '2s' }} />
-            <div className="absolute bottom-40 left-1/4 w-40 h-40 bg-gradient-to-br from-accent-200/10 to-cream-200/20 rounded-full blur-2xl animate-floating-orbs" 
-                 style={{ animationDelay: '4s' }} />
-            <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-gradient-to-br from-cream-200/25 to-sage-200/15 rounded-full blur-md animate-floating-orbs" 
-                 style={{ animationDelay: '6s' }} />
-            
-            {/* Liquid flowing shapes */}
-            <div className="absolute top-32 right-40 w-64 h-64 bg-gradient-to-br from-primary-100/10 to-accent-100/10 animate-liquid-flow blur-xl" 
-                 style={{ animationDelay: '1s' }} />
-            <div className="absolute bottom-20 left-20 w-48 h-48 bg-gradient-to-br from-sage-100/8 to-cream-100/12 animate-liquid-flow blur-lg" 
-                 style={{ animationDelay: '8s' }} />
-            
-            {/* Subtle grid overlay */}
-            <div className="absolute inset-0 opacity-30">
-              <div className="w-full h-full animate-gentle-grid"
-                   style={{
-                     backgroundImage: `
-                       linear-gradient(rgba(8, 145, 178, 0.02) 1px, transparent 1px),
-                       linear-gradient(90deg, rgba(8, 145, 178, 0.02) 1px, transparent 1px)
-                     `,
-                     backgroundSize: '60px 60px'
-                   }} />
-            </div>
-            
-            {/* Floating particles */}
-            <div className="absolute top-60 left-1/2 w-2 h-2 bg-primary-300/40 rounded-full animate-subtle-float blur-sm" 
-                 style={{ animationDelay: '1s' }} />
-            <div className="absolute top-80 right-1/4 w-1 h-1 bg-accent-300/50 rounded-full animate-subtle-float" 
-                 style={{ animationDelay: '3s' }} />
-            <div className="absolute bottom-60 left-1/3 w-3 h-3 bg-sage-300/30 rounded-full animate-subtle-float blur-sm" 
-                 style={{ animationDelay: '5s' }} />
+    <Router>
+      <div className="min-h-screen relative overflow-x-hidden">
+        {/* Enhanced Animated Background */}
+        <div className="fixed inset-0 z-0">
+          {/* Base gradient with animation */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#fcdfbe] via-[#fef3e2] to-[#ffd3c2] animate-gradient-shift" 
+               style={{ backgroundSize: '400% 400%' }} />
+          
+          {/* Floating orbs */}
+          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-primary-200/20 to-accent-200/20 rounded-full blur-xl animate-floating-orbs" 
+               style={{ animationDelay: '0s' }} />
+          <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-sage-200/15 to-primary-200/15 rounded-full blur-lg animate-floating-orbs" 
+               style={{ animationDelay: '2s' }} />
+          <div className="absolute bottom-40 left-1/4 w-40 h-40 bg-gradient-to-br from-accent-200/10 to-cream-200/20 rounded-full blur-2xl animate-floating-orbs" 
+               style={{ animationDelay: '4s' }} />
+          <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-gradient-to-br from-cream-200/25 to-sage-200/15 rounded-full blur-md animate-floating-orbs" 
+               style={{ animationDelay: '6s' }} />
+          
+          {/* Liquid flowing shapes */}
+          <div className="absolute top-32 right-40 w-64 h-64 bg-gradient-to-br from-primary-100/10 to-accent-100/10 animate-liquid-flow blur-xl" 
+               style={{ animationDelay: '1s' }} />
+          <div className="absolute bottom-20 left-20 w-48 h-48 bg-gradient-to-br from-sage-100/8 to-cream-100/12 animate-liquid-flow blur-lg" 
+               style={{ animationDelay: '8s' }} />
+          
+          {/* Subtle grid overlay */}
+          <div className="absolute inset-0 opacity-30">
+            <div className="w-full h-full animate-gentle-grid"
+                 style={{
+                   backgroundImage: `
+                     linear-gradient(rgba(8, 145, 178, 0.02) 1px, transparent 1px),
+                     linear-gradient(90deg, rgba(8, 145, 178, 0.02) 1px, transparent 1px)
+                   `,
+                   backgroundSize: '60px 60px'
+                 }} />
           </div>
           
-          <div className="relative z-10">
-            <Header />
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/learning-library" element={
-                <>
-                  <LearningLibrary />
-                  <Footer />
-                </>
-              } />
-            </Routes>
-          </div>
+          {/* Floating particles */}
+          <div className="absolute top-60 left-1/2 w-2 h-2 bg-primary-300/40 rounded-full animate-subtle-float blur-sm" 
+               style={{ animationDelay: '1s' }} />
+          <div className="absolute top-80 right-1/4 w-1 h-1 bg-accent-300/50 rounded-full animate-subtle-float" 
+               style={{ animationDelay: '3s' }} />
+          <div className="absolute bottom-60 left-1/3 w-3 h-3 bg-sage-300/30 rounded-full animate-subtle-float blur-sm" 
+               style={{ animationDelay: '5s' }} />
         </div>
-      </Router>
-    </PdfSelectionProvider>
+        
+        <div className="relative z-10">
+          <Header />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 }
 
