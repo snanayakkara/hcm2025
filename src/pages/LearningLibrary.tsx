@@ -484,7 +484,7 @@ const LearningLibrary: React.FC = () => {
   });
 
   /**
-   * Maps the plain‑language test names shown in each condition card
+   * Maps the plainlanguage test names shown in each condition card
    * to the corresponding key in `procedureJourneys`.
    * When a test appears in this map, we can jump straight to the
    * “Tests & Procedures” tab and open the matching card.
@@ -526,7 +526,7 @@ const LearningLibrary: React.FC = () => {
 
   /**
    * When a test “pill” is clicked we switch to the
-   * Tests & Procedures tab, open the relevant journey,
+   * Tests&Procedures tab, open the relevant journey,
    * and smoothly scroll to the top.
    */
   const handleTestClick = (testName: string) => {

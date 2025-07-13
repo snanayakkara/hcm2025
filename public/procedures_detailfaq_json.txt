@@ -245,12 +245,12 @@
     "procedure": "Right Heart Catheterisation (RHC)",
     "faq": [
       {
-        "question": "What is a right‑heart catheterisation?",
-        "answer": "A right‑heart catheterisation (RHC) is a test where a thin catheter is passed through a large vein—usually in your neck or groin—into the right side of the heart and pulmonary artery to directly measure blood pressures and oxygen levels. It provides information that ultrasound and CT scanning can only estimate, and is considered the gold‑standard test for diagnosing pulmonary hypertension, assessing advanced heart‑failure patients, and guiding some valve and congenital‑heart treatments."
+        "question": "What is a rightheart catheterisation?",
+        "answer": "A rightheart catheterisation (RHC) is a test where a thin catheter is passed through a large vein—usually in your neck or groin—into the right side of the heart and pulmonary artery to directly measure blood pressures and oxygen levels. It provides information that ultrasound and CT scanning can only estimate, and is considered the goldstandard test for diagnosing pulmonary hypertension, assessing advanced heartfailure patients, and guiding some valve and congenitalheart treatments."
       },
       {
         "question": "Why might I need an RHC?",
-        "answer": "You may need an RHC if your doctor suspects pulmonary hypertension, needs to understand why you are short‑of‑breath, is evaluating you for advanced heart‑failure therapies or transplant, or wants to confirm pressures before and after certain valve or shunt procedures. The test can also help tailor medications—such as diuretics, pulmonary‑vasodilators or inotropes—by showing exactly how your heart and lungs respond."
+        "answer": "You may need an RHC if your doctor suspects pulmonary hypertension, needs to understand why you are shortofbreath, is evaluating you for advanced heartfailure therapies or transplant, or wants to confirm pressures before and after certain valve or shunt procedures. The test can also help tailor medications—such as diuretics, pulmonaryvasodilators or inotropes—by showing exactly how your heart and lungs respond."
       },
       {
         "question": "How do I prepare for the test?",
@@ -258,11 +258,11 @@
       },
       {
         "question": "What happens during the procedure?",
-        "answer": "You are brought to the catheter lab, connected to monitors and given local anaesthetic plus light sedation. A small sheath is placed into a neck (internal‑jugular) or groin (femoral) vein. A balloon‑tipped Swan‑Ganz catheter is floated, under pressure‑waveform guidance, through the right atrium, right ventricle and into the pulmonary artery. Measurements are taken at each site and a sample of blood might be drawn for oxygen analysis. Most patients feel only mild pressure at the puncture site; the heart itself has no pain nerves."
+        "answer": "You are brought to the catheter lab, connected to monitors and given local anaesthetic plus light sedation. A small sheath is placed into a neck (internaljugular) or groin (femoral) vein. A balloontipped SwanGanz catheter is floated, under pressurewaveform guidance, through the right atrium, right ventricle and into the pulmonary artery. Measurements are taken at each site and a sample of blood might be drawn for oxygen analysis. Most patients feel only mild pressure at the puncture site; the heart itself has no pain nerves."
       },
       {
         "question": "What is exercise RHC with supine cycle ergometry?",
-        "answer": "Some centres repeat key pressure measurements while you pedal a small bicycle attached to the table while lying flat (supine cycle ergometry). This ‘exercise RHC’ shows how your heart‑lung pressures behave during exertion and can unmask problems—such as exercise‑induced pulmonary hypertension or abnormal left‑heart filling pressures—that are hidden at rest. Pedalling usually lasts 3–6 minutes at low‑to‑moderate resistance, and you can stop any time if uncomfortable."
+        "answer": "Some centres repeat key pressure measurements while you pedal a small bicycle attached to the table while lying flat (supine cycle ergometry). This ‘exercise RHC’ shows how your heartlung pressures behave during exertion and can unmask problems—such as exerciseinduced pulmonary hypertension or abnormal leftheart filling pressures—that are hidden at rest. Pedalling usually lasts 3–6 minutes at lowtomoderate resistance, and you can stop any time if uncomfortable."
       },
       {
         "question": "What are the risks and recovery?",
@@ -324,7 +324,7 @@
       },
       {
         "question": "What happens after the TOE + DCR?",
-        "answer": "After the procedure, you’ll be moved to a recovery area. Expect to feel groggy for a little while. Nurses will monitor you as you wake up. You may have a mild sore throat from the TOE. You’ll typically go home the same day once fully awake and stable. Because of the sedation, you cannot drive that day. Take it easy for the rest of the day; most people feel back to usual by the next day. You’ll continue your blood thinner for at least several weeks and see your cardiologist for follow‑up."
+        "answer": "After the procedure, you’ll be moved to a recovery area. Expect to feel groggy for a little while. Nurses will monitor you as you wake up. You may have a mild sore throat from the TOE. You’ll typically go home the same day once fully awake and stable. Because of the sedation, you cannot drive that day. Take it easy for the rest of the day; most people feel back to usual by the next day. You’ll continue your blood thinner for at least several weeks and see your cardiologist for followup."
       }
     ]
   },
@@ -345,7 +345,7 @@
       },
       {
         "question": "What happens during an SVT ablation?",
-        "answer": "Under local anaesthetic and sedation, catheters are inserted via the groin. The arrhythmia is mapped and radio‑frequency or cryo energy is delivered to eliminate it. The procedure takes 1–2 hours. You do not feel pain, only mild pressure or chest flutter."
+        "answer": "Under local anaesthetic and sedation, catheters are inserted via the groin. The arrhythmia is mapped and radiofrequency or cryo energy is delivered to eliminate it. The procedure takes 1–2 hours. You do not feel pain, only mild pressure or chest flutter."
       },
       {
         "question": "What are the risks of an SVT ablation?",
@@ -366,7 +366,7 @@
       },
       {
         "question": "Why might I need an ILR?",
-        "answer": "ILRs are used to investigate unexplained fainting, palpitations, or cryptogenic stroke when short‑term monitors have not found the cause."
+        "answer": "ILRs are used to investigate unexplained fainting, palpitations, or cryptogenic stroke when shortterm monitors have not found the cause."
       },
       {
         "question": "How is an ILR implanted?",
@@ -391,27 +391,27 @@
     "faq": [
       {
         "question": "What is the Ross procedure?",
-        "answer": "The Ross procedure is an open‑heart surgery where your own pulmonary valve is moved to replace a diseased aortic valve. A donated cryo‑preserved valve (homograft) is then placed where the pulmonary valve was. Because the new aortic valve is living tissue from your body, it grows, heals and works like a normal valve without needing lifelong warfarin."
+        "answer": "The Ross procedure is an openheart surgery where your own pulmonary valve is moved to replace a diseased aortic valve. A donated cryopreserved valve (homograft) is then placed where the pulmonary valve was. Because the new aortic valve is living tissue from your body, it grows, heals and works like a normal valve without needing lifelong warfarin."
       },
       {
         "question": "Who might benefit from a Ross procedure?",
-        "answer": "It is mainly offered to children, teenagers and adults under about 50 who have severe aortic valve disease (often congenital bicuspid stenosis) and want to avoid a mechanical valve and lifelong anticoagulation. Australian guidelines advise it be done in high‑volume centres experienced in the technique."
+        "answer": "It is mainly offered to children, teenagers and adults under about 50who have severe aortic valve disease (often congenital bicuspid stenosis) and want to avoid a mechanical valve and lifelong anticoagulation. Australian guidelines advise it be done in highvolume centres experienced in the technique."
       },
       {
         "question": "What are the advantages and disadvantages?",
-        "answer": "Benefits include excellent long‑term survival, ability to participate in sport without warfarin, low risk of valve infection, and the autograft’s capacity to grow in children. Downsides are a longer operation involving two valves, potential dilation of the pulmonary autograft over decades, and risk that the pulmonary homograft may eventually need replacement."
+        "answer": "Benefits include excellent longterm survival, ability to participate in sport without warfarin, low risk of valve infection, and the autograft’s capacity to grow in children. Downsides are a longer operation involving two valves, potential dilation of the pulmonary autograft over decades, and risk that the pulmonary homograft may eventually need replacement."
       },
       {
         "question": "How is the surgery performed?",
-        "answer": "Under general anaesthetic and heart‑lung bypass, the surgeon removes the diseased aortic valve, mobilises your pulmonary valve and roots it into the aortic position, then sews in a homograft in the right‑ventricular outflow tract. Operation time is 4–6 hours and hospital stay is about a week."
+        "answer": "Under general anaesthetic and heartlung bypass, the surgeon removes the diseased aortic valve, mobilises your pulmonary valve and roots it into the aortic position, then sews in a homograft in the rightventricular outflow tract. Operation time is 4–6hours and hospital stay is about a week."
       },
       {
-        "question": "What is the recovery and follow‑up?",
-        "answer": "Sternal healing takes 6–8 weeks. Cardiac rehabilitation is encouraged. You will need regular echocardiograms—initially at 6 weeks, 6 months, then yearly—to watch both valves. Most patients return to full activity including contact sports once cleared."
+        "question": "What is the recovery and followup?",
+        "answer": "Sternal healing takes 6–8weeks. Cardiac rehabilitation is encouraged. You will need regular echocardiograms—initially at 6weeks, 6months, then yearly—to watch both valves. Most patients return to full activity including contact sports once cleared."
       },
       {
-        "question": "What are the long‑term results?",
-        "answer": "Australian and international series show >90 % freedom from re‑operation at 10 years. If either valve deteriorates later, options include transcatheter valve‑in‑valve procedures or redo surgery."
+        "question": "What are the longterm results?",
+        "answer": "Australian and international series show >90 % freedom from reoperation at 10years. If either valve deteriorates later, options include transcatheter valveinvalve procedures or redo surgery."
       }
     ]
   },
@@ -424,23 +424,23 @@
       },
       {
         "question": "When is replacement chosen over repair?",
-        "answer": "Repair is preferred, but if the valve leaflets are rigid, heavily calcified or shortened, or previous repair has failed, replacement gives a better and safer result. Your heart team decides this based on echocardiography and intra‑operative findings."
+        "answer": "Repair is preferred, but if the valve leaflets are rigid, heavily calcified or shortened, or previous repair has failed, replacement gives a better and safer result. Your heart team decides this based on echocardiography and intraoperative findings."
       },
       {
         "question": "Mechanical versus tissue valve—how do I choose?",
-        "answer": "Mechanical valves last a lifetime but require lifelong warfarin. Tissue valves avoid warfarin (after 3 months of anticoagulation) but slowly wear out—lasting 10–20 years depending on age. Younger patients often opt for mechanical; those >65 or unable to take warfarin often choose tissue."
+        "answer": "Mechanical valves last a lifetime but require lifelong warfarin. Tissue valves avoid warfarin (after 3months of anticoagulation) but slowly wear out—lasting 10–20years depending on age. Younger patients often opt for mechanical; those >65or unable to take warfarin often choose tissue."
       },
       {
         "question": "How is the operation done and what are the risks?",
-        "answer": "Under general anaesthetic and on heart‑lung bypass via median sternotomy or minimally invasive approach, the surgeon excises the native valve and sews in the prosthesis. Major risks include bleeding, stroke, infection, atrial fibrillation and, rarely, death (1–3 % in elective Australian practice)."
+        "answer": "Under general anaesthetic and on heartlung bypass via median sternotomy or minimally invasive approach, the surgeon excises the native valve and sews in the prosthesis. Major risks include bleeding, stroke, infection, atrial fibrillation and, rarely, death (1–3 % in elective Australian practice)."
       },
       {
         "question": "What is the recovery like?",
-        "answer": "ICU stay is 1–2 days, ward 4–5 days. Sternal precautions for 6 weeks. Warfarin for mechanical valves is managed by your GP or anticoagulation clinic. Cardiac rehab starts at 3–4 weeks."
+        "answer": "ICU stay is 1–2days, ward 4–5days. Sternal precautions for 6weeks. Warfarin for mechanical valves is managed by your GP or anticoagulation clinic. Cardiac rehab starts at 3–4weeks."
       },
       {
-        "question": "Long‑term follow‑up and lifestyle?",
-        "answer": "Annual echocardiography checks valve function. Mechanical valves require strict INR monitoring; tissue valves need endocarditis prophylaxis for dental work. Most patients resume normal activity by 3 months."
+        "question": "Longterm followup and lifestyle?",
+        "answer": "Annual echocardiography checks valve function. Mechanical valves require strict INR monitoring; tissue valves need endocarditis prophylaxis for dental work. Most patients resume normal activity by 3months."
       }
     ]
   },
@@ -457,11 +457,11 @@
       },
       {
         "question": "How do I prepare?",
-        "answer": "Wear a loose two‑piece outfit to the appointment. Bathe beforehand—no showering once the monitor is on. Avoid lotions or oils on the chest so electrodes stick well."
+        "answer": "Wear a loose twopiece outfit to the appointment. Bathe beforehand—no showering once the monitor is on. Avoid lotions or oils on the chest so electrodes stick well."
       },
       {
         "question": "What happens while I’m wearing it?",
-        "answer": "Five small sticky electrodes attach to your chest and connect to a matchbox‑sized recorder clipped to your belt. You’ll keep a diary of symptoms and activities. Continue usual daily routine but avoid getting the device wet and stay away from very strong magnets."
+        "answer": "Five small sticky electrodes attach to your chest and connect to a matchboxsized recorder clipped to your belt. You’ll keep a diary of symptoms and activities. Continue usual daily routine but avoid getting the device wet and stay away from very strong magnets."
       },
       {
         "question": "Will it affect my activities?",

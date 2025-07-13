@@ -1,8 +1,9 @@
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import * as fontkit from 'fontkit';
-import { IntakeForm } from '../../types/intake';
-import { FaqItem } from '../../utils/parseFaqData';
-import { parseMarkdownForPdf } from '../../utils/markdownParser';
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import * as fontkit from "fontkit";
+import { IntakeForm } from "../../types/intake";
+import { FaqItem } from "../../utils/parseFaqData";
+import { parseMarkdownForPdf } from "../../utils/markdownParser";
+import { cleanText } from "../../utils/cleanText";
 
 interface ProcedureData {
   name: string;
@@ -21,66 +22,24 @@ interface ProcedureData {
   faqs?: FaqItem[];
 }
 
-// Inter font URLs from Google Fonts
-const INTER_REGULAR_URL = 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2';
-const INTER_BOLD_URL = 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuDyfAZ9hiJ-Ek-_EeA.woff2';
-
-async function fetchFont(url: string): Promise<ArrayBuffer> {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch font: ${response.status}`);
-    }
-    return await response.arrayBuffer();
-  } catch (error) {
-    console.warn('Failed to load Inter font, falling back to Helvetica:', error);
-    throw error;
-  }
-}
-
-// Clean text function to handle special characters that can't be encoded in WinAnsi
-function cleanText(text: string): string {
-  return text
-    // Replace all types of dash characters with regular ASCII hyphen
-    .replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, '-') // Various dash and minus characters
-    // Replace smart quotes with regular quotes
-    .replace(/[\u2018\u2019]/g, "'") // Replace smart quotes with regular apostrophe
-    .replace(/[\u201C\u201D]/g, '"') // Replace smart quotes with regular quotes
-    // Replace various bracket characters with standard ASCII brackets
-    .replace(/[\u2768\u276A\u276C\u276E]/g, '(') // Various opening parentheses
-    .replace(/[\u2769\u276B\u276D\u276F]/g, ')') // Various closing parentheses
-    .replace(/[\u3008\u3010\u3014\u3016\u3018\u301A]/g, '(') // CJK opening brackets
-    .replace(/[\u3009\u3011\u3015\u3017\u3019\u301B]/g, ')') // CJK closing brackets
-    .replace(/[\u2039]/g, '<') // Single left-pointing angle quotation mark
-    .replace(/[\u203A]/g, '>') // Single right-pointing angle quotation mark
-    .replace(/[\u2026]/g, '...') // Replace ellipsis with three dots
-    // Remove zero-width and invisible characters that might cause spacing issues
-    .replace(/[\u200B\u200C\u200D\u2060\uFEFF]/g, '') // Zero-width spaces and BOM
-    .replace(/[\u00A0]/g, ' ') // Non-breaking spaces to regular spaces
-    // Handle specific patterns with special characters
-    .replace(/(\d+)\s*[\u2010-\u2015\u2212]\s*(\d+)/g, '$1-$2') // Numbers with dashes, no spaces
-    .replace(/\s*[\u2768-\u276F\u3008-\u301B]\s*/g, ' (') // Clean spacing around various brackets
-    // Clean up any remaining non-ASCII characters
-    .replace(/[^\x00-\x7F]/g, '')
-    // Normalize whitespace
-    .replace(/\s+/g, ' ')
-    .trim();
-}
+// Using Helvetica fonts with cleanText utility for reliable PDF generation
 
 async function fetchLogo(): Promise<ArrayBuffer> {
   try {
-    const response = await fetch('/images/hcm3d2.png');
+    const response = await fetch("/images/hcm3d2.png");
     if (!response.ok) {
       throw new Error(`Failed to fetch logo: ${response.status}`);
     }
     return await response.arrayBuffer();
   } catch (error) {
-    console.warn('Failed to load logo:', error);
+    console.warn("Failed to load logo:", error);
     throw error;
   }
 }
 
-async function fetchProcedureImage(imagePath: string): Promise<ArrayBuffer | null> {
+async function fetchProcedureImage(
+  imagePath: string,
+): Promise<ArrayBuffer | null> {
   try {
     const response = await fetch(imagePath);
     if (!response.ok) {
@@ -95,28 +54,16 @@ async function fetchProcedureImage(imagePath: string): Promise<ArrayBuffer | nul
 
 export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
   const pdfDoc = await PDFDocument.create();
-  
+
   // Register fontkit for custom font support
   pdfDoc.registerFontkit(fontkit);
-  
+
   const page = pdfDoc.addPage([595.28, 841.89]); // A4 size in points
   const { width, height } = page.getSize();
-  
-  // Try to load Inter fonts, fallback to Helvetica if failed
-  let font, boldFont;
-  try {
-    const [regularFontBytes, boldFontBytes] = await Promise.all([
-      fetchFont(INTER_REGULAR_URL),
-      fetchFont(INTER_BOLD_URL)
-    ]);
-    
-    font = await pdfDoc.embedFont(regularFontBytes);
-    boldFont = await pdfDoc.embedFont(boldFontBytes);
-  } catch (error) {
-    console.warn('Using fallback fonts:', error);
-    font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-  }
+
+  // Use reliable Helvetica fonts with cleanText for Unicode handling
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
   // Try to load and embed logo
   let logo = null;
@@ -124,38 +71,43 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     const logoBytes = await fetchLogo();
     logo = await pdfDoc.embedPng(logoBytes);
   } catch (error) {
-    console.warn('Logo not available, proceeding without logo:', error);
+    console.warn("Logo not available, proceeding without logo:", error);
   }
-  
+
   const marginLeft = 60;
   const marginRight = 60;
   const marginTop = 60;
   const logoHeight = 50;
   const logoWidth = 50;
   let currentY = height - marginTop;
-  
+
   // Color palette - Updated to match teal gradient
   const primaryTeal = rgb(0.2, 0.6, 0.6); // Teal color
   const lightTeal = rgb(0.89, 0.97, 0.95); // Light teal background
   const darkGray = rgb(0.2, 0.2, 0.2); // #333333
   const lightGray = rgb(0.6, 0.6, 0.6); // #999999
   const veryLightGray = rgb(0.95, 0.95, 0.95); // #F2F2F2
-  
-  const drawText = (text: string, x: number, y: number, options: { font?: any; size?: number; color?: any; maxWidth?: number } = {}) => {
+
+  const drawText = (
+    text: string,
+    x: number,
+    y: number,
+    options: { font?: any; size?: number; color?: any; maxWidth?: number } = {},
+  ) => {
     let textToDraw = cleanText(text); // Clean text to handle special characters
-    
+
     // Simple text wrapping if maxWidth is specified
     if (options.maxWidth && font) {
       const fontSize = options.size || 12;
-      const textWidth = (textToDraw.length * fontSize * 0.6); // Rough estimation
+      const textWidth = textToDraw.length * fontSize * 0.6; // Rough estimation
       if (textWidth > options.maxWidth) {
         const maxChars = Math.floor(options.maxWidth / (fontSize * 0.6));
         if (textToDraw.length > maxChars) {
-          textToDraw = textToDraw.substring(0, maxChars - 3) + '...';
+          textToDraw = textToDraw.substring(0, maxChars - 3) + "...";
         }
       }
     }
-    
+
     page.drawText(textToDraw, {
       x,
       y,
@@ -164,8 +116,15 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
       color: options.color || darkGray,
     });
   };
-  
-  const drawRectangle = (x: number, y: number, width: number, height: number, color: any, borderColor?: any) => {
+
+  const drawRectangle = (
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    color: any,
+    borderColor?: any,
+  ) => {
     page.drawRectangle({
       x,
       y,
@@ -176,8 +135,15 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
       borderWidth: borderColor ? 1 : 0,
     });
   };
-  
-  const drawLine = (startX: number, startY: number, endX: number, endY: number, color = lightGray, thickness = 1) => {
+
+  const drawLine = (
+    startX: number,
+    startY: number,
+    endX: number,
+    endY: number,
+    color = lightGray,
+    thickness = 1,
+  ) => {
     page.drawLine({
       start: { x: startX, y: startY },
       end: { x: endX, y: endY },
@@ -188,10 +154,13 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
 
   // Header with logo and clinic info
   if (logo) {
-    const logoScale = Math.min(logoWidth / logo.width, logoHeight / logo.height);
+    const logoScale = Math.min(
+      logoWidth / logo.width,
+      logoHeight / logo.height,
+    );
     const scaledLogoWidth = logo.width * logoScale;
     const scaledLogoHeight = logo.height * logoScale;
-    
+
     page.drawImage(logo, {
       x: marginLeft,
       y: currentY - scaledLogoHeight,
@@ -199,315 +168,499 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
       height: scaledLogoHeight,
     });
   }
-  
+
   // Clinic name and title - Updated with teal gradient effect
   const titleX = marginLeft + (logo ? logoWidth + 20 : 0);
-  drawText('Heart Clinic Melbourne', titleX, currentY - 10, { 
-    font: boldFont, 
-    size: 24, 
-    color: primaryTeal 
+  drawText("Heart Clinic Melbourne", titleX, currentY - 10, {
+    font: boldFont,
+    size: 24,
+    color: primaryTeal,
   });
-  drawText('Patient Intake Summary', titleX, currentY - 35, { 
-    font: boldFont, 
-    size: 16, 
-    color: darkGray 
+  drawText("Patient Intake Summary", titleX, currentY - 35, {
+    font: boldFont,
+    size: 16,
+    color: darkGray,
   });
-  
+
   // Date and time - Simplified for footer
   const today = new Date();
-  const dateStr = today.toLocaleDateString('en-AU', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
+  const dateStr = today.toLocaleDateString("en-AU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
   });
-  const timeStr = today.toLocaleTimeString('en-AU', {
-    hour: '2-digit',
-    minute: '2-digit'
+  const timeStr = today.toLocaleTimeString("en-AU", {
+    hour: "2-digit",
+    minute: "2-digit",
   });
-  
+
   currentY -= 80;
-  
+
   // Elegant separator line
   drawLine(marginLeft, currentY, width - marginRight, currentY, primaryTeal, 2);
   currentY -= 30;
-  
+
   // Helper function to create section
   const createSection = (title: string, content: () => number) => {
     // Section header with background
-    drawRectangle(marginLeft - 10, currentY - 5, width - marginLeft - marginRight + 20, 25, lightTeal);
-    drawText(title, marginLeft, currentY, { font: boldFont, size: 14, color: primaryTeal });
+    drawRectangle(
+      marginLeft - 10,
+      currentY - 5,
+      width - marginLeft - marginRight + 20,
+      25,
+      lightTeal,
+    );
+    drawText(title, marginLeft, currentY, {
+      font: boldFont,
+      size: 14,
+      color: primaryTeal,
+    });
     currentY -= 35;
-    
+
     // Section content
     currentY = content();
     currentY -= 15;
-    
+
     return currentY;
   };
-  
+
   // Primary Symptom Section (new)
   if (data.primarySymptom && data.primarySymptom.trim()) {
-    createSection('Primary Symptom', () => {
-      drawText('[>]', marginLeft + 10, currentY, { color: rgb(0.8, 0.4, 0), size: 12, font: boldFont });
-      drawText(data.primarySymptom!, marginLeft + 40, currentY, { size: 11, color: rgb(0.8, 0.4, 0) });
+    createSection("Primary Symptom", () => {
+      drawText("[>]", marginLeft + 10, currentY, {
+        color: rgb(0.8, 0.4, 0),
+        size: 12,
+        font: boldFont,
+      });
+      drawText(data.primarySymptom!, marginLeft + 40, currentY, {
+        size: 11,
+        color: rgb(0.8, 0.4, 0),
+      });
       currentY -= 16;
       return currentY;
     });
   }
-  
+
   // Medical History Section (now includes smoking and family history)
-  createSection('Medical History', () => {
+  createSection("Medical History", () => {
     const medicalConditions = [
-      { key: 'bp', label: 'High Blood Pressure (Hypertension)' },
-      { key: 'diabetes', label: 'Diabetes' },
-      { key: 'cholesterol', label: 'High Cholesterol' },
-      { key: 'af', label: 'Atrial Fibrillation' },
-      { key: 'osa', label: 'Obstructive Sleep Apnea' }
+      { key: "bp", label: "High Blood Pressure (Hypertension)" },
+      { key: "diabetes", label: "Diabetes" },
+      { key: "cholesterol", label: "High Cholesterol" },
+      { key: "af", label: "Atrial Fibrillation" },
+      { key: "osa", label: "Obstructive Sleep Apnea" },
     ];
-    
-    const activeConditions = medicalConditions.filter(condition => 
-      data.medicalHistory?.[condition.key as keyof typeof data.medicalHistory]
+
+    const activeConditions = medicalConditions.filter(
+      (condition) =>
+        data.medicalHistory?.[
+          condition.key as keyof typeof data.medicalHistory
+        ],
     );
-    
+
     if (activeConditions.length > 0) {
-      activeConditions.forEach(condition => {
-        drawText('↪', marginLeft + 10, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
+      activeConditions.forEach((condition) => {
+        drawText("↪", marginLeft + 10, currentY, {
+          color: rgb(0, 0.6, 0),
+          size: 12,
+          font: boldFont,
+        });
         drawText(condition.label, marginLeft + 35, currentY, { size: 11 });
         currentY -= 16;
       });
     } else {
-      drawText('No significant medical history reported', marginLeft + 10, currentY, { 
-        color: lightGray, 
-        size: 11 
-      });
+      drawText(
+        "No significant medical history reported",
+        marginLeft + 10,
+        currentY,
+        {
+          color: lightGray,
+          size: 11,
+        },
+      );
       currentY -= 16;
     }
-    
+
     // Add smoking history as part of medical history
     currentY -= 8;
-    drawText('Smoking History:', marginLeft + 10, currentY, { size: 11, font: boldFont, color: darkGray });
+    drawText("Smoking History:", marginLeft + 10, currentY, {
+      size: 11,
+      font: boldFont,
+      color: darkGray,
+    });
     currentY -= 16;
-    
+
     if (data.smoking?.current) {
-      drawText('↪', marginLeft + 20, currentY, { size: 12, color: rgb(0, 0.6, 0), font: boldFont });
-      drawText('Current smoker', marginLeft + 45, currentY, { size: 11, color: rgb(0.8, 0.2, 0.2) });
+      drawText("↪", marginLeft + 20, currentY, {
+        size: 12,
+        color: rgb(0, 0.6, 0),
+        font: boldFont,
+      });
+      drawText("Current smoker", marginLeft + 45, currentY, {
+        size: 11,
+        color: rgb(0.8, 0.2, 0.2),
+      });
       currentY -= 16;
       if (data.smoking.start) {
-        drawText(`Started smoking: ${data.smoking.start}`, marginLeft + 45, currentY, { size: 10, color: lightGray });
+        drawText(
+          `Started smoking: ${data.smoking.start}`,
+          marginLeft + 45,
+          currentY,
+          { size: 10, color: lightGray },
+        );
         currentY -= 14;
       }
     } else if (data.smoking?.past) {
-      drawText('↪', marginLeft + 20, currentY, { size: 12, color: rgb(0, 0.6, 0), font: boldFont });
-      drawText('Former smoker (quit)', marginLeft + 45, currentY, { size: 11, color: rgb(0, 0.6, 0) });
+      drawText("↪", marginLeft + 20, currentY, {
+        size: 12,
+        color: rgb(0, 0.6, 0),
+        font: boldFont,
+      });
+      drawText("Former smoker (quit)", marginLeft + 45, currentY, {
+        size: 11,
+        color: rgb(0, 0.6, 0),
+      });
       currentY -= 16;
       if (data.smoking.start) {
-        drawText(`Smoking period: ${data.smoking.start}`, marginLeft + 45, currentY, { size: 10, color: lightGray });
+        drawText(
+          `Smoking period: ${data.smoking.start}`,
+          marginLeft + 45,
+          currentY,
+          { size: 10, color: lightGray },
+        );
         if (data.smoking.stop) {
-          drawText(` - ${data.smoking.stop}`, marginLeft + 150, currentY, { size: 10, color: lightGray });
+          drawText(` - ${data.smoking.stop}`, marginLeft + 150, currentY, {
+            size: 10,
+            color: lightGray,
+          });
         }
         currentY -= 14;
       }
     } else {
-      drawText('↪', marginLeft + 20, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
-      drawText('Never smoked', marginLeft + 45, currentY, { size: 11, color: rgb(0, 0.6, 0) });
+      drawText("↪", marginLeft + 20, currentY, {
+        color: rgb(0, 0.6, 0),
+        size: 12,
+        font: boldFont,
+      });
+      drawText("Never smoked", marginLeft + 45, currentY, {
+        size: 11,
+        color: rgb(0, 0.6, 0),
+      });
       currentY -= 16;
     }
-    
+
     // Add family history as part of medical history
     currentY -= 8;
-    drawText('Family History:', marginLeft + 10, currentY, { size: 11, font: boldFont, color: darkGray });
+    drawText("Family History:", marginLeft + 10, currentY, {
+      size: 11,
+      font: boldFont,
+      color: darkGray,
+    });
     currentY -= 16;
-    
+
     if (data.familyHistory) {
-      drawText('↪', marginLeft + 20, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
-      drawText('Family history of heart disease before age 65', marginLeft + 45, currentY, { size: 11, color: rgb(0.8, 0.4, 0) });
+      drawText("↪", marginLeft + 20, currentY, {
+        color: rgb(0, 0.6, 0),
+        size: 12,
+        font: boldFont,
+      });
+      drawText(
+        "Family history of heart disease before age 65",
+        marginLeft + 45,
+        currentY,
+        { size: 11, color: rgb(0.8, 0.4, 0) },
+      );
     } else {
-      drawText('↪', marginLeft + 20, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
-      drawText('No family history of early heart disease', marginLeft + 45, currentY, { size: 11 });
+      drawText("↪", marginLeft + 20, currentY, {
+        color: rgb(0, 0.6, 0),
+        size: 12,
+        font: boldFont,
+      });
+      drawText(
+        "No family history of early heart disease",
+        marginLeft + 45,
+        currentY,
+        { size: 11 },
+      );
     }
     currentY -= 16;
-    
+
     return currentY;
   });
-  
+
   // Medications Section
   if (data.medications && data.medications.trim()) {
-    createSection('Current Medications', () => {
-      const medicationLines = data.medications!.split('\n').slice(0, 4);
-      medicationLines.forEach(line => {
+    createSection("Current Medications", () => {
+      const medicationLines = data.medications!.split("\n").slice(0, 4);
+      medicationLines.forEach((line) => {
         if (line.trim()) {
-          drawText('*', marginLeft + 10, currentY, { color: primaryTeal, size: 12, font: boldFont });
-          drawText(line.trim(), marginLeft + 25, currentY, { size: 11, maxWidth: width - marginLeft - marginRight - 40 });
+          drawText("*", marginLeft + 10, currentY, {
+            color: primaryTeal,
+            size: 12,
+            font: boldFont,
+          });
+          drawText(line.trim(), marginLeft + 25, currentY, {
+            size: 11,
+            maxWidth: width - marginLeft - marginRight - 40,
+          });
           currentY -= 16;
         }
       });
       return currentY;
     });
   }
-  
+
   // Allergies Section
   if (data.allergies && data.allergies.trim()) {
-    createSection('Known Allergies', () => {
-      const allergyLines = data.allergies!.split('\n').slice(0, 3);
-      allergyLines.forEach(line => {
+    createSection("Known Allergies", () => {
+      const allergyLines = data.allergies!.split("\n").slice(0, 3);
+      allergyLines.forEach((line) => {
         if (line.trim()) {
-          drawText('!', marginLeft + 10, currentY, { color: rgb(0.8, 0.4, 0), size: 12, font: boldFont });
-          drawText(line.trim(), marginLeft + 25, currentY, { size: 11, maxWidth: width - marginLeft - marginRight - 40 });
+          drawText("!", marginLeft + 10, currentY, {
+            color: rgb(0.8, 0.4, 0),
+            size: 12,
+            font: boldFont,
+          });
+          drawText(line.trim(), marginLeft + 25, currentY, {
+            size: 11,
+            maxWidth: width - marginLeft - marginRight - 40,
+          });
           currentY -= 16;
         }
       });
       return currentY;
     });
   }
-  
+
   // Cardiac Tests Section
-  createSection('Previous Cardiac Tests & Procedures', () => {
+  createSection("Previous Cardiac Tests & Procedures", () => {
     const tests = [
-      { key: 'echo', label: 'Echocardiogram' },
-      { key: 'holter', label: 'Holter Monitor (24-48hr)' },
-      { key: 'angio', label: 'Angiogram/Catheterisation' },
-      { key: 'surgery', label: 'Previous Cardiac Surgery' }
+      { key: "echo", label: "Echocardiogram" },
+      { key: "holter", label: "Holter Monitor (24-48hr)" },
+      { key: "angio", label: "Angiogram/Catheterisation" },
+      { key: "surgery", label: "Previous Cardiac Surgery" },
     ];
-    
-    const completedTests = tests.filter(test => 
-      data.tests?.[test.key as keyof typeof data.tests]
+
+    const completedTests = tests.filter(
+      (test) => data.tests?.[test.key as keyof typeof data.tests],
     );
-    
+
     if (completedTests.length > 0) {
-      completedTests.forEach(test => {
-        drawText('[+]', marginLeft + 10, currentY, { color: rgb(0, 0.6, 0), size: 12, font: boldFont });
+      completedTests.forEach((test) => {
+        drawText("[+]", marginLeft + 10, currentY, {
+          color: rgb(0, 0.6, 0),
+          size: 12,
+          font: boldFont,
+        });
         drawText(test.label, marginLeft + 35, currentY, { size: 11 });
         currentY -= 16;
-        
+
         // Add per-test location and date details if provided
         const locationKey = `${test.key}Location` as keyof IntakeForm;
         const dateKey = `${test.key}Date` as keyof IntakeForm;
         const location = data[locationKey] as string;
         const date = data[dateKey] as string;
-        
+
         if (location || date) {
           if (location) {
-            drawText('Location:', marginLeft + 45, currentY, { size: 9, font: boldFont, color: lightGray });
-            drawText(location, marginLeft + 95, currentY, { size: 9, color: lightGray });
+            drawText("Location:", marginLeft + 45, currentY, {
+              size: 9,
+              font: boldFont,
+              color: lightGray,
+            });
+            drawText(location, marginLeft + 95, currentY, {
+              size: 9,
+              color: lightGray,
+            });
             currentY -= 12;
           }
           if (date) {
-            drawText('Date:', marginLeft + 45, currentY, { size: 9, font: boldFont, color: lightGray });
-            drawText(date, marginLeft + 75, currentY, { size: 9, color: lightGray });
+            drawText("Date:", marginLeft + 45, currentY, {
+              size: 9,
+              font: boldFont,
+              color: lightGray,
+            });
+            drawText(date, marginLeft + 75, currentY, {
+              size: 9,
+              color: lightGray,
+            });
             currentY -= 12;
           }
           currentY -= 4; // Add spacing between tests
         }
       });
     } else {
-      drawText('No previous cardiac tests or procedures reported', marginLeft + 10, currentY, { 
-        color: lightGray, 
-        size: 11 
-      });
+      drawText(
+        "No previous cardiac tests or procedures reported",
+        marginLeft + 10,
+        currentY,
+        {
+          color: lightGray,
+          size: 11,
+        },
+      );
       currentY -= 16;
     }
-    
+
     return currentY;
   });
-  
+
   // Emergency Contact Section
   if (data.nok?.name || data.nok?.relation || data.nok?.phone) {
-    createSection('Emergency Contact', () => {
+    createSection("Emergency Contact", () => {
       if (data.nok.name) {
-        drawText('>', marginLeft + 10, currentY, { size: 12, font: boldFont, color: primaryTeal });
-        drawText(`Name: ${data.nok.name}`, marginLeft + 30, currentY, { size: 11 });
+        drawText(">", marginLeft + 10, currentY, {
+          size: 12,
+          font: boldFont,
+          color: primaryTeal,
+        });
+        drawText(`Name: ${data.nok.name}`, marginLeft + 30, currentY, {
+          size: 11,
+        });
         currentY -= 16;
       }
-      
+
       if (data.nok.relation) {
-        drawText('>', marginLeft + 10, currentY, { size: 12, font: boldFont, color: primaryTeal });
-        drawText(`Relationship: ${data.nok.relation}`, marginLeft + 30, currentY, { size: 11 });
+        drawText(">", marginLeft + 10, currentY, {
+          size: 12,
+          font: boldFont,
+          color: primaryTeal,
+        });
+        drawText(
+          `Relationship: ${data.nok.relation}`,
+          marginLeft + 30,
+          currentY,
+          { size: 11 },
+        );
         currentY -= 16;
       }
-      
+
       if (data.nok.phone) {
-        drawText('>', marginLeft + 10, currentY, { size: 12, font: boldFont, color: primaryTeal });
-        drawText(`Phone: ${data.nok.phone}`, marginLeft + 30, currentY, { size: 11 });
+        drawText(">", marginLeft + 10, currentY, {
+          size: 12,
+          font: boldFont,
+          color: primaryTeal,
+        });
+        drawText(`Phone: ${data.nok.phone}`, marginLeft + 30, currentY, {
+          size: 11,
+        });
         currentY -= 16;
       }
-      
+
       return currentY;
     });
   }
-  
+
   // Additional Notes Section
   if (data.notes && data.notes.trim()) {
-    createSection('Additional Information', () => {
-      drawRectangle(marginLeft, currentY - 5, width - marginLeft - marginRight, 2, veryLightGray);
+    createSection("Additional Information", () => {
+      drawRectangle(
+        marginLeft,
+        currentY - 5,
+        width - marginLeft - marginRight,
+        2,
+        veryLightGray,
+      );
       currentY -= 10;
-      
-      const noteLines = data.notes!.split('\n').slice(0, 6);
-      noteLines.forEach(line => {
+
+      const noteLines = data.notes!.split("\n").slice(0, 6);
+      noteLines.forEach((line) => {
         if (line.trim()) {
-          drawText(line.trim(), marginLeft + 10, currentY, { 
-            size: 10, 
-            maxWidth: width - marginLeft - marginRight - 20 
+          drawText(line.trim(), marginLeft + 10, currentY, {
+            size: 10,
+            maxWidth: width - marginLeft - marginRight - 20,
           });
           currentY -= 14;
         }
       });
-      
+
       currentY -= 5;
-      drawRectangle(marginLeft, currentY, width - marginLeft - marginRight, 2, veryLightGray);
-      
+      drawRectangle(
+        marginLeft,
+        currentY,
+        width - marginLeft - marginRight,
+        2,
+        veryLightGray,
+      );
+
       return currentY;
     });
   }
-  
+
   // Professional Footer - Updated with Cabrini address and timestamp
   const footerY = 60;
-  
+
   // Footer separator
-  drawLine(marginLeft, footerY + 35, width - marginRight, footerY + 35, lightGray, 1);
-  
+  drawLine(
+    marginLeft,
+    footerY + 35,
+    width - marginRight,
+    footerY + 35,
+    lightGray,
+    1,
+  );
+
   // Footer content
-  drawText('Heart Clinic Melbourne', marginLeft, footerY + 20, { 
-    font: boldFont, 
-    size: 10, 
-    color: primaryTeal 
+  drawText("Heart Clinic Melbourne", marginLeft, footerY + 20, {
+    font: boldFont,
+    size: 10,
+    color: primaryTeal,
   });
-  drawText('Suite 21/183 Wattletree Rd, Malvern VIC 3144', marginLeft, footerY + 8, { 
-    size: 8, 
-    color: lightGray 
-  });
-  drawText('Phone: (03) 9509 5009  |  Email: reception@heartclinicmelbourne.com.au', marginLeft, footerY - 4, { 
-    size: 8, 
-    color: lightGray 
-  });
-  
+  drawText(
+    "Suite 21/183 Wattletree Rd, Malvern VIC 3144",
+    marginLeft,
+    footerY + 8,
+    {
+      size: 8,
+      color: lightGray,
+    },
+  );
+  drawText(
+    "Phone: (03) 9509 5009  |  Email: reception@heartclinicmelbourne.com.au",
+    marginLeft,
+    footerY - 4,
+    {
+      size: 8,
+      color: lightGray,
+    },
+  );
+
   // Timestamp in footer (smaller font)
-  drawText(`Generated: ${dateStr} at ${timeStr}`, width - marginRight - 120, footerY - 4, { 
-    size: 7, 
-    color: lightGray 
-  });
-  
+  drawText(
+    `Generated: ${dateStr} at ${timeStr}`,
+    width - marginRight - 120,
+    footerY - 4,
+    {
+      size: 7,
+      color: lightGray,
+    },
+  );
+
   return await pdfDoc.save();
 }
 
-export function downloadPDF(pdfBytes: Uint8Array, filename: string = 'patient-intake.pdf') {
-  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+export function downloadPDF(
+  pdfBytes: Uint8Array,
+  filename: string = "patient-intake.pdf",
+) {
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
   const url = URL.createObjectURL(blob);
-  
-  const link = document.createElement('a');
+
+  const link = document.createElement("a");
   link.href = url;
   link.download = filename;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  
+
   URL.revokeObjectURL(url);
 }
 
 export function createMailtoLink(pdfBytes: Uint8Array): void {
-  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
   const url = URL.createObjectURL(blob);
-  
-  const subject = encodeURIComponent('Patient Intake Form');
+
+  const subject = encodeURIComponent("Patient Intake Form");
   const body = encodeURIComponent(`Dear Reception Team,
 
 Please find attached my completed patient intake form.
@@ -519,37 +672,27 @@ DOB [Your Date of Birth Here],
 Phone Number [Your Phone Number Here],
 
 `);
-  
+
   const mailtoUrl = `mailto:reception@heartclinicmelbourne.com.au?subject=${subject}&body=${body}`;
-  
-  window.open(mailtoUrl, '_blank');
-  
+
+  window.open(mailtoUrl, "_blank");
+
   setTimeout(() => {
     URL.revokeObjectURL(url);
   }, 10000);
 }
 
-export async function generateLearningLibraryPDF(procedures: ProcedureData[]): Promise<Uint8Array> {
+export async function generateLearningLibraryPDF(
+  procedures: ProcedureData[],
+): Promise<Uint8Array> {
   const pdfDoc = await PDFDocument.create();
-  
+
   // Register fontkit for custom font support
   pdfDoc.registerFontkit(fontkit);
-  
-  // Try to load Inter fonts, fallback to Helvetica if failed
-  let font, boldFont;
-  try {
-    const [regularFontBytes, boldFontBytes] = await Promise.all([
-      fetchFont(INTER_REGULAR_URL),
-      fetchFont(INTER_BOLD_URL)
-    ]);
-    
-    font = await pdfDoc.embedFont(regularFontBytes);
-    boldFont = await pdfDoc.embedFont(boldFontBytes);
-  } catch (error) {
-    console.warn('Using fallback fonts:', error);
-    font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-  }
+
+  // Use reliable Helvetica fonts with cleanText for Unicode handling
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
   // Try to load and embed logo
   let logo = null;
@@ -557,7 +700,7 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     const logoBytes = await fetchLogo();
     logo = await pdfDoc.embedPng(logoBytes);
   } catch (error) {
-    console.warn('Logo not available, proceeding without logo:', error);
+    console.warn("Logo not available, proceeding without logo:", error);
   }
 
   const marginLeft = 30;
@@ -566,7 +709,7 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
   const marginBottom = 80;
   const logoHeight = 50;
   const logoWidth = 50;
-  
+
   // Color palette
   const primaryTeal = rgb(0.2, 0.6, 0.6);
   const lightTeal = rgb(0.89, 0.97, 0.95);
@@ -575,20 +718,26 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
   const veryLightGray = rgb(0.95, 0.95, 0.95);
 
   // Helper functions
-  const drawText = (page: any, text: string, x: number, y: number, options: { font?: any; size?: number; color?: any; maxWidth?: number } = {}) => {
+  const drawText = (
+    page: any,
+    text: string,
+    x: number,
+    y: number,
+    options: { font?: any; size?: number; color?: any; maxWidth?: number } = {},
+  ) => {
     let textToDraw = cleanText(text); // Clean text to handle special characters
-    
+
     if (options.maxWidth && font) {
       const fontSize = options.size || 12;
-      const textWidth = (textToDraw.length * fontSize * 0.6);
+      const textWidth = textToDraw.length * fontSize * 0.6;
       if (textWidth > options.maxWidth) {
         const maxChars = Math.floor(options.maxWidth / (fontSize * 0.6));
         if (textToDraw.length > maxChars) {
-          textToDraw = textToDraw.substring(0, maxChars - 3) + '...';
+          textToDraw = textToDraw.substring(0, maxChars - 3) + "...";
         }
       }
     }
-    
+
     page.drawText(textToDraw, {
       x,
       y,
@@ -598,7 +747,15 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     });
   };
 
-  const drawRectangle = (page: any, x: number, y: number, width: number, height: number, color: any, borderColor?: any) => {
+  const drawRectangle = (
+    page: any,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    color: any,
+    borderColor?: any,
+  ) => {
     page.drawRectangle({
       x,
       y,
@@ -610,7 +767,15 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     });
   };
 
-  const drawLine = (page: any, startX: number, startY: number, endX: number, endY: number, color = lightGray, thickness = 1) => {
+  const drawLine = (
+    page: any,
+    startX: number,
+    startY: number,
+    endX: number,
+    endY: number,
+    color = lightGray,
+    thickness = 1,
+  ) => {
     page.drawLine({
       start: { x: startX, y: startY },
       end: { x: endX, y: endY },
@@ -619,16 +784,20 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     });
   };
 
-  const wrapText = (text: string, maxWidth: number, fontSize: number): string[] => {
+  const wrapText = (
+    text: string,
+    maxWidth: number,
+    fontSize: number,
+  ): string[] => {
     const cleanedText = cleanText(text); // Clean text to handle special characters
-    const words = cleanedText.split(' ');
+    const words = cleanedText.split(" ");
     const lines: string[] = [];
-    let currentLine = '';
-    
+    let currentLine = "";
+
     for (const word of words) {
-      const testLine = currentLine + (currentLine ? ' ' : '') + word;
+      const testLine = currentLine + (currentLine ? " " : "") + word;
       const testWidth = testLine.length * fontSize * 0.6;
-      
+
       if (testWidth <= maxWidth) {
         currentLine = testLine;
       } else {
@@ -640,11 +809,11 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
         }
       }
     }
-    
+
     if (currentLine) {
       lines.push(currentLine);
     }
-    
+
     return lines;
   };
 
@@ -653,53 +822,116 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
   const { width: coverWidth, height: coverHeight } = coverPage.getSize();
   let coverY = coverHeight - marginTop;
 
-  // Header with logo
+  // Determine if this is a single procedure guide
+  const isSingleProcedure = procedures.length === 1;
+
+  // Header with logo - center for single procedure
   if (logo) {
-    const logoScale = Math.min(logoWidth / logo.width, logoHeight / logo.height);
+    const logoScale = Math.min(
+      logoWidth / logo.width,
+      logoHeight / logo.height,
+    );
     const scaledLogoWidth = logo.width * logoScale;
     const scaledLogoHeight = logo.height * logoScale;
-    
+
+    const logoX = isSingleProcedure
+      ? coverWidth / 2 - scaledLogoWidth / 2
+      : marginLeft;
+
     coverPage.drawImage(logo, {
-      x: marginLeft,
+      x: logoX,
       y: coverY - scaledLogoHeight,
       width: scaledLogoWidth,
       height: scaledLogoHeight,
     });
   }
 
-  // Title - aligned with logo
-  const titleX = marginLeft + (logo ? logoWidth + 20 : 0);
-  drawText(coverPage, 'Heart Clinic Melbourne', titleX, coverY - 15, { 
-    font: boldFont, 
-    size: 24, 
-    color: primaryTeal 
-  });
-  drawText(coverPage, 'Patient Education Guide', titleX, coverY - 40, { 
-    font: boldFont, 
-    size: 18, 
-    color: darkGray 
-  });
+  // Title - centered for single procedure, left-aligned for multiple
+  if (isSingleProcedure) {
+    // Centered layout for single procedure
+    const clinicNameWidth = "Heart Clinic Melbourne".length * 14; // Approximate width for 24pt
+    const subtitleWidth = "Patient Education Guide".length * 11; // Approximate width for 18pt
+
+    drawText(
+      coverPage,
+      "Heart Clinic Melbourne",
+      coverWidth / 2 - clinicNameWidth / 2,
+      coverY - 15,
+      {
+        font: boldFont,
+        size: 24,
+        color: primaryTeal,
+      },
+    );
+    drawText(
+      coverPage,
+      "Patient Education Guide",
+      coverWidth / 2 - subtitleWidth / 2,
+      coverY - 40,
+      {
+        font: boldFont,
+        size: 18,
+        color: darkGray,
+      },
+    );
+  } else {
+    // Left-aligned layout for multiple procedures
+    const titleX = marginLeft + (logo ? logoWidth + 20 : 0);
+    drawText(coverPage, "Heart Clinic Melbourne", titleX, coverY - 15, {
+      font: boldFont,
+      size: 24,
+      color: primaryTeal,
+    });
+    drawText(coverPage, "Patient Education Guide", titleX, coverY - 40, {
+      font: boldFont,
+      size: 18,
+      color: darkGray,
+    });
+  }
 
   // Date in header as subtitle
   const today = new Date();
-  const dateStr = today.toLocaleDateString('en-AU', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-  
-  drawText(coverPage, `Generated: ${dateStr}`, titleX, coverY - 60, { 
-    size: 10, 
-    color: lightGray 
+  const dateStr = today.toLocaleDateString("en-AU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
   });
 
+  if (isSingleProcedure) {
+    const dateWidth = `Generated: ${dateStr}`.length * 6; // Approximate width for 10pt
+    drawText(
+      coverPage,
+      `Generated: ${dateStr}`,
+      coverWidth / 2 - dateWidth / 2,
+      coverY - 60,
+      {
+        size: 10,
+        color: lightGray,
+      },
+    );
+  } else {
+    const titleX = marginLeft + (logo ? logoWidth + 20 : 0);
+    drawText(coverPage, `Generated: ${dateStr}`, titleX, coverY - 60, {
+      size: 10,
+      color: lightGray,
+    });
+  }
+
   coverY -= 80;
-  drawLine(coverPage, marginLeft, coverY, coverWidth - marginRight, coverY, primaryTeal, 2);
+  drawLine(
+    coverPage,
+    marginLeft,
+    coverY,
+    coverWidth - marginRight,
+    coverY,
+    primaryTeal,
+    2,
+  );
   coverY -= 40;
 
   // Only show table of contents if there are multiple procedures
   const showTableOfContents = procedures.length > 1;
-  
+
   // Load procedure images for table of contents (or single procedure header)
   const procedureImages: { [key: string]: any } = {};
   for (const procedure of procedures) {
@@ -708,8 +940,8 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
         const imageBytes = await fetchProcedureImage(procedure.image);
         if (imageBytes) {
           // Determine image type and embed accordingly
-          const isPng = procedure.image.toLowerCase().includes('.png');
-          procedureImages[procedure.name] = isPng 
+          const isPng = procedure.image.toLowerCase().includes(".png");
+          procedureImages[procedure.name] = isPng
             ? await pdfDoc.embedPng(imageBytes)
             : await pdfDoc.embedJpg(imageBytes);
         }
@@ -721,35 +953,39 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
   if (showTableOfContents) {
     // Table of contents
-    drawText(coverPage, 'Contents', marginLeft, coverY, { 
-      font: boldFont, 
-      size: 16, 
-      color: primaryTeal 
+    drawText(coverPage, "Contents", marginLeft, coverY, {
+      font: boldFont,
+      size: 16,
+      color: primaryTeal,
     });
     coverY -= 40;
 
     procedures.forEach((procedure) => {
       const imageSize = 24;
       const rowHeight = 32;
-      
+
       // Draw procedure image if available
       if (procedureImages[procedure.name]) {
         const image = procedureImages[procedure.name];
-        const imageScale = Math.min(imageSize / image.width, imageSize / image.height);
+        const imageScale = Math.min(
+          imageSize / image.width,
+          imageSize / image.height,
+        );
         const scaledWidth = image.width * imageScale;
         const scaledHeight = image.height * imageScale;
-        
+
         // Draw rounded rectangle border around image
         const imagePadding = 2;
-        drawRectangle(coverPage, 
-          marginLeft + 20 - imagePadding, 
-          coverY - scaledHeight + 5 - imagePadding, 
-          scaledWidth + (imagePadding * 2), 
-          scaledHeight + (imagePadding * 2), 
+        drawRectangle(
+          coverPage,
+          marginLeft + 20 - imagePadding,
+          coverY - scaledHeight + 5 - imagePadding,
+          scaledWidth + imagePadding * 2,
+          scaledHeight + imagePadding * 2,
           rgb(1, 1, 1), // white background
-          lightGray // border color
+          lightGray, // border color
         );
-        
+
         coverPage.drawImage(image, {
           x: marginLeft + 20,
           y: coverY - scaledHeight + 5,
@@ -757,75 +993,162 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
           height: scaledHeight,
         });
       }
-      
+
       // Draw procedure name with image offset
-      drawText(coverPage, procedure.name, marginLeft + 20 + imageSize + 10, coverY, { 
-        size: 12 
-      });
+      drawText(
+        coverPage,
+        procedure.name,
+        marginLeft + 20 + imageSize + 10,
+        coverY,
+        {
+          size: 12,
+        },
+      );
       coverY -= rowHeight;
     });
   } else {
     // For single procedure, create an attractive centered layout
     const singleProcedure = procedures[0];
     const centerX = coverWidth / 2;
-    
+
     // Focus Topic header - centered
-    const focusTopicText = 'Focus Topic';
+    const focusTopicText = "Focus Topic";
     const focusTopicWidth = focusTopicText.length * 9; // Approximate width for font size 16
-    drawText(coverPage, focusTopicText, centerX - (focusTopicWidth / 2), coverY, { 
-      font: boldFont, 
-      size: 16, 
-      color: primaryTeal 
+    drawText(coverPage, focusTopicText, centerX - focusTopicWidth / 2, coverY, {
+      font: boldFont,
+      size: 16,
+      color: primaryTeal,
     });
     coverY -= 50;
-    
+
     // Procedure name - centered and larger
     const procedureNameWidth = singleProcedure.name.length * 11; // Approximate width for font size 18
-    drawText(coverPage, singleProcedure.name, centerX - (procedureNameWidth / 2), coverY, { 
-      font: boldFont, 
-      size: 18, 
-      color: darkGray 
-    });
+    drawText(
+      coverPage,
+      singleProcedure.name,
+      centerX - procedureNameWidth / 2,
+      coverY,
+      {
+        font: boldFont,
+        size: 18,
+        color: darkGray,
+      },
+    );
     coverY -= 60;
-    
+
     // Large procedure image in the center with rounded container
     if (procedureImages[singleProcedure.name]) {
       const image = procedureImages[singleProcedure.name];
-      const maxImageSize = 200; // Large featured image
-      const imageScale = Math.min(maxImageSize / image.width, maxImageSize / image.height);
+      const maxImageSize = 180; // Slightly smaller to fit better in rounded container
+      const imageScale = Math.min(
+        maxImageSize / image.width,
+        maxImageSize / image.height,
+      );
       const scaledWidth = image.width * imageScale;
       const scaledHeight = image.height * imageScale;
-      
-      // Calculate centered position
-      const imageX = centerX - (scaledWidth / 2);
-      const imageY = coverY - scaledHeight;
-      
-      // Draw rounded rectangle container with shadow effect
+
+      // Container dimensions with padding
       const containerPadding = 20;
-      const containerX = imageX - containerPadding;
-      const containerY = imageY - containerPadding;
-      const containerWidth = scaledWidth + (containerPadding * 2);
-      const containerHeight = scaledHeight + (containerPadding * 2);
-      
-      // Shadow effect (slightly offset gray rectangle)
-      drawRectangle(coverPage, 
-        containerX + 3, 
-        containerY - 3, 
-        containerWidth, 
-        containerHeight, 
-        rgb(0.9, 0.9, 0.9)
+      const containerWidth = scaledWidth + containerPadding * 2;
+      const containerHeight = scaledHeight + containerPadding * 2;
+
+      // Calculate centered position for container
+      const containerX = centerX - containerWidth / 2;
+      const containerY = coverY - containerHeight;
+
+      // Image position within container (centered)
+      const imageX = containerX + containerPadding;
+      const imageY = containerY + containerPadding;
+
+      // Create rounded rectangle using multiple small rectangles to simulate rounded corners
+      const radius = 12;
+
+      // Shadow effect (slightly offset)
+      const shadowOffset = 3;
+      const shadowX = containerX + shadowOffset;
+      const shadowY = containerY - shadowOffset;
+
+      // Draw shadow - main rectangle
+      drawRectangle(
+        coverPage,
+        shadowX + radius,
+        shadowY,
+        containerWidth - radius * 2,
+        containerHeight,
+        rgb(0.9, 0.9, 0.9),
       );
-      
-      // Main container with light background and border
-      drawRectangle(coverPage, 
-        containerX, 
-        containerY, 
-        containerWidth, 
-        containerHeight, 
+      // Shadow - left and right rectangles for rounded effect
+      drawRectangle(
+        coverPage,
+        shadowX,
+        shadowY + radius,
+        radius,
+        containerHeight - radius * 2,
+        rgb(0.9, 0.9, 0.9),
+      );
+      drawRectangle(
+        coverPage,
+        shadowX + containerWidth - radius,
+        shadowY + radius,
+        radius,
+        containerHeight - radius * 2,
+        rgb(0.9, 0.9, 0.9),
+      );
+
+      // Main container - create rounded rectangle effect
+      // Center rectangle
+      drawRectangle(
+        coverPage,
+        containerX + radius,
+        containerY,
+        containerWidth - radius * 2,
+        containerHeight,
         rgb(0.98, 0.98, 0.98), // Very light gray background
-        lightGray // border color
+        lightGray,
       );
-      
+
+      // Left and right rectangles for rounded sides
+      drawRectangle(
+        coverPage,
+        containerX,
+        containerY + radius,
+        radius,
+        containerHeight - radius * 2,
+        rgb(0.98, 0.98, 0.98),
+        lightGray,
+      );
+      drawRectangle(
+        coverPage,
+        containerX + containerWidth - radius,
+        containerY + radius,
+        radius,
+        containerHeight - radius * 2,
+        rgb(0.98, 0.98, 0.98),
+        lightGray,
+      );
+
+      // Corner circles to complete the rounded effect
+      const cornerPositions = [
+        { x: containerX + radius, y: containerY + containerHeight - radius }, // top-left
+        {
+          x: containerX + containerWidth - radius,
+          y: containerY + containerHeight - radius,
+        }, // top-right
+        { x: containerX + radius, y: containerY + radius }, // bottom-left
+        { x: containerX + containerWidth - radius, y: containerY + radius }, // bottom-right
+      ];
+
+      cornerPositions.forEach((pos) => {
+        coverPage.drawCircle({
+          x: pos.x,
+          y: pos.y,
+          size: radius,
+          color: rgb(0.98, 0.98, 0.98),
+          borderColor: lightGray,
+          borderWidth: 1,
+        });
+      });
+
       // Draw the image centered in the container
       coverPage.drawImage(image, {
         x: imageX,
@@ -833,38 +1156,38 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
         width: scaledWidth,
         height: scaledHeight,
       });
-      
-      coverY -= (scaledHeight + containerPadding * 2 + 30); // Move below image
+
+      coverY -= containerHeight + 30; // Move below container
     } else {
       // If no image, add more space
       coverY -= 80;
     }
-    
+
     // Add centered description if available
     if (singleProcedure.summary) {
       const maxDescWidth = 400; // Narrower centered text block
       const summaryLines = wrapText(singleProcedure.summary, maxDescWidth, 12);
-      
-      summaryLines.slice(0, 4).forEach(line => { // Show more lines since we have space
+
+      summaryLines.slice(0, 4).forEach((line) => {
+        // Show more lines since we have space
         const lineWidth = line.length * 7; // Approximate width for font size 12
-        drawText(coverPage, line, centerX - (lineWidth / 2), coverY, { 
-          size: 12, 
-          color: darkGray 
+        drawText(coverPage, line, centerX - lineWidth / 2, coverY, {
+          size: 12,
+          color: darkGray,
         });
         coverY -= 18;
       });
-      
+
       // Add "..." if there are more lines
       if (summaryLines.length > 4) {
         const dotsWidth = 3 * 7;
-        drawText(coverPage, '...', centerX - (dotsWidth / 2), coverY, { 
-          size: 12, 
-          color: lightGray 
+        drawText(coverPage, "...", centerX - dotsWidth / 2, coverY, {
+          size: 12,
+          color: lightGray,
         });
       }
     }
   }
-
 
   // Add procedure pages with proper page management
   procedures.forEach((procedure) => {
@@ -872,12 +1195,12 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     const { width, height } = page.getSize();
     let currentY = height - marginTop;
     const procedurePages: any[] = [page]; // Track all pages for this procedure
-    
+
     // Helper function to check if we need a new page
     const checkPageBreak = (requiredSpace: number): boolean => {
       return currentY - requiredSpace < marginBottom + 50; // 50px buffer above footer
     };
-    
+
     // Helper function to add a new page
     const addNewPage = (): void => {
       page = pdfDoc.addPage([595.28, 841.89]);
@@ -886,35 +1209,64 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
       addHeader(page); // Add header to new page
       currentY -= 80; // Adjust for header space
     };
-    
+
     // Helper function to add footer to a page
     const addFooter = (currentPage: any) => {
-      drawLine(currentPage, marginLeft, marginBottom + 35, width - marginRight, marginBottom + 35, lightGray, 1);
-      drawText(currentPage, 'Heart Clinic Melbourne', marginLeft, marginBottom + 20, { 
-        font: boldFont, 
-        size: 10, 
-        color: primaryTeal 
-      });
-      drawText(currentPage, 'Suite 21/183 Wattletree Rd, Malvern VIC 3144', marginLeft, marginBottom + 8, { 
-        size: 8, 
-        color: lightGray 
-      });
-      drawText(currentPage, 'Phone: (03) 9509 5009  |  Email: reception@heartclinicmelbourne.com.au', marginLeft, marginBottom - 4, { 
-        size: 8, 
-        color: lightGray 
-      });
+      drawLine(
+        currentPage,
+        marginLeft,
+        marginBottom + 35,
+        width - marginRight,
+        marginBottom + 35,
+        lightGray,
+        1,
+      );
+      drawText(
+        currentPage,
+        "Heart Clinic Melbourne",
+        marginLeft,
+        marginBottom + 20,
+        {
+          font: boldFont,
+          size: 10,
+          color: primaryTeal,
+        },
+      );
+      drawText(
+        currentPage,
+        "Suite 21/183 Wattletree Rd, Malvern VIC 3144",
+        marginLeft,
+        marginBottom + 8,
+        {
+          size: 8,
+          color: lightGray,
+        },
+      );
+      drawText(
+        currentPage,
+        "Phone: (03) 9509 5009  |  Email: reception@heartclinicmelbourne.com.au",
+        marginLeft,
+        marginBottom - 4,
+        {
+          size: 8,
+          color: lightGray,
+        },
+      );
     };
 
     // Helper function to add header with logo and procedure image
     const addHeader = (currentPage: any) => {
       let headerY = height - marginTop;
-      
+
       // Draw logo
       if (logo) {
-        const logoScale = Math.min(logoWidth / logo.width, logoHeight / logo.height);
+        const logoScale = Math.min(
+          logoWidth / logo.width,
+          logoHeight / logo.height,
+        );
         const scaledLogoWidth = logo.width * logoScale;
         const scaledLogoHeight = logo.height * logoScale;
-        
+
         currentPage.drawImage(logo, {
           x: marginLeft,
           y: headerY - scaledLogoHeight,
@@ -927,10 +1279,13 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
       if (procedureImages[procedure.name]) {
         const procedureImage = procedureImages[procedure.name];
         const procedureImageSize = 40;
-        const imageScale = Math.min(procedureImageSize / procedureImage.width, procedureImageSize / procedureImage.height);
+        const imageScale = Math.min(
+          procedureImageSize / procedureImage.width,
+          procedureImageSize / procedureImage.height,
+        );
         const scaledWidth = procedureImage.width * imageScale;
         const scaledHeight = procedureImage.height * imageScale;
-        
+
         currentPage.drawImage(procedureImage, {
           x: width - marginRight - scaledWidth,
           y: headerY - scaledHeight,
@@ -941,26 +1296,38 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
       // Procedure name - aligned with logo
       const titleX = marginLeft + (logo ? logoWidth + 20 : 0);
-      drawText(currentPage, procedure.name, titleX, headerY - 15, { 
-        font: boldFont, 
-        size: 20, 
-        color: primaryTeal 
+      drawText(currentPage, procedure.name, titleX, headerY - 15, {
+        font: boldFont,
+        size: 20,
+        color: primaryTeal,
       });
     };
-    
+
     // Add header to first page
     addHeader(page);
 
     currentY -= 60;
-    drawLine(page, marginLeft, currentY, width - marginRight, currentY, primaryTeal, 2);
+    drawLine(
+      page,
+      marginLeft,
+      currentY,
+      width - marginRight,
+      currentY,
+      primaryTeal,
+      2,
+    );
     currentY -= 30;
 
     // Description
-    const descriptionLines = wrapText(procedure.description, width - marginLeft - marginRight, 12);
+    const descriptionLines = wrapText(
+      procedure.description,
+      width - marginLeft - marginRight,
+      12,
+    );
     if (checkPageBreak(descriptionLines.length * 18 + 15)) {
       addNewPage();
     }
-    descriptionLines.forEach(line => {
+    descriptionLines.forEach((line) => {
       if (checkPageBreak(18)) {
         addNewPage();
       }
@@ -972,22 +1339,33 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
     // Summary section
     if (procedure.summary) {
-      const summaryLines = wrapText(procedure.summary, width - marginLeft - marginRight - 20, 11);
-      const summaryHeight = 60 + (summaryLines.length * 16) + 20; // Header + content + spacing
-      
+      const summaryLines = wrapText(
+        procedure.summary,
+        width - marginLeft - marginRight - 20,
+        11,
+      );
+      const summaryHeight = 60 + summaryLines.length * 16 + 20; // Header + content + spacing
+
       if (checkPageBreak(summaryHeight)) {
         addNewPage();
       }
-      
-      drawRectangle(page, marginLeft - 10, currentY - 5, width - marginLeft - marginRight + 20, 25, lightTeal);
-      drawText(page, 'Overview', marginLeft, currentY, { 
-        font: boldFont, 
-        size: 14, 
-        color: primaryTeal 
+
+      drawRectangle(
+        page,
+        marginLeft - 10,
+        currentY - 5,
+        width - marginLeft - marginRight + 20,
+        25,
+        lightTeal,
+      );
+      drawText(page, "Overview", marginLeft, currentY, {
+        font: boldFont,
+        size: 14,
+        color: primaryTeal,
       });
       currentY -= 35;
 
-      summaryLines.forEach(line => {
+      summaryLines.forEach((line) => {
         if (checkPageBreak(16)) {
           addNewPage();
         }
@@ -1001,32 +1379,43 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
     // Need to know section
     if (procedure.needToKnow && procedure.needToKnow.length > 0) {
       // Calculate approximate height needed
-      const estimatedHeight = 60 + (procedure.needToKnow.length * 40); // Header + items
-      
+      const estimatedHeight = 60 + procedure.needToKnow.length * 40; // Header + items
+
       if (checkPageBreak(estimatedHeight)) {
         addNewPage();
       }
-      
-      drawRectangle(page, marginLeft - 10, currentY - 5, width - marginLeft - marginRight + 20, 25, lightTeal);
-      drawText(page, 'Key Information', marginLeft, currentY, { 
-        font: boldFont, 
-        size: 14, 
-        color: primaryTeal 
+
+      drawRectangle(
+        page,
+        marginLeft - 10,
+        currentY - 5,
+        width - marginLeft - marginRight + 20,
+        25,
+        lightTeal,
+      );
+      drawText(page, "Key Information", marginLeft, currentY, {
+        font: boldFont,
+        size: 14,
+        color: primaryTeal,
       });
       currentY -= 35;
 
-      procedure.needToKnow.forEach(item => {
-        const itemLines = wrapText(item, width - marginLeft - marginRight - 40, 11);
+      procedure.needToKnow.forEach((item) => {
+        const itemLines = wrapText(
+          item,
+          width - marginLeft - marginRight - 40,
+          11,
+        );
         const itemHeight = itemLines.length * 16 + 20;
-        
+
         if (checkPageBreak(itemHeight)) {
           addNewPage();
         }
-        
-        drawText(page, '•', marginLeft + 10, currentY, { 
-          color: primaryTeal, 
-          size: 12, 
-          font: boldFont 
+
+        drawText(page, "•", marginLeft + 10, currentY, {
+          color: primaryTeal,
+          size: 12,
+          font: boldFont,
         });
         itemLines.forEach((line, index) => {
           if (checkPageBreak(16)) {
@@ -1043,37 +1432,49 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
     // Steps section
     if (procedure.steps && procedure.steps.length > 0) {
-      if (checkPageBreak(60)) { // Check for section header space
+      if (checkPageBreak(60)) {
+        // Check for section header space
         addNewPage();
       }
-      
-      drawRectangle(page, marginLeft - 10, currentY - 5, width - marginLeft - marginRight + 20, 25, lightTeal);
-      drawText(page, 'Procedure Steps', marginLeft, currentY, { 
-        font: boldFont, 
-        size: 14, 
-        color: primaryTeal 
+
+      drawRectangle(
+        page,
+        marginLeft - 10,
+        currentY - 5,
+        width - marginLeft - marginRight + 20,
+        25,
+        lightTeal,
+      );
+      drawText(page, "Procedure Steps", marginLeft, currentY, {
+        font: boldFont,
+        size: 14,
+        color: primaryTeal,
       });
       currentY -= 35;
 
       procedure.steps.forEach((step) => {
         // Calculate approximate step height
-        const descLines = wrapText(step.description, width - marginLeft - marginRight - 40, 11);
+        const descLines = wrapText(
+          step.description,
+          width - marginLeft - marginRight - 40,
+          11,
+        );
         const detailsHeight = step.details ? step.details.length * 26 : 0; // Approximate
-        const stepHeight = 50 + (descLines.length * 14) + detailsHeight;
-        
+        const stepHeight = 50 + descLines.length * 14 + detailsHeight;
+
         if (checkPageBreak(stepHeight)) {
           addNewPage();
         }
-        
+
         // Step number and title
-        drawText(page, `${step.id}.`, marginLeft + 10, currentY, { 
-          color: primaryTeal, 
-          size: 12, 
-          font: boldFont 
+        drawText(page, `${step.id}.`, marginLeft + 10, currentY, {
+          color: primaryTeal,
+          size: 12,
+          font: boldFont,
         });
-        drawText(page, step.title, marginLeft + 30, currentY, { 
-          font: boldFont, 
-          size: 12 
+        drawText(page, step.title, marginLeft + 30, currentY, {
+          font: boldFont,
+          size: 12,
         });
         currentY -= 18;
 
@@ -1082,29 +1483,41 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
           if (checkPageBreak(16)) {
             addNewPage();
           }
-          drawText(page, step.subtitle, marginLeft + 30, currentY, { 
-            size: 10, 
-            color: lightGray 
+          drawText(page, step.subtitle, marginLeft + 30, currentY, {
+            size: 10,
+            color: lightGray,
           });
           if (step.duration) {
-            drawText(page, `Duration: ${step.duration}`, width - marginRight - 100, currentY, { 
-              size: 10, 
-              color: lightGray 
-            });
+            drawText(
+              page,
+              `Duration: ${step.duration}`,
+              width - marginRight - 100,
+              currentY,
+              {
+                size: 10,
+                color: lightGray,
+              },
+            );
           }
           currentY -= 16;
         } else if (step.duration) {
           // Only duration, no subtitle
-          drawText(page, `Duration: ${step.duration}`, marginLeft + 30, currentY, { 
-            size: 10, 
-            color: lightGray 
-          });
+          drawText(
+            page,
+            `Duration: ${step.duration}`,
+            marginLeft + 30,
+            currentY,
+            {
+              size: 10,
+              color: lightGray,
+            },
+          );
           currentY -= 16;
         }
         // If neither subtitle nor duration, don't add extra spacing
 
         // Description
-        descLines.forEach(line => {
+        descLines.forEach((line) => {
           if (checkPageBreak(14)) {
             addNewPage();
           }
@@ -1114,25 +1527,29 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
         // Details
         if (step.details && step.details.length > 0) {
-          step.details.forEach(detail => {
-            const detailLines = wrapText(detail, width - marginLeft - marginRight - 60, 10);
+          step.details.forEach((detail) => {
+            const detailLines = wrapText(
+              detail,
+              width - marginLeft - marginRight - 60,
+              10,
+            );
             const detailHeight = detailLines.length * 12 + 14;
-            
+
             if (checkPageBreak(detailHeight)) {
               addNewPage();
             }
-            
-            drawText(page, '◦', marginLeft + 40, currentY, { 
-              color: lightGray, 
-              size: 10 
+
+            drawText(page, "◦", marginLeft + 40, currentY, {
+              color: lightGray,
+              size: 10,
             });
             detailLines.forEach((line, lineIndex) => {
               if (checkPageBreak(12)) {
                 addNewPage();
               }
-              drawText(page, line, marginLeft + 50, currentY, { 
-                size: 10, 
-                color: lightGray 
+              drawText(page, line, marginLeft + 50, currentY, {
+                size: 10,
+                color: lightGray,
               });
               if (lineIndex < detailLines.length - 1) currentY -= 12;
             });
@@ -1146,91 +1563,131 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
     // FAQ section
     if (procedure.faqs && procedure.faqs.length > 0) {
-      if (checkPageBreak(60)) { // Check for section header space
+      if (checkPageBreak(60)) {
+        // Check for section header space
         addNewPage();
       }
-      
-      drawRectangle(page, marginLeft - 10, currentY - 5, width - marginLeft - marginRight + 20, 25, lightTeal);
-      drawText(page, 'Frequently Asked Questions', marginLeft, currentY, { 
-        font: boldFont, 
-        size: 14, 
-        color: primaryTeal 
+
+      drawRectangle(
+        page,
+        marginLeft - 10,
+        currentY - 5,
+        width - marginLeft - marginRight + 20,
+        25,
+        lightTeal,
+      );
+      drawText(page, "Frequently Asked Questions", marginLeft, currentY, {
+        font: boldFont,
+        size: 14,
+        color: primaryTeal,
       });
       currentY -= 35;
 
       procedure.faqs.forEach((faq, index) => {
         // Parse markdown for answer to get proper formatting
         const { paragraphs } = parseMarkdownForPdf(faq.answer);
-        
+
         // Calculate approximate FAQ height
-        const questionLines = wrapText(faq.question, width - marginLeft - marginRight - 35, 12);
+        const questionLines = wrapText(
+          faq.question,
+          width - marginLeft - marginRight - 35,
+          12,
+        );
         const totalAnswerLines = paragraphs.reduce((total, para) => {
-          return total + wrapText(para.text, width - marginLeft - marginRight - 25, 11).length;
+          return (
+            total +
+            wrapText(para.text, width - marginLeft - marginRight - 25, 11)
+              .length
+          );
         }, 0);
-        const faqHeight = 30 + (questionLines.length * 16) + (totalAnswerLines * 14) + (paragraphs.length * 8) + 20;
-        
+        const faqHeight =
+          30 +
+          questionLines.length * 16 +
+          totalAnswerLines * 14 +
+          paragraphs.length * 8 +
+          20;
+
         if (checkPageBreak(faqHeight)) {
           addNewPage();
         }
-        
+
         // Question with teal color
-        drawText(page, `Q${index + 1}:`, marginLeft + 10, currentY, { 
-          color: primaryTeal, 
-          size: 12, 
-          font: boldFont 
+        drawText(page, `Q${index + 1}:`, marginLeft + 10, currentY, {
+          color: primaryTeal,
+          size: 12,
+          font: boldFont,
         });
-        
+
         questionLines.forEach((line, lineIndex) => {
           if (checkPageBreak(16)) {
             addNewPage();
           }
-          drawText(page, line, marginLeft + (lineIndex === 0 ? 35 : 25), currentY, { 
-            font: boldFont, 
-            size: 12 
-          });
+          drawText(
+            page,
+            line,
+            marginLeft + (lineIndex === 0 ? 35 : 25),
+            currentY,
+            {
+              font: boldFont,
+              size: 12,
+            },
+          );
           currentY -= 16;
         });
 
         currentY -= 5;
 
         // Answer with markdown formatting
-        drawText(page, 'A:', marginLeft + 10, currentY, { 
-          color: lightGray, 
-          size: 11, 
-          font: boldFont 
+        drawText(page, "A:", marginLeft + 10, currentY, {
+          color: lightGray,
+          size: 11,
+          font: boldFont,
         });
-        
+
         // Handle paragraphs in the answer
         let isFirstAnswer = true;
-        
+
         paragraphs.forEach((paragraph, paraIndex) => {
           if (paragraph.text.trim()) {
-            const paragraphLines = wrapText(paragraph.text.trim(), width - marginLeft - marginRight - 25, 11);
-            
+            const paragraphLines = wrapText(
+              paragraph.text.trim(),
+              width - marginLeft - marginRight - 25,
+              11,
+            );
+
             paragraphLines.forEach((line, lineIndex) => {
               if (checkPageBreak(14)) {
                 addNewPage();
               }
-              
+
               // Determine if line should be bold based on formatting info
-              const lineStart = paragraphLines.slice(0, lineIndex).join(' ').length + (lineIndex > 0 ? lineIndex : 0);
+              const lineStart =
+                paragraphLines.slice(0, lineIndex).join(" ").length +
+                (lineIndex > 0 ? lineIndex : 0);
               const lineEnd = lineStart + line.length;
-              
-              const shouldBold = paragraph.formatting.some(format => 
-                format.bold && 
-                ((format.start >= lineStart && format.start < lineEnd) ||
-                 (format.end > lineStart && format.end <= lineEnd) ||
-                 (format.start <= lineStart && format.end >= lineEnd))
+
+              const shouldBold = paragraph.formatting.some(
+                (format) =>
+                  format.bold &&
+                  ((format.start >= lineStart && format.start < lineEnd) ||
+                    (format.end > lineStart && format.end <= lineEnd) ||
+                    (format.start <= lineStart && format.end >= lineEnd)),
               );
-              
-              drawText(page, line, marginLeft + (isFirstAnswer && lineIndex === 0 ? 25 : 25), currentY, { 
-                size: 11,
-                font: shouldBold ? boldFont : font
-              });
+
+              drawText(
+                page,
+                line,
+                marginLeft + (isFirstAnswer && lineIndex === 0 ? 25 : 25),
+                currentY,
+                {
+                  size: 11,
+                  font: shouldBold ? boldFont : font,
+                },
+              );
               currentY -= 14;
               isFirstAnswer = false;
             });
-            
+
             // Add paragraph spacing except for the last paragraph
             if (paraIndex < paragraphs.length - 1) {
               currentY -= 8;
@@ -1243,9 +1700,9 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
 
       currentY -= 10;
     }
-    
+
     // Add footers to all pages created for this procedure
-    procedurePages.forEach(pageToFooter => {
+    procedurePages.forEach((pageToFooter) => {
       addFooter(pageToFooter);
     });
   });
@@ -1253,9 +1710,12 @@ export async function generateLearningLibraryPDF(procedures: ProcedureData[]): P
   return await pdfDoc.save();
 }
 
-export function createLearningLibraryMailtoLink(_pdfBytes: Uint8Array, selectedProcedures: string[]): void {
-  const procedureList = selectedProcedures.join(', ');
-  const subject = encodeURIComponent('Patient Education Materials Request');
+export function createLearningLibraryMailtoLink(
+  _pdfBytes: Uint8Array,
+  selectedProcedures: string[],
+): void {
+  const procedureList = selectedProcedures.join(", ");
+  const subject = encodeURIComponent("Patient Education Materials Request");
   const body = encodeURIComponent(`Dear Heart Clinic Melbourne Team,
 
 I would like to request the educational materials for the following procedures/tests:
@@ -1272,7 +1732,7 @@ Best regards,
 [Your Email Address]
 
 `);
-  
+
   const mailtoUrl = `mailto:reception@heartclinicmelbourne.com.au?subject=${subject}&body=${body}`;
-  window.open(mailtoUrl, '_blank');
+  window.open(mailtoUrl, "_blank");
 }
