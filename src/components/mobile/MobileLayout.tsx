@@ -99,7 +99,19 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
                 style={parallax.styles}
               >
                 <div className="w-32 h-32 text-teal-600/20 text-8xl flex items-center justify-center">
-                  ❤️
+                  <motion.img
+                    src="/images/hcm3d2.png"
+                    alt="Heart Clinic Melbourne Logo"
+                    className="w-20 h-20 object-contain opacity-20"
+                    animate={{
+                      scale: [1, 1.05, 1],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
                 </div>
               </motion.div>
               

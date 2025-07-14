@@ -485,7 +485,7 @@ ${formData.name}`;
                   <span>(03) 9509 5009</span>
                 </a>
                 <a
-                  href="mailto:reception@heartclinicmelbourne.com"
+                  href="mailto:reception@heartclinicmelbourne.com.au"
                   className="flex items-center justify-center space-x-2 border-2 border-red-600 text-red-600 px-6 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-200 transform hover:scale-105"
                 >
                   <Mail className="w-5 h-5" />

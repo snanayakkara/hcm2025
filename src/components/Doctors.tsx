@@ -1,72 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { GraduationCap, MapPin, Stethoscope, Star } from 'lucide-react';
+import { doctors } from '../data/doctors';
 
 const Doctors: React.FC = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-  const doctors = [
-    {
-      name: "Dr Mark Freilich",
-      title: "General & Interventional Cardiologist",
-      specialization: "Coronary Interventions",
-      education: "MBBS (Hons) Monash University 1999, Fellowship Lahey Clinic Medical Centre Boston",
-      degrees: "MBBS FRACP",
-      expertise: ["Radial (wrist) approach coronary angiography", "Interventional cardiology", "Coronary angiograms", "General cardiology"],
-      image: "/images/freilich.png",
-      locations: ["Cabrini Hospital Malvern"],
-      description: "Dr Freilich is a pioneer in radial approach coronary angiography in Melbourne, having trained in this advanced technique in the United States. He specialises in interventional cardiac procedures with extensive experience in coronary interventions.",
-      color: '#148792',
-    },
-    {
-      name: "Dr Phillip Ngu",
-      title: "General Cardiologist & Cardiac Imaging Specialist",
-      specialization: "Cardiac Imaging & General Cardiology",
-      education: "MBBS (Hons) Monash University 2007, Cardiac Imaging Fellowship Alfred Hospital 2017",
-      degrees: "MBBS FRACP",
-      expertise: ["Echocardiography (resting, stress, TOE)", "CT coronary angiography", "Cardiac MRI", "Multi-modality imaging"],
-      image: "/images/ngu.png",
-      locations: ["The Alfred Hospital"],
-      description: "Dr Ngu specialises in advanced cardiac imaging and uses multi-modality imaging techniques to better understand cardiac disease and improve patient outcomes. His expertise spans all forms of non-invasive cardiac assessment.",
-      color: '#4a787d',
-    },
-    {
-      name: "A/Prof Alex Voskoboinik",
-      title: "General Cardiologist & Electrophysiologist",
-      specialization: "Cardiac Rhythm Disturbances",
-      education: "MBBS (Hons) Monash University 2008, PhD Baker Heart Institute 2019, Electrophysiology Fellowship UCSF 2019",
-      degrees: "MBBS PhD FRACP",
-      expertise: ["Pacemaker implantation", "Defibrillator implantation", "Catheter ablation", "Atrial fibrillation treatment"],
-      image: "/images/vosko.png",
-      locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
-      description: "Associate Professor Voskoboinik is a leading electrophysiologist specializing in rhythm disorders. He has extensive research experience and has won prestigious awards including the Ralph Reader Prize for top young investigator.",
-      color: '#3bd7d6',
-    },
-    {
-      name: "Dr Shane Nanayakkara",
-      title: "General Cardiologist, Interventional & Structural Cardiologist and Heart Failure Specialist",
-      specialization: "Coronary and Structural Heart Interventions, Heart Failure",
-      education: "MBBS Monash University, PhD Heart Failure, Advanced Fellowships in Coronary Intervention and Structural Intervention",
-      degrees: "MBBS PhD FRACP",
-      expertise: ["Coronary angiography", "Coronary stenting", "Transcatheter valve procedures", "Structural heart interventions"],
-      image: "/images/nanayakkara.png",
-      locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
-      description: "Dr Nanayakkara is an interventional and structural cardiologist with expertise in advanced procedures including transcatheter valve interventions. He combines clinical excellence with research innovation and has a passion for both face-to-face and telemedicine care.",
-      color: '#79e7e1',
-    },
-    {
-      name: "Dr Kate Rowe",
-      title: "General Cardiologist & Cardiac Imaging Specialist",
-      specialization: "Cardiac Imaging & Valvular Heart Disease",
-      education: "MBBS (Hons) Monash University 2013, Advanced Cardiac Imaging Fellowships in Echocardiography, Cardiac CT and Cardiac MRI Alfred Hospital",
-      degrees: "MBBS FRACP",
-      expertise: ["Cardiac CT", "Echocardiography (resting, stress, TOE)"],
-      image: "/images/kate2png.png",
-      locations: ["Cabrini Hospital Malvern", "Pakenham", "Alfred Hospital"],
-      description: "Dr Rowe is a cardiac imaging specialist and general cardiologist. Her proficiency in multimodality cardiac imaging techniques guides appropriate care of her patients with a broad range of cardiac conditions.",
-      color: '#2dd4bf',
-    }
-  ];
 
   const currentDoctor = doctors[selectedDoctor];
 

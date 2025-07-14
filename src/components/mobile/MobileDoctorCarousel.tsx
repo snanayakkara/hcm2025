@@ -1,60 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Calendar, ChevronRight, Award } from 'lucide-react';
+import { doctors } from '../../data/doctors';
 
 const MobileDoctorCarousel: React.FC = () => {
   const [selectedDoctorId, setSelectedDoctorId] = useState('freilich');
-
-  const doctors = [
-    {
-      id: 'freilich',
-      name: 'Dr Mark Freilich',
-      specialty: 'Interventional Cardiologist',
-      qualifications: 'MBBS (Hons) FRACP',
-      image: '/images/freilich.png',
-      experience: '25+ years',
-      location: 'Cabrini Malvern',
-      description: 'Specializing in radial (wrist) approach coronary angiography and interventional cardiology procedures.',
-      expertise: ['Coronary Angioplasty', 'Radial Approach', 'Interventional Cardiology', 'Coronary Angiograms'],
-      color: 'from-primary-500 to-primary-600',
-    },
-    {
-      id: 'ngu',
-      name: 'Dr Phillip Ngu',
-      specialty: 'Non-Invasive Imaging',
-      qualifications: 'MBBS (Hons)  FRACP',
-      image: '/images/ngu.png',
-      experience: '17+ years',
-      location: 'Alfred Hospital',
-      description: 'Expert in advanced cardiac imaging and multi-modality imaging techniques.',
-      expertise: ['Echocardiography', 'CT Coronary Angiography', 'Cardiac MRI', 'Multi-modality Imaging'],
-      color: 'from-sage-500 to-sage-600',
-    },
-    {
-      id: 'voskoboinik',
-      name: 'A/Prof Alex Voskoboinik',
-      specialty: 'Electrophysiologist',
-      qualifications: 'MBBS (Hons) FRACP PhD',
-      image: '/images/vosko.png',
-      experience: '16+ years',
-      location: 'Multiple Locations',
-      description: 'Leading expert in cardiac rhythm disorders, ablation procedures, and device implantation.',
-      expertise: ['Pacemaker Implantation', 'Catheter Ablation', 'Atrial Fibrillation', 'Defibrillator Implantation'],
-      color: 'from-accent-500 to-accent-600',
-    },
-    {
-      id: 'nanayakkara',
-      name: 'Dr Shane Nanayakkara',
-      specialty: 'Interventional/Structural and Heart Failure Cardiologist',
-      qualifications: 'MBBS FRACP PhD',
-      image: '/images/nanayakkara.png',
-      experience: '14+ years',
-      location: 'Multiple Locations',
-      description: 'Specialist in complex heart failure, cardiomyopathy, and structural heart interventions including TAVI.',
-      expertise: ['Heart Failure', 'Cardiomyopathy', 'TAVI', 'Structural Heart Disease'],
-      color: 'from-cream-700 to-cream-800',
-    },
-  ];
 
   const selectedDoctor = doctors.find(d => d.id === selectedDoctorId) || doctors[0];
 
@@ -160,7 +110,7 @@ const MobileDoctorCarousel: React.FC = () => {
           className="doctor-card relative overflow-visible"
         >
           {/* Gradient Overlay */}
-          <div className={`absolute inset-0 bg-gradient-to-br ${selectedDoctor.color} opacity-5 rounded-3xl`} />
+          <div className={`absolute inset-0 bg-gradient-to-br ${selectedDoctor.mobileColor} opacity-5 rounded-3xl`} />
           
           {/* Content */}
           <div className="relative z-10">

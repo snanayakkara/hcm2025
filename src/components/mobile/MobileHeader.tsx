@@ -123,20 +123,21 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
         <div className="px-4 h-16 flex items-center justify-center">
           <AnimatePresence mode="wait">
             {!isScrolled ? (
-              // Initial State - Logo and Text
+              // Initial State - Logo and Navigation
               <motion.div
-                key="logo-text"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
+                key="logo-nav"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="flex items-center"
+                className="flex items-center justify-between w-full max-w-md"
               >
-                <div className="flex items-center space-x-3">
+                {/* Logo */}
+                <div className="flex items-center space-x-2">
                   <motion.img
                     src="/images/hcm3d2.png"
                     alt="Heart Clinic Melbourne Logo"
-                    className="w-8 h-8 object-contain"
+                    className="w-6 h-6 object-contain"
                     animate={{
                       scale: [1, 1.1, 1],
                     }}
@@ -147,17 +148,42 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                     }}
                   />
                   <div>
-                    <h1 className="text-base font-semibold text-gray-800 leading-tight">
-                      Heart Clinic
+                    <h1 className="text-sm font-semibold text-gray-800 leading-tight">
+                      Heart Clinic Melbourne
                     </h1>
-                    <p className="text-base font-semibold text-gray-800 leading-tight -mt-1">
-                      Melbourne
-                    </p>
                   </div>
+                </div>
+                
+                {/* Quick Actions */}
+                <div className="flex items-center space-x-1">
+                  <motion.button
+                    onClick={() => { vibrate(); onCallClick(); }}
+                    className="flex flex-col items-center justify-center px-2 py-1 transition-all duration-300 text-teal-600 hover:text-teal-700"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Phone className="w-4 h-4" strokeWidth={2.5} />
+                    <span className="text-xs font-medium">Call</span>
+                  </motion.button>
+                  
+                  <motion.button
+                    onClick={() => { vibrate(); handleMoreMenuToggle(); }}
+                    className="flex flex-col items-center justify-center px-2 py-1 transition-all duration-300 text-teal-600 hover:text-teal-700"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <motion.div
+                      animate={{ rotate: showMoreMenu ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Menu className="w-4 h-4" strokeWidth={2.5} />
+                    </motion.div>
+                    <span className="text-xs font-medium">Menu</span>
+                  </motion.button>
                 </div>
               </motion.div>
             ) : (
-              // Scrolled State - Navigation Bar
+              // Scrolled State - Full Navigation Bar
               <motion.div
                 key="navigation"
                 initial={{ opacity: 0, y: 20 }}
