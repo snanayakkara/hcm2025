@@ -881,20 +881,6 @@ html {
   }
 }
 
-/* Pull-to-refresh indicator */
-.pull-to-refresh-indicator {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.pull-to-refresh-indicator.visible {
-  opacity: 1;
-}
 
 /* Swipe gesture styles */
 .swipe-container {

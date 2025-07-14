@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import MobileHeader from './MobileHeader';
 import AddToCalendar from './AddToCalendar';
 import PWAInstallBanner from './PWAInstallBanner';
-import PullToRefresh from './PullToRefresh';
 import QuickActionsCard from './QuickActionsCard';
 import MobileServiceCards from './MobileServiceCards';
 import MobileDoctorCarousel from './MobileDoctorCarousel';
@@ -84,11 +83,6 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
     }
   };
 
-  const handleRefresh = async () => {
-    // Simulate refresh
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    window.location.reload();
-  };
 
   const renderPageContent = () => {
     switch (currentPage) {
@@ -253,7 +247,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
 
   return (
     <>
-      {/* Mobile Header - MOVED OUTSIDE containers */}
+      {/* Mobile Header - Fixed position outside main container */}
       <MobileHeader 
         onNavigate={handleNavigate}
         currentSection={activeSection}
@@ -262,8 +256,8 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
         onDirectionsClick={handleDirectionsClick}
       />
 
-      <PullToRefresh onRefresh={handleRefresh}>
-        <div className="min-h-screen relative overflow-x-hidden ios-vh-fix safe-area-inset-top safe-area-inset-bottom">
+      {/* Main content container */}
+      <div className="min-h-screen relative overflow-x-hidden ios-vh-fix safe-area-inset-bottom">
           {/* Animated Light Background */}
           <div className="fixed inset-0 -z-10">
             {/* Base light gradient */}
@@ -305,7 +299,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
             </div>
           </div>
           
-          <main className="pt-16 safe-area-inset-left safe-area-inset-right">
+          <main className="pt-20 safe-area-inset-left safe-area-inset-right">
             {renderPageContent()}
           </main>
 
@@ -332,7 +326,6 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
             />
           )}
         </div>
-      </PullToRefresh>
     </>
   );
 };

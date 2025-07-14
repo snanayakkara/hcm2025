@@ -18,44 +18,14 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
-  const [isDevTools, setIsDevTools] = useState(false);
-
-  // Detect Chrome DevTools/localhost and initialize
-  useEffect(() => {
-    // Detect Chrome DevTools (device simulation) - same logic as BottomNavigation
-    const isChrome = window.chrome !== undefined || /chrome/i.test(navigator.userAgent);
-    const hasDevToolsAPI = window.devtools !== undefined;
-    const isDevToolsOpen = window.outerHeight - window.innerHeight > 200 || 
-                          window.outerWidth - window.innerWidth > 200;
-    
-    // More reliable detection for Chrome DevTools simulator or localhost
-    const isSimulator = (
-      // Check if running in Chrome with mobile user agent (likely simulator)
-      isChrome && /mobile|iphone|android/i.test(navigator.userAgent) ||
-      // Check for specific Chrome DevTools indicators
-      hasDevToolsAPI ||
-      isDevToolsOpen ||
-      // Check if it's localhost (development environment)
-      window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1' ||
-      // Check for dev server ports
-      /:\d{4}/.test(window.location.href)
-    );
-    
-    setIsDevTools(isSimulator);
-    
-  }, []);
 
   useEffect(() => {
     let ticking = false;
-    let lastScrollY = 0;
-    let timeoutId: NodeJS.Timeout;
     
     const updateScrollState = () => {
-      const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
       const scrolled = currentScrollY > 50;
       setIsScrolled(scrolled);
-      lastScrollY = currentScrollY;
     };
 
     const handleScroll = () => {
@@ -68,33 +38,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
       }
     };
 
-    // iOS Safari specific handlers
-    const handleTouchStart = () => {
-      clearTimeout(timeoutId);
-    };
-
-    const handleTouchMove = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          updateScrollState();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    const handleTouchEnd = () => {
-      // Delayed check for iOS momentum scrolling
-      timeoutId = setTimeout(() => {
-        updateScrollState();
-      }, 100);
-    };
-
-    // Detect if we're on iOS
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-    // Use Intersection Observer as primary method for iOS
+    // Use Intersection Observer as primary method for reliable detection
     const observerOptions = {
       root: null,
       rootMargin: '-50px 0px 0px 0px',
@@ -118,42 +62,18 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     document.body.appendChild(sentinel);
     observer.observe(sentinel);
 
-    const options = { passive: true };
-    
-    // Add event listeners with iOS-specific handling
-    if (isIOS) {
-      // For iOS, rely more on touch events and intersection observer
-      window.addEventListener('touchstart', handleTouchStart, options);
-      window.addEventListener('touchmove', handleTouchMove, options);
-      window.addEventListener('touchend', handleTouchEnd, options);
-      document.addEventListener('touchmove', handleTouchMove, options);
-      document.addEventListener('touchend', handleTouchEnd, options);
-    }
-    
     // Standard scroll events for all devices
-    window.addEventListener('scroll', handleScroll, options);
-    document.addEventListener('scroll', handleScroll, options);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     
     // Force initial check
     const initialTimeoutId = setTimeout(updateScrollState, 100);
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('scroll', handleScroll);
-      
-      if (isIOS) {
-        window.removeEventListener('touchstart', handleTouchStart);
-        window.removeEventListener('touchmove', handleTouchMove);
-        window.removeEventListener('touchend', handleTouchEnd);
-        document.removeEventListener('touchmove', handleTouchMove);
-        document.removeEventListener('touchend', handleTouchEnd);
-      }
-      
       observer.disconnect();
       if (document.body.contains(sentinel)) {
         document.body.removeChild(sentinel);
       }
-      clearTimeout(timeoutId);
       clearTimeout(initialTimeoutId);
     };
   }, []);
@@ -186,9 +106,9 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     <>
       {/* Fixed Header - Frosted Glass */}
       <motion.header 
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 safe-area-inset-top"
         style={{
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.85) 100%)',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%)',
           backdropFilter: 'blur(20px) saturate(180%)',
           WebkitBackdropFilter: 'blur(20px) saturate(180%)',
           borderBottom: '1px solid rgba(255,255,255,0.2)',
