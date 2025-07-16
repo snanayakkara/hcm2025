@@ -130,7 +130,7 @@ const ReceptionTeam: React.FC = () => {
       name: "Aaron Williams",
       title: "Cardiac Sonographer",
       experience: "Diagnostic Imaging",
-      description: "Aaron brings fresh expertise to our imaging team with a focus on providing comfortable patient experiences during diagnostic procedures. His technical skills and patient-centered approach make him a valuable addition to our team.",
+      description: "Aaron brings fresh expertise to our imaging team with a focus on providing comfortable patient experiences during diagnostic procedures. His technical skills and patient-centred approach make him a valuable addition to our team.",
       qualities: ["Technical Proficiency", "Patient Comfort", "Innovation", "Collaborative"],
       image: "/images/placeholder3.png",
       specialties: ["Cardiac Ultrasound", "Diagnostic Procedures", "Patient Care", "Technical Innovation"],
@@ -141,7 +141,7 @@ const ReceptionTeam: React.FC = () => {
       title: "Cardiac Technologist",
       experience: "Cardiac Diagnostics",
       description: "Janice is a skilled cardiac technologist who specialises in various cardiac diagnostic procedures. Her meticulous attention to detail and gentle approach with patients ensures high-quality diagnostic results while maintaining patient comfort throughout the process.",
-      qualities: ["Detail-Oriented", "Patient-Centered", "Technical Precision", "Gentle Approach"],
+      qualities: ["Detail-Oriented", "Patient-Centred", "Technical Precision", "Gentle Approach"],
       image: "/images/placeholder1.png",
       specialties: ["Cardiac Diagnostics", "ECG Interpretation", "Patient Monitoring", "Quality Assurance"],
       color: "from-primary-100 to-accent-100"
@@ -712,14 +712,14 @@ const ReceptionTeam: React.FC = () => {
             <div className="space-y-8">
               <h3 className="text-3xl font-bold text-secondary-800">Our Team Philosophy</h3>
               <p className="text-lg text-secondary-600 leading-relaxed">
-                Our comprehensive team approach ensures that every aspect of your care is handled with professionalism, compassion, and expertise. From your first phone call to your diagnostic procedures, our team works together to provide seamless, patient-centered care.
+                Our comprehensive team approach ensures that every aspect of your care is handled with professionalism, compassion, and expertise. From your first phone call to your diagnostic procedures, our team works together to provide seamless, patient-centred care.
               </p>
               
               <div className="grid sm:grid-cols-2 gap-8">
                 <div className="space-y-3">
                   <div className="flex items-center space-x-2">
                     <Smile className="w-5 h-5 text-primary-600" />
-                    <span className="font-semibold text-secondary-800">Patient-Centered Care</span>
+                    <span className="font-semibold text-secondary-800">Patient-Centred Care</span>
                   </div>
                   <p className="text-sm text-secondary-600">Every interaction focused on your comfort and wellbeing</p>
                 </div>

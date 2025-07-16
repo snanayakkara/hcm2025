@@ -862,9 +862,9 @@ export async function generateLearningLibraryPDF(
     });
   }
 
-  // Title - centered for single procedure, left-aligned for multiple
+  // Title - centred for single procedure, left-aligned for multiple
   if (isSingleProcedure) {
-    // Centered layout for single procedure
+    // Centred layout for single procedure
     const clinicNameWidth = "Heart Clinic Melbourne".length * 14; // Approximate width for 24pt
     const subtitleWidth = "Patient Education Guide".length * 11; // Approximate width for 18pt
 
@@ -1023,7 +1023,7 @@ export async function generateLearningLibraryPDF(
       coverY -= rowHeight;
     });
   } else {
-    // For single procedure, create an attractive centered layout
+    // For single procedure, create an attractive centred layout
     const singleProcedure = procedures[0];
     const centerX = coverWidth / 2;
 

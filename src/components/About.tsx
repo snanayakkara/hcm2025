@@ -71,7 +71,7 @@ const About: React.FC = () => {
   return (
     <section id="about" className="py-32 bg-white" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-        {/* Centered Header */}
+        {/* Centred Header */}
         <motion.div 
           className="text-center mb-20"
           variants={containerVariants}
@@ -89,7 +89,7 @@ const About: React.FC = () => {
           </motion.h2>
         </motion.div>
 
-        {/* Full-width centered description */}
+        {/* Full-width centred description */}
         <motion.div 
           className="text-center mb-20 max-w-4xl mx-auto"
           variants={containerVariants}

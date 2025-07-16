@@ -162,8 +162,8 @@ If using professional email:
 
 #### 3. Bundle Analysis
 ```bash
-# Analyze bundle size locally
-npm run build -- --analyze
+# Analyse bundle size locally
+npm run build -- --analyse
 ```
 
 ## Security Considerations

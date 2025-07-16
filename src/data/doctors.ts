@@ -12,7 +12,7 @@ export interface Doctor {
   description: string;
   color: string;
   experience: string;
-  specialization: string;
+  specialisation: string;
   mobileColor: string;
 }
 
@@ -22,7 +22,7 @@ export const doctors: Doctor[] = [
     name: "Dr Mark Freilich",
     title: "General & Interventional Cardiologist",
     specialty: "Interventional Cardiologist",
-    specialization: "Coronary Interventions",
+    specialisation: "Coronary Interventions",
     education: "MBBS (Hons) Monash University 1999, Fellowship Lahey Clinic Medical Centre Boston",
     degrees: "MBBS FRACP",
     qualifications: "MBBS (Hons) FRACP",
@@ -39,7 +39,7 @@ export const doctors: Doctor[] = [
     name: "Dr Phillip Ngu",
     title: "General Cardiologist & Cardiac Imaging Specialist",
     specialty: "Non-Invasive Imaging",
-    specialization: "Cardiac Imaging & General Cardiology",
+    specialisation: "Cardiac Imaging & General Cardiology",
     education: "MBBS (Hons) Monash University 2007, Cardiac Imaging Fellowship Alfred Hospital 2017",
     degrees: "MBBS FRACP",
     qualifications: "MBBS (Hons) FRACP",
@@ -56,7 +56,7 @@ export const doctors: Doctor[] = [
     name: "A/Prof Alex Voskoboinik",
     title: "General Cardiologist & Electrophysiologist",
     specialty: "Electrophysiologist",
-    specialization: "Cardiac Rhythm Disturbances",
+    specialisation: "Cardiac Rhythm Disturbances",
     education: "MBBS (Hons) Monash University 2008, PhD Baker Heart Institute 2019, Electrophysiology Fellowship UCSF 2019",
     degrees: "MBBS PhD FRACP",
     qualifications: "MBBS (Hons) FRACP PhD",
@@ -73,7 +73,7 @@ export const doctors: Doctor[] = [
     name: "Dr Shane Nanayakkara",
     title: "General Cardiologist, Interventional & Structural Cardiologist and Heart Failure Specialist",
     specialty: "Interventional/Structural and Heart Failure Cardiologist",
-    specialization: "Coronary and Structural Heart Interventions, Heart Failure",
+    specialisation: "Coronary and Structural Heart Interventions, Heart Failure",
     education: "MBBS Monash University, PhD Heart Failure, Advanced Fellowships in Coronary Intervention and Structural Intervention",
     degrees: "MBBS PhD FRACP",
     qualifications: "MBBS FRACP PhD",
@@ -90,14 +90,14 @@ export const doctors: Doctor[] = [
     name: "Dr Kate Rowe",
     title: "General Cardiologist & Cardiac Imaging Specialist",
     specialty: "Cardiac Imaging & Valvular Heart Disease",
-    specialization: "Cardiac Imaging & Valvular Heart Disease",
+    specialisation: "Cardiac Imaging & Valvular Heart Disease",
     education: "MBBS Monash University 2013, Cardiac Imaging Fellowship Alfred Hospital 2023",
     degrees: "MBBS FRACP",
     qualifications: "MBBS FRACP",
     expertise: ["Echocardiography (resting, stress, TOE)", "Valvular heart disease", "Cardiac imaging", "Women's cardiac health"],
     image: "/images/kate2png.png",
     locations: ["The Alfred Hospital", "Cabrini Hospital Malvern"],
-    description: "Dr Rowe is a cardiac imaging specialist with particular expertise in valvular heart disease and echocardiography. She has a special interest in women's cardiac health and provides comprehensive cardiac care with a focus on patient-centered approach.",
+    description: "Dr Rowe is a cardiac imaging specialist with particular expertise in valvular heart disease and echocardiography. She has a special interest in women's cardiac health and provides comprehensive cardiac care with a focus on patient-centred approach.",
     color: '#5fb3b6',
     mobileColor: 'from-teal-400 to-teal-500',
     experience: '11+ years',

@@ -758,7 +758,13 @@ ${formData.name}`;
                               const isCurrentMonth = date.getMonth() === currentMonth;
                               const isToday = date.toDateString() === today.toDateString();
                               const isPast = date < today && !isToday;
-                              const isSelected = formData.preferredDate === date.toISOString().split('T')[0];
+                              
+                              // Format date as YYYY-MM-DD using local timezone
+                              const year = date.getFullYear();
+                              const month = String(date.getMonth() + 1).padStart(2, '0');
+                              const day = String(date.getDate()).padStart(2, '0');
+                              const localDateString = `${year}-${month}-${day}`;
+                              const isSelected = formData.preferredDate === localDateString;
                               
                               days.push(
                                 <button
@@ -767,10 +773,15 @@ ${formData.name}`;
                                   disabled={isPast}
                                   onClick={() => {
                                     if (!isPast) {
-                                      const selectedDate = new Date(date);
+                                      // Format selected date as YYYY-MM-DD using local timezone
+                                      const year = date.getFullYear();
+                                      const month = String(date.getMonth() + 1).padStart(2, '0');
+                                      const day = String(date.getDate()).padStart(2, '0');
+                                      const localDateString = `${year}-${month}-${day}`;
+                                      
                                       setFormData({
                                         ...formData,
-                                        preferredDate: selectedDate.toISOString().split('T')[0]
+                                        preferredDate: localDateString
                                       });
                                     }
                                   }}

@@ -54,7 +54,7 @@ const MobileDoctorCarousel: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-gray-600 max-w-sm mx-auto"
         >
-          Comprehensive cardiac care with advanced specialization
+          Comprehensive cardiac care with advanced specialisation
         </motion.p>
       </div>
 

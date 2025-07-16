@@ -88,7 +88,7 @@ npm run test performance
 
 #### UI/UX Enhancements:
 - **Contextual clarity**: Button purposes immediately clear through slide-out text
-- **Visual hierarchy**: Card content blurs to emphasize action buttons and labels
+- **Visual hierarchy**: Card content blurs to emphasise action buttons and labels
 - **Smooth animations**: 200ms transitions for all hover states and blur effects
 - **Accessibility**: High contrast tooltips with proper ARIA labels
 

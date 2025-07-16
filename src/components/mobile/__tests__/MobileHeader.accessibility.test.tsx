@@ -190,7 +190,7 @@ describe('MobileHeader Accessibility Tests', () => {
       
       await waitFor(() => {
         const menuItems = screen.getAllByRole('button')
-        // Menu items should be properly labeled
+        // Menu items should be properly labelled
         expect(menuItems.length).toBeGreaterThan(0)
       })
     })

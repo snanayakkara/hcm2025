@@ -4,7 +4,7 @@ import { marked } from 'marked';
 // Configure marked options
 marked.setOptions({
   breaks: true, // Convert \n to <br>
-  gfm: true,    // GitHub Flavored Markdown
+  gfm: true,    // GitHub Flavoured Markdown
 });
 
 export function parseMarkdown(text: string): string {

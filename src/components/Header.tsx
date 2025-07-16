@@ -422,7 +422,7 @@ const Header: React.FC = () => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <div className="ml-28"> {/* Adjusted margin for larger, vertically-centered logo */}
+                <div className="ml-28"> {/* Adjusted margin for larger, vertically-centred logo */}
                   <h1 className="text-base font-semibold bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent whitespace-nowrap">
                     Heart Clinic Melbourne
                   </h1>
