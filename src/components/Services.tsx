@@ -105,7 +105,7 @@ const Services: React.FC = () => {
       preparation: "Fasting required",
       locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "Coronary angiography is a specialised X-ray procedure that uses contrast dye to visualise the coronary arteries. This gold-standard test can detect blockages and assess the need for intervention.",
-      cost: "Hospital admission may be required",
+      cost: "Performed at The Alfred (public); private health insurance recommended for Cabrini and SJOG",
       image: "/images/angio.png"
     },
     {
@@ -170,7 +170,7 @@ const Services: React.FC = () => {
       preparation: "Comprehensive pre-procedure assessment required",
       locations: ["Cabrini Malvern", "The Alfred"],
       description: "TAVI is a minimally invasive procedure to replace a diseased aortic valve without open heart surgery. A new valve is delivered via catheter, typically through the groin artery.",
-      cost: "Private health insurance recommended",
+      cost: "Performed at The Alfred (public); private health insurance recommended for Cabrini",
       image: "/images/tavi.png"
     },
     {
@@ -183,7 +183,7 @@ const Services: React.FC = () => {
       preparation: "Multidisciplinary team assessment required",
       locations: ["Cabrini Malvern", "The Alfred"],
       description: "mTEER is a minimally invasive procedure to repair a leaking mitral valve using advanced clip technology. This procedure can significantly improve symptoms without open heart surgery.",
-      cost: "Private health insurance recommended",
+      cost: "Performed at The Alfred (public); private health insurance recommended for Cabrini",
       image: "/images/mteer_drawn.png"
     },
     {
@@ -196,7 +196,7 @@ const Services: React.FC = () => {
       preparation: "Day procedure or overnight stay",
       locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "Pacemaker insertion is a procedure to implant a small electronic device that helps regulate your heart rhythm. The pacemaker monitors your heart rate and delivers electrical impulses when needed to maintain a normal rhythm.",
-      cost: "Private health insurance recommended",
+      cost: "Performed at The Alfred (public); private health insurance recommended for Cabrini",
       image: "/images/pacemaker.png"
     }
   ];
@@ -355,7 +355,7 @@ const Services: React.FC = () => {
               variant="outline-white"
               size="large"
               icon={Mail}
-              onClick={() => window.location.href = 'mailto:reception@hcm2025.com.au'}
+              onClick={() => window.location.href = 'mailto:reception@heartclinicmelbourne.com.au'}
               isMobile={isMobile}
               className="shadow-md hover:shadow-lg backdrop-blur-sm"
             >

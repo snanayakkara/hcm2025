@@ -31,7 +31,7 @@ const LocationOverlay: React.FC<LocationOverlayProps> = ({ isOpen, onClose }) =>
       color: "from-sage-500 to-sage-600",
     },
     {
-      name: "Casey Medical Centre, Clyde",
+      name: "Casey Specialist Centre, Clyde",
       address: "1 Morison Rd, Clyde VIC 3978",
       phone: "(03) 9509 5009",
       hours: "Fri: 9:00 AM - 5:00 PM",

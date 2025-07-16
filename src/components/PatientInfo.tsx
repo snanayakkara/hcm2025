@@ -651,7 +651,7 @@ ${formData.name}`;
                         required
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 text-gray-900"
                         placeholder="Enter your full name"
                       />
                     </div>
@@ -666,7 +666,7 @@ ${formData.name}`;
                         required
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 text-gray-900"
                         placeholder="0412 345 678"
                       />
                     </div>
@@ -683,7 +683,7 @@ ${formData.name}`;
                       required
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 text-gray-900"
                       placeholder="your.email@example.com"
                     />
                   </div>
@@ -699,7 +699,7 @@ ${formData.name}`;
                         name="preferredDate"
                         value={formData.preferredDate}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 text-gray-900"
                       />
                       
                       {/* Mini Calendar Widget */}
@@ -817,14 +817,14 @@ ${formData.name}`;
                             }}
                             className={`w-full px-4 py-3 text-left rounded-lg border-2 transition-all duration-200 flex items-center justify-between ${
                               formData.preferredTime === timeSlot.value
-                                ? 'bg-blue-600 text-white border-blue-600 shadow-md'
-                                : 'bg-white text-gray-700 border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+                                ? 'bg-teal-600 text-white border-teal-600 shadow-md'
+                                : 'bg-white text-gray-700 border-gray-200 hover:border-teal-300 hover:bg-teal-50'
                             }`}
                           >
                             <div>
                               <div className="font-medium">{timeSlot.label}</div>
                               <div className={`text-xs ${
-                                formData.preferredTime === timeSlot.value ? 'text-blue-100' : 'text-gray-500'
+                                formData.preferredTime === timeSlot.value ? 'text-teal-100' : 'text-gray-500'
                               }`}>
                                 {timeSlot.period}
                               </div>
@@ -856,8 +856,8 @@ ${formData.name}`;
                           }}
                           className={`px-4 py-3 text-sm font-medium rounded-lg border-2 transition-all duration-200 ${
                             formData.preferredLocation === location
-                              ? 'bg-blue-600 text-white border-blue-600 shadow-md'
-                              : 'bg-white text-gray-700 border-gray-300 hover:border-blue-300 hover:bg-blue-50'
+                              ? 'bg-teal-600 text-white border-teal-600 shadow-md'
+                              : 'bg-white text-gray-700 border-gray-300 hover:border-teal-300 hover:bg-teal-50'
                           }`}
                         >
                           {location}
@@ -901,8 +901,8 @@ ${formData.name}`;
                             !formData.preferredLocation
                               ? 'bg-gray-50 text-gray-400 border-gray-200 cursor-not-allowed'
                               : formData.preferredDoctor === doctor.name
-                              ? 'bg-blue-600 text-white border-blue-600 shadow-md'
-                              : 'bg-white text-gray-700 border-gray-300 hover:border-blue-300 hover:bg-blue-50'
+                              ? 'bg-teal-600 text-white border-teal-600 shadow-md'
+                              : 'bg-white text-gray-700 border-gray-300 hover:border-teal-300 hover:bg-teal-50'
                           }`}
                         >
                           <div className="flex-shrink-0">
@@ -921,7 +921,7 @@ ${formData.name}`;
                                 !formData.preferredLocation
                                   ? 'bg-gray-200 text-gray-400 border-gray-300'
                                   : formData.preferredDoctor === doctor.name
-                                  ? 'bg-white text-blue-600 border-white'
+                                  ? 'bg-white text-teal-600 border-white'
                                   : 'bg-gray-100 text-gray-600 border-gray-300'
                               }`}>
                                 ?
@@ -942,7 +942,7 @@ ${formData.name}`;
                               !formData.preferredLocation
                                 ? 'text-gray-300'
                                 : formData.preferredDoctor === doctor.name
-                                ? 'text-blue-100'
+                                ? 'text-teal-100'
                                 : 'text-gray-500'
                             }`}>
                               {doctor.specialty}
@@ -969,7 +969,7 @@ ${formData.name}`;
                       name="localGP"
                       value={formData.localGP}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 text-gray-900"
                       placeholder="Enter your GP's name and practice"
                     />
                   </div>
@@ -984,7 +984,7 @@ ${formData.name}`;
                       rows={4}
                       value={formData.reason}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 text-gray-900"
                       placeholder="Please describe your symptoms or reason for consultation..."
                     ></textarea>
                   </div>

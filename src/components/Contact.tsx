@@ -31,7 +31,7 @@ const Contact: React.FC = () => {
       googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.8!2d145.4847!3d-38.0773!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad7a9b1b5b6b6b1%3A0x5017d681632ccc54!2s44%20Main%20St%2C%20Pakenham%20VIC%203810%2C%20Australia!5e0!3m2!1sen!2sau!4v1640995200000!5m2!1sen!2sau"
     },
     {
-      name: "Casey Medical Centre, Clyde",
+      name: "Casey Specialist Centre, Clyde",
       address: "1s Morison Rd, Clyde VIC 3978",
       phone: "(03) 9509 5009", 
       hours: ["Mon-Fri: 8:30 AM - 5:00 PM", "Sat: By appointment"],

@@ -238,9 +238,52 @@ src/
 - **Vite** build system for optimized production bundles
 - **Domain**: heartclinicmelbourne.com.au
 
-## Recent Updates (January 2025)
+## Recent Updates (July 2025)
 
-### 3. Comprehensive Testing Infrastructure
+### 4. Project Structure Fix & Color Palette Refinement (July 16, 2025)
+**Resolved nested folder structure and updated Wizard component styling**
+
+#### Major Infrastructure Fix:
+- **Fixed nested `hcm2025/hcm2025/` folder structure** that was preventing npm/build tools from working
+- **Moved all project files up one level** to enable proper development workflow
+- **Resolved npm script execution issues** - `npm run dev` now works correctly
+- **Enabled Vite dev server** to run at http://localhost:5173/
+
+#### Wizard Component Color Palette Updates:
+**Migrated from blue-based to teal-based color scheme for better brand consistency**
+
+#### Color Changes Applied:
+- **Primary accent color**: `blue-600` → `teal-600`
+- **Background highlights**: `blue-50/100` → `teal-50/100` 
+- **Border colors**: `blue-200` → `teal-200`
+- **Focus rings**: `focus:ring-blue-500` → `focus:ring-teal-500`
+- **Text colors**: `blue-800/900` → `teal-800/900`
+
+#### Enhanced User Experience:
+- **Improved PDF generation error handling** with user-friendly error messages
+- **Enhanced completion flow** with clearer next steps instructions
+- **Better validation logic** for review step - checks essential fields rather than strict validation
+- **Added instructional messaging** for PDF attachment process
+
+#### Technical Improvements:
+- **Button component integration** - Replaced custom button styling with reusable `Button` component
+- **Consistent spacing and typography** across all wizard steps
+- **Improved accessibility** with better color contrast ratios
+
+```typescript
+// Example of color palette migration
+// Before:
+<div className="bg-blue-100 rounded-full">
+  <FileText className="w-8 h-8 text-blue-600" />
+</div>
+
+// After:
+<div className="bg-teal-100 rounded-full">
+  <FileText className="w-8 h-8 text-teal-600" />
+</div>
+```
+
+### 3. Comprehensive Testing Infrastructure (January 2025)
 **Complete test suite implementation with performance monitoring**
 
 #### Testing Coverage:

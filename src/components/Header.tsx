@@ -52,7 +52,7 @@ const Header: React.FC = () => {
     // Locations
     { type: 'location', title: 'Cabrini Hospital, Malvern', description: 'Main clinic location', section: 'contact', keywords: ['malvern', 'cabrini', 'location', 'address', 'clinic'] },
     { type: 'location', title: 'Heart Clinic Pakenham', description: 'Southeastern location', section: 'contact', keywords: ['pakenham', 'location', 'address', 'clinic'] },
-    { type: 'location', title: 'Casey Medical Centre, Clyde', description: 'Southeastern location', section: 'contact', keywords: ['clyde', 'casey', 'location', 'address', 'clinic'] },
+    { type: 'location', title: 'Casey Specialist Centre, Clyde', description: 'Southeastern location', section: 'contact', keywords: ['clyde', 'casey', 'location', 'address', 'clinic'] },
     
     // General pages
     { type: 'page', title: 'About Us', description: 'Learn about Heart Clinic Melbourne', section: 'about', keywords: ['about', 'history', 'team', 'mission'] },

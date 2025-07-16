@@ -149,7 +149,7 @@ Provider Number: ${formData.providerNumber}`;
   const locations = [
     "Cabrini Malvern",
     "Heart Clinic Pakenham", 
-    "Casey Medical Centre, Clyde"
+    "Casey Specialist Centre, Clyde"
   ];
 
   const getDoctorsByLocation = (location: string) => {
@@ -208,7 +208,7 @@ Provider Number: ${formData.providerNumber}`;
             displayName: "No preference"
           }
         ];
-      case "Casey Medical Centre, Clyde":
+      case "Casey Specialist Centre, Clyde":
         return [
           { 
             name: "Dr Phillip Ngu", 

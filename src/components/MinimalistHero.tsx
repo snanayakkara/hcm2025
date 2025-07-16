@@ -156,7 +156,7 @@ const MinimalistHero: React.FC = () => {
             
             {/* Value Proposition */}
             <p className={`${isMobile ? 'text-lg' : 'text-xl lg:text-2xl'} text-secondary-500 max-w-3xl mx-auto leading-relaxed font-light`}>
-              Comprehensive cardiovascular services across Melbourne's southeast with a focus on personalized, compassionate care
+              Comprehensive cardiovascular services across Melbourne's South East with a focus on personalised, compassionate care
             </p>
           </motion.div>
 

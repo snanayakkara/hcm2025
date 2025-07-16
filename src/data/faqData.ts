@@ -43,7 +43,7 @@ export const faqData: FAQItem[] = [
   {
     category: 'general',
     question: 'What locations do you have?',
-    answer: 'We have three convenient locations: Cabrini Hospital Malvern (our main clinic), Heart Clinic Pakenham, and Casey Medical Centre Clyde. Each location offers different services, and our reception team can advise which location is best for your specific needs.'
+    answer: 'We have three convenient locations: Cabrini Hospital Malvern (our main clinic), Heart Clinic Pakenham, and Casey Specialist Centre Clyde. Each location offers different services, and our reception team can advise which location is best for your specific needs.'
   },
   {
     category: 'general',
