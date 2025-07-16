@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Send } from 'lucide-react';
+import { X, Send, FileText, Download, Printer, ChevronDown } from 'lucide-react';
 import Button from './ui/Button';
 
 interface ReferralFormProps {
@@ -8,6 +8,7 @@ interface ReferralFormProps {
 }
 
 const ReferralForm: React.FC<ReferralFormProps> = ({ isOpen, onClose }) => {
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     // Referral Types
     referralTypes: [] as string[],
@@ -327,6 +328,21 @@ Provider Number: ${formData.providerNumber}`;
     return category ? category.indications : [];
   };
 
+  const handleDownloadPDF = () => {
+    // Open the PDF in a new tab for download
+    window.open('/A4-Referral-Pad-update-Feb-2023.pdf', '_blank');
+  };
+
+  const handlePrintPDF = () => {
+    // Open PDF in new window and trigger print dialog
+    const printWindow = window.open('/A4-Referral-Pad-update-Feb-2023.pdf', '_blank');
+    if (printWindow) {
+      printWindow.onload = () => {
+        printWindow.print();
+      };
+    }
+  };
+
   const referralTypes = [
     {
       value: "Cardiology Consult",
@@ -359,20 +375,135 @@ Provider Number: ${formData.providerNumber}`;
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center" onClick={onClose}>
       <div className="bg-white w-[95vw] max-w-3xl max-h-[90vh] overflow-y-auto rounded-lg shadow-2xl border border-gray-200"
            onClick={e => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex justify-between items-center border-b p-4">
-          <div className="flex items-center space-x-3">
-            <img 
-              src="/images/hcm3d2.png" 
-              alt="Heart Clinic Melbourne Logo" 
-              className="h-8 w-8"
-            />
-            <h2 className="text-lg font-semibold text-black">Patient Referral Form for Referring Doctors</h2>
+        
+        {!showForm ? (
+          // Initial Screen with PDF and Form Options
+          <div className="p-8">
+            {/* Header */}
+            <div className="flex justify-between items-center border-b pb-6 mb-8">
+              <div className="flex items-center space-x-3">
+                <img 
+                  src="/images/hcm3d2.png" 
+                  alt="Heart Clinic Melbourne Logo" 
+                  className="h-10 w-10"
+                />
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Patient Referral</h2>
+                  <p className="text-gray-600">Choose your preferred method</p>
+                </div>
+              </div>
+              <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <X className="w-6 h-6 text-gray-500" />
+              </button>
+            </div>
+
+            {/* Option Cards */}
+            <div className="space-y-6">
+              
+              {/* PDF Option */}
+              <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+                <div className="flex items-start space-x-4 mb-6">
+                  <div className="bg-blue-500 p-3 rounded-xl">
+                    <FileText className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">PDF Referral Form</h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      Download or print our traditional PDF referral form. Perfect for printing and filling out by hand, 
+                      or for practices that prefer paper-based workflows.
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Split Button for PDF */}
+                <div className="flex rounded-xl overflow-hidden shadow-md">
+                  <button
+                    onClick={handleDownloadPDF}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 font-semibold transition-colors duration-200 flex items-center justify-center space-x-2"
+                  >
+                    <Download className="w-5 h-5" />
+                    <span>Download PDF</span>
+                  </button>
+                  <div className="w-px bg-blue-700"></div>
+                  <button
+                    onClick={handlePrintPDF}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-4 transition-colors duration-200 flex items-center justify-center"
+                    title="Print PDF"
+                  >
+                    <Printer className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="flex items-center">
+                <div className="flex-1 border-t border-gray-300"></div>
+                <span className="px-4 text-gray-500 font-medium">OR</span>
+                <div className="flex-1 border-t border-gray-300"></div>
+              </div>
+
+              {/* Online Form Option */}
+              <div className="bg-gradient-to-r from-teal-50 to-emerald-100 rounded-2xl p-6 border border-teal-200">
+                <div className="flex items-start space-x-4 mb-6">
+                  <div className="bg-teal-500 p-3 rounded-xl">
+                    <FileText className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Fill Form Online</h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      Complete the referral form digitally with guided fields, smart suggestions, and automatic email formatting. 
+                      Faster and more accurate than paper forms.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <span className="bg-white/70 text-teal-700 px-3 py-1 rounded-full text-sm font-medium">Smart Validation</span>
+                      <span className="bg-white/70 text-teal-700 px-3 py-1 rounded-full text-sm font-medium">Auto Email</span>
+                      <span className="bg-white/70 text-teal-700 px-3 py-1 rounded-full text-sm font-medium">No Printing</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="w-full bg-teal-600 hover:bg-teal-700 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center space-x-2 shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+                >
+                  <span>Fill Form Online</span>
+                  <ChevronDown className="w-5 h-5 rotate-[-90deg]" />
+                </button>
+              </div>
+            </div>
+
+            {/* Footer Note */}
+            <div className="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
+              <p className="text-sm text-gray-600 text-center">
+                <strong>Note:</strong> Both methods will create a referral that can be sent to{' '}
+                <span className="font-medium text-teal-600">reception@heartclinicmelbourne.com</span>
+              </p>
+            </div>
           </div>
-          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+        ) : (
+          // Existing Form Content
+          <>
+            {/* Header */}
+            <div className="flex justify-between items-center border-b p-4">
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={() => setShowForm(false)}
+                  className="p-1 hover:bg-gray-100 rounded mr-2 transition-colors"
+                  title="Back to options"
+                >
+                  <ChevronDown className="w-5 h-5 rotate-90 text-gray-600" />
+                </button>
+                <img 
+                  src="/images/hcm3d2.png" 
+                  alt="Heart Clinic Melbourne Logo" 
+                  className="h-8 w-8"
+                />
+                <h2 className="text-lg font-semibold text-black">Patient Referral Form for Referring Doctors</h2>
+              </div>
+              <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-4 space-y-6">
@@ -876,6 +1007,8 @@ Provider Number: ${formData.providerNumber}`;
             Your email client will open with a pre-filled referral. Send the email and we'll contact you to confirm receipt and appointment details.
           </p>
         </form>
+        </>
+        )}
       </div>
     </div>
   ) : null;
