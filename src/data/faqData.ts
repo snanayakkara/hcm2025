@@ -32,11 +32,6 @@ export const faqData: FAQItem[] = [
   },
   {
     category: 'general',
-    question: 'Where can I learn more about heart conditions and procedures?',
-    answer: 'Our comprehensive Library contains detailed information about heart conditions, procedures, and patient journey maps. You can access educational videos, procedure guides, and step-by-step explanations of what to expect during your care. Visit our Library for in-depth medical information and educational resources.'
-  },
-  {
-    category: 'general',
     question: 'How do I book an appointment?',
     answer: 'You can book an appointment by calling our reception team at (03) 9509 5009. We have locations at Malvern, Pakenham, and Clyde. Our team will help you choose the most convenient location and time slot that suits your needs.'
   },
