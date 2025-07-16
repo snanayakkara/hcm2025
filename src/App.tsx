@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useMobileDetection } from './hooks/useMobileDetection';
 import Header from './components/Header';
 import MinimalistHero from './components/MinimalistHero';
-import About from './components/About';
-import Services from './components/Services';
-import Doctors from './components/Doctors';
-import ReceptionTeam from './components/ReceptionTeam';
-import PatientInfo from './components/PatientInfo';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import MobileLayout from './components/mobile/MobileLayout';
+
+// Lazy load heavy components
+const About = lazy(() => import('./components/About'));
+const Services = lazy(() => import('./components/Services'));
+const Doctors = lazy(() => import('./components/Doctors'));
+const ReceptionTeam = lazy(() => import('./components/ReceptionTeam'));
+const PatientInfo = lazy(() => import('./components/PatientInfo'));
+const FAQ = lazy(() => import('./components/FAQ'));
+const Contact = lazy(() => import('./components/Contact'));
+const Footer = lazy(() => import('./components/Footer'));
+const MobileLayout = lazy(() => import('./components/mobile/MobileLayout'));
 
 function HomePage() {
   const { isMobile } = useMobileDetection();
@@ -62,7 +65,6 @@ function HomePage() {
       // Add floating animation to background elements
       const floatingElements = document.querySelectorAll('.floating-element');
       floatingElements.forEach((element, index) => {
-        const speed = 0.1 + (index * 0.05);
         const yPos = Math.sin(scrolled * 0.01 + index) * 10;
         element.style.transform = `translateY(${yPos}px)`;
       });
@@ -164,13 +166,30 @@ function HomePage() {
       
       <main className="relative z-10">
         <MinimalistHero />
-        <About />
-        <Services />
-        <Doctors />
-        <ReceptionTeam />
-        <PatientInfo />
-        <Contact />
-        <Footer />
+        <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
+          <About />
+        </Suspense>
+        <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
+          <Services />
+        </Suspense>
+        <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
+          <Doctors />
+        </Suspense>
+        <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
+          <ReceptionTeam />
+        </Suspense>
+        <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
+          <PatientInfo />
+        </Suspense>
+        <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
+          <FAQ />
+        </Suspense>
+        <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
+          <Contact />
+        </Suspense>
+        <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
+          <Footer />
+        </Suspense>
       </main>
     </div>
   );
@@ -180,8 +199,6 @@ function App() {
   const { isMobile, screenWidth } = useMobileDetection();
   const [currentPage, setCurrentPage] = useState('home');
   
-  // Debug logging
-  console.log('Mobile detection:', { isMobile, screenWidth });
 
   // If mobile, use MobileLayout exclusively
   if (isMobile) {
@@ -189,10 +206,12 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={
-            <MobileLayout 
-              currentPage={currentPage} 
-              onPageChange={setCurrentPage} 
-            />
+            <Suspense fallback={<div className="flex justify-center items-center h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div></div>}>
+              <MobileLayout 
+                currentPage={currentPage} 
+                onPageChange={setCurrentPage} 
+              />
+            </Suspense>
           } />
         </Routes>
       </Router>

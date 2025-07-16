@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Car, Train, Printer, ExternalLink, Search, Building2 } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
+import Button from './ui/Button';
 
 const Contact: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState(0);
@@ -441,20 +442,26 @@ const Contact: React.FC = () => {
                 Emma and our reception team are here to help you schedule appointments, answer questions, and ensure your visit goes smoothly.
               </p>
               <div className="flex flex-col gap-4">
-                <button 
+                <Button 
+                  variant="primary"
+                  size="large"
+                  icon={Phone}
                   onClick={() => window.open('tel:(03) 9509 5009', '_self')}
-                  className={`flex-1 bg-primary-500 text-white ${isMobile ? 'px-8 py-4 min-h-[44px]' : 'px-8 py-4'} rounded-2xl hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold`}
+                  isMobile={isMobile}
+                  className="flex-1"
                 >
-                  <Phone className="w-4 h-4" />
-                  <span>Call Now</span>
-                </button>
-                <button 
+                  Call Now
+                </Button>
+                <Button 
+                  variant="secondary"
+                  size="large"
+                  icon={Mail}
                   onClick={() => window.open('mailto:reception@heartclinicmelbourne.com.au', '_self')}
-                  className={`flex-1 border border-primary-500 text-primary-600 ${isMobile ? 'px-8 py-4 min-h-[44px]' : 'px-8 py-4'} rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold`}
+                  isMobile={isMobile}
+                  className="flex-1"
                 >
-                  <Mail className="w-4 h-4" />
-                  <span>Send Email</span>
-                </button>
+                  Send Email
+                </Button>
               </div>
             </div>
           </div>

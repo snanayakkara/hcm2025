@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import { X, Send } from 'lucide-react';
+import Button from './ui/Button';
 
 interface ReferralFormProps {
   isOpen: boolean;
@@ -94,7 +95,7 @@ const ReferralForm: React.FC<ReferralFormProps> = ({ isOpen, onClose }) => {
     // Create email content
     const subject = encodeURIComponent('Patient Referral - Heart Clinic Melbourne');
     
-    let body = `Dear Heart Clinic Melbourne Team,
+    const body = `Dear Heart Clinic Melbourne Team,
 
 I would like to refer a patient for cardiac consultation.
 
@@ -853,19 +854,23 @@ Provider Number: ${formData.providerNumber}`;
 
           {/* Submit Buttons */}
           <div className="flex space-x-4 pt-4 border-t">
-            <button
-              type="button"
+            <Button
+              variant="secondary"
+              size="medium"
               onClick={onClose}
-              className="px-4 py-2 border rounded hover:bg-gray-50 text-gray-700"
+              className="border border-gray-300 text-gray-700 hover:bg-gray-50"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
+              size="medium"
+              icon={Send}
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className="flex-1"
             >
               Send Referral
-            </button>
+            </Button>
           </div>
           <p className="text-sm text-gray-600 text-center">
             Your email client will open with a pre-filled referral. Send the email and we'll contact you to confirm receipt and appointment details.

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, FileText, Search, Video, Plus } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -93,46 +93,57 @@ const Header: React.FC = () => {
 
   // Search function
   const performSearch = (query: string) => {
-    if (!query.trim()) {
+    try {
+      if (!query.trim()) {
+        setSearchResults([]);
+        setShowSearchResults(false);
+        return;
+      }
+
+      const searchTerms = query.toLowerCase().split(' ');
+      const results = searchData.filter(item => {
+        try {
+          const searchableText = [
+            item.title.toLowerCase(),
+            item.description.toLowerCase(),
+            ...item.keywords
+          ].join(' ');
+
+          return searchTerms.some(term => 
+            searchableText.includes(term) && term.length > 1
+          );
+        } catch (error) {
+          console.error('Error processing search item:', error);
+          return false;
+        }
+      });
+
+      // Sort by relevance (exact title matches first, then description matches)
+      results.sort((a, b) => {
+        const aTitle = a.title.toLowerCase().includes(query.toLowerCase()) ? 1 : 0;
+        const bTitle = b.title.toLowerCase().includes(query.toLowerCase()) ? 1 : 0;
+        return bTitle - aTitle;
+      });
+
+      setSearchResults(results.slice(0, 6)); // Limit to 6 results
+      setShowSearchResults(true);
+    } catch (error) {
+      console.error('Error performing search:', error);
       setSearchResults([]);
       setShowSearchResults(false);
-      return;
     }
-
-    const searchTerms = query.toLowerCase().split(' ');
-    const results = searchData.filter(item => {
-      const searchableText = [
-        item.title.toLowerCase(),
-        item.description.toLowerCase(),
-        ...item.keywords
-      ].join(' ');
-
-      return searchTerms.some(term => 
-        searchableText.includes(term) && term.length > 1
-      );
-    });
-
-    // Sort by relevance (exact title matches first, then description matches)
-    results.sort((a, b) => {
-      const aTitle = a.title.toLowerCase().includes(query.toLowerCase()) ? 1 : 0;
-      const bTitle = b.title.toLowerCase().includes(query.toLowerCase()) ? 1 : 0;
-      return bTitle - aTitle;
-    });
-
-    setSearchResults(results.slice(0, 6)); // Limit to 6 results
-    setShowSearchResults(true);
   };
 
   // Handle search input
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
     performSearch(query);
     setSelectedResultIndex(-1); // Reset selection when query changes
-  };
+  }, []);
 
   // Handle keyboard navigation in search
-  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearchKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       setSelectedResultIndex(prev => 
@@ -152,23 +163,27 @@ const Header: React.FC = () => {
     } else if (e.key === 'Escape') {
       handleSearchPopoverClose();
     }
-  };
+  }, [selectedResultIndex, searchResults]);
 
   // Handle search result click
   const handleSearchResultClick = (result: SearchResult) => {
-    if (result.section === 'library-conditions') {
-      // Navigate to Library page with conditions tab and search term
-      navigate(`/library?tab=conditions&search=${encodeURIComponent(result.title)}`);
-    } else if (result.section === 'library-procedures') {
-      // Navigate to Library page with procedures tab and search term
-      navigate(`/library?tab=journeys&search=${encodeURIComponent(result.title)}`);
-    } else {
-      // Handle regular homepage sections
-      scrollToSection(result.section);
+    try {
+      if (result.section === 'library-conditions') {
+        // Navigate to Library page with conditions tab and search term
+        navigate(`/library?tab=conditions&search=${encodeURIComponent(result.title)}`);
+      } else if (result.section === 'library-procedures') {
+        // Navigate to Library page with procedures tab and search term
+        navigate(`/library?tab=journeys&search=${encodeURIComponent(result.title)}`);
+      } else {
+        // Handle regular homepage sections
+        scrollToSection(result.section);
+      }
+      setSearchQuery('');
+      setShowSearchResults(false);
+      setIsMenuOpen(false);
+    } catch (error) {
+      console.error('Error handling search result click:', error);
     }
-    setSearchQuery('');
-    setShowSearchResults(false);
-    setIsMenuOpen(false);
   };
 
   // Handle search input focus/blur
@@ -216,7 +231,6 @@ const Header: React.FC = () => {
       
       // Track if user has scrolled at all
       if (currentScrollY > 0 && !hasScrolled) {
-        console.log('User has scrolled - enabling logo pulse animation');
         setHasScrolled(true);
       }
       
@@ -243,11 +257,26 @@ const Header: React.FC = () => {
   }, [location.pathname, hasScrolled]);
 
   const scrollToSection = (sectionId: string) => {
-    // If we're not on the homepage, navigate there first
-    if (location.pathname !== '/') {
-      navigate('/');
-      // Wait for navigation to complete, then scroll
-      setTimeout(() => {
+    try {
+      // If we're not on the homepage, navigate there first
+      if (location.pathname !== '/') {
+        navigate('/');
+        // Wait for navigation to complete, then scroll
+        setTimeout(() => {
+          try {
+            if (sectionId === 'home') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              const element = document.getElementById(sectionId);
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+              }
+            }
+          } catch (error) {
+            console.error('Error scrolling to section after navigation:', error);
+          }
+        }, 100);
+      } else {
         if (sectionId === 'home') {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
@@ -256,18 +285,11 @@ const Header: React.FC = () => {
             element.scrollIntoView({ behavior: 'smooth' });
           }
         }
-      }, 100);
-    } else {
-      if (sectionId === 'home') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
       }
+      setIsMenuOpen(false);
+    } catch (error) {
+      console.error('Navigation error:', error);
     }
-    setIsMenuOpen(false);
   };
 
   const handleReferralClick = () => {
@@ -532,6 +554,11 @@ const Header: React.FC = () => {
                         }}
                         autoFocus
                         className="w-full pl-12 pr-12 py-4 bg-secondary-50/80 border border-secondary-200 rounded-xl text-base focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                        role="combobox"
+                        aria-expanded={showSearchResults}
+                        aria-controls="search-results"
+                        aria-autocomplete="list"
+                        aria-activedescendant={selectedResultIndex >= 0 ? `search-result-${selectedResultIndex}` : undefined}
                       />
                       <button
                         onClick={handleSearchPopoverClose}
@@ -552,10 +579,11 @@ const Header: React.FC = () => {
                           transition={{ duration: 0.2 }}
                         >
                           {searchResults.length > 0 ? (
-                            <div className="space-y-2 max-h-80 overflow-y-auto">
+                            <div id="search-results" className="space-y-2 max-h-80 overflow-y-auto" role="listbox">
                               {searchResults.map((result, index) => (
                                 <motion.div
                                   key={index}
+                                  id={`search-result-${index}`}
                                   className={`w-full text-left p-4 transition-all duration-200 flex items-start space-x-3 group rounded-xl ${
                                     index === selectedResultIndex
                                       ? 'bg-primary-100/80 border border-primary-200'
@@ -566,6 +594,8 @@ const Header: React.FC = () => {
                                   transition={{ delay: index * 0.05 }}
                                   whileHover={{ x: 4 }}
                                   onMouseEnter={() => setSelectedResultIndex(index)}
+                                  role="option"
+                                  aria-selected={index === selectedResultIndex}
                                 >
                                   <span className="text-xl mt-0.5 flex-shrink-0">
                                     {getResultIcon(result.type)}

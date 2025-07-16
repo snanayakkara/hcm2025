@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 
 import { useIntake } from '../../hooks/useIntake';
+import Button from '../ui/Button';
 import { IntakeSchema, IntakeForm, CARD_TEST_DESCRIPTIONS } from '../../types/intake';
 import Stepper from './Stepper';
 import ToggleCard from '../fields/ToggleCard';
@@ -52,10 +53,10 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
 
   const handleNext = useCallback(() => {
     updateData(formData);
-    if (state.currentStep < 7) {
+    if (state.currentStep < stepTitles.length - 1) {
       nextStep();
     }
-  }, [formData, updateData, nextStep, state.currentStep]);
+  }, [formData, updateData, nextStep, state.currentStep, stepTitles.length]);
 
   const handlePrev = useCallback(() => {
     updateData(formData);
@@ -87,6 +88,8 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
       setIsComplete(true);
     } catch (error) {
       console.error('PDF generation failed:', error);
+      // Show user-friendly error message
+      alert('PDF generation failed. This may be due to special characters in your form data. Please review your entries and try again.');
     } finally {
       setIsGenerating(false);
     }
@@ -102,8 +105,8 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
       case 0:
         return (
           <div className="text-center space-y-6">
-            <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-              <FileText className="w-8 h-8 text-blue-600" />
+            <div className="mx-auto w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center">
+              <FileText className="w-8 h-8 text-teal-600" />
             </div>
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Patient Summary</h3>
@@ -111,12 +114,12 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                 This secure form collects your cardiovascular health information. All data stays on your device and is never stored online.
               </p>
             </div>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
+            <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 max-w-md mx-auto">
               <div className="flex items-start space-x-3">
-                <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-teal-600 mt-0.5" />
                 <div className="text-left">
-                  <h4 className="font-medium text-blue-900">Privacy Notice</h4>
-                  <p className="text-sm text-blue-800 mt-1">
+                  <h4 className="font-medium text-teal-900">Privacy Notice</h4>
+                  <p className="text-sm text-teal-800 mt-1">
                     Your information is stored only on your computer, and automatically deleted after you finish.
                   </p>
                 </div>
@@ -156,7 +159,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                                 <img 
                                   src={condition.icon} 
                                   alt={condition.label}
-                                  className="w-5 h-5 text-blue-600"
+                                  className="w-5 h-5 text-teal-600"
                                   style={{ filter: 'invert(21%) sepia(77%) saturate(1342%) hue-rotate(211deg) brightness(97%) contrast(94%)' }}
                                 />
                                 <span>{condition.label}</span>
@@ -249,7 +252,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                                       start: e.target.value
                                     })
                                   }
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                                   placeholder="e.g., 1995"
                                 />
                               </div>
@@ -268,7 +271,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                                         stop: e.target.value
                                       })
                                     }
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                                     placeholder="e.g., 2020"
                                   />
                                 </div>
@@ -329,7 +332,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                   <textarea
                     {...field}
                     rows={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                     placeholder="List all medications, dosages, and frequency..."
                   />
                 )}
@@ -347,7 +350,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                   <textarea
                     {...field}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                     placeholder="List any drug, food, or environmental allergies..."
                   />
                 )}
@@ -402,7 +405,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                                   <input
                                     type="text"
                                     {...locationField}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                                     placeholder="e.g., Alfred Hospital, Cabrini Malvern"
                                   />
                                 )}
@@ -420,7 +423,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                                   <input
                                     type="text"
                                     {...dateField}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                                     placeholder="e.g., March 2023"
                                   />
                                 )}
@@ -461,7 +464,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                           name: e.target.value
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                       placeholder="Emergency contact's full name"
                     />
                   </div>
@@ -479,7 +482,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                           relation: e.target.value
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                       placeholder="e.g., Spouse, Parent, Sibling"
                     />
                   </div>
@@ -497,7 +500,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                           phone: e.target.value
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                       placeholder="e.g., 0412 345 678"
                     />
                     {errors.nok?.phone && (
@@ -526,7 +529,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                   <textarea
                     {...field}
                     rows={6}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                     placeholder="Any additional symptoms, concerns, or information you think would be helpful for your consultation..."
                   />
                 )}
@@ -658,12 +661,12 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
               </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5" />
+                <CheckCircle className="w-5 h-5 text-teal-600 mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-blue-900">Ready to Generate PDF</h4>
-                  <p className="text-sm text-blue-800 mt-1">
+                  <h4 className="font-medium text-teal-900">Ready to Generate PDF</h4>
+                  <p className="text-sm text-teal-800 mt-1">
                     Your information will be compiled into a PDF for download and email attachment.
                   </p>
                 </div>
@@ -685,13 +688,26 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                   <p className="text-gray-600 max-w-md mx-auto mb-6">
                     Your pre-review form is complete. Click below to generate your PDF and prepare it for email.
                   </p>
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 max-w-lg mx-auto">
+                    <div className="flex items-start space-x-3">
+                      <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                      <div className="text-left">
+                        <h4 className="font-medium text-amber-800">Important</h4>
+                        <p className="text-sm text-amber-700 mt-1">
+                          The PDF will be downloaded to your device and an email will open automatically. 
+                          <strong> You will need to manually attach the downloaded PDF file to the email</strong> before sending it to the clinic.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button
+                  <Button
+                    variant="primary"
+                    size="large"
                     onClick={handleGeneratePDF}
                     disabled={isGenerating}
-                    className="flex items-center justify-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
                   >
                     {isGenerating ? (
                       <>
@@ -704,7 +720,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                         <span>Generate PDF & Email</span>
                       </>
                     )}
-                  </button>
+                  </Button>
                 </div>
               </>
             ) : (
@@ -714,8 +730,24 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">All Done!</h3>
-                  <p className="text-gray-600 max-w-md mx-auto">
-                    Your PDF has been downloaded and your email client should have opened with a pre-filled message. All data has been cleared from your browser.
+                  <p className="text-gray-600 max-w-md mx-auto mb-4">
+                    Your PDF has been downloaded and your email client should have opened with a pre-filled message.
+                  </p>
+                  <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 max-w-lg mx-auto">
+                    <div className="flex items-start space-x-3">
+                      <FileText className="w-5 h-5 text-teal-600 mt-0.5 flex-shrink-0" />
+                      <div className="text-left">
+                        <h4 className="font-medium text-teal-800">Next Steps</h4>
+                        <p className="text-sm text-teal-700 mt-1">
+                          1. Check your Downloads folder for the PDF file<br/>
+                          2. Attach the PDF to the email that opened<br/>
+                          3. Send the email to complete your referral
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-gray-500 text-sm mt-4">
+                    All data has been cleared from your browser for privacy.
                   </p>
                 </div>
                 <button
@@ -741,7 +773,11 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
       case 1:
         return formData.medicalHistory !== undefined;
       case 6:
-        return isValid;
+        // For review step, check if essential fields are filled rather than strict validation
+        return formData.medicalHistory !== undefined && 
+               formData.tests !== undefined && 
+               formData.smoking !== undefined && 
+               formData.familyHistory !== undefined;
       default:
         return true;
     }
@@ -808,14 +844,15 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
               Step {state.currentStep + 1} of {stepTitles.length}
             </span>
 
-            <button
+            <Button
+              variant="primary"
+              size="medium"
               onClick={handleNext}
               disabled={!canProceed()}
-              className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               <span>Next</span>
               <ChevronRight className="w-5 h-5" />
-            </button>
+            </Button>
           </div>
         )}
       </motion.div>

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, FileText, Search } from 'lucide-react';
+import { ChevronDown, FileText, Search, Phone, Mail } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import { faqData } from '../data/faqData';
+import Button from './ui/Button';
 
 const FAQ: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
-  const navigate = useNavigate();
   const { isMobile } = useMobileDetection();
 
 
@@ -194,12 +194,24 @@ const FAQ: React.FC = () => {
             Our friendly reception team is here to help answer any questions you may have about our services or procedures.
           </p>
           <div className="flex flex-col gap-4 justify-center">
-            <button className={`bg-white text-primary-600 ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold`}>
-              <span>Call (03) 9509 5009</span>
-            </button>
-            <button className={`border-2 border-white text-white ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-white hover:text-primary-600 transition-colors duration-200 font-semibold`}>
+            <Button 
+              variant="white"
+              size="large"
+              icon={Phone}
+              href="tel:(03) 9509 5009"
+              isMobile={isMobile}
+            >
+              Call (03) 9509 5009
+            </Button>
+            <Button 
+              variant="outline-white"
+              size="large"
+              icon={Mail}
+              onClick={() => window.location.href = 'mailto:reception@heartclinicmelbourne.com.au'}
+              isMobile={isMobile}
+            >
               Send Email
-            </button>
+            </Button>
           </div>
         </motion.div>
       </div>

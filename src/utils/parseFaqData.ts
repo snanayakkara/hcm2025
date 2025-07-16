@@ -62,7 +62,7 @@ export async function parseFaqDataFromJson(jsonData: JsonFaqDataStructure): Prom
 }
 
 // Keep the old function for backwards compatibility, but it's no longer used
-export async function parseFaqData(faqText: string): Promise<FaqData> {
+export async function parseFaqData(_faqText: string): Promise<FaqData> {
   console.warn('parseFaqData is deprecated. Use parseFaqDataFromJson instead.');
   return {};
 }

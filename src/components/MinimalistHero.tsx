@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import SplitText from './SplitText';
 import { useMobileDetection } from '../hooks/useMobileDetection';
+import Button from './ui/Button';
+import { Calendar, MapPin } from 'lucide-react';
 
 const MinimalistHero: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -164,30 +166,26 @@ const MinimalistHero: React.FC = () => {
             variants={itemVariants}
           >
             <div className={`flex flex-col ${isMobile ? 'gap-4' : 'sm:flex-row gap-6'} justify-center`}>
-              <motion.button 
-                className={`bg-secondary-800 text-white ${isMobile ? 'px-8 py-4 text-base min-h-[44px]' : 'px-10 py-4 text-lg'} rounded-2xl font-medium shadow-sm`}
-                whileHover={{ 
-                  scale: isMobile ? 1.01 : 1.02,
-                  backgroundColor: "#1e293b",
-                  boxShadow: "0 10px 25px rgba(0,0,0,0.15)"
-                }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 300 }}
+              <Button 
+                variant="primary"
+                size="large"
+                icon={Calendar}
                 onClick={scrollToConsultation}
+                isMobile={isMobile}
+                className="bg-secondary-800 text-white hover:bg-secondary-900 shadow-sm"
               >
                 Book An Appointment
-              </motion.button>
-              <motion.button 
-                className={`border-2 border-secondary-200 text-secondary-600 ${isMobile ? 'px-8 py-4 text-base min-h-[44px]' : 'px-10 py-4 text-lg'} rounded-2xl font-medium hover:border-secondary-300 hover:bg-secondary-50/50`}
-                whileHover={{ 
-                  scale: isMobile ? 1.01 : 1.02
-                }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 300 }}
+              </Button>
+              <Button 
+                variant="secondary"
+                size="large"
+                icon={MapPin}
                 onClick={scrollToLocations}
+                isMobile={isMobile}
+                className="border-2 border-secondary-200 text-secondary-600 hover:border-secondary-300 hover:bg-secondary-50/50"
               >
                 View Locations
-              </motion.button>
+              </Button>
             </div>
           </motion.div>
         </motion.div>

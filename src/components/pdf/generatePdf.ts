@@ -1,4 +1,4 @@
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { PDFDocument, rgb, StandardFonts, PDFFont, RGB } from "pdf-lib";
 import * as fontkit from "fontkit";
 import { IntakeForm } from "../../types/intake";
 import { FaqItem } from "../../utils/parseFaqData";
@@ -92,9 +92,12 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     text: string,
     x: number,
     y: number,
-    options: { font?: any; size?: number; color?: any; maxWidth?: number } = {},
+    options: { font?: PDFFont; size?: number; color?: RGB; maxWidth?: number } = {},
   ) => {
     let textToDraw = cleanText(text); // Clean text to handle special characters
+
+    // Additional fallback to remove any remaining problematic characters
+    textToDraw = textToDraw.replace(/[^\x00-\x7F]/g, "?"); // Replace any non-ASCII with ?
 
     // Simple text wrapping if maxWidth is specified
     if (options.maxWidth && font) {
@@ -108,13 +111,26 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
       }
     }
 
-    page.drawText(textToDraw, {
-      x,
-      y,
-      size: options.size || 12,
-      font: options.font || font,
-      color: options.color || darkGray,
-    });
+    try {
+      page.drawText(textToDraw, {
+        x,
+        y,
+        size: options.size || 12,
+        font: options.font || font,
+        color: options.color || darkGray,
+      });
+    } catch (error) {
+      console.warn('Failed to draw text, attempting with ASCII-only fallback:', error);
+      // Fallback: replace all non-ASCII characters with safe alternatives
+      const fallbackText = textToDraw.replace(/[^\x20-\x7E]/g, "?");
+      page.drawText(fallbackText, {
+        x,
+        y,
+        size: options.size || 12,
+        font: options.font || font,
+        color: options.color || darkGray,
+      });
+    }
   };
 
   const drawRectangle = (
@@ -1256,7 +1272,7 @@ export async function generateLearningLibraryPDF(
 
     // Helper function to add header with logo and procedure image
     const addHeader = (currentPage: any) => {
-      let headerY = height - marginTop;
+      const headerY = height - marginTop;
 
       // Draw logo
       if (logo) {

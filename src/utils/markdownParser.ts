@@ -9,7 +9,7 @@ marked.setOptions({
 
 export function parseMarkdown(text: string): string {
   // Pre-process the text to handle markdown properly
-  let processedText = text
+  const processedText = text
     // First handle bold text
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     // Handle paragraph breaks - double line breaks become new paragraphs

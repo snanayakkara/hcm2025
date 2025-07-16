@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Users, Phone, Smile, Award, Stethoscope, Activity, ChevronDown } from 'lucide-react';
+import { Users, Phone, Smile, Award, Stethoscope, Activity, ChevronDown, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useMobileDetection } from '../hooks/useMobileDetection';
+import Button from './ui/Button';
 
 // Simple Collapse component
 const Collapse: React.FC<{ isOpened: boolean; children: React.ReactNode }> = ({ isOpened, children }) => {
@@ -762,16 +763,24 @@ const ReceptionTeam: React.FC = () => {
             Our entire team is here to support you through every step of your cardiac care journey. Contact us today to schedule your consultation.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <button className="bg-white text-primary-600 px-10 py-4 rounded-2xl hover:bg-primary-50 transition-all duration-200 flex items-center justify-center space-x-2 font-semibold text-lg transform hover:scale-105">
-              <Phone className="w-5 h-5" />
-              <span>Call Our Team</span>
-            </button>
-            <button className="border-2 border-white text-white px-10 py-4 rounded-2xl hover:bg-white hover:text-primary-600 transition-all duration-200 flex items-center justify-center space-x-2 font-semibold text-lg transform hover:scale-105">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              <span>Email Us</span>
-            </button>
+            <Button 
+              variant="white"
+              size="large"
+              icon={Phone}
+              href="tel:(03) 9509 5009"
+              isMobile={isMobile}
+            >
+              Call Our Team
+            </Button>
+            <Button 
+              variant="outline-white"
+              size="large"
+              icon={Mail}
+              onClick={() => window.location.href = 'mailto:reception@heartclinicmelbourne.com.au'}
+              isMobile={isMobile}
+            >
+              Email Us
+            </Button>
           </div>
         </div>
       </div>

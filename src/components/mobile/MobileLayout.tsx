@@ -6,7 +6,6 @@ import PWAInstallBanner from './PWAInstallBanner';
 import QuickActionsCard from './QuickActionsCard';
 import MobileServiceCards from './MobileServiceCards';
 import MobileDoctorCarousel from './MobileDoctorCarousel';
-import MobileDoctorActionBar from './MobileDoctorActionBar';
 import LocationOverlay from './LocationOverlay';
 import CallModal from './CallModal';
 import MinimalistHero from '../MinimalistHero';
@@ -15,6 +14,7 @@ import Services from '../Services';
 import Doctors from '../Doctors';
 import ReceptionTeam from '../ReceptionTeam';
 import PatientInfo from '../PatientInfo';
+import FAQ from '../FAQ';
 import Contact from '../Contact';
 import useParallaxHero from '../../hooks/useParallaxHero';
 
@@ -186,7 +186,6 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
                 transition={{ duration: 0.6 }}
               >
                 <MobileDoctorCarousel />
-                <MobileDoctorActionBar />
               </motion.div>
             </section>
 
@@ -209,6 +208,17 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
                 transition={{ duration: 0.6 }}
               >
                 <PatientInfo />
+              </motion.div>
+            </section>
+
+            <section id="faq" className="py-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <FAQ />
               </motion.div>
             </section>
 
@@ -236,6 +246,12 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
             <Doctors />
           </div>
         );
+      case 'faq':
+        return (
+          <div className="pb-24">
+            <FAQ />
+          </div>
+        );
       case 'contact':
         return (
           <div className="pb-24">
@@ -251,6 +267,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
             <Doctors />
             <ReceptionTeam />
             <PatientInfo />
+            <FAQ />
             <Contact />
           </div>
         );

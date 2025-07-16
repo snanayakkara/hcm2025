@@ -98,8 +98,8 @@ export const doctors: Doctor[] = [
     image: "/images/kate2png.png",
     locations: ["The Alfred Hospital", "Cabrini Hospital Malvern"],
     description: "Dr Rowe is a cardiac imaging specialist with particular expertise in valvular heart disease and echocardiography. She has a special interest in women's cardiac health and provides comprehensive cardiac care with a focus on patient-centered approach.",
-    color: '#79e7e1',
-    mobileColor: 'from-pink-500 to-pink-600',
+    color: '#5fb3b6',
+    mobileColor: 'from-teal-400 to-teal-500',
     experience: '11+ years',
   },
 ];

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Activity, Stethoscope, Zap, Clock, Search, MapPin, ArrowRight, Phone, FileText } from 'lucide-react';
+import { ServiceItem } from '../../types/common';
 
 const MobileServiceCards: React.FC = () => {
   const [selectedService, setSelectedService] = useState(0);
@@ -153,14 +154,12 @@ const MobileServiceCards: React.FC = () => {
     },
   ];
 
-  const handleServiceSelect = (service: any) => {
-    console.log('Service selected:', service.title);
+  const handleServiceSelect = (service: ServiceItem) => {
     // Could navigate to service detail page or open modal
   };
 
-  const handleLearnMore = (_serviceId: string) => {
+  const handleLearnMore = () => {
     // Learning Library has been moved to a separate site
-    console.log('Learning Library is now available as a separate application');
   };
 
   return (
@@ -331,7 +330,7 @@ const MobileServiceCards: React.FC = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => handleLearnMore(services[selectedService].id)}
+              onClick={handleLearnMore}
               className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white py-4 px-6 rounded-xl font-medium text-base transition-all duration-300"
             >
               <span>Learn More in Library</span>

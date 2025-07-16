@@ -21,9 +21,9 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, totalSteps, stepTitles, 
                 className={`
                   w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-200
                   ${index < currentStep 
-                    ? 'bg-green-500 text-white hover:bg-green-600' 
+                    ? 'bg-teal-600 text-white hover:bg-teal-700' 
                     : index === currentStep 
-                    ? 'bg-blue-600 text-white ring-4 ring-blue-200' 
+                    ? 'bg-teal-600 text-white ring-4 ring-teal-200' 
                     : 'bg-gray-200 text-gray-500 hover:bg-gray-300'
                   }
                   ${onStepClick ? 'cursor-pointer hover:scale-110' : 'cursor-default'}
@@ -42,7 +42,7 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, totalSteps, stepTitles, 
               </motion.button>
               <div className={`
                 mt-2 text-xs text-center w-24 h-8 flex items-center justify-center leading-tight
-                ${index === currentStep ? 'text-blue-600 font-medium' : 'text-gray-500'}
+                ${index === currentStep ? 'text-teal-600 font-medium' : 'text-gray-500'}
               `}>
                 <span className="px-1">
                   {stepTitles[index]}
@@ -52,7 +52,7 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, totalSteps, stepTitles, 
             {index < totalSteps - 1 && (
               <div className={`
                 flex-1 h-0.5 mx-2 mt-4
-                ${index < currentStep ? 'bg-green-500' : 'bg-gray-200'}
+                ${index < currentStep ? 'bg-teal-500' : 'bg-gray-200'}
               `} />
             )}
           </React.Fragment>

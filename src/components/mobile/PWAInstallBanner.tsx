@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Smartphone, Share } from 'lucide-react';
+import Button from '../ui/Button';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -232,12 +233,14 @@ const PWAInstallBanner: React.FC = () => {
                   </div>
                 </div>
                 
-                <button
+                <Button
+                  variant="primary"
+                  size="medium"
                   onClick={() => setShowIOSInstructions(false)}
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium"
+                  className="w-full"
                 >
                   Got it
-                </button>
+                </Button>
               </div>
             </motion.div>
           </motion.div>

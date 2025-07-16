@@ -114,7 +114,7 @@
       "name": "Telehealth",
       "short_name": "Telehealth",
       "description": "Start a virtual consultation",
-      "url": "https://doxy.me/hcm21",
+      "url": "/#telehealth",
       "icons": [
         {
           "src": "/images/icons/video-icon.png",

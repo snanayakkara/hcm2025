@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, Search } from 'lucide-react';
+import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, Search, Mail } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
+import Button from './ui/Button';
+import { ServiceItem } from '../types/common';
 
 const Services: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string | null>('consultation');
@@ -42,7 +44,7 @@ const Services: React.FC = () => {
     title,
     value,
   }: {
-    icon: React.FC<any>;
+    icon: React.ComponentType<{ className?: string; size?: number }>;
     title: string;
     value: string;
   }) => (
@@ -339,16 +341,26 @@ const Services: React.FC = () => {
             Our reception team is ready to help you book the right service at the most convenient location for you.
           </p>
           <div className={`flex flex-col ${isMobile ? 'gap-4' : 'sm:flex-row gap-6'} justify-center`}>
-            <button className={`bg-white/95 backdrop-blur-sm text-primary-600 ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-white hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2 font-semibold shadow-md`}>
-              <Phone className="w-5 h-5" />
-              <span>Call (03) 9509 5009</span>
-            </button>
-            <button 
+            <Button 
+              variant="white"
+              size="large"
+              icon={Phone}
+              href="tel:(03) 9509 5009"
+              isMobile={isMobile}
+              className="bg-white/95 backdrop-blur-sm shadow-md hover:shadow-lg"
+            >
+              Call (03) 9509 5009
+            </Button>
+            <Button 
+              variant="outline-white"
+              size="large"
+              icon={Mail}
               onClick={() => window.location.href = 'mailto:reception@hcm2025.com.au'}
-              className={`border-2 border-white/80 text-white ${isMobile ? 'px-8 py-4 min-h-[44px] text-base' : 'px-10 py-4 text-lg'} rounded-2xl hover:bg-white hover:text-primary-600 transition-all duration-200 font-semibold shadow-md hover:shadow-lg backdrop-blur-sm`}
+              isMobile={isMobile}
+              className="shadow-md hover:shadow-lg backdrop-blur-sm"
             >
               Email Us
-            </button>
+            </Button>
           </div>
         </motion.div>
       </div>
@@ -356,4 +368,4 @@ const Services: React.FC = () => {
   );
 };
 
-export default Services;
+export default React.memo(Services);

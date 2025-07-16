@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Phone, Clock, MapPin, AlertTriangle, Heart } from 'lucide-react';
+import { X, Phone, Clock, MapPin, Heart } from 'lucide-react';
 
 interface CallModalProps {
   isOpen: boolean;

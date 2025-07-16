@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, MapPin, Video, Menu } from 'lucide-react';
+import { SCROLL_THRESHOLD } from '../../constants';
 
 interface MobileHeaderProps {
   onNavigate: (section: string) => void;
@@ -24,7 +25,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     
     const updateScrollState = () => {
       const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-      const scrolled = currentScrollY > 50;
+      const scrolled = currentScrollY > SCROLL_THRESHOLD;
       setIsScrolled(scrolled);
     };
 
@@ -92,6 +93,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     { label: 'Our Doctors', onClick: () => { onNavigate('doctors'); setShowMoreMenu(false); } },
     { label: 'Reception Team', onClick: () => { onNavigate('reception-team'); setShowMoreMenu(false); } },
     { label: 'Patient Info', onClick: () => { onNavigate('patients'); setShowMoreMenu(false); } },
+    { label: 'FAQ', onClick: () => { onNavigate('faq'); setShowMoreMenu(false); } },
     { label: 'Contact', onClick: () => { onNavigate('contact'); setShowMoreMenu(false); } },
   ];
 
@@ -161,6 +163,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                     className="flex flex-col items-center justify-center px-2 py-1 transition-all duration-300 text-teal-600 hover:text-teal-700"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    aria-label="Call Heart Clinic Melbourne"
                   >
                     <Phone className="w-4 h-4" strokeWidth={2.5} />
                     <span className="text-xs font-medium">Call</span>
@@ -171,6 +174,9 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                     className="flex flex-col items-center justify-center px-2 py-1 transition-all duration-300 text-teal-600 hover:text-teal-700"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    aria-label={showMoreMenu ? "Close menu" : "Open menu"}
+                    aria-expanded={showMoreMenu}
+                    aria-controls="more-menu"
                   >
                     <motion.div
                       animate={{ rotate: showMoreMenu ? 180 : 0 }}

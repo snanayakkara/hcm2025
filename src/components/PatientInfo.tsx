@@ -3,6 +3,7 @@ import { FileText, Clock, Shield, CreditCard, Phone, Mail, ArrowRight, CheckCirc
 import { motion, AnimatePresence } from 'framer-motion';
 import { faqData } from '../data/faqData';
 import Wizard from './Wizard/Wizard';
+import Button from './ui/Button';
 
 const PatientInfo: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -67,7 +68,7 @@ const PatientInfo: React.FC = () => {
     // Create email content
     const subject = encodeURIComponent('Appointment Request - Heart Clinic Melbourne');
     
-    let body = `Dear Heart Clinic Melbourne team,
+    const body = `Dear Heart Clinic Melbourne team,
 
 I would like to request an appointment with the following details:
 
@@ -97,8 +98,6 @@ ${formData.name}`;
     // Open email client
     window.location.href = mailtoLink;
     
-    // Optional: Still log for debugging
-    console.log('Form submitted:', formData);
   };
 
   useEffect(() => {
@@ -353,16 +352,17 @@ ${formData.name}`;
                     </ul>
                     {resource.hasWizard && (
                       <div className="pt-3">
-                        <button
+                        <Button
+                          variant="primary"
+                          size="medium"
+                          icon={FileText}
                           onClick={(e) => {
                             e.stopPropagation();
                             setShowIntakeWizard(true);
                           }}
-                          className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                         >
-                          <FileText className="w-4 h-4" />
-                          <span>Start Intake Form</span>
-                        </button>
+                          Start Intake Form
+                        </Button>
                       </div>
                     )}
                   </div>
@@ -452,16 +452,17 @@ ${formData.name}`;
                     </ul>
                     {resource.hasWizard && (
                       <div className="pt-3">
-                        <button
+                        <Button
+                          variant="primary"
+                          size="medium"
+                          icon={FileText}
                           onClick={(e) => {
                             e.stopPropagation();
                             setShowIntakeWizard(true);
                           }}
-                          className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                         >
-                          <FileText className="w-4 h-4" />
-                          <span>Start Intake Form</span>
-                        </button>
+                          Start Intake Form
+                        </Button>
                       </div>
                     )}
                   </div>
