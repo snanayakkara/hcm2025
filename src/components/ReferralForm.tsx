@@ -176,6 +176,12 @@ Provider Number: ${formData.providerNumber}`;
             displayName: "Dr Shane Nanayakkara (Interventional/Structural/Heart Failure)"
           },
           { 
+            name: "Dr Kate Rowe", 
+            image: "/images/kate2png.png",
+            specialty: "General Cardiology",
+            displayName: "Dr Kate Rowe (General)"
+          },
+          { 
             name: "No preference", 
             image: null,
             specialty: "Any available cardiologist",
@@ -201,6 +207,12 @@ Provider Number: ${formData.providerNumber}`;
             image: "/images/ngu.png",
             specialty: "General and Non-Invasive Imaging",
             displayName: "Dr Phillip Ngu (Imaging/General)"
+          },
+          { 
+            name: "Dr Kate Rowe", 
+            image: "/images/kate2png.png",
+            specialty: "General Cardiology",
+            displayName: "Dr Kate Rowe (General)"
           },
           { 
             name: "No preference", 
