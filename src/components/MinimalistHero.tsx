@@ -76,16 +76,15 @@ const MinimalistHero: React.FC = () => {
       ref={heroRef}
       className="relative min-h-screen bg-gradient-to-br from-cream-50 via-white to-primary-50/20 overflow-hidden"
     >
-      {/* Subtle Background Elements */}
-      <div className="absolute inset-0 opacity-30 pointer-events-none">
+      {/* Light Floating Particles */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        {/* Small floating particles */}
         <motion.div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-primary-200/30 to-sage-200/30 rounded-full blur-3xl"
-          style={{ 
-            y: scrollY * 0.1,
-            transformOrigin: 'center'
-          }}
+          className="absolute top-1/3 left-1/4 w-2 h-2 bg-primary-300/60 rounded-full blur-sm"
           animate={{
-            opacity: [0.2, 0.4, 0.2]
+            y: [0, -20, 0],
+            x: [0, 10, 0],
+            opacity: [0.3, 0.8, 0.3]
           }}
           transition={{
             duration: 8,
@@ -94,19 +93,31 @@ const MinimalistHero: React.FC = () => {
           }}
         />
         <motion.div 
-          className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-br from-accent-200/30 to-primary-200/30 rounded-full blur-3xl"
-          style={{ 
-            y: scrollY * 0.15,
-            transformOrigin: 'center'
-          }}
+          className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-accent-300/50 rounded-full blur-sm"
           animate={{
-            opacity: [0.2, 0.5, 0.2]
+            y: [0, 15, 0],
+            x: [0, -8, 0],
+            opacity: [0.4, 0.7, 0.4]
           }}
           transition={{
             duration: 6,
             repeat: Infinity,
             ease: "easeInOut",
             delay: 2
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-1/3 left-1/2 w-1 h-1 bg-sage-300/40 rounded-full blur-sm"
+          animate={{
+            y: [0, -12, 0],
+            x: [0, 6, 0],
+            opacity: [0.2, 0.6, 0.2]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 4
           }}
         />
       </div>
