@@ -84,14 +84,14 @@ const Services: React.FC = () => {
     },
     {
       id: 'holter',
-      name: "24 Hour Holter Monitoring",
+      name: "Holter Monitoring",
       category: 'monitoring',
       icon: <Clock className="w-5 h-5" />,
-      shortDescription: "Continuous cardiac rhythm monitoring over 24 hours",
-      duration: "24 hours continuous",
+      shortDescription: "Continuous cardiac rhythm monitoring from 24 hours to one month",
+      duration: "24 hours to 1 month continuous",
       preparation: "Normal daily activities",
       locations: ["Cabrini Malvern", "Pakenham", "Clyde"],
-      description: "Holter monitoring involves wearing a small, portable device that continuously records your heart rhythm for 24 hours. This helps detect irregular heartbeats that may not occur during a brief office visit.",
+      description: "Holter monitoring involves wearing a small, portable device that continuously records your heart rhythm for periods ranging from 24 hours to one month. This helps detect irregular heartbeats that may not occur during a brief office visit.",
       cost: "Medicare rebates available",
       image: "/images/holter.png"
     },
@@ -118,7 +118,7 @@ const Services: React.FC = () => {
       preparation: "Comfortable exercise clothing required",
       locations: ["Pakenham", "Clyde"],
       description: "Stress echocardiography combines ultrasound imaging with stress testing to evaluate heart function under stress conditions. This helps detect coronary artery disease and assess exercise capacity.",
-      cost: "Medicare rebates available",
+      cost: "Bulk billed for eligible patients",
       image: "/images/stressecho.png"
     },
     {

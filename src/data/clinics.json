@@ -120,5 +120,44 @@
       "Family medical centre",
       "Wheelchair accessible"
     ]
+  },
+  {
+    "id": "peninsula-private-hospital",
+    "name": "Peninsula Private Hospital",
+    "address": "525 McClelland Dr, Langwarrin VIC 3910",
+    "coordinates": {
+      "latitude": -38.1462,
+      "longitude": 145.1850
+    },
+    "phone": "(03) 9788 3333",
+    "email": "reception@heartclinicmelbourne.com.au",
+    "services": [
+      "Consultation",
+      "Coronary Angiography",
+      "Pacemaker Insertion",
+      "TOE",
+      "TOE-Guided Cardioversion"
+    ],
+    "doctors": [
+      "Dr Phillip Ngu"
+    ],
+    "hours": {
+      "monday": "9:00 AM - 5:00 PM",
+      "tuesday": "9:00 AM - 5:00 PM",
+      "wednesday": "9:00 AM - 5:00 PM",
+      "thursday": "9:00 AM - 5:00 PM",
+      "friday": "9:00 AM - 4:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "parking": "Available on-site",
+    "publicTransport": "Near Frankston train line",
+    "isMain": false,
+    "features": [
+      "Hospital procedures",
+      "Private facilities",
+      "Parking available",
+      "Wheelchair accessible"
+    ]
   }
 ]
