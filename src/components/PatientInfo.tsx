@@ -15,7 +15,8 @@ const PatientInfo: React.FC = () => {
     reason: '',
     preferredLocation: '',
     preferredDoctor: '',
-    localGP: ''
+    localGP: '',
+    hasReferral: ''
   });
   const [isVisible, setIsVisible] = useState(false);
   const [activeResource, setActiveResource] = useState(0);
@@ -83,6 +84,9 @@ Preferred Date: ${formData.preferredDate || 'Not specified'}
 Preferred Time: ${formData.preferredTime || 'Not specified'}
 Preferred Location: ${formData.preferredLocation || 'Not specified'}
 Preferred Cardiologist: ${formData.preferredDoctor || 'Not specified'}
+
+REFERRAL STATUS:
+GP Referral: ${formData.hasReferral === 'yes' ? 'Yes - I have a valid referral (will attach to this email)' : formData.hasReferral === 'no' ? 'No - I need to obtain a referral from my GP' : 'Not specified'}
 
 REASON FOR VISIT:
 ${formData.reason || 'Not specified'}
@@ -235,6 +239,11 @@ ${formData.name}`;
             specialty: "General, Intervention, Structural, and Heart Failure"
           },
           { 
+            name: "Dr Kate Rowe", 
+            image: "/images/kate2png.png",
+            specialty: "General Cardiology"
+          },
+          { 
             name: "No preference", 
             image: null,
             specialty: "Any available cardiologist"
@@ -256,6 +265,11 @@ ${formData.name}`;
             name: "Dr Phillip Ngu", 
             image: "/images/ngu.png",
             specialty: "General and Non-Invasive Imaging"
+          },
+          { 
+            name: "Dr Kate Rowe", 
+            image: "/images/kate2png.png",
+            specialty: "General Cardiology"
           },
           { 
             name: "No preference", 
@@ -356,8 +370,7 @@ ${formData.name}`;
                           variant="primary"
                           size="medium"
                           icon={FileText}
-                          onClick={(e) => {
-                            e.stopPropagation();
+                          onClick={() => {
                             setShowIntakeWizard(true);
                           }}
                         >
@@ -456,8 +469,7 @@ ${formData.name}`;
                           variant="primary"
                           size="medium"
                           icon={FileText}
-                          onClick={(e) => {
-                            e.stopPropagation();
+                          onClick={() => {
                             setShowIntakeWizard(true);
                           }}
                         >
@@ -998,6 +1010,79 @@ ${formData.name}`;
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 text-gray-900"
                       placeholder="Please describe your symptoms or reason for consultation..."
                     ></textarea>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Do you have a valid referral from your GP? *
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData({
+                            ...formData,
+                            hasReferral: 'yes'
+                          });
+                        }}
+                        className={`px-4 py-3 text-sm font-medium rounded-lg border-2 transition-all duration-200 ${
+                          formData.hasReferral === 'yes'
+                            ? 'bg-green-600 text-white border-green-600 shadow-md'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-green-300 hover:bg-green-50'
+                        }`}
+                      >
+                        Yes, I have a referral
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData({
+                            ...formData,
+                            hasReferral: 'no'
+                          });
+                        }}
+                        className={`px-4 py-3 text-sm font-medium rounded-lg border-2 transition-all duration-200 ${
+                          formData.hasReferral === 'no'
+                            ? 'bg-orange-600 text-white border-orange-600 shadow-md'
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-orange-300 hover:bg-orange-50'
+                        }`}
+                      >
+                        No, I need to get one
+                      </button>
+                    </div>
+                    
+                    {/* Referral guidance */}
+                    {formData.hasReferral === 'yes' && (
+                      <div className="mt-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div className="flex items-start space-x-2">
+                          <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                          <div>
+                            <p className="text-sm font-medium text-green-800">Great! Please remember to:</p>
+                            <ul className="text-sm text-green-700 mt-1 space-y-1">
+                              <li>• Attach your referral letter to the email this form generates</li>
+                              <li>• Ensure the referral is dated within the last 12 months</li>
+                              <li>• Bring the original referral to your appointment</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {formData.hasReferral === 'no' && (
+                      <div className="mt-3 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                        <div className="flex items-start space-x-2">
+                          <HelpCircle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                          <div>
+                            <p className="text-sm font-medium text-orange-800">You'll need a GP referral for your appointment:</p>
+                            <ul className="text-sm text-orange-700 mt-1 space-y-1">
+                              <li>• Visit your local GP to obtain a referral letter</li>
+                              <li>• Email the referral to us at reception@heartclinicmelbourne.com.au</li>
+                              <li>• We can still process your appointment request and follow up once you have the referral</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <button

@@ -5,7 +5,7 @@ import { useMobileDetection } from '../hooks/useMobileDetection';
 import Button from './ui/Button';
 import { Calendar, MapPin } from 'lucide-react';
 
-const MinimalistHeroWithRemotion: React.FC = () => {
+const MinimalistHeroAlternate: React.FC = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const { isMobile } = useMobileDetection();
@@ -307,4 +307,4 @@ const MinimalistHeroWithRemotion: React.FC = () => {
   );
 };
 
-export default MinimalistHeroWithRemotion;
+export default MinimalistHeroAlternate;

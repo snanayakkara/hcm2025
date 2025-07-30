@@ -1,17 +1,19 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Video, MapPin, Calendar, Clock } from 'lucide-react';
+import { Phone, Video, MapPin, Calendar, Clock, FileText } from 'lucide-react';
 
 interface QuickActionsCardProps {
   onCallClick: () => void;
   onTelehealthClick: () => void;
   onDirectionsClick: () => void;
+  onQuickReferralClick: () => void;
 }
 
 const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
   onCallClick,
   onTelehealthClick,
   onDirectionsClick,
+  onQuickReferralClick,
 }) => {
   const primaryActions = [
     {
@@ -57,6 +59,12 @@ const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
           element.scrollIntoView({ behavior: 'smooth' });
         }
       },
+    },
+    {
+      id: 'quickReferral',
+      label: 'Quick Referral',
+      icon: FileText,
+      onClick: onQuickReferralClick,
     },
     {
       id: 'hours',
@@ -149,13 +157,13 @@ const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
           ))}
         </div>
 
-        {/* Secondary Actions - Horizontal */}
-        <div className="flex space-x-4">
+        {/* Secondary Actions - Grid */}
+        <div className="grid grid-cols-3 gap-3">
           {secondaryActions.map((action, index) => (
             <motion.button
               key={action.id}
               onClick={action.onClick}
-              className="flex-1 flex flex-col items-center justify-center p-4 rounded-xl bg-secondary-50 hover:bg-secondary-100 transition-all duration-300 group"
+              className="flex flex-col items-center justify-center p-4 rounded-xl bg-secondary-50 hover:bg-secondary-100 transition-all duration-300 group"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, y: 20 }}

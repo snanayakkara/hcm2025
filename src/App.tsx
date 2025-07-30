@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useMobileDetection } from './hooks/useMobileDetection';
 import Header from './components/Header';
 import MinimalistHero from './components/MinimalistHero';
-import MinimalistHeroWithRemotion from './components/MinimalistHeroWithRemotion';
+import MinimalistHeroAlternate from './components/MinimalistHeroAlternate';
 
 // Lazy load heavy components
 const About = lazy(() => import('./components/About'));
@@ -77,7 +77,7 @@ function HomePage() {
       </div>
       
       <main className="relative z-10">
-        {useRemotionHero ? <MinimalistHeroWithRemotion /> : <MinimalistHero />}
+        {useRemotionHero ? <MinimalistHeroAlternate /> : <MinimalistHero />}
         <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
           <About />
         </Suspense>

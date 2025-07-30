@@ -8,6 +8,7 @@ import MobileServiceCards from './MobileServiceCards';
 import MobileDoctorCarousel from './MobileDoctorCarousel';
 import LocationOverlay from './LocationOverlay';
 import CallModal from './CallModal';
+import MobileReferralForm from './MobileReferralForm';
 import MinimalistHero from '../MinimalistHero';
 import About from '../About';
 import Services from '../Services';
@@ -27,6 +28,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
   const [showLocationOverlay, setShowLocationOverlay] = useState(false);
   const [showCallModal, setShowCallModal] = useState(false);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
+  const [showMobileReferralForm, setShowMobileReferralForm] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [calendarEvent] = useState<any>(null);
 
@@ -70,6 +72,10 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
 
   const handleDirectionsClick = () => {
     setShowLocationOverlay(true);
+  };
+
+  const handleQuickReferralClick = () => {
+    setShowMobileReferralForm(true);
   };
 
   const handleNavigate = (section: string) => {
@@ -149,6 +155,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
                       onCallClick={handleCallClick}
                       onTelehealthClick={handleTelehealthClick}
                       onDirectionsClick={handleDirectionsClick}
+                      onQuickReferralClick={handleQuickReferralClick}
                     />
                   </motion.div>
                 </motion.div>
@@ -354,6 +361,12 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               event={calendarEvent}
             />
           )}
+
+          {/* Mobile Referral Form */}
+          <MobileReferralForm
+            isOpen={showMobileReferralForm}
+            onClose={() => setShowMobileReferralForm(false)}
+          />
         </div>
     </>
   );
