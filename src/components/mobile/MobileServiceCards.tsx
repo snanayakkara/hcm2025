@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Activity, Stethoscope, Zap, Clock, Search, MapPin, ArrowRight, Phone, FileText } from 'lucide-react';
 import { ServiceItem } from '../../types/common';
+import { DEFAULT_VIEWPORT } from '../../lib/motion';
 
 const MobileServiceCards: React.FC = () => {
   const [selectedService, setSelectedService] = useState(0);
@@ -17,7 +18,7 @@ const MobileServiceCards: React.FC = () => {
       icon: Stethoscope,
       color: 'from-primary-500 to-primary-600',
       image: '/images/consult.png',
-      duration: '45-60 minutes',
+      duration: '30 minutes',
       preparation: 'Minimal preparation required',
       locations: ['Cabrini Malvern', 'Pakenham', 'Clyde'],
       cost: 'Medicare rebates available'
@@ -169,6 +170,7 @@ const MobileServiceCards: React.FC = () => {
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={DEFAULT_VIEWPORT}
           transition={{ duration: 0.6 }}
           className="mobile-text-xl font-bold text-gray-900 mb-2"
         >
@@ -177,6 +179,7 @@ const MobileServiceCards: React.FC = () => {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={DEFAULT_VIEWPORT}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mobile-text-sm text-gray-600 max-w-sm mx-auto"
         >

@@ -4,6 +4,7 @@ import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, Sear
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import Button from './ui/Button';
 import { ServiceItem } from '../types/common';
+import { DEFAULT_VIEWPORT } from '../lib/motion';
 
 const Services: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string | null>('consultation');
@@ -62,7 +63,7 @@ const Services: React.FC = () => {
       category: 'consultation',
       icon: <Stethoscope className="w-5 h-5" />,
       shortDescription: "Comprehensive cardiac assessment and specialist consultation",
-      duration: "20-40 minutes",
+      duration: "30 minutes",
       preparation: "Minimal preparation required",
       locations: ["Cabrini Malvern", "Pakenham", "Clyde"],
       description: "A comprehensive cardiac consultation is your first step towards understanding and managing your heart health. Our experienced cardiologists will review your medical history, perform a thorough examination, and discuss your symptoms and concerns.",
@@ -210,7 +211,7 @@ const Services: React.FC = () => {
             className={`${isMobile ? 'text-3xl' : 'text-5xl lg:text-6xl'} font-bold text-secondary-800 mb-8 leading-tight`}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={DEFAULT_VIEWPORT}
           >
             Our Cardiac Services
           </motion.h2>
@@ -218,7 +219,7 @@ const Services: React.FC = () => {
             className={`${isMobile ? 'text-lg' : 'text-xl'} text-secondary-600 max-w-3xl mx-auto leading-relaxed`}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={DEFAULT_VIEWPORT}
             transition={{ delay: 0.1 }}
           >
             Comprehensive cardiac care with detailed patient information to help you understand what to expect during your visit.
@@ -332,7 +333,7 @@ const Services: React.FC = () => {
           className={`bg-gradient-to-r from-primary-500/90 to-accent-500/90 backdrop-blur-sm rounded-3xl ${isMobile ? 'p-8' : 'p-12'} text-center ${isMobile ? 'mt-16' : 'mt-32'} shadow-2xl border border-white/20`}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={DEFAULT_VIEWPORT}
         >
           <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-white mb-6`}>
             Ready to Schedule Your Appointment?

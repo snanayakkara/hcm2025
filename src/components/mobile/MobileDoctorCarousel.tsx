@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Calendar, ChevronRight, Award } from 'lucide-react';
 import { doctors } from '../../data/doctors';
+import { DEFAULT_VIEWPORT } from '../../lib/motion';
 
 const MobileDoctorCarousel: React.FC = () => {
   const [selectedDoctorId, setSelectedDoctorId] = useState('freilich');
@@ -36,6 +37,7 @@ const MobileDoctorCarousel: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={DEFAULT_VIEWPORT}
           transition={{ duration: 0.6 }}
           className="inline-flex items-center space-x-3 mb-4"
         >
@@ -51,6 +53,7 @@ const MobileDoctorCarousel: React.FC = () => {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={DEFAULT_VIEWPORT}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-gray-600 max-w-sm mx-auto"
         >

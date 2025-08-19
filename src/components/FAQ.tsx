@@ -4,6 +4,7 @@ import { ChevronDown, FileText, Search, Phone, Mail } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import { faqData } from '../data/faqData';
 import Button from './ui/Button';
+import { DEFAULT_VIEWPORT } from '../lib/motion';
 
 const FAQ: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,7 +29,7 @@ const FAQ: React.FC = () => {
             className="inline-flex items-center space-x-3 bg-white/70 backdrop-blur-sm px-6 py-3 rounded-full border border-secondary-200/50 shadow-sm mb-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={DEFAULT_VIEWPORT}
           >
             <FileText className="w-5 h-5 text-primary-500" />
             <span className="text-secondary-600 font-medium">Frequently Asked Questions</span>
@@ -38,7 +39,7 @@ const FAQ: React.FC = () => {
             className={`${isMobile ? 'text-3xl' : 'text-5xl lg:text-6xl'} font-bold text-secondary-800 mb-8 leading-tight`}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={DEFAULT_VIEWPORT}
           >
             Common Questions
           </motion.h2>
@@ -46,7 +47,7 @@ const FAQ: React.FC = () => {
             className={`${isMobile ? 'text-lg' : 'text-xl'} text-secondary-600 max-w-3xl mx-auto leading-relaxed`}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={DEFAULT_VIEWPORT}
             transition={{ delay: 0.1 }}
           >
             Find answers to the most common questions about our services, procedures, and patient care.
@@ -58,7 +59,7 @@ const FAQ: React.FC = () => {
           className="max-w-2xl mx-auto mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={DEFAULT_VIEWPORT}
           transition={{ delay: 0.2 }}
         >
           <div className="relative mb-8">
@@ -111,7 +112,7 @@ const FAQ: React.FC = () => {
           className="max-w-4xl mx-auto space-y-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={DEFAULT_VIEWPORT}
           transition={{ delay: 0.3 }}
         >
           {filteredFAQs.map((faq, index) => (
@@ -120,7 +121,7 @@ const FAQ: React.FC = () => {
               className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-secondary-200/50 overflow-hidden hover:shadow-md transition-all duration-300"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={DEFAULT_VIEWPORT}
               transition={{ delay: index * 0.1 }}
             >
               <button
@@ -184,7 +185,7 @@ const FAQ: React.FC = () => {
           className={`mt-20 bg-gradient-to-r from-primary-500 to-accent-500 rounded-3xl ${isMobile ? 'p-8' : 'p-12'} text-center`}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={DEFAULT_VIEWPORT}
           transition={{ delay: 0.4 }}
         >
           <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-white mb-6`}>

@@ -18,6 +18,7 @@ import PatientInfo from '../PatientInfo';
 import FAQ from '../FAQ';
 import Contact from '../Contact';
 import useParallaxHero from '../../hooks/useParallaxHero';
+import { DEFAULT_VIEWPORT } from '../../lib/motion';
 
 interface MobileLayoutProps {
   currentPage: string;
@@ -167,7 +168,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={DEFAULT_VIEWPORT}
                 transition={{ duration: 0.6 }}
               >
                 <About />
@@ -178,7 +179,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={DEFAULT_VIEWPORT}
                 transition={{ duration: 0.6 }}
               >
                 <MobileServiceCards />
@@ -189,7 +190,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={DEFAULT_VIEWPORT}
                 transition={{ duration: 0.6 }}
               >
                 <MobileDoctorCarousel />
@@ -200,7 +201,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={DEFAULT_VIEWPORT}
                 transition={{ duration: 0.6 }}
               >
                 <ReceptionTeam />
@@ -211,7 +212,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={DEFAULT_VIEWPORT}
                 transition={{ duration: 0.6 }}
               >
                 <PatientInfo />
@@ -222,7 +223,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={DEFAULT_VIEWPORT}
                 transition={{ duration: 0.6 }}
               >
                 <FAQ />
@@ -233,7 +234,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={DEFAULT_VIEWPORT}
                 transition={{ duration: 0.6 }}
               >
                 <Contact />

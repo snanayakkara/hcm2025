@@ -109,6 +109,8 @@ ${formData.name}`;
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+          // Disconnect after first trigger to ensure one-shot behavior
+          observer.disconnect();
         }
       },
       { threshold: 0.1 }
