@@ -50,11 +50,11 @@ const ReceptionTeam: React.FC = () => {
     color: "from-primary-100 to-accent-100"
   };
 
-  // Reception Team Members
-  const receptionTeam = [
+  // Executive Assistants
+  const executiveAssistants = [
     {
       name: "Louise Georgeson",
-      title: "Medical Receptionist",
+      title: "Executive Assistant",
       experience: "Healthcare Administration",
       description: "Louise brings valuable healthcare administration experience to our team. She is dedicated to ensuring smooth clinic operations and providing excellent patient service with attention to detail and professionalism.",
       qualities: ["Detail-Oriented", "Professional", "Reliable", "Patient-Focused"],
@@ -62,6 +62,20 @@ const ReceptionTeam: React.FC = () => {
       specialties: ["Healthcare Administration", "Appointment Scheduling", "Patient Records", "Insurance Processing"],
       color: "from-cream-100 to-sage-100"
     },
+    {
+      name: "Leanne Marshall",
+      title: "Executive Assistant",
+      experience: "Medical Administration",
+      description: "Leanne coordinates various administrative functions across our multiple locations. Her attention to detail and systematic approach help maintain consistency and quality in all our administrative processes.",
+      qualities: ["Systematic", "Detail-Focused", "Multi-Location Coordinator", "Quality-Driven"],
+      image: "/images/leanne.png",
+      specialties: ["Multi-Location Coordination", "Process Management", "Quality Control", "Administrative Systems"],
+      color: "from-cream-100 to-primary-100"
+    }
+  ];
+
+  // Reception Team Members
+  const receptionTeam = [
     {
       name: "Michelle Goodier",
       title: "Medical Receptionist",
@@ -101,16 +115,6 @@ const ReceptionTeam: React.FC = () => {
       image: "/images/alison.png",
       specialties: ["Patient Services", "Healthcare Navigation", "Insurance Assistance", "Patient Advocacy"],
       color: "from-sage-100 to-accent-100"
-    },
-    {
-      name: "Leanne Marshall",
-      title: "Medical Receptionist",
-      experience: "Medical Administration",
-      description: "Leanne coordinates various administrative functions across our multiple locations. Her attention to detail and systematic approach help maintain consistency and quality in all our administrative processes.",
-      qualities: ["Systematic", "Detail-Focused", "Multi-Location Coordinator", "Quality-Driven"],
-      image: "/images/leanne.png",
-      specialties: ["Multi-Location Coordination", "Process Management", "Quality Control", "Administrative Systems"],
-      color: "from-cream-100 to-primary-100"
     }
   ];
 
@@ -167,7 +171,7 @@ const ReceptionTeam: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveCard((prev) => (prev + 1) % (receptionTeam.length + technologists.length + 1));
+      setActiveCard((prev) => (prev + 1) % (executiveAssistants.length + receptionTeam.length + technologists.length + 1));
     }, 4000);
     return () => clearInterval(interval);
   }, []);
@@ -359,6 +363,165 @@ const ReceptionTeam: React.FC = () => {
           )}
         </div>
 
+        {/* Executive Assistants */}
+        <div className={`mb-20 transition-all duration-1000 delay-200 ${isVisible || isMobile ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="text-center mb-12">
+            <div className="glass-accent rounded-2xl p-8 mb-8">
+              <h3 className="text-3xl font-bold text-secondary-800 mb-4">Executive Assistants</h3>
+              <p className="text-lg text-secondary-600 max-w-2xl mx-auto">
+                Our executive assistants provide essential administrative support and coordination across all our locations.
+              </p>
+            </div>
+          </div>
+
+          {isMobile ? (
+            // Mobile: Collapsible Cards
+            <div className="space-y-4">
+              {executiveAssistants.map((member, index) => {
+                const cardId = `executive-${index}`;
+                const isExpanded = expandedCards.has(cardId);
+                
+                return (
+                  <motion.div
+                    key={index}
+                    className="liquid-glass-card rounded-2xl overflow-hidden"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    {/* Compact Header - Always Visible */}
+                    <div 
+                      className="p-4 cursor-pointer flex items-center justify-between hover:bg-white/50 transition-colors"
+                      onClick={() => toggleCard(cardId)}
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${member.color} flex-shrink-0 overflow-hidden`}>
+                          <img
+                            src={member.image}
+                            alt={member.name}
+                            className="w-full h-full object-cover object-center"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-secondary-800">{member.name}</h4>
+                          <p className="text-accent-600 font-medium text-sm">{member.title}</p>
+                        </div>
+                      </div>
+                      <motion.div
+                        animate={{ rotate: isExpanded ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <ChevronDown className="w-5 h-5 text-gray-500" />
+                      </motion.div>
+                    </div>
+
+                    {/* Expandable Content */}
+                    <Collapse isOpened={isExpanded}>
+                      <div className="px-4 pb-4">
+                        <div className="border-t pt-4 space-y-4">
+                          {/* Full Image */}
+                          <div className={`relative h-48 overflow-hidden rounded-xl bg-gradient-to-br ${member.color}`}>
+                            <img
+                              src={member.image}
+                              alt={`${member.name} - ${member.title}`}
+                              className="w-full h-full object-cover object-center"
+                            />
+                          </div>
+
+                          {/* Description */}
+                          <p className="text-secondary-600 text-sm leading-relaxed">
+                            {member.description}
+                          </p>
+
+                          {/* Qualities */}
+                          <div className="space-y-2">
+                            <h5 className="font-semibold text-secondary-800 text-sm">Key Qualities</h5>
+                            <div className="grid grid-cols-2 gap-2">
+                              {member.qualities.map((quality, idx) => (
+                                <div key={idx} className="flex items-center space-x-2">
+                                  <div className="w-1.5 h-1.5 bg-accent-600 rounded-full"></div>
+                                  <span className="text-xs text-secondary-600">{quality}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Specialties */}
+                          <div className="space-y-2">
+                            <h5 className="font-semibold text-secondary-800 text-sm">Administrative Areas</h5>
+                            <div className="flex flex-wrap gap-2">
+                              {member.specialties.map((specialty, idx) => (
+                                <span
+                                  key={idx}
+                                  className={`px-3 py-1 bg-gradient-to-r ${member.color} text-accent-700 text-xs rounded-full font-medium`}
+                                >
+                                  {specialty}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Collapse>
+                  </motion.div>
+                );
+              })}
+            </div>
+          ) : (
+            // Desktop: Original Layout
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {executiveAssistants.map((member, index) => (
+                <div
+                  key={index}
+                  className={`liquid-glass-card rounded-2xl overflow-hidden transform transition-all duration-500 ${
+                    activeCard === index + 1 ? 'ring-2 ring-accent-200/30 shadow-xl' : 'hover:shadow-lg'
+                  }`}
+                  style={{ 
+                    transformOrigin: 'center',
+                    willChange: 'transform',
+                    transform: activeCard === index + 1 ? 'scale(1.02)' : 'scale(1)',
+                    transitionDelay: `${index * 100}ms` 
+                  }}
+                >
+                  {/* Member Image */}
+                  <div className={`relative overflow-hidden bg-gradient-to-br ${member.color}`} style={{ height: '450px' }}>
+                    <img
+                      src={member.image}
+                      alt={`${member.name} - ${member.title}`}
+                      className="w-full h-full object-cover object-center"
+                      style={{ objectFit: 'cover', objectPosition: 'center' }}
+                    />
+                  </div>
+
+                  {/* Member Info */}
+                  <div className="p-6 space-y-4">
+                    <div className="space-y-2">
+                      <h4 className="text-lg font-bold text-secondary-800">{member.name}</h4>
+                      <p className="text-accent-600 font-semibold text-sm">{member.title}</p>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-secondary-600 text-sm leading-relaxed">{member.description}</p>
+
+                    {/* Qualities */}
+                    <div className="space-y-2">
+                      <h5 className="font-semibold text-secondary-800 text-sm">Key Qualities</h5>
+                      <div className="grid grid-cols-2 gap-1">
+                        {member.qualities.slice(0, 4).map((quality, idx) => (
+                          <div key={idx} className="flex items-center space-x-1">
+                            <div className="w-1 h-1 bg-accent-600 rounded-full"></div>
+                            <span className="text-xs text-secondary-600">{quality}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Reception Team */}
         <div className={`mb-20 transition-all duration-1000 delay-200 ${isVisible || isMobile ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="text-center mb-12">
@@ -465,17 +628,17 @@ const ReceptionTeam: React.FC = () => {
             </div>
           ) : (
             // Desktop: Original Layout
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {receptionTeam.map((member, index) => (
                 <div
                   key={index}
                   className={`liquid-glass-card rounded-2xl overflow-hidden transform transition-all duration-500 ${
-                    activeCard === index + 1 ? 'ring-2 ring-primary-200/30 shadow-xl' : 'hover:shadow-lg'
+                    activeCard === index + executiveAssistants.length + 1 ? 'ring-2 ring-primary-200/30 shadow-xl' : 'hover:shadow-lg'
                   }`}
                   style={{ 
                     transformOrigin: 'center',
                     willChange: 'transform',
-                    transform: activeCard === index + 1 ? 'scale(1.02)' : 'scale(1)',
+                    transform: activeCard === index + executiveAssistants.length + 1 ? 'scale(1.02)' : 'scale(1)',
                     transitionDelay: `${index * 100}ms` 
                   }}
                 >
@@ -639,12 +802,12 @@ const ReceptionTeam: React.FC = () => {
                 <div
                   key={index}
                   className={`liquid-glass-card rounded-2xl overflow-hidden hover:shadow-xl transform transition-all duration-500 ${
-                    activeCard === index + receptionTeam.length + 1 ? 'ring-2 ring-sage-200/30 shadow-xl' : 'hover:shadow-lg'
+                    activeCard === index + executiveAssistants.length + receptionTeam.length + 1 ? 'ring-2 ring-sage-200/30 shadow-xl' : 'hover:shadow-lg'
                   }`}
                   style={{ 
                     transformOrigin: 'center',
                     willChange: 'transform',
-                    transform: activeCard === index + receptionTeam.length + 1 ? 'scale(1.02)' : 'scale(1)',
+                    transform: activeCard === index + executiveAssistants.length + receptionTeam.length + 1 ? 'scale(1.02)' : 'scale(1)',
                     transitionDelay: `${index * 150}ms` 
                   }}
                 >
