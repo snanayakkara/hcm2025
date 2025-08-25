@@ -33,8 +33,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/ # The folder to upload
           server-dir: ./public_html/ # The destination on the server
-          # Use 'dangerous-clean-slate' to remove old files on deployment
-          protocol: ftps
-          port: 21
+          # Try SFTP protocol instead of FTPS
+          protocol: sftp
+          port: 22
           log-level: verbose
           dangerous-clean-slate: true
