@@ -32,9 +32,10 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/ # The folder to upload
-          server-dir: /public_html/ # Use absolute path
-          # Try regular FTP first, then FTPS if needed
-          protocol: ftp
+          server-dir: /public_html/ # The destination on the server
+          # Use explicit FTPS as specified in VentraIP cPanel
+          protocol: ftps
           port: 21
           log-level: verbose
+          security: loose
           dangerous-clean-slate: true
