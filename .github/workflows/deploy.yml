@@ -32,7 +32,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/ # The folder to upload
-          server-dir: /public_html/ # Correct website directory as shown in cPanel
+          server-dir: /home/heartcli/public_html/ # Full path as shown in cPanel
           # Use explicit FTPS as specified in VentraIP cPanel
           protocol: ftps
           port: 21
