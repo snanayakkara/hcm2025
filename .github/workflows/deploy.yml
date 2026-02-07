@@ -32,10 +32,12 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/ # The folder to upload
-          server-dir: /home/heartcli/public_html/ # Full path as shown in cPanel
+          # FTP account is jailed to its configured directory, so deploy from that root.
+          server-dir: /
           # Use explicit FTPS as specified in VentraIP cPanel
           protocol: ftps
           port: 21
           log-level: verbose
           security: loose
-          dangerous-clean-slate: true
+          # Safer default: do not wipe the remote directory before upload.
+          dangerous-clean-slate: false
