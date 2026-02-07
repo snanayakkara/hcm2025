@@ -153,6 +153,11 @@ const ReceptionTeam: React.FC = () => {
   ];
 
   useEffect(() => {
+    if (isMobile || typeof IntersectionObserver === 'undefined') {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -167,7 +172,7 @@ const ReceptionTeam: React.FC = () => {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     const interval = setInterval(() => {
