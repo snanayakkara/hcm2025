@@ -11,7 +11,6 @@ const Services = lazy(() => import('./components/Services'));
 const Doctors = lazy(() => import('./components/Doctors'));
 const ReceptionTeam = lazy(() => import('./components/ReceptionTeam'));
 const PatientInfo = lazy(() => import('./components/PatientInfo'));
-const FAQ = lazy(() => import('./components/FAQ'));
 const Contact = lazy(() => import('./components/Contact'));
 const Footer = lazy(() => import('./components/Footer'));
 const MobileLayout = lazy(() => import('./components/mobile/MobileLayout'));
@@ -92,9 +91,6 @@ function HomePage() {
         </Suspense>
         <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
           <PatientInfo />
-        </Suspense>
-        <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
-          <FAQ />
         </Suspense>
         <Suspense fallback={<div className="flex justify-center items-center h-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>}>
           <Contact />

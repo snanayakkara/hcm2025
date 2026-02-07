@@ -65,7 +65,7 @@ Sent via Mobile Quick Referral
 Thank you for your assistance.`;
 
     const encodedBody = encodeURIComponent(body);
-    const mailtoLink = `mailto:reception@heartclinicmelbourne.com?subject=${subject}&body=${encodedBody}`;
+    const mailtoLink = `mailto:reception@heartclinicmelbourne.com.au?subject=${subject}&body=${encodedBody}`;
     
     // Open email client
     window.location.href = mailtoLink;
@@ -123,7 +123,7 @@ Thank you for your assistance.`;
       )
     },
     {
-      title: 'Patient Info',
+      title: 'Patient Information',
       icon: User,
       content: (
         <div className="space-y-4">

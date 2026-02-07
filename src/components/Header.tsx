@@ -199,7 +199,7 @@ const Header: React.FC = () => {
       
       // Update active section based on scroll position (only on homepage)
       if (location.pathname === '/') {
-        const sections = ['home', 'about', 'services', 'doctors', 'reception-team', 'patients', 'faq', 'contact'];
+        const sections = ['home', 'about', 'services', 'doctors', 'reception-team', 'patients', 'contact'];
         const currentSection = sections.find(section => {
           const element = document.getElementById(section);
           if (element) {
@@ -263,10 +263,9 @@ const Header: React.FC = () => {
   const navItems = [
     { id: 'about', label: 'About' },
     { id: 'services', label: 'Services' },
-    { id: 'doctors', label: 'Doctors' },
+    { id: 'doctors', label: 'Our Doctors' },
     { id: 'reception-team', label: 'Our Team' },
-    { id: 'patients', label: 'Patients' },
-    { id: 'faq', label: 'FAQ' },
+    { id: 'patients', label: 'Patient Information' },
     { id: 'contact', label: 'Find Us' },
   ];
 
@@ -324,7 +323,7 @@ const Header: React.FC = () => {
             className={`transition-all duration-500 ${
               isScrolled 
                 ? 'bg-white/95 backdrop-blur-xl shadow-lg border border-secondary-200/50 rounded-2xl' 
-                : 'bg-white/80 backdrop-blur-sm border border-secondary-100/30 rounded-2xl'
+                : ''
             }`}
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}

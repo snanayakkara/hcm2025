@@ -87,10 +87,10 @@ const ReceptionTeam: React.FC = () => {
       color: "from-sage-100 to-primary-100"
     },
     {
-      name: "Jennifer Haywood",
+      name: "Jessica Langford",
       title: "Medical Receptionist",
       experience: "Medical Office Support",
-      description: "Jennifer provides essential administrative support to our clinical team. Her organizational skills and warm personality help create a welcoming environment for all patients visiting our clinic.",
+      description: "Jessica provides essential administrative support to our clinical team. She has extensive experience in medical office settings and is skilled at managing patient communications and file management.",
       qualities: ["Organised", "Warm Personality", "Supportive", "Efficient"],
       image: "/images/placeholder1.png",
       specialties: ["Administrative Support", "Patient Communication", "File Management", "Clinical Coordination"],
@@ -153,7 +153,12 @@ const ReceptionTeam: React.FC = () => {
   ];
 
   useEffect(() => {
-    if (isMobile || typeof IntersectionObserver === 'undefined') {
+    if (isMobile || !sectionRef.current) {
+      setIsVisible(true);
+      return;
+    }
+
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
       setIsVisible(true);
       return;
     }
@@ -162,14 +167,13 @@ const ReceptionTeam: React.FC = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+          observer.disconnect();
         }
       },
       { threshold: 0.05 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    observer.observe(sectionRef.current);
 
     return () => observer.disconnect();
   }, [isMobile]);

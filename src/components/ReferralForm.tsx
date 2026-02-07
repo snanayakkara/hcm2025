@@ -138,7 +138,7 @@ ${formData.doctorEmail}
 Provider Number: ${formData.providerNumber}`;
 
     const encodedBody = encodeURIComponent(body);
-    const mailtoLink = `mailto:reception@heartclinicmelbourne.com?subject=${subject}&body=${encodedBody}`;
+    const mailtoLink = `mailto:reception@heartclinicmelbourne.com.au?subject=${subject}&body=${encodedBody}`;
     
     // Open email client
     window.location.href = mailtoLink;
@@ -488,7 +488,7 @@ Provider Number: ${formData.providerNumber}`;
             <div className="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
               <p className="text-sm text-gray-600 text-center">
                 <strong>Note:</strong> Both methods will create a referral that can be sent to{' '}
-                <span className="font-medium text-teal-600">reception@heartclinicmelbourne.com</span>
+                <span className="font-medium text-teal-600">reception@heartclinicmelbourne.com.au</span>
               </p>
             </div>
           </div>

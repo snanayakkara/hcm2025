@@ -3,7 +3,6 @@ import { FileText, Clock, Shield, CreditCard, Phone, Mail, ArrowRight, CheckCirc
 import { motion, AnimatePresence } from 'framer-motion';
 import { faqData } from '../data/faqData';
 import Wizard from './Wizard/Wizard';
-import Button from './ui/Button';
 
 const PatientInfo: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -25,6 +24,7 @@ const PatientInfo: React.FC = () => {
   const [calendarDate, setCalendarDate] = useState(new Date());
   const [doctorPreSelected, setDoctorPreSelected] = useState(false);
   const [showIntakeWizard, setShowIntakeWizard] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const handleCardClick = (cardType: string) => {
@@ -97,7 +97,7 @@ Thank you,
 ${formData.name}`;
 
     const encodedBody = encodeURIComponent(body);
-    const mailtoLink = `mailto:reception@heartclinicmelbourne.com?subject=${subject}&body=${encodedBody}`;
+    const mailtoLink = `mailto:reception@heartclinicmelbourne.com.au?subject=${subject}&body=${encodedBody}`;
     
     // Open email client
     window.location.href = mailtoLink;
@@ -105,6 +105,14 @@ ${formData.name}`;
   };
 
   useEffect(() => {
+    // Check for mobile viewport
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -120,7 +128,10 @@ ${formData.name}`;
       observer.observe(sectionRef.current);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   useEffect(() => {
@@ -300,22 +311,22 @@ ${formData.name}`;
   const availableDoctors = getDoctorsByLocation(formData.preferredLocation);
 
   return (
-    <section id="patients" className="py-32 bg-white" ref={sectionRef}>
+    <section id="patients" className={`${isMobile ? 'py-16' : 'py-32'} bg-white`} ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className={`text-center ${isMobile ? 'mb-12' : 'mb-16'} transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h2 className={`${isMobile ? 'text-3xl' : 'text-4xl'} font-bold text-gray-900 mb-4`}>
             Patient Information
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className={`${isMobile ? 'text-lg' : 'text-xl'} text-gray-600 max-w-3xl mx-auto`}>
             Everything you need to know for your visit, from scheduling to insurance and what to expect during your consultation. Click a card for more information.
           </p>
         </div>
 
         <motion.div 
-          className="grid gap-8 lg:items-start"
+          className={`grid ${isMobile ? 'gap-6' : 'gap-8'} lg:items-start grid-cols-1 lg:grid-cols-2`}
           animate={{
-            gridTemplateColumns: activeDetail ? '1fr 0.67fr' : '1fr 1fr'
+            gridTemplateColumns: !isMobile ? (activeDetail ? '1fr 0.67fr' : '1fr 1fr') : '1fr'
           }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
@@ -329,101 +340,148 @@ ${formData.name}`;
               }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <div className="flex flex-col space-y-8">
+              <div className={`flex flex-col ${isMobile ? 'space-y-6' : 'space-y-8'}`}>
             {patientResources.slice(0, 2).map((resource, index) => (
               <div
                 key={index}
-                className={`relative bg-white border border-gray-200 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 transform ${
+                className={`group relative bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 transform ${
                   isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
                 } ${
-                  activeResource === index ? 'ring-2 ring-blue-200 shadow-xl' : 'hover:shadow-lg'
-                }`}
+                  activeResource === index && !isMobile ? 'ring-2 ring-blue-200 shadow-xl' : 'hover:shadow-lg'
+                } ${resource.hasHoverCard || resource.hasWizard ? 'cursor-pointer hover:scale-[1.02] hover:border-blue-300 hover:shadow-2xl' : ''}`}
                 style={{ 
                   transformOrigin: 'center',
                   willChange: 'transform',
-                  transform: activeResource === index ? 'scale(1.02)' : 'scale(1)',
-                  transitionDelay: `${300 + index * 150}ms`,
-                  cursor: resource.hasHoverCard ? 'pointer' : 'default'
+                  transform: (activeResource === index && !isMobile) ? 'scale(1.02)' : 'scale(1)',
+                  transitionDelay: `${300 + index * 150}ms`
                 }}
-                onClick={() => resource.hasHoverCard && handleCardClick('visit')}
+                onClick={() => {
+                  if (resource.hasHoverCard) {
+                    handleCardClick('visit');
+                  } else if (resource.hasWizard) {
+                    setShowIntakeWizard(true);
+                  }
+                }}
               >
-                <div className="flex items-start space-x-4 relative">
-                  <div className={`bg-gradient-to-br ${resource.color} p-3 rounded-lg`}>
-                    {resource.icon}
-                  </div>
-                  <div className="flex-1 space-y-3">
-                    <div>
-                      <h4 className="text-lg font-semibold text-gray-900">{resource.title}</h4>
-                      <p className="text-gray-600">{resource.description}</p>
+                {/* Subtle glow effect on hover */}
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400/5 to-purple-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                <div className={`relative ${isMobile ? 'p-5' : 'p-6'} pb-4`}>
+                  <div className="flex items-start space-x-4">
+                    <div className={`bg-gradient-to-br ${resource.color} group-hover:shadow-md p-3 rounded-lg transition-all duration-300`}>
+                      {resource.icon}
                     </div>
-                    <ul className="space-y-2">
-                      {resource.items.map((item, idx) => (
-                        <li key={idx} className="flex items-center">
-                          <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                            <span className="text-sm text-gray-700">{item}</span>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                    {resource.hasWizard && (
-                      <div className="pt-3">
-                        <Button
-                          variant="primary"
-                          size="medium"
-                          icon={FileText}
-                          onClick={() => {
-                            setShowIntakeWizard(true);
-                          }}
-                        >
-                          Start Intake Form
-                        </Button>
+                    <div className="flex-1 space-y-3">
+                      <div>
+                        <h4 className="text-lg font-semibold text-gray-900 group-hover:text-gray-800 transition-colors duration-300">{resource.title}</h4>
+                        <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">{resource.description}</p>
                       </div>
-                    )}
+                      <ul className="space-y-2">
+                        {resource.items.map((item, idx) => (
+                          <li key={idx} className="flex items-center group-hover:translate-x-1 transition-transform duration-300" style={{ transitionDelay: `${idx * 25}ms` }}>
+                            <div className="flex items-center space-x-2">
+                              <CheckCircle className="w-4 h-4 text-green-500" />
+                              <span className="text-sm text-gray-700">{item}</span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  
+                </div>
+                
+                {/* Footer Bar */}
+                <div className="relative border-t border-gray-100 group-hover:border-gray-200 transition-colors duration-300 px-6 py-4">
+                  {resource.hasWizard ? (
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors duration-300">
+                        Complete your intake form digitally
+                      </span>
+                      <div className="flex items-center space-x-2 text-blue-600 group-hover:text-blue-700 transition-all duration-300">
+                        <span className="text-xs font-medium">Start Form</span>
+                        <ArrowRight className="w-3 h-3 transform group-hover:translate-x-1 transition-transform duration-300" />
+                      </div>
+                    </div>
+                  ) : resource.hasHoverCard ? (
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors duration-300">
+                        Learn what to expect during your visit
+                      </span>
+                      <div className="flex items-center space-x-2 text-blue-600 group-hover:text-blue-700 transition-all duration-300">
+                        <span className="text-xs font-medium">View Details</span>
+                        <ChevronRight className="w-3 h-3 transform group-hover:translate-x-1 transition-transform duration-300" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center">
+                      <span className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors duration-300">
+                        Essential information for your care
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
 
             {/* Common Questions Card - moved to third position */}
             <div
-              className={`relative bg-white border border-gray-200 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 transform ${
+              className={`group relative bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 transform ${
                 isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
-              } hover:scale-102`}
+              } ${!isMobile ? 'hover:scale-[1.02] hover:border-blue-300 hover:shadow-2xl' : ''} cursor-pointer`}
               style={{ 
-                transitionDelay: `${300 + 2 * 150}ms`,
-                cursor: 'pointer'
+                transitionDelay: `${300 + 2 * 150}ms`
               }}
               onClick={() => handleCardClick('faq')}
             >
-              <div className="flex items-start space-x-4">
-                <div className="bg-gradient-to-br from-indigo-100 to-purple-100 p-3 rounded-lg">
-                  <HelpCircle className="w-6 h-6 text-blue-600" />
-                </div>
-                <div className="flex-1 space-y-3">
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900">Common Questions</h4>
-                    <p className="text-gray-600">Frequently asked questions about our services and appointments</p>
+              {/* Subtle glow effect on hover */}
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400/5 to-purple-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div className={`relative ${isMobile ? 'p-5' : 'p-6'} pb-4`}>
+                <div className="flex items-start space-x-4">
+                  <div className="bg-gradient-to-br from-indigo-100 to-purple-100 group-hover:from-indigo-200 group-hover:to-purple-200 p-3 rounded-lg transition-all duration-300">
+                    <HelpCircle className="w-6 h-6 text-blue-600 group-hover:text-blue-700 transition-colors duration-300" />
                   </div>
-                  <ul className="space-y-2">
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      <span className="text-sm text-gray-700">What to expect during your visit</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      <span className="text-sm text-gray-700">Insurance and billing information</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      <span className="text-sm text-gray-700">Appointment scheduling and preparation</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      <span className="text-sm text-gray-700">Emergency contact information</span>
-                    </li>
-                  </ul>
+                  <div className="flex-1 space-y-3">
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 group-hover:text-gray-800 transition-colors duration-300">
+                        Common Questions
+                      </h4>
+                      <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+                        Frequently asked questions about our services and appointments
+                      </p>
+                    </div>
+                    <ul className="space-y-2">
+                      <li className="flex items-center space-x-2 group-hover:translate-x-1 transition-transform duration-300 delay-75">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span className="text-sm text-gray-700">What to expect during your visit</span>
+                      </li>
+                      <li className="flex items-center space-x-2 group-hover:translate-x-1 transition-transform duration-300 delay-100">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span className="text-sm text-gray-700">Insurance and billing information</span>
+                      </li>
+                      <li className="flex items-center space-x-2 group-hover:translate-x-1 transition-transform duration-300 delay-125">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span className="text-sm text-gray-700">Appointment scheduling and preparation</span>
+                      </li>
+                      <li className="flex items-center space-x-2 group-hover:translate-x-1 transition-transform duration-300 delay-150">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span className="text-sm text-gray-700">Emergency contact information</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Footer Bar */}
+              <div className="relative border-t border-gray-100 group-hover:border-gray-200 transition-colors duration-300 px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors duration-300">
+                    {faqData.length} questions available
+                  </span>
+                  <div className="flex items-center space-x-2 text-blue-600 group-hover:text-blue-700 transition-all duration-300">
+                    <span className="text-xs font-medium">View All Answers</span>
+                    <ArrowRight className="w-3 h-3 transform group-hover:translate-x-1 transition-transform duration-300" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -432,55 +490,52 @@ ${formData.name}`;
             {patientResources.slice(2).map((resource, index) => (
               <div
                 key={index + 2}
-                className={`relative bg-white border border-gray-200 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 transform ${
+                className={`group relative bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 transform ${
                   isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
                 } ${
-                  activeResource === index + 2 ? 'ring-2 ring-blue-200 shadow-xl' : 'hover:shadow-lg'
-                }`}
+                  activeResource === index + 2 && !isMobile ? 'ring-2 ring-blue-200 shadow-xl' : 'hover:shadow-lg'
+                } hover:scale-[1.02] hover:border-blue-300 hover:shadow-2xl`}
                 style={{ 
                   transformOrigin: 'center',
                   willChange: 'transform',
-                  transform: activeResource === index + 2 ? 'scale(1.02)' : 'scale(1)',
-                  transitionDelay: `${300 + (index + 3) * 150}ms`,
-                  cursor: resource.hasHoverCard ? 'pointer' : 'default'
+                  transform: (activeResource === index + 2 && !isMobile) ? 'scale(1.02)' : 'scale(1)',
+                  transitionDelay: `${300 + (index + 3) * 150}ms`
                 }}
-                onClick={() => resource.hasHoverCard && handleCardClick('visit')}
               >
-                <div className="flex items-start space-x-4 relative">
-                  <div className={`bg-gradient-to-br ${resource.color} p-3 rounded-lg`}>
-                    {resource.icon}
-                  </div>
-                  <div className="flex-1 space-y-3">
-                    <div>
-                      <h4 className="text-lg font-semibold text-gray-900">{resource.title}</h4>
-                      <p className="text-gray-600">{resource.description}</p>
+                {/* Subtle glow effect on hover */}
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400/5 to-purple-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                <div className={`relative ${isMobile ? 'p-5' : 'p-6'} pb-4`}>
+                  <div className="flex items-start space-x-4">
+                    <div className={`bg-gradient-to-br ${resource.color} group-hover:shadow-md p-3 rounded-lg transition-all duration-300`}>
+                      {resource.icon}
                     </div>
-                    <ul className="space-y-2">
-                      {resource.items.map((item, idx) => (
-                        <li key={idx} className="flex items-center">
-                          <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                            <span className="text-sm text-gray-700">{item}</span>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                    {resource.hasWizard && (
-                      <div className="pt-3">
-                        <Button
-                          variant="primary"
-                          size="medium"
-                          icon={FileText}
-                          onClick={() => {
-                            setShowIntakeWizard(true);
-                          }}
-                        >
-                          Start Intake Form
-                        </Button>
+                    <div className="flex-1 space-y-3">
+                      <div>
+                        <h4 className="text-lg font-semibold text-gray-900 group-hover:text-gray-800 transition-colors duration-300">{resource.title}</h4>
+                        <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">{resource.description}</p>
                       </div>
-                    )}
+                      <ul className="space-y-2">
+                        {resource.items.map((item, idx) => (
+                          <li key={idx} className="flex items-center group-hover:translate-x-1 transition-transform duration-300" style={{ transitionDelay: `${idx * 25}ms` }}>
+                            <div className="flex items-center space-x-2">
+                              <CheckCircle className="w-4 h-4 text-green-500" />
+                              <span className="text-sm text-gray-700">{item}</span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  
+                </div>
+                
+                {/* Footer Bar */}
+                <div className="relative border-t border-gray-100 group-hover:border-gray-200 transition-colors duration-300 px-6 py-4">
+                  <div className="flex items-center justify-center">
+                    <span className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors duration-300">
+                      {index === 0 ? 'Medicare rebates and payment options available' : 'Flexible payment solutions for your care'}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -515,13 +570,28 @@ ${formData.name}`;
           <AnimatePresence>
             {activeDetail && (
               <motion.div 
-                className="flex-shrink-0 pl-4"
-                initial={{ opacity: 0, width: 0 }}
-                animate={{ opacity: 1, width: '40%' }}
-                exit={{ opacity: 0, width: 0 }}
+                className={isMobile 
+                  ? "fixed inset-0 z-50 bg-white" 
+                  : "flex-shrink-0 pl-4"
+                }
+                initial={isMobile 
+                  ? { opacity: 0, y: '100%' } 
+                  : { opacity: 0, width: 0 }
+                }
+                animate={isMobile 
+                  ? { opacity: 1, y: 0 } 
+                  : { opacity: 1, width: '40%' }
+                }
+                exit={isMobile 
+                  ? { opacity: 0, y: '100%' } 
+                  : { opacity: 0, width: 0 }
+                }
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
-                <div className="bg-white border border-gray-200 rounded-xl shadow-xl p-6 h-full flex flex-col">
+                <div className={`${isMobile 
+                  ? 'h-full flex flex-col p-6 pt-12' 
+                  : 'bg-white border border-gray-200 rounded-xl shadow-xl p-6 h-full flex flex-col'
+                }`}>
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="text-2xl font-bold text-gray-900">
                       {activeDetail === 'visit' ? 'Before Your Visit' : 'Frequently Asked Questions'}
@@ -702,7 +772,7 @@ ${formData.name}`;
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div className="order-1">
                       <label htmlFor="preferredDate" className="block text-sm font-medium text-gray-700 mb-2">
                         Preferred Date
@@ -713,11 +783,11 @@ ${formData.name}`;
                         name="preferredDate"
                         value={formData.preferredDate}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 text-gray-900"
+                        className="w-full px-4 py-4 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 text-gray-900"
                       />
                       
                       {/* Mini Calendar Widget */}
-                      <div className="mt-3 bg-white rounded-lg p-4 h-[200px] flex flex-col mb-32 md:mb-0">
+                      <div className={`mt-3 bg-white rounded-lg p-4 flex flex-col ${isMobile ? 'h-[240px] mb-4' : 'h-[200px] mb-4'}`}>
                         <div className="flex items-center justify-between mb-3">
                           <button
                             type="button"
@@ -726,12 +796,12 @@ ${formData.name}`;
                               newDate.setMonth(newDate.getMonth() - 1);
                               setCalendarDate(newDate);
                             }}
-                            className="p-1 rounded hover:bg-gray-100 transition-colors"
+                            className={`${isMobile ? 'p-3' : 'p-1'} rounded hover:bg-gray-100 transition-colors touch-manipulation`}
                           >
-                            <ChevronLeft className="w-4 h-4 text-teal-600" />
+                            <ChevronLeft className={`${isMobile ? 'w-6 h-6' : 'w-4 h-4'} text-teal-600`} />
                           </button>
                           
-                          <div className="text-sm font-medium text-teal-700">
+                          <div className={`${isMobile ? 'text-base' : 'text-sm'} font-medium text-teal-700`}>
                             {calendarDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                           </div>
                           
@@ -742,15 +812,15 @@ ${formData.name}`;
                               newDate.setMonth(newDate.getMonth() + 1);
                               setCalendarDate(newDate);
                             }}
-                            className="p-1 rounded hover:bg-gray-100 transition-colors"
+                            className={`${isMobile ? 'p-3' : 'p-1'} rounded hover:bg-gray-100 transition-colors touch-manipulation`}
                           >
-                            <ChevronRight className="w-4 h-4 text-teal-600" />
+                            <ChevronRight className={`${isMobile ? 'w-6 h-6' : 'w-4 h-4'} text-teal-600`} />
                           </button>
                         </div>
-                        <div className="grid grid-cols-7 gap-1 text-xs flex-1">
+                        <div className={`grid grid-cols-7 gap-1 flex-1 ${isMobile ? 'text-sm' : 'text-xs'}`}>
                           {/* Calendar Header */}
                           {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, idx) => (
-                            <div key={idx} className="text-center text-gray-500 font-medium py-1">
+                            <div key={idx} className={`text-center text-gray-500 font-medium ${isMobile ? 'py-2' : 'py-1'}`}>
                               {day}
                             </div>
                           ))}
@@ -799,7 +869,7 @@ ${formData.name}`;
                                       });
                                     }
                                   }}
-                                  className={`h-7 rounded text-xs transition-all duration-200 ${
+                                  className={`${isMobile ? 'h-10 text-sm' : 'h-7 text-xs'} rounded transition-all duration-200 touch-manipulation ${
                                     isPast
                                       ? 'text-gray-300 cursor-not-allowed'
                                       : isSelected
@@ -824,7 +894,7 @@ ${formData.name}`;
                       <label className="block text-sm font-medium text-gray-700 mb-3">
                         Preferred Time
                       </label>
-                      <div className="space-y-2">
+                      <div className={isMobile ? 'space-y-3' : 'space-y-2'}>
                         {[
                           { value: "9-11 AM", label: "9-11 AM", period: "Morning" },
                           { value: "11 AM-1 PM", label: "11 AM-1 PM", period: "Late Morning" },
@@ -840,21 +910,21 @@ ${formData.name}`;
                                 preferredTime: timeSlot.value
                               });
                             }}
-                            className={`w-full px-4 py-3 text-left rounded-lg border-2 transition-all duration-200 flex items-center justify-between ${
+                            className={`w-full ${isMobile ? 'px-6 py-4' : 'px-4 py-3'} text-left rounded-lg border-2 transition-all duration-200 flex items-center justify-between touch-manipulation ${
                               formData.preferredTime === timeSlot.value
                                 ? 'bg-teal-600 text-white border-teal-600 shadow-md'
                                 : 'bg-white text-gray-700 border-gray-200 hover:border-teal-300 hover:bg-teal-50'
                             }`}
                           >
                             <div>
-                              <div className="font-medium">{timeSlot.label}</div>
-                              <div className={`text-xs ${
+                              <div className={`font-medium ${isMobile ? 'text-base' : 'text-sm'}`}>{timeSlot.label}</div>
+                              <div className={`${isMobile ? 'text-sm' : 'text-xs'} ${
                                 formData.preferredTime === timeSlot.value ? 'text-teal-100' : 'text-gray-500'
                               }`}>
                                 {timeSlot.period}
                               </div>
                             </div>
-                            <div className={`w-2 h-2 rounded-full ${
+                            <div className={`${isMobile ? 'w-3 h-3' : 'w-2 h-2'} rounded-full ${
                               formData.preferredTime === timeSlot.value ? 'bg-white' : 'bg-gray-300'
                             }`}></div>
                           </button>
@@ -867,7 +937,7 @@ ${formData.name}`;
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       Preferred Location *
                     </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className={`grid gap-3 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-3'}`}>
                       {locations.map((location) => (
                         <button
                           key={location}
@@ -879,7 +949,7 @@ ${formData.name}`;
                               preferredDoctor: '' // Reset doctor when location changes
                             });
                           }}
-                          className={`px-4 py-3 text-sm font-medium rounded-lg border-2 transition-all duration-200 ${
+                          className={`${isMobile ? 'px-6 py-4 text-base' : 'px-4 py-3 text-sm'} font-medium rounded-lg border-2 transition-all duration-200 touch-manipulation ${
                             formData.preferredLocation === location
                               ? 'bg-teal-600 text-white border-teal-600 shadow-md'
                               : 'bg-white text-gray-700 border-gray-300 hover:border-teal-300 hover:bg-teal-50'
@@ -908,7 +978,7 @@ ${formData.name}`;
                       </div>
                     )}
                     
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className={`grid gap-3 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
                       {availableDoctors.map((doctor) => (
                         <button
                           key={doctor.name}
@@ -922,7 +992,7 @@ ${formData.name}`;
                               });
                             }
                           }}
-                          className={`px-4 py-4 text-left rounded-lg border-2 transition-all duration-200 flex items-center space-x-3 ${
+                          className={`${isMobile ? 'px-6 py-5' : 'px-4 py-4'} text-left rounded-lg border-2 transition-all duration-200 flex items-center space-x-3 touch-manipulation ${
                             !formData.preferredLocation
                               ? 'bg-gray-50 text-gray-400 border-gray-200 cursor-not-allowed'
                               : formData.preferredDoctor === doctor.name
@@ -935,14 +1005,14 @@ ${formData.name}`;
                               <img
                                 src={doctor.image}
                                 alt={doctor.name}
-                                className={`w-12 h-12 rounded-full object-cover border-2 transition-all duration-200 ${
+                                className={`${isMobile ? 'w-16 h-16' : 'w-12 h-12'} rounded-full object-cover border-2 transition-all duration-200 ${
                                   formData.preferredDoctor === doctor.name
                                     ? 'border-white'
                                     : 'border-gray-300'
                                 }`}
                               />
                             ) : (
-                              <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold border-2 transition-all duration-200 ${
+                              <div className={`${isMobile ? 'w-16 h-16 text-xl' : 'w-12 h-12 text-lg'} rounded-full flex items-center justify-center font-bold border-2 transition-all duration-200 ${
                                 !formData.preferredLocation
                                   ? 'bg-gray-200 text-gray-400 border-gray-300'
                                   : formData.preferredDoctor === doctor.name
@@ -954,7 +1024,7 @@ ${formData.name}`;
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className={`font-medium text-sm ${
+                            <div className={`font-medium ${isMobile ? 'text-base' : 'text-sm'} ${
                               !formData.preferredLocation
                                 ? 'text-gray-400'
                                 : formData.preferredDoctor === doctor.name
@@ -963,7 +1033,7 @@ ${formData.name}`;
                             }`}>
                               {doctor.name}
                             </div>
-                            <div className={`text-xs mt-1 ${
+                            <div className={`${isMobile ? 'text-sm' : 'text-xs'} mt-1 ${
                               !formData.preferredLocation
                                 ? 'text-gray-300'
                                 : formData.preferredDoctor === doctor.name
@@ -973,7 +1043,7 @@ ${formData.name}`;
                               {doctor.specialty}
                             </div>
                           </div>
-                          <div className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                          <div className={`${isMobile ? 'w-4 h-4' : 'w-3 h-3'} rounded-full transition-all duration-200 ${
                             formData.preferredDoctor === doctor.name ? 'bg-white' : 'bg-gray-300'
                           }`}></div>
                         </button>
@@ -1018,7 +1088,7 @@ ${formData.name}`;
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       Do you have a valid referral from your GP? *
                     </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className={`grid gap-3 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
                       <button
                         type="button"
                         onClick={() => {
@@ -1027,7 +1097,7 @@ ${formData.name}`;
                             hasReferral: 'yes'
                           });
                         }}
-                        className={`px-4 py-3 text-sm font-medium rounded-lg border-2 transition-all duration-200 ${
+                        className={`${isMobile ? 'px-6 py-4 text-base' : 'px-4 py-3 text-sm'} font-medium rounded-lg border-2 transition-all duration-200 touch-manipulation ${
                           formData.hasReferral === 'yes'
                             ? 'bg-green-600 text-white border-green-600 shadow-md'
                             : 'bg-white text-gray-700 border-gray-300 hover:border-green-300 hover:bg-green-50'
@@ -1043,7 +1113,7 @@ ${formData.name}`;
                             hasReferral: 'no'
                           });
                         }}
-                        className={`px-4 py-3 text-sm font-medium rounded-lg border-2 transition-all duration-200 ${
+                        className={`${isMobile ? 'px-6 py-4 text-base' : 'px-4 py-3 text-sm'} font-medium rounded-lg border-2 transition-all duration-200 touch-manipulation ${
                           formData.hasReferral === 'no'
                             ? 'bg-orange-600 text-white border-orange-600 shadow-md'
                             : 'bg-white text-gray-700 border-gray-300 hover:border-orange-300 hover:bg-orange-50'
@@ -1089,10 +1159,10 @@ ${formData.name}`;
 
                   <button
                     type="submit"
-                    className="w-full bg-teal-600 text-white py-4 rounded-lg hover:bg-teal-700 transition-all duration-200 flex items-center justify-center space-x-2 font-semibold transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    className={`w-full bg-teal-600 text-white ${isMobile ? 'py-5 text-lg' : 'py-4'} rounded-lg hover:bg-teal-700 transition-all duration-200 flex items-center justify-center space-x-2 font-semibold transform hover:scale-105 shadow-lg hover:shadow-xl touch-manipulation`}
                   >
                     <span>Send Appointment Request</span>
-                    <ArrowRight className="w-5 h-5" />
+                    <ArrowRight className={`${isMobile ? 'w-6 h-6' : 'w-5 h-5'}`} />
                   </button>
                 </form>
 

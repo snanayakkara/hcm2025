@@ -81,7 +81,7 @@ const Doctors: React.FC = () => {
 
         {/* Doctor Details Card */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="grid md:grid-cols-2 gap-0">
+          <div className="grid md:grid-cols-2 gap-0 h-[770px]">
             
             {/* Doctor Image */}
             <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 p-8 flex items-center justify-center">
@@ -99,46 +99,55 @@ const Doctors: React.FC = () => {
             </div>
 
             {/* Doctor Information */}
-            <div className="p-8 space-y-6">
-              
-              {/* Name and Title */}
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  {currentDoctor.name}
-                </h3>
-                <p className="text-lg font-medium mb-2" style={{ color: currentDoctor.color }}>
-                  {currentDoctor.title}
-                </p>
-                <p className="text-gray-600">{currentDoctor.description}</p>
-              </div>
-
-              {/* Education */}
-              <InfoSection icon={GraduationCap} title="Education & Training">
-                <p>{currentDoctor.education}</p>
-              </InfoSection>
-
-              {/* Expertise */}
-              <InfoSection icon={Star} title="Areas of Expertise">
-                <div className="flex flex-wrap gap-2">
-                  {currentDoctor.expertise.map((item, idx) => (
-                    <span
-                      key={idx}
-                      className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700"
-                    >
-                      {item}
-                    </span>
-                  ))}
+            <div className="p-8 flex flex-col justify-between h-[770px]">
+              <div className="space-y-6 flex-grow">
+                {/* Name and Title */}
+                <div className="min-h-[140px]">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    {currentDoctor.name}
+                  </h3>
+                  <p className="text-lg font-medium mb-2 min-h-[28px]" style={{ color: currentDoctor.color }}>
+                    {currentDoctor.title}
+                  </p>
+                  <p className="text-gray-600 text-sm leading-relaxed min-h-[80px]">
+                    {currentDoctor.description}
+                  </p>
                 </div>
-              </InfoSection>
 
-              {/* Locations */}
-              <InfoSection icon={MapPin} title="Locations">
-                <ul className="space-y-1">
-                  {currentDoctor.locations.map((location, idx) => (
-                    <li key={idx} className="text-sm">• {location}</li>
-                  ))}
-                </ul>
-              </InfoSection>
+                {/* Education */}
+                <div className="min-h-[100px]">
+                  <InfoSection icon={GraduationCap} title="Education & Training">
+                    <p className="min-h-[60px] overflow-hidden line-clamp-3">{currentDoctor.education}</p>
+                  </InfoSection>
+                </div>
+
+                {/* Expertise */}
+                <div className="min-h-[100px]">
+                  <InfoSection icon={Star} title="Areas of Expertise">
+                    <div className="flex flex-wrap gap-2 min-h-[60px] overflow-hidden max-h-[60px]">
+                      {currentDoctor.expertise.map((item, idx) => (
+                        <span
+                          key={idx}
+                          className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700 whitespace-nowrap"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </InfoSection>
+                </div>
+
+                {/* Locations */}
+                <div className="min-h-[100px]">
+                  <InfoSection icon={MapPin} title="Locations">
+                    <ul className="space-y-1 min-h-[80px] max-h-[80px] overflow-hidden">
+                      {currentDoctor.locations.map((location, idx) => (
+                        <li key={idx} className="text-sm">• {location}</li>
+                      ))}
+                    </ul>
+                  </InfoSection>
+                </div>
+              </div>
 
               {/* Book Button */}
               <button
@@ -157,7 +166,7 @@ const Doctors: React.FC = () => {
                     element.scrollIntoView({ behavior: 'smooth' });
                   }
                 }}
-                className="w-full py-4 rounded-xl font-bold text-white transition-all duration-200 hover:shadow-lg"
+                className="w-full py-4 rounded-xl font-bold text-white transition-all duration-200 hover:shadow-lg mt-6"
                 style={{ backgroundColor: currentDoctor.color }}
               >
                 Book with {currentDoctor.name.split(' ')[1]}

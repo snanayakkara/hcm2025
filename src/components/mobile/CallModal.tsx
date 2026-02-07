@@ -156,7 +156,7 @@ const CallModal: React.FC<CallModalProps> = ({ isOpen, onClose }) => {
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
                 <p className="text-blue-800 text-xs text-center">
                   💡 For non-urgent inquiries, you can also email us at{' '}
-                  <span className="font-medium">reception@heartclinicmelbourne.com</span>
+                  <span className="font-medium">reception@heartclinicmelbourne.com.au</span>
                 </p>
               </div>
             </div>

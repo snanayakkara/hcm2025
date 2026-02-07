@@ -17,8 +17,7 @@ import ReceptionTeam from '../ReceptionTeam';
 import PatientInfo from '../PatientInfo';
 import FAQ from '../FAQ';
 import Contact from '../Contact';
-import useParallaxHero from '../../hooks/useParallaxHero';
-import { DEFAULT_VIEWPORT } from '../../lib/motion';
+import { DEFAULT_VIEWPORT, MOBILE_VIEWPORT } from '../../lib/motion';
 
 interface MobileLayoutProps {
   currentPage: string;
@@ -33,12 +32,6 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
   const [activeSection, setActiveSection] = useState('home');
   const [calendarEvent] = useState<any>(null);
 
-  // Parallax hero effect
-  const parallax = useParallaxHero({
-    maxTranslate: 10,
-    enableOnMobile: true,
-    enableOnDesktop: false
-  });
 
   useEffect(() => {
     // Track scroll position for active section
@@ -95,81 +88,218 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
     switch (currentPage) {
       case 'home':
         return (
-          <div className="pb-24">
-            {/* Mobile-optimised hero with parallax */}
-            <section id="home" className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
-              {/* No separate background - uses the unified light background */}
+          <div className="pb-8">
+            {/* Mobile-optimised hero with rich desktop-style background */}
+            <section id="home" className="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cream-50 via-white to-primary-50/20">
               
-              {/* Parallax Heart Logo */}
-              <motion.div
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0"
-                style={parallax.styles}
-              >
-                <div className="w-32 h-32 text-teal-600/20 text-8xl flex items-center justify-center">
-                  <motion.img
-                    src="/images/hcm3d2.png"
-                    alt="Heart Clinic Melbourne Logo"
-                    className="w-20 h-20 object-contain opacity-20"
+              {/* Enhanced Mobile Background Elements */}
+              <div className="absolute inset-0 pointer-events-none">
+                {/* Floating Particles - Mobile Optimized */}
+                <div className="opacity-60">
+                  <motion.div 
+                    className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary-400/70 rounded-full shadow-sm"
                     animate={{
-                      scale: [1, 1.05, 1],
+                      y: [0, -15, 0],
+                      x: [0, 8, 0],
+                      opacity: [0.5, 0.8, 0.5]
                     }}
                     transition={{
-                      duration: 3,
+                      duration: 6,
                       repeat: Infinity,
                       ease: "easeInOut"
                     }}
                   />
+                  <motion.div 
+                    className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-accent-400/60 rounded-full shadow-sm"
+                    animate={{
+                      y: [0, 12, 0],
+                      x: [0, -6, 0],
+                      opacity: [0.4, 0.7, 0.4]
+                    }}
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 1
+                    }}
+                  />
+                  <motion.div 
+                    className="absolute bottom-1/3 right-1/4 w-2.5 h-2.5 bg-sage-400/50 rounded-full shadow-sm"
+                    animate={{
+                      y: [0, -10, 0],
+                      x: [0, 5, 0],
+                      opacity: [0.3, 0.6, 0.3]
+                    }}
+                    transition={{
+                      duration: 7,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 2
+                    }}
+                  />
                 </div>
-              </motion.div>
-              
-              <div className="relative z-10 text-center px-4 pb-10 mb-12">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="space-y-6"
-                >
-                  <motion.h1 
-                    className="mobile-text-2xl font-bold text-gray-900 leading-tight"
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.8 }}
-                  >
-                    Expert Cardiac Care in Melbourne
-                  </motion.h1>
-                  <motion.p 
-                    className="mobile-text-lg text-gray-700 max-w-md mx-auto"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.8 }}
-                  >
-                    Leading cardiology practice with telehealth, interventional procedures, and comprehensive heart care
-                  </motion.p>
-                  
+
+                {/* Soft Bokeh Effects - Mobile Optimized */}
+                <div className="opacity-20">
                   <motion.div
+                    className="absolute top-1/3 right-1/4 w-16 h-16 bg-gradient-to-r from-primary-200/40 to-accent-200/30 rounded-full blur-xl"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.2, 0.4, 0.2],
+                    }}
+                    transition={{
+                      duration: 12,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  />
+                  <motion.div
+                    className="absolute bottom-1/3 left-1/4 w-12 h-12 bg-gradient-to-r from-sage-200/30 to-primary-200/25 rounded-full blur-xl"
+                    animate={{
+                      scale: [1, 1.3, 1],
+                      opacity: [0.15, 0.35, 0.15],
+                    }}
+                    transition={{
+                      duration: 15,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 4,
+                    }}
+                  />
+                </div>
+              </div>
+              
+              {/* Clean Mobile Hero Content - Center Aligned */}
+              <div className="relative z-10 text-center px-4 pb-8">
+                <motion.div className="space-y-6 max-w-md mx-auto">
+                  {/* Prominent Pulsing Heart Logo */}
+                  <motion.div
+                    className="flex justify-center mb-8"
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6, duration: 0.8 }}
-                    className=""
+                    transition={{ duration: 0.8, ease: "easeOut" }}
                   >
-                    <QuickActionsCard 
-                      onCallClick={handleCallClick}
-                      onTelehealthClick={handleTelehealthClick}
-                      onDirectionsClick={handleDirectionsClick}
-                      onQuickReferralClick={handleQuickReferralClick}
+                    <motion.img
+                      src="/images/hcm3d2.png"
+                      alt="Heart Clinic Melbourne Logo"
+                      className="w-16 h-16 object-contain animate-heartbeat"
+                      style={{
+                        filter: 'hue-rotate(160deg) saturate(1.2) brightness(1.1)', // Green teal color
+                      }}
                     />
                   </motion.div>
+                  
+                  {/* Welcome Message - Main Title */}
+                  <motion.h1 
+                    className="mobile-text-2xl font-bold text-gray-900 leading-tight"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.8 }}
+                  >
+                    Welcome to Heart Clinic Melbourne
+                  </motion.h1>
+                  
+                  {/* Subtitle */}
+                  <motion.p 
+                    className="mobile-text-lg text-gray-600 font-medium"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.8 }}
+                  >
+                    Expert Cardiac Care in Melbourne
+                  </motion.p>
                 </motion.div>
               </div>
+              
+              {/* Enhanced Scroll Indicator - Cleaner Animation */}
+              <motion.div
+                className="mobile-scroll-indicator"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.6 }}
+                onClick={() => {
+                  const aboutSection = document.getElementById('about');
+                  if (aboutSection) {
+                    aboutSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                <motion.div
+                  className="w-14 h-14 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center cursor-pointer border border-white/40"
+                  style={{
+                    backdropFilter: 'blur(20px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                  }}
+                  whileHover={{ 
+                    scale: 1.1,
+                    boxShadow: '0 0 30px rgba(20, 184, 166, 0.4)',
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  animate={{ 
+                    y: [0, 8, 0],
+                    boxShadow: [
+                      '0 8px 32px rgba(0, 0, 0, 0.15)',
+                      '0 12px 40px rgba(20, 184, 166, 0.2)',
+                      '0 8px 32px rgba(0, 0, 0, 0.15)'
+                    ]
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <motion.div
+                    animate={{ y: [0, 4, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <svg
+                      className="w-6 h-6 text-teal-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2.5}
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                      />
+                    </svg>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
             </section>
 
-            {/* Mobile-optimised sections with enhanced spacing */}
+            {/* Quick Actions Card - Immediately after hero for maximum visibility */}
+            <section className="py-8 px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 0.8 }}
+              >
+                <QuickActionsCard 
+                  onCallClick={handleCallClick}
+                  onTelehealthClick={handleTelehealthClick}
+                  onDirectionsClick={handleDirectionsClick}
+                  onQuickReferralClick={handleQuickReferralClick}
+                />
+              </motion.div>
+            </section>
+
+            {/* Mobile-optimised sections with enhanced spacing and better viewport handling */}
             <section id="about" className="py-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={DEFAULT_VIEWPORT}
+                viewport={MOBILE_VIEWPORT}
                 transition={{ duration: 0.6 }}
+                // iOS Safari fallback - trigger after timeout if intersection observer fails
+                animate={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { delay: 2, duration: 0.6 } 
+                }}
               >
                 <About />
               </motion.div>
@@ -179,8 +309,13 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={DEFAULT_VIEWPORT}
+                viewport={MOBILE_VIEWPORT}
                 transition={{ duration: 0.6 }}
+                animate={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { delay: 2.5, duration: 0.6 } 
+                }}
               >
                 <MobileServiceCards />
               </motion.div>
@@ -190,8 +325,13 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={DEFAULT_VIEWPORT}
+                viewport={MOBILE_VIEWPORT}
                 transition={{ duration: 0.6 }}
+                animate={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { delay: 3, duration: 0.6 } 
+                }}
               >
                 <MobileDoctorCarousel />
               </motion.div>
@@ -201,8 +341,13 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={DEFAULT_VIEWPORT}
+                viewport={MOBILE_VIEWPORT}
                 transition={{ duration: 0.6 }}
+                animate={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { delay: 3.5, duration: 0.6 } 
+                }}
               >
                 <ReceptionTeam />
               </motion.div>
@@ -212,8 +357,13 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={DEFAULT_VIEWPORT}
+                viewport={MOBILE_VIEWPORT}
                 transition={{ duration: 0.6 }}
+                animate={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { delay: 4, duration: 0.6 } 
+                }}
               >
                 <PatientInfo />
               </motion.div>
@@ -223,8 +373,13 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={DEFAULT_VIEWPORT}
+                viewport={MOBILE_VIEWPORT}
                 transition={{ duration: 0.6 }}
+                animate={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { delay: 4.5, duration: 0.6 } 
+                }}
               >
                 <FAQ />
               </motion.div>
@@ -234,8 +389,13 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={DEFAULT_VIEWPORT}
+                viewport={MOBILE_VIEWPORT}
                 transition={{ duration: 0.6 }}
+                animate={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { delay: 5, duration: 0.6 } 
+                }}
               >
                 <Contact />
               </motion.div>
@@ -339,6 +499,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
           <main className="pt-20 safe-area-inset-left safe-area-inset-right">
             {renderPageContent()}
           </main>
+
 
           {/* PWA Install Banner */}
           <PWAInstallBanner />

@@ -116,7 +116,7 @@ describe('MobileHeader', () => {
         expect(screen.getByText('Services')).toBeInTheDocument()
         expect(screen.getByText('Our Doctors')).toBeInTheDocument()
         expect(screen.getByText('Reception Team')).toBeInTheDocument()
-        expect(screen.getByText('Patient Info')).toBeInTheDocument()
+        expect(screen.getByText('Patient Information')).toBeInTheDocument()
         expect(screen.getByText('Contact')).toBeInTheDocument()
       })
     })

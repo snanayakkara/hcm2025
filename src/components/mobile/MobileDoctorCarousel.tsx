@@ -110,16 +110,16 @@ const MobileDoctorCarousel: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="doctor-card relative overflow-visible"
+          className="doctor-card relative overflow-visible min-h-[528px] flex flex-col"
         >
           {/* Gradient Overlay */}
           <div className={`absolute inset-0 bg-gradient-to-br ${selectedDoctor.mobileColor} opacity-5 rounded-3xl`} />
           
           {/* Content */}
-          <div className="relative z-10">
+          <div className="relative z-10 flex flex-col h-full">
             {/* Header Section */}
-            <div className="flex items-start space-x-4 mb-6">
-              <div className="w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center shadow-lg">
+            <div className="flex items-start space-x-4 mb-6 min-h-[96px]">
+              <div className="w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center shadow-lg flex-shrink-0">
                 <img
                   src={selectedDoctor.image}
                   alt={selectedDoctor.name}
@@ -140,33 +140,38 @@ const MobileDoctorCarousel: React.FC = () => {
               </div>
               
               <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-xl text-gray-900 truncate mb-1">{selectedDoctor.name}</h3>
-                <p className="text-teal-600 font-semibold text-base mb-1">{selectedDoctor.specialty}</p>
-                <p className="text-gray-500 text-sm">{selectedDoctor.qualifications}</p>
+                <h3 className="font-bold text-xl text-gray-900 truncate mb-1 min-h-[28px]">{selectedDoctor.name}</h3>
+                <p className="text-teal-600 font-semibold text-base mb-1 min-h-[24px] line-clamp-2">{selectedDoctor.specialty}</p>
+                <p className="text-gray-500 text-sm min-h-[20px]">{selectedDoctor.qualifications}</p>
               </div>
             </div>
 
             {/* Description */}
-            <div className="mb-6">
-              <p className="text-gray-700 text-base leading-relaxed">
+            <div className="mb-6 flex-grow">
+              <p className="text-gray-700 text-base leading-relaxed min-h-[96px]">
                 {selectedDoctor.description}
               </p>
             </div>
 
             {/* Location & Expertise */}
-            <div className="mb-6">
-              <div className="flex items-center space-x-2 mb-4">
-                <MapPin className="w-5 h-5 text-gray-400" />
-                <span className="text-base font-medium text-gray-700">{selectedDoctor.location}</span>
+            <div className="mb-6 min-h-[140px]">
+              <div className="flex items-center space-x-2 mb-4 min-h-[24px]">
+                <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                <span className="text-base font-medium text-gray-700 truncate">
+                  {selectedDoctor.locations && selectedDoctor.locations.length > 0 
+                    ? selectedDoctor.locations[0] 
+                    : 'Multiple locations'
+                  }
+                </span>
               </div>
               
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 min-h-[88px]">
                 {selectedDoctor.expertise.slice(0, 4).map((skill, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-100 rounded-xl"
+                    className="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-100 rounded-xl min-h-[40px]"
                   >
-                    <div className="w-2 h-2 bg-teal-500 rounded-full" />
+                    <div className="w-2 h-2 bg-teal-500 rounded-full flex-shrink-0" />
                     <span className="text-teal-700 text-sm font-medium truncate">{skill}</span>
                   </div>
                 ))}
@@ -174,12 +179,12 @@ const MobileDoctorCarousel: React.FC = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex space-x-3">
+            <div className="flex space-x-3 mt-auto">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleBookAppointment(selectedDoctor)}
-                className="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white py-4 px-6 rounded-2xl font-semibold text-base transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white py-4 px-6 rounded-2xl font-semibold text-base transition-all duration-300 shadow-lg hover:shadow-xl min-h-[56px]"
               >
                 <Calendar className="w-5 h-5" />
                 <span>Book Now</span>

@@ -237,7 +237,7 @@ describe('MobileHeader Accessibility Tests', () => {
         // Menu items should have descriptive names
         expect(screen.getByText('About Us')).toBeInTheDocument()
         expect(screen.getByText('Our Doctors')).toBeInTheDocument()
-        expect(screen.getByText('Patient Info')).toBeInTheDocument()
+        expect(screen.getByText('Patient Information')).toBeInTheDocument()
       })
     })
   })

@@ -29,7 +29,7 @@ export const doctors: Doctor[] = [
     expertise: ["Radial (wrist) approach coronary angiography", "Interventional cardiology", "Coronary angiograms", "General cardiology"],
     image: "/images/freilich.png",
     locations: ["Cabrini Hospital Malvern", "Heart Clinic Pakenham"],
-    description: "Dr Freilich is a pioneer in radial approach coronary angiography in Melbourne, having trained in this advanced technique in the United States. He specialises in interventional cardiac procedures with extensive experience in coronary interventions.",
+    description: "Dr Freilich is the clinical lead for cardiology at Cabrini, and a pioneer in radial approach coronary angiography in Melbourne, having trained in this advanced technique in the United States. He specialises in interventional cardiac procedures with extensive experience in coronary interventions.",
     color: '#148792',
     mobileColor: 'from-primary-500 to-primary-600',
     experience: '25+ years',

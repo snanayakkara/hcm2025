@@ -71,11 +71,45 @@ const MinimalistHero: React.FC = () => {
     }
   };
 
+  const dotGridVariants = {
+    rest: {
+      backgroundPosition: '0px 0px, 14px 14px',
+      backgroundSize: '28px 28px, 28px 28px'
+    },
+    hover: {
+      backgroundPosition: '4px 4px, 18px 18px',
+      backgroundSize: '30px 30px, 30px 30px',
+      transition: {
+        type: 'spring',
+        stiffness: 70,
+        damping: 18
+      }
+    }
+  };
+
   return (
-    <section 
+    <motion.section 
       ref={heroRef}
       className="relative min-h-screen bg-gradient-to-br from-cream-50 via-white to-primary-50/20 overflow-hidden"
+      initial="rest"
+      animate="rest"
+      whileHover="hover"
     >
+      <motion.div
+        variants={dotGridVariants}
+        className="absolute inset-0 -z-20"
+        style={{
+          backgroundColor: '#f0fdff',
+          backgroundImage: `
+            radial-gradient(circle at 1px 1px, rgba(20, 135, 146, 0.22) 1px, transparent 0),
+            radial-gradient(circle at 13px 13px, rgba(59, 215, 214, 0.16) 1px, transparent 0)
+          `,
+          opacity: 0.9
+        }}
+      />
+
+      <div className="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-br from-white/70 via-transparent to-primary-50/40" />
+
       {/* Enhanced Floating Particles */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Main visible particles */}
@@ -318,7 +352,7 @@ const MinimalistHero: React.FC = () => {
           }}
         />
       </motion.div>
-    </section>
+    </motion.section>
   );
 };
 

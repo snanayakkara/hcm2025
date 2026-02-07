@@ -66,7 +66,7 @@ The build creates a `dist/` folder containing:
 #### Using FTP/SFTP
 ```bash
 # Example using rsync (if available)
-rsync -av dist/ username@yourserver.com:public_html/
+rsync -av dist/ shane@heartclinicmelbourne.com.au:public_html/
 
 # Or use FTP client like FileZilla
 # Server: yourserver.com
@@ -219,6 +219,6 @@ See DEPLOYMENT-CHECKLIST.md for step-by-step verification list.
 
 ---
 
-**Last Updated**: December 2024
+**Last Updated**: August 2025
 **Next Review**: Quarterly
 **Contact**: Shane Nanayakkara (Developer)

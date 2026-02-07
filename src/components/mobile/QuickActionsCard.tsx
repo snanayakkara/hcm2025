@@ -15,43 +15,41 @@ const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
   onDirectionsClick,
   onQuickReferralClick,
 }) => {
+
   const primaryActions = [
     {
       id: 'call',
-      label: 'Call Now',
+      label: 'Call',
       subtitle: '(03) 9509 5009',
       icon: Phone,
       onClick: onCallClick,
-      color: 'from-primary-500 to-primary-600',
-      hoverColor: 'from-primary-600 to-primary-700',
-      shadowColor: 'rgba(20, 135, 146, 0.4)',
+      color: 'from-teal-500 to-teal-600',
+      textColor: 'text-white',
     },
     {
       id: 'telehealth',
-      label: 'Telehealth',
-      subtitle: 'Video call',
+      label: 'Video',
+      subtitle: 'Telehealth',
       icon: Video,
       onClick: onTelehealthClick,
-      color: 'from-accent-500 to-accent-600',
-      hoverColor: 'from-accent-600 to-accent-700',
-      shadowColor: 'rgba(59, 215, 214, 0.4)',
+      color: 'from-primary-500 to-primary-600',
+      textColor: 'text-white',
     },
     {
       id: 'directions',
-      label: 'Directions',
-      subtitle: '3 locations',
+      label: 'Locations',
+      subtitle: '3 clinics',
       icon: MapPin,
       onClick: onDirectionsClick,
       color: 'from-sage-500 to-sage-600',
-      hoverColor: 'from-sage-600 to-sage-700',
-      shadowColor: 'rgba(74, 120, 125, 0.4)',
+      textColor: 'text-white',
     },
   ];
 
   const secondaryActions = [
     {
       id: 'book',
-      label: 'Book Appointment',
+      label: 'Book',
       icon: Calendar,
       onClick: () => {
         const element = document.getElementById('patients');
@@ -62,13 +60,13 @@ const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
     },
     {
       id: 'quickReferral',
-      label: 'Quick Referral',
+      label: 'Refer',
       icon: FileText,
       onClick: onQuickReferralClick,
     },
     {
       id: 'hours',
-      label: 'Opening Hours',
+      label: 'Hours',
       icon: Clock,
       onClick: () => {
         const element = document.getElementById('contact');
@@ -79,6 +77,8 @@ const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
     },
   ];
 
+
+  // Original card layout (kept for compatibility)
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -86,9 +86,9 @@ const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
       transition={{ delay: 0.2, duration: 0.8 }}
       className="w-full max-w-sm mx-auto"
     >
-      <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-secondary-200/50 p-10">
+      <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-secondary-200/50 p-8">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <h3 className="text-lg font-bold text-secondary-800 mb-1">
             Quick Actions
           </h3>
@@ -98,16 +98,15 @@ const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
         </div>
 
         {/* Primary Actions - Grid */}
-        <div className="space-y-4 mb-8">
+        <div className="space-y-3 mb-6">
           {primaryActions.map((action, index) => (
             <motion.button
               key={action.id}
               onClick={action.onClick}
-              className={`w-full flex items-center justify-between p-5 rounded-2xl bg-gradient-to-r ${action.color} hover:${action.hoverColor} text-white transition-all duration-300 group relative overflow-hidden`}
+              className={`w-full flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r ${action.color} ${action.textColor} transition-all duration-300 group relative overflow-hidden shadow-lg`}
               whileHover={{ 
                 scale: 1.02,
                 y: -2,
-                boxShadow: `0 12px 30px ${action.shadowColor}`,
               }}
               whileTap={{ scale: 0.98 }}
               initial={{ opacity: 0, x: -20 }}
@@ -117,15 +116,15 @@ const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
               {/* Background Pattern */}
               <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
-              <div className="flex items-center space-x-4 relative z-10">
-                <div className="p-3 bg-white/20 rounded-xl">
-                  <action.icon className="w-6 h-6" />
+              <div className="flex items-center space-x-3 relative z-10">
+                <div className="p-2 bg-white/20 rounded-xl">
+                  <action.icon className="w-5 h-5" />
                 </div>
                 <div className="text-left">
-                  <div className="font-semibold text-base">
+                  <div className="font-semibold text-sm">
                     {action.label}
                   </div>
-                  <div className="text-sm text-white/80">
+                  <div className="text-xs text-white/80">
                     {action.subtitle}
                   </div>
                 </div>
@@ -141,8 +140,8 @@ const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
                   ease: "easeInOut"
                 }}
               >
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                  <div className="w-3 h-3 bg-white rounded-full" />
+                <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                  <div className="w-2 h-2 bg-white rounded-full" />
                 </div>
               </motion.div>
 
@@ -158,20 +157,20 @@ const QuickActionsCard: React.FC<QuickActionsCardProps> = ({
         </div>
 
         {/* Secondary Actions - Grid */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           {secondaryActions.map((action, index) => (
             <motion.button
               key={action.id}
               onClick={action.onClick}
-              className="flex flex-col items-center justify-center p-4 rounded-xl bg-secondary-50 hover:bg-secondary-100 transition-all duration-300 group"
+              className="flex flex-col items-center justify-center p-3 rounded-xl bg-secondary-50 hover:bg-secondary-100 transition-all duration-300 group"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + (0.1 * index) }}
             >
-              <action.icon className="w-6 h-6 text-secondary-600 mb-3 group-hover:text-secondary-700 transition-colors" />
-              <span className="text-sm font-medium text-secondary-700 text-center leading-tight">
+              <action.icon className="w-5 h-5 text-secondary-600 mb-2 group-hover:text-secondary-700 transition-colors" />
+              <span className="text-xs font-medium text-secondary-700 text-center leading-tight">
                 {action.label}
               </span>
             </motion.button>

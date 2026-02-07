@@ -92,8 +92,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     { label: 'Services', onClick: () => { onNavigate('services'); setShowMoreMenu(false); } },
     { label: 'Our Doctors', onClick: () => { onNavigate('doctors'); setShowMoreMenu(false); } },
     { label: 'Reception Team', onClick: () => { onNavigate('reception-team'); setShowMoreMenu(false); } },
-    { label: 'Patient Info', onClick: () => { onNavigate('patients'); setShowMoreMenu(false); } },
-    { label: 'FAQ', onClick: () => { onNavigate('faq'); setShowMoreMenu(false); } },
+    { label: 'Patient Information', onClick: () => { onNavigate('patients'); setShowMoreMenu(false); } },
     { label: 'Contact', onClick: () => { onNavigate('contact'); setShowMoreMenu(false); } },
   ];
 
