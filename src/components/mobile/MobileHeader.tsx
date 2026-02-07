@@ -22,6 +22,8 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
 
   useEffect(() => {
     let ticking = false;
+    let observer: IntersectionObserver | null = null;
+    let sentinel: HTMLDivElement | null = null;
     
     const updateScrollState = () => {
       const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -46,22 +48,34 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
       threshold: 0
     };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        setIsScrolled(!entry.isIntersecting);
-      });
-    }, observerOptions);
+    try {
+      const IntersectionObserverImpl =
+        window.IntersectionObserver ?? globalThis.IntersectionObserver;
 
-    // Create a sentinel element at the top
-    const sentinel = document.createElement('div');
-    sentinel.style.position = 'absolute';
-    sentinel.style.top = '0';
-    sentinel.style.height = '1px';
-    sentinel.style.width = '100%';
-    sentinel.style.pointerEvents = 'none';
-    sentinel.style.zIndex = '-1';
-    document.body.appendChild(sentinel);
-    observer.observe(sentinel);
+      if (typeof IntersectionObserverImpl === 'function') {
+        observer = new IntersectionObserverImpl((entries) => {
+          entries.forEach((entry) => {
+            setIsScrolled(!entry.isIntersecting);
+          });
+        }, observerOptions);
+
+        // Create a sentinel element at the top
+        sentinel = document.createElement('div');
+        sentinel.style.position = 'absolute';
+        sentinel.style.top = '0';
+        sentinel.style.height = '1px';
+        sentinel.style.width = '100%';
+        sentinel.style.pointerEvents = 'none';
+        sentinel.style.zIndex = '-1';
+        document.body.appendChild(sentinel);
+
+        if (typeof observer.observe === 'function') {
+          observer.observe(sentinel);
+        }
+      }
+    } catch (error) {
+      console.error('MobileHeader intersection observer setup failed:', error);
+    }
 
     // Standard scroll events for all devices
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -71,8 +85,10 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      observer.disconnect();
-      if (document.body.contains(sentinel)) {
+      if (observer && typeof observer.disconnect === 'function') {
+        observer.disconnect();
+      }
+      if (sentinel && document.body.contains(sentinel)) {
         document.body.removeChild(sentinel);
       }
       clearTimeout(initialTimeoutId);
@@ -87,13 +103,21 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     setShowMoreMenu(!showMoreMenu);
   };
 
+  const runSafely = (callback: () => void) => {
+    try {
+      callback();
+    } catch (error) {
+      console.error('MobileHeader action failed:', error);
+    }
+  };
+
   const moreMenuItems = [
-    { label: 'About Us', onClick: () => { onNavigate('about'); setShowMoreMenu(false); } },
-    { label: 'Services', onClick: () => { onNavigate('services'); setShowMoreMenu(false); } },
-    { label: 'Our Doctors', onClick: () => { onNavigate('doctors'); setShowMoreMenu(false); } },
-    { label: 'Reception Team', onClick: () => { onNavigate('reception-team'); setShowMoreMenu(false); } },
-    { label: 'Patient Information', onClick: () => { onNavigate('patients'); setShowMoreMenu(false); } },
-    { label: 'Contact', onClick: () => { onNavigate('contact'); setShowMoreMenu(false); } },
+    { label: 'About Us', onClick: () => { runSafely(() => onNavigate('about')); setShowMoreMenu(false); } },
+    { label: 'Services', onClick: () => { runSafely(() => onNavigate('services')); setShowMoreMenu(false); } },
+    { label: 'Our Doctors', onClick: () => { runSafely(() => onNavigate('doctors')); setShowMoreMenu(false); } },
+    { label: 'Reception Team', onClick: () => { runSafely(() => onNavigate('reception-team')); setShowMoreMenu(false); } },
+    { label: 'Patient Information', onClick: () => { runSafely(() => onNavigate('patients')); setShowMoreMenu(false); } },
+    { label: 'Contact', onClick: () => { runSafely(() => onNavigate('contact')); setShowMoreMenu(false); } },
   ];
 
   const vibrate = () => {
@@ -136,7 +160,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                 {/* Logo */}
                 <div className="flex items-center space-x-2">
                   <motion.img
-                    src="/images/hcm3d2.png"
+                    src="/images/hcm3d2.webp"
                     alt="Heart Clinic Melbourne Logo"
                     className="w-6 h-6 object-contain"
                     animate={{
@@ -158,7 +182,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                 {/* Quick Actions */}
                 <div className="flex items-center space-x-1">
                   <motion.button
-                    onClick={() => { vibrate(); onCallClick(); }}
+                    onClick={() => { vibrate(); runSafely(onCallClick); }}
                     className="flex flex-col items-center justify-center px-2 py-1 transition-all duration-300 text-teal-600 hover:text-teal-700"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -169,7 +193,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                   </motion.button>
                   
                   <motion.button
-                    onClick={() => { vibrate(); handleMoreMenuToggle(); }}
+                    onClick={() => { vibrate(); runSafely(handleMoreMenuToggle); }}
                     className="flex flex-col items-center justify-center px-2 py-1 transition-all duration-300 text-teal-600 hover:text-teal-700"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -199,13 +223,13 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
               >
                 {/* Logo Button (replaces Home) */}
                 <motion.button
-                  onClick={() => { vibrate(); handleLogoClick(); }}
+                  onClick={() => { vibrate(); runSafely(handleLogoClick); }}
                   className="flex flex-col items-center justify-center px-2 py-2 transition-all duration-300 text-teal-600 hover:text-teal-700"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <motion.img
-                    src="/images/hcm3d2.png"
+                    src="/images/hcm3d2.webp"
                     alt="Heart Clinic Melbourne Logo"
                     className="w-5 h-5 mb-0.5"
                     animate={{
@@ -224,7 +248,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
 
                 {/* Call Button */}
                 <motion.button
-                  onClick={() => { vibrate(); onCallClick(); }}
+                  onClick={() => { vibrate(); runSafely(onCallClick); }}
                   className="flex flex-col items-center justify-center px-2 py-2 transition-all duration-300 text-teal-600 hover:text-teal-700"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -237,7 +261,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
 
                 {/* Directions Button */}
                 <motion.button
-                  onClick={() => { vibrate(); onDirectionsClick(); }}
+                  onClick={() => { vibrate(); runSafely(onDirectionsClick); }}
                   className="flex flex-col items-center justify-center px-2 py-2 transition-all duration-300 text-teal-600 hover:text-teal-700"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -250,7 +274,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
 
                 {/* Video/Telehealth Button */}
                 <motion.button
-                  onClick={() => { vibrate(); onTelehealthClick(); }}
+                  onClick={() => { vibrate(); runSafely(onTelehealthClick); }}
                   className="flex flex-col items-center justify-center px-2 py-2 transition-all duration-300 text-teal-600 hover:text-teal-700"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

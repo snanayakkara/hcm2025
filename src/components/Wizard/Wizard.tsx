@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, Path } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 
   ChevronLeft, 
@@ -17,7 +17,6 @@ import Button from '../ui/Button';
 import { IntakeSchema, IntakeForm, CARD_TEST_DESCRIPTIONS } from '../../types/intake';
 import Stepper from './Stepper';
 import ToggleCard from '../fields/ToggleCard';
-import { generateIntakePDF, downloadPDF, createMailtoLink } from '../pdf/generatePdf';
 
 interface WizardProps {
   onClose: () => void;
@@ -30,7 +29,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
   
   const {
     control,
-    formState: { errors, isValid },
+    formState: { errors },
     watch
   } = useForm<IntakeForm>({
     resolver: zodResolver(IntakeSchema),
@@ -81,6 +80,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
   const handleGeneratePDF = async () => {
     setIsGenerating(true);
     try {
+      const { generateIntakePDF, downloadPDF, createMailtoLink } = await import('../pdf/generatePdf');
       const pdfBytes = await generateIntakePDF(formData);
       downloadPDF(pdfBytes);
       createMailtoLink(pdfBytes);
@@ -399,7 +399,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                                 Where was this test performed?
                               </label>
                               <Controller
-                                name={`${test.key}Location` as any}
+                                name={`${test.key}Location` as Path<IntakeForm>}
                                 control={control}
                                 render={({ field: locationField }) => (
                                   <input
@@ -417,7 +417,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                                 Approximate date
                               </label>
                               <Controller
-                                name={`${test.key}Date` as any}
+                                name={`${test.key}Date` as Path<IntakeForm>}
                                 control={control}
                                 render={({ field: dateField }) => (
                                   <input

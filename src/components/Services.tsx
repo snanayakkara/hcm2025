@@ -68,7 +68,7 @@ const Services: React.FC = () => {
       locations: ["Cabrini Malvern", "Pakenham", "Clyde"],
       description: "A comprehensive cardiac consultation is your first step towards understanding and managing your heart health. Our experienced cardiologists will review your medical history, perform a thorough examination, and discuss your symptoms and concerns.",
       cost: "Medicare rebates available",
-      image: "/images/consult.png"
+      image: "/images/consult.webp"
     },
     {
       id: 'echocardiography',
@@ -81,7 +81,7 @@ const Services: React.FC = () => {
       locations: ["Pakenham", "Clyde"],
       description: "Echocardiography uses ultrasound waves to create detailed images of your heart. This non-invasive test allows us to assess heart function, valve performance, and detect structural abnormalities.",
       cost: "Bulk billed for eligible patients",
-      image: "/images/echo.png"
+      image: "/images/echo.webp"
     },
     {
       id: 'holter',
@@ -94,7 +94,7 @@ const Services: React.FC = () => {
       locations: ["Cabrini Malvern", "Pakenham", "Clyde"],
       description: "Holter monitoring involves wearing a small, portable device that continuously records your heart rhythm for periods ranging from 24 hours to one month. This helps detect irregular heartbeats that may not occur during a brief office visit.",
       cost: "Medicare rebates available",
-      image: "/images/holter.png"
+      image: "/images/holter.webp"
     },
     {
       id: 'angiography',
@@ -107,7 +107,7 @@ const Services: React.FC = () => {
       locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "Coronary angiography is a specialised X-ray procedure that uses contrast dye to visualise the coronary arteries. This gold-standard test can detect blockages and assess the need for intervention.",
       cost: "Performed at The Alfred (public); private health insurance recommended for Cabrini and SJOG",
-      image: "/images/angio.png"
+      image: "/images/angio.webp"
     },
     {
       id: 'stress-echo',
@@ -120,7 +120,7 @@ const Services: React.FC = () => {
       locations: ["Pakenham", "Clyde"],
       description: "Stress echocardiography combines ultrasound imaging with stress testing to evaluate heart function under stress conditions. This helps detect coronary artery disease and assess exercise capacity.",
       cost: "Bulk billed for eligible patients",
-      image: "/images/stressecho.png"
+      image: "/images/stressecho.webp"
     },
     {
       id: 'toe',
@@ -133,7 +133,7 @@ const Services: React.FC = () => {
       locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "TOE provides superior cardiac images by placing an ultrasound probe in the oesophagus. This advanced technique offers detailed views of heart structures, particularly useful for valve assessment and detecting blood clots.",
       cost: "Day procedure charges apply",
-      image: "/images/toe_drawn.png"
+      image: "/images/toe_drawn.webp"
     },
     {
       id: 'toe-dcr',
@@ -146,7 +146,7 @@ const Services: React.FC = () => {
       locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "TOE-guided cardioversion combines transesophageal echocardiography with electrical cardioversion to safely restore normal heart rhythm in patients with atrial fibrillation.",
       cost: "Day procedure charges apply",
-      image: "/images/toe.png"
+      image: "/images/toe.webp"
     },
     {
       id: 'af-ablation',
@@ -159,7 +159,7 @@ const Services: React.FC = () => {
       locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "Catheter ablation for atrial fibrillation uses advanced techniques including the latest Pulsed Field Ablation (PFA) technology to eliminate abnormal electrical pathways causing irregular heart rhythm.",
       cost: "Overnight hospital admission required",
-      image: "/images/afabl_drawn.png"
+      image: "/images/afabl_drawn.webp"
     },
     {
       id: 'tavi',
@@ -172,7 +172,7 @@ const Services: React.FC = () => {
       locations: ["Cabrini Malvern", "The Alfred"],
       description: "TAVI is a minimally invasive procedure to replace a diseased aortic valve without open heart surgery. A new valve is delivered via catheter, typically through the groin artery.",
       cost: "Performed at The Alfred (public); private health insurance recommended for Cabrini",
-      image: "/images/tavi.png"
+      image: "/images/tavi.webp"
     },
     {
       id: 'mteer',
@@ -185,7 +185,7 @@ const Services: React.FC = () => {
       locations: ["Cabrini Malvern", "The Alfred"],
       description: "mTEER is a minimally invasive procedure to repair a leaking mitral valve using advanced clip technology. This procedure can significantly improve symptoms without open heart surgery.",
       cost: "Performed at The Alfred (public); private health insurance recommended for Cabrini",
-      image: "/images/mteer_drawn.png"
+      image: "/images/mteer_drawn.webp"
     },
     {
       id: 'pacemaker',
@@ -198,7 +198,7 @@ const Services: React.FC = () => {
       locations: ["Cabrini Malvern", "Berwick", "The Alfred"],
       description: "Pacemaker insertion is a procedure to implant a small electronic device that helps regulate your heart rhythm. The pacemaker monitors your heart rate and delivers electrical impulses when needed to maintain a normal rhythm.",
       cost: "Performed at The Alfred (public); private health insurance recommended for Cabrini",
-      image: "/images/pacemaker.png"
+      image: "/images/pacemaker.webp"
     }
   ];
 

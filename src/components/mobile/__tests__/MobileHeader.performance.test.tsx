@@ -402,7 +402,7 @@ describe('MobileHeader Performance Tests', () => {
       
       logos.forEach(logo => {
         // Should have proper loading attributes
-        expect(logo).toHaveAttribute('src', '/images/hcm3d2.png')
+        expect(logo).toHaveAttribute('src', '/images/hcm3d2.webp')
       })
     })
 

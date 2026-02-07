@@ -39,11 +39,16 @@ const About: React.FC = () => {
   ];
 
   useEffect(() => {
+    if (!isInView) {
+      return;
+    }
+
     const interval = setInterval(() => {
       setActiveFeature((prev) => (prev + 1) % features.length);
     }, 4000);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [isInView, features.length]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -168,9 +173,11 @@ const About: React.FC = () => {
               style={{ minHeight: '572px' }}
             >
               <motion.img
-                src="/images/table_port.png"
+                src="/images/table_port.webp"
                 alt="Medical professionals in consultation discussing patient care"
                 className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
                 initial={{ scale: 1.1 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.8 }}

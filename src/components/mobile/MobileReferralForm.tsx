@@ -312,7 +312,7 @@ Thank you for your assistance.`;
         <div className="flex items-center justify-between p-4 border-b bg-gray-50">
           <div className="flex items-center space-x-3">
             <img 
-              src="/images/hcm3d2.png" 
+              src="/images/hcm3d2.webp" 
               alt="Heart Clinic Melbourne" 
               className="h-8 w-8"
             />

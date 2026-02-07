@@ -290,7 +290,7 @@ const Header: React.FC = () => {
           transition={{ type: "spring", stiffness: 300 }}
         >
           <motion.img
-            src="/images/hcm3d2.png"
+            src="/images/hcm3d2.webp"
             alt="Heart Clinic Melbourne Logo"
             className="w-28 h-28 object-contain"
             animate={hasScrolled ? {

@@ -7,6 +7,7 @@ interface SplitTextProps {
   style?: React.CSSProperties;
   delay?: number;
   duration?: number;
+  disableInitialAnimation?: boolean;
 }
 
 const SplitText: React.FC<SplitTextProps> = ({ 
@@ -14,7 +15,8 @@ const SplitText: React.FC<SplitTextProps> = ({
   className = "", 
   style = {},
   delay = 0,
-  duration = 0.05
+  duration = 0.05,
+  disableInitialAnimation = false
 }) => {
   const letters = Array.from(children);
 
@@ -50,7 +52,7 @@ const SplitText: React.FC<SplitTextProps> = ({
       style={{ display: "inline-block", ...style }}
       className={className}
       variants={container}
-      initial="hidden"
+      initial={disableInitialAnimation ? false : "hidden"}
       animate="visible"
     >
       {letters.map((letter, index) => (

@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { FileText, Clock, Shield, CreditCard, Phone, Mail, ArrowRight, CheckCircle, ChevronLeft, ChevronRight, HelpCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { faqData } from '../data/faqData';
-import Wizard from './Wizard/Wizard';
+const Wizard = lazy(() => import('./Wizard/Wizard'));
+const PATIENT_RESOURCE_COUNT = 4;
 
 const PatientInfo: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -136,7 +137,7 @@ ${formData.name}`;
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveResource((prev) => (prev + 1) % patientResources.length);
+      setActiveResource((prev) => (prev + 1) % PATIENT_RESOURCE_COUNT);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
@@ -238,22 +239,22 @@ ${formData.name}`;
         return [
           { 
             name: "Dr Mark Freilich", 
-            image: "/images/freilich.png",
+            image: "/images/freilich.webp",
             specialty: "General and Interventional Cardiology"
           },
           { 
             name: "Associate Professor Alex Voskoboinik", 
-            image: "/images/vosko.png",
+            image: "/images/vosko.webp",
             specialty: "General and Electrophysiology"
           },
           { 
             name: "Dr Shane Nanayakkara", 
-            image: "/images/nanayakkara.png",
+            image: "/images/nanayakkara.webp",
             specialty: "General, Intervention, Structural, and Heart Failure"
           },
           { 
             name: "Dr Kate Rowe", 
-            image: "/images/kate2png.png",
+            image: "/images/kate2png.webp",
             specialty: "General Cardiology"
           },
           { 
@@ -266,22 +267,22 @@ ${formData.name}`;
         return [
           { 
             name: "Dr Mark Freilich", 
-            image: "/images/freilich.png",
+            image: "/images/freilich.webp",
             specialty: "Interventional Cardiology"
           },
           { 
             name: "Associate Professor Alex Voskoboinik", 
-            image: "/images/vosko.png",
+            image: "/images/vosko.webp",
             specialty: "Electrophysiology"
           },
           { 
             name: "Dr Phillip Ngu", 
-            image: "/images/ngu.png",
+            image: "/images/ngu.webp",
             specialty: "General and Non-Invasive Imaging"
           },
           { 
             name: "Dr Kate Rowe", 
-            image: "/images/kate2png.png",
+            image: "/images/kate2png.webp",
             specialty: "General Cardiology"
           },
           { 
@@ -294,7 +295,7 @@ ${formData.name}`;
         return [
           { 
             name: "Dr Phillip Ngu", 
-            image: "/images/ngu.png",
+            image: "/images/ngu.webp",
             specialty: "General and Non-Invasive Imaging"
           },
           { 
@@ -715,9 +716,11 @@ ${formData.name}`;
               <div className={`bg-white border border-gray-200 p-8 pb-20 rounded-2xl shadow-xl transition-all duration-1000 delay-400 relative ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
                 <div className="flex items-center space-x-4 mb-6">
                   <img 
-                    src="/images/hcm3d2.png" 
+                    src="/images/hcm3d2.webp" 
                     alt="Heart Clinic Melbourne" 
                     className="w-12 h-12 object-contain"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <h3 className="text-2xl font-bold text-gray-900">Request An Appointment</h3>
                 </div>
@@ -1010,6 +1013,8 @@ ${formData.name}`;
                                     ? 'border-white'
                                     : 'border-gray-300'
                                 }`}
+                                loading="lazy"
+                                decoding="async"
                               />
                             ) : (
                               <div className={`${isMobile ? 'w-16 h-16 text-xl' : 'w-12 h-12 text-lg'} rounded-full flex items-center justify-center font-bold border-2 transition-all duration-200 ${
@@ -1177,7 +1182,15 @@ ${formData.name}`;
       {/* Patient Intake Wizard Modal */}
       <AnimatePresence>
         {showIntakeWizard && (
-          <Wizard onClose={() => setShowIntakeWizard(false)} />
+          <Suspense
+            fallback={
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+                <div className="h-10 w-10 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              </div>
+            }
+          >
+            <Wizard onClose={() => setShowIntakeWizard(false)} />
+          </Suspense>
         )}
       </AnimatePresence>
     </section>

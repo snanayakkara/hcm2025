@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Activity, Stethoscope, Zap, Clock, Search, MapPin, ArrowRight, Phone, FileText } from 'lucide-react';
-import { ServiceItem } from '../../types/common';
 import { DEFAULT_VIEWPORT } from '../../lib/motion';
 
 const MobileServiceCards: React.FC = () => {
@@ -17,7 +16,7 @@ const MobileServiceCards: React.FC = () => {
       description: 'A comprehensive cardiac consultation is your first step towards understanding and managing your heart health. Our experienced cardiologists will review your medical history, perform a thorough examination, and discuss your symptoms and concerns.',
       icon: Stethoscope,
       color: 'from-primary-500 to-primary-600',
-      image: '/images/consult.png',
+      image: '/images/consult.webp',
       duration: '30 minutes',
       preparation: 'Minimal preparation required',
       locations: ['Cabrini Malvern', 'Pakenham', 'Clyde'],
@@ -30,7 +29,7 @@ const MobileServiceCards: React.FC = () => {
       description: 'Echocardiography uses ultrasound waves to create detailed images of your heart. This non-invasive test allows us to assess heart function, valve performance, and detect structural abnormalities.',
       icon: Activity,
       color: 'from-accent-500 to-accent-600',
-      image: '/images/echo.png',
+      image: '/images/echo.webp',
       duration: '30-45 minutes',
       preparation: 'Comfortable clothing recommended',
       locations: ['Pakenham', 'Clyde'],
@@ -43,7 +42,7 @@ const MobileServiceCards: React.FC = () => {
       description: 'Holter monitoring involves wearing a small, portable device that continuously records your heart rhythm for 24 hours. This helps detect irregular heartbeats that may not occur during a brief office visit.',
       icon: Clock,
       color: 'from-sage-500 to-sage-600',
-      image: '/images/holter.png',
+      image: '/images/holter.webp',
       duration: '24 hours continuous',
       preparation: 'Normal daily activities',
       locations: ['Cabrini Malvern', 'Pakenham', 'Clyde'],
@@ -56,7 +55,7 @@ const MobileServiceCards: React.FC = () => {
       description: 'Coronary angiography is a specialised X-ray procedure that uses contrast dye to visualise the coronary arteries. This gold-standard test can detect blockages and assess the need for intervention.',
       icon: Heart,
       color: 'from-primary-500 to-primary-600',
-      image: '/images/angio.png',
+      image: '/images/angio.webp',
       duration: '30-60 minutes',
       preparation: 'Fasting required',
       locations: ['Cabrini Malvern', 'Berwick'],
@@ -69,7 +68,7 @@ const MobileServiceCards: React.FC = () => {
       description: 'Stress echocardiography combines ultrasound imaging with stress testing to evaluate heart function under stress conditions. This helps detect coronary artery disease and assess exercise capacity.',
       icon: Activity,
       color: 'from-accent-500 to-accent-600',
-      image: '/images/stressecho.png',
+      image: '/images/stressecho.webp',
       duration: '60-90 minutes',
       preparation: 'Comfortable exercise clothing required',
       locations: ['Pakenham', 'Clyde'],
@@ -82,7 +81,7 @@ const MobileServiceCards: React.FC = () => {
       description: 'TOE provides superior cardiac images by placing an ultrasound probe in the oesophagus. This advanced technique offers detailed views of heart structures, particularly useful for valve assessment and detecting blood clots.',
       icon: Search,
       color: 'from-sage-500 to-sage-600',
-      image: '/images/toe_drawn.png',
+      image: '/images/toe_drawn.webp',
       duration: '30-45 minutes',
       preparation: 'Fasting required, light sedation available',
       locations: ['Cabrini Malvern', 'Berwick'],
@@ -95,7 +94,7 @@ const MobileServiceCards: React.FC = () => {
       description: 'TOE-guided cardioversion combines transesophageal echocardiography with electrical cardioversion to safely restore normal heart rhythm in patients with atrial fibrillation.',
       icon: Zap,
       color: 'from-cream-700 to-cream-800',
-      image: '/images/cardioversion.jpg',
+      image: '/images/toe.webp',
       duration: '2-3 hours including recovery',
       preparation: 'Fasting and pre-procedure assessments required',
       locations: ['Cabrini Malvern', 'Berwick'],
@@ -108,7 +107,7 @@ const MobileServiceCards: React.FC = () => {
       description: 'Catheter ablation for atrial fibrillation uses advanced techniques including the latest Pulsed Field Ablation (PFA) technology to eliminate abnormal electrical pathways causing irregular heart rhythm.',
       icon: Zap,
       color: 'from-primary-500 to-primary-600',
-      image: '/images/afabl_drawn.png',
+      image: '/images/afabl_drawn.webp',
       duration: '3-5 hours',
       preparation: 'Hospital admission required',
       locations: ['Cabrini Malvern', 'Berwick'],
@@ -121,7 +120,7 @@ const MobileServiceCards: React.FC = () => {
       description: 'TAVI is a minimally invasive procedure to replace a diseased aortic valve without open heart surgery. A new valve is delivered via catheter, typically through the groin artery.',
       icon: Heart,
       color: 'from-accent-500 to-accent-600',
-      image: '/images/tavi.png',
+      image: '/images/tavi.webp',
       duration: '2-3 hours',
       preparation: 'Comprehensive pre-procedure assessment required',
       locations: ['Cabrini Malvern'],
@@ -134,7 +133,7 @@ const MobileServiceCards: React.FC = () => {
       description: 'mTEER is a minimally invasive procedure to repair a leaking mitral valve using advanced clip technology. This procedure can significantly improve symptoms without open heart surgery.',
       icon: Heart,
       color: 'from-sage-500 to-sage-600',
-      image: '/images/mteer_drawn.png',
+      image: '/images/mteer_drawn.webp',
       duration: '2-4 hours',
       preparation: 'Multidisciplinary team assessment required',
       locations: ['Cabrini Malvern'],
@@ -147,7 +146,7 @@ const MobileServiceCards: React.FC = () => {
       description: 'Pacemaker insertion is a procedure to implant a small electronic device that helps regulate your heart rhythm. The pacemaker monitors your heart rate and delivers electrical impulses when needed to maintain a normal rhythm.',
       icon: Zap,
       color: 'from-cream-700 to-cream-800',
-      image: '/images/pacemaker.png',
+      image: '/images/pacemaker.webp',
       duration: '1-2 hours',
       preparation: 'Day procedure or overnight stay',
       locations: ['Cabrini Malvern', 'Berwick'],
@@ -155,12 +154,18 @@ const MobileServiceCards: React.FC = () => {
     },
   ];
 
-  const handleServiceSelect = (service: ServiceItem) => {
-    // Could navigate to service detail page or open modal
+  const handleServiceSelect = () => {
+    const patientSection = document.getElementById('patients');
+    if (patientSection) {
+      patientSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleLearnMore = () => {
-    // Learning Library has been moved to a separate site
+    const faqSection = document.getElementById('faq');
+    if (faqSection) {
+      faqSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -209,6 +214,8 @@ const MobileServiceCards: React.FC = () => {
                       src={service.image} 
                       alt={service.title}
                       className="w-8 h-8 object-contain"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                   <span className={`text-xs font-medium text-center leading-tight ${
@@ -241,6 +248,8 @@ const MobileServiceCards: React.FC = () => {
                       src={service.image} 
                       alt={service.title}
                       className="w-8 h-8 object-contain"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                   <span className={`text-xs font-medium text-center leading-tight ${
@@ -280,6 +289,8 @@ const MobileServiceCards: React.FC = () => {
             src={services[selectedService].image} 
             alt={services[selectedService].title}
             className="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
           />
         </div>
 
@@ -343,7 +354,7 @@ const MobileServiceCards: React.FC = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => handleServiceSelect(services[selectedService])}
+              onClick={handleServiceSelect}
               className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white py-3 px-6 rounded-xl font-medium text-sm transition-all duration-300"
             >
               <Phone className="w-4 h-4" />

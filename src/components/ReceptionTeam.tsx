@@ -45,7 +45,7 @@ const ReceptionTeam: React.FC = () => {
     experience: "7+ Years",
     description: "Emma joined the team in 2022 and has more than 7 years of medical administration experience, both in a hospital and clinical settings. As Practice Manager, she oversees all clinic operations and ensures the highest standards of patient care. Emma is known to be kind, empathetic and professional and always does whatever she can to help patients and her colleagues.",
     qualities: ["Leadership & Management", "Kind & Empathetic", "Professional Excellence", "Operational Oversight"],
-    image: "/images/mayne.png",
+    image: "/images/mayne.webp",
     specialties: ["Practice Management", "Medical Administration", "Patient Care", "Team Leadership"],
     color: "from-primary-100 to-accent-100"
   };
@@ -58,7 +58,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Healthcare Administration",
       description: "Louise brings valuable healthcare administration experience to our team. She is dedicated to ensuring smooth clinic operations and providing excellent patient service with attention to detail and professionalism.",
       qualities: ["Detail-Oriented", "Professional", "Reliable", "Patient-Focused"],
-      image: "/images/georgeson.png",
+      image: "/images/georgeson.webp",
       specialties: ["Healthcare Administration", "Appointment Scheduling", "Patient Records", "Insurance Processing"],
       color: "from-cream-100 to-sage-100"
     },
@@ -68,7 +68,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Medical Administration",
       description: "Leanne coordinates various administrative functions across our multiple locations. Her attention to detail and systematic approach help maintain consistency and quality in all our administrative processes.",
       qualities: ["Systematic", "Detail-Focused", "Multi-Location Coordinator", "Quality-Driven"],
-      image: "/images/leanne.png",
+      image: "/images/leanne.webp",
       specialties: ["Multi-Location Coordination", "Process Management", "Quality Control", "Administrative Systems"],
       color: "from-cream-100 to-primary-100"
     }
@@ -82,7 +82,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Extensive Customer Service",
       description: "Michelle joined our team in 2022. Michelle has a long career in customer service roles including aged care as a personal carer. She is caring, friendly and brings a bright demeanour to the practice.",
       qualities: ["Caring & Friendly", "Bright Demeanour", "Patient Comfort", "Customer Service"],
-      image: "/images/goodier.png",
+      image: "/images/goodier.webp",
       specialties: ["Customer Service", "Aged Care", "Personal Care", "Patient Support"],
       color: "from-sage-100 to-primary-100"
     },
@@ -92,7 +92,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Medical Office Support",
       description: "Jessica provides essential administrative support to our clinical team. She has extensive experience in medical office settings and is skilled at managing patient communications and file management.",
       qualities: ["Organised", "Warm Personality", "Supportive", "Efficient"],
-      image: "/images/placeholder1.png",
+      image: "/images/placeholder1.webp",
       specialties: ["Administrative Support", "Patient Communication", "File Management", "Clinical Coordination"],
       color: "from-accent-100 to-cream-100"
     },
@@ -102,7 +102,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Front Office Management",
       description: "The newest member of our team, Georgie coordinates our front office operations with enthusiasm and professionalism. She ensures that every patient interaction is positive and that our reception area runs smoothly throughout the day.",
       qualities: ["Enthusiastic", "Coordinated", "Professional", "Team Player"],
-      image: "/images/placeholder2.png",
+      image: "/images/placeholder2.webp",
       specialties: ["Front Office Management", "Patient Flow", "Team Coordination", "Quality Assurance"],
       color: "from-primary-100 to-sage-100"
     },
@@ -112,7 +112,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Healthcare Support",
       description: "Alison specialises in patient services and support, helping patients navigate their healthcare journey with confidence. Her compassionate approach ensures every patient feels heard and supported.",
       qualities: ["Compassionate", "Supportive", "Knowledgeable", "Patient Advocate"],
-      image: "/images/alison.png",
+      image: "/images/alison.webp",
       specialties: ["Patient Services", "Healthcare Navigation", "Insurance Assistance", "Patient Advocacy"],
       color: "from-sage-100 to-accent-100"
     }
@@ -126,7 +126,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Specialised Cardiac Imaging",
       description: "Janie is our senior cardiac sonographer with extensive experience in echocardiography and cardiac imaging. She provides high-quality diagnostic imaging services and works closely with our cardiologists to ensure accurate assessments.",
       qualities: ["Technical Excellence", "Patient Care", "Diagnostic Expertise", "Professional Development"],
-      image: "/images/janie.png",
+      image: "/images/janie.webp",
       specialties: ["Echocardiography", "Stress Echo", "Cardiac Imaging", "Patient Education"],
       color: "from-primary-100 to-accent-100"
     },
@@ -136,7 +136,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Diagnostic Imaging",
       description: "Aaron brings fresh expertise to our imaging team with a focus on providing comfortable patient experiences during diagnostic procedures. His technical skills and patient-centred approach make him a valuable addition to our team.",
       qualities: ["Technical Proficiency", "Patient Comfort", "Innovation", "Collaborative"],
-      image: "/images/placeholder3.png",
+      image: "/images/placeholder3.webp",
       specialties: ["Cardiac Ultrasound", "Diagnostic Procedures", "Patient Care", "Technical Innovation"],
       color: "from-primary-100 to-accent-100"
     },
@@ -146,7 +146,7 @@ const ReceptionTeam: React.FC = () => {
       experience: "Cardiac Diagnostics",
       description: "Janice is a skilled cardiac technologist who specialises in various cardiac diagnostic procedures. Her meticulous attention to detail and gentle approach with patients ensures high-quality diagnostic results while maintaining patient comfort throughout the process.",
       qualities: ["Detail-Oriented", "Patient-Centred", "Technical Precision", "Gentle Approach"],
-      image: "/images/placeholder1.png",
+      image: "/images/placeholder1.webp",
       specialties: ["Cardiac Diagnostics", "ECG Interpretation", "Patient Monitoring", "Quality Assurance"],
       color: "from-primary-100 to-accent-100"
     }
@@ -179,11 +179,16 @@ const ReceptionTeam: React.FC = () => {
   }, [isMobile]);
 
   useEffect(() => {
+    if (isMobile) {
+      return;
+    }
+
     const interval = setInterval(() => {
       setActiveCard((prev) => (prev + 1) % (executiveAssistants.length + receptionTeam.length + technologists.length + 1));
     }, 4000);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [isMobile, executiveAssistants.length, receptionTeam.length, technologists.length]);
 
   return (
     <section id="reception-team" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20" ref={sectionRef}>

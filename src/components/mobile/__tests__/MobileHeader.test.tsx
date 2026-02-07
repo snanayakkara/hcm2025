@@ -52,7 +52,7 @@ describe('MobileHeader', () => {
       
       const logo = screen.getByAltText('Heart Clinic Melbourne Logo')
       expect(logo).toBeInTheDocument()
-      expect(logo).toHaveAttribute('src', '/images/hcm3d2.png')
+      expect(logo).toHaveAttribute('src', '/images/hcm3d2.webp')
       expect(logo).toHaveClass('w-6', 'h-6', 'object-contain')
     })
 

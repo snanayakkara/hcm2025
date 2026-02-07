@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { MapPin, Calendar, ChevronRight, Award } from 'lucide-react';
 import { doctors } from '../../data/doctors';
 import { DEFAULT_VIEWPORT } from '../../lib/motion';
+import { normalizeClinicLocation } from '../../utils/locationMapping';
 
 const MobileDoctorCarousel: React.FC = () => {
   const [selectedDoctorId, setSelectedDoctorId] = useState('freilich');
@@ -10,16 +11,18 @@ const MobileDoctorCarousel: React.FC = () => {
   const selectedDoctor = doctors.find(d => d.id === selectedDoctorId) || doctors[0];
 
   const handleBookAppointment = (doctor: typeof doctors[0]) => {
+    const normalizedLocation = normalizeClinicLocation(doctor.locations?.[0]);
+
     // Store doctor selection and scroll to booking
     localStorage.setItem('selectedDoctorBooking', JSON.stringify({
       name: doctor.name,
-      location: doctor.location,
+      location: normalizedLocation,
       timestamp: Date.now()
     }));
 
     // Trigger the custom event
     window.dispatchEvent(new CustomEvent('doctorSelected', {
-      detail: { name: doctor.name, location: doctor.location }
+      detail: { name: doctor.name, location: normalizedLocation }
     }));
 
     // Scroll to booking section
@@ -80,6 +83,8 @@ const MobileDoctorCarousel: React.FC = () => {
                 src={doctor.image}
                 alt={doctor.name}
                 className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
@@ -124,6 +129,8 @@ const MobileDoctorCarousel: React.FC = () => {
                   src={selectedDoctor.image}
                   alt={selectedDoctor.name}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';

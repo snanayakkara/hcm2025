@@ -37,8 +37,8 @@
   --brand-accent: #06b6d4;
   --brand-teal: #14b8a6;
   --brand-emerald: #10b981;
-  --brand-background: #fcdfbe;
-  --brand-background-alt: #ffd3c2;
+  --brand-background: #f8fbfc;
+  --brand-background-alt: #eef7fa;
   --brand-surface: #ffffff;
   --brand-surface-alt: #f8fafc;
   --brand-text: #1e293b;
@@ -411,22 +411,6 @@ body {
 
 .animate-subtle-float {
   animation: subtleFloat 8s ease-in-out infinite;
-}
-
-/* Enhanced smooth transitions for all interactive elements */
-* {
-  transition-property: transform, opacity, background-color, border-color, color, fill, stroke, box-shadow;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms;
-}
-
-/* Ensure full width sections */
-section {
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
-  padding-left: 0;
-  padding-right: 0;
 }
 
 /* Root container full width */

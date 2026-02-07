@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import SplitText from './SplitText';
 import { useMobileDetection } from '../hooks/useMobileDetection';
@@ -14,7 +14,7 @@ const MinimalistHeroAlternate: React.FC = () => {
   useEffect(() => {
     const img = new Image();
     img.onload = () => setImageLoaded(true);
-    img.src = '/images/hcmheartback.png';
+    img.src = '/images/hcmheartback.webp';
   }, []);
 
   const scrollToNext = () => {
@@ -61,6 +61,18 @@ const MinimalistHeroAlternate: React.FC = () => {
     }
   };
 
+  const dustParticles = useMemo(
+    () =>
+      Array.from({ length: 12 }, () => ({
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        yOffset: -30 - Math.random() * 20,
+        xOffset: (Math.random() - 0.5) * 20,
+        duration: 12 + Math.random() * 8,
+        delay: Math.random() * 10,
+      })),
+    []
+  );
 
   // Enhanced floating particles with dust and bokeh
   const LightFloatingParticles = () => (
@@ -112,24 +124,24 @@ const MinimalistHeroAlternate: React.FC = () => {
 
       {/* Floating dust particles */}
       <div className="opacity-25">
-        {Array.from({ length: 12 }, (_, i) => (
+        {dustParticles.map((particle, i) => (
           <motion.div
             key={`dust-${i}`}
             className="absolute w-1 h-1 bg-primary-300/40 rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: particle.left,
+              top: particle.top,
             }}
             animate={{
-              y: [0, -30 - Math.random() * 20, 0],
-              x: [0, (Math.random() - 0.5) * 20, 0],
+              y: [0, particle.yOffset, 0],
+              x: [0, particle.xOffset, 0],
               opacity: [0.1, 0.4, 0.1],
             }}
             transition={{
-              duration: 12 + Math.random() * 8,
+              duration: particle.duration,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: Math.random() * 10,
+              delay: particle.delay,
             }}
           />
         ))}
@@ -195,7 +207,7 @@ const MinimalistHeroAlternate: React.FC = () => {
         <motion.div 
           className="text-center space-y-20"
           variants={containerVariants}
-          initial="hidden"
+          initial="visible"
           animate="visible"
         >
           
@@ -209,7 +221,7 @@ const MinimalistHeroAlternate: React.FC = () => {
                   className="relative inline-block bg-gradient-to-br from-primary-500 via-accent-500 to-primary-600 bg-clip-text text-transparent"
                   style={{
                     ...(imageLoaded && {
-                      backgroundImage: `url('/images/hcmheartback.png')`,
+                      backgroundImage: `url('/images/hcmheartback.webp')`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       backgroundClip: 'text',
@@ -220,11 +232,11 @@ const MinimalistHeroAlternate: React.FC = () => {
                   }}
                 >
                   {/* Animated headline with no internal break in "Melbourne" */}
-                  <SplitText delay={0.5} duration={0.04}>
+                  <SplitText delay={0.3} duration={0.03} disableInitialAnimation>
                     Heart Clinic&nbsp;
                   </SplitText>
                   <span className="whitespace-nowrap inline-block">
-                    <SplitText delay={0.5} duration={0.04}>
+                    <SplitText delay={0.3} duration={0.03} disableInitialAnimation>
                       Melbourne.
                     </SplitText>
                   </span>

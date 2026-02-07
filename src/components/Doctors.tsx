@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { GraduationCap, MapPin, Stethoscope, Star } from 'lucide-react';
+import { GraduationCap, MapPin, Stethoscope, Star, LucideIcon } from 'lucide-react';
 import { doctors } from '../data/doctors';
+import { normalizeClinicLocation } from '../utils/locationMapping';
 
 const Doctors: React.FC = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(0);
@@ -9,7 +10,7 @@ const Doctors: React.FC = () => {
 
   const currentDoctor = doctors[selectedDoctor];
 
-  const InfoSection = ({ icon: Icon, title, children }: { icon: any; title: string; children: React.ReactNode }) => (
+  const InfoSection = ({ icon: Icon, title, children }: { icon: LucideIcon; title: string; children: React.ReactNode }) => (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <Icon className="w-5 h-5 text-gray-600" />
@@ -28,7 +29,7 @@ const Doctors: React.FC = () => {
       }, 5000);
       return () => clearInterval(interval);
     }
-  }, [isAutoPlaying, doctors.length]);
+  }, [isAutoPlaying]);
 
   return (
     <section id="doctors" className="py-32 bg-gradient-to-br from-white via-cream-25 to-primary-25/10">
@@ -70,6 +71,8 @@ const Doctors: React.FC = () => {
                 src={doctor.image}
                 alt={doctor.name}
                 className="w-8 h-8 rounded-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
               <div className="text-left">
                 <div className="font-semibold">{doctor.name}</div>
@@ -90,6 +93,8 @@ const Doctors: React.FC = () => {
                   src={currentDoctor.image}
                   alt={currentDoctor.name}
                   className="w-96 h-96 object-cover rounded-full shadow-xl transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div 
                   className="absolute inset-0 rounded-full border-4 opacity-20 transition-opacity duration-300 group-hover:opacity-40"
@@ -152,9 +157,13 @@ const Doctors: React.FC = () => {
               {/* Book Button */}
               <button
                 onClick={() => {
+                  const normalizedLocation = normalizeClinicLocation(
+                    currentDoctor.locations?.[0]
+                  );
+
                   const selectedDoctorInfo = {
                     name: currentDoctor.name,
-                    location: currentDoctor.name === "Dr Shane Nanayakkara" ? "Cabrini Malvern" : null,
+                    location: normalizedLocation,
                     timestamp: Date.now()
                   };
                   

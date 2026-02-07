@@ -159,25 +159,25 @@ Provider Number: ${formData.providerNumber}`;
         return [
           { 
             name: "Dr Mark Freilich", 
-            image: "/images/freilich.png",
+            image: "/images/freilich.webp",
             specialty: "General and Interventional Cardiology",
             displayName: "Dr Mark Freilich (Interventional)"
           },
           { 
             name: "Associate Professor Alex Voskoboinik", 
-            image: "/images/vosko.png",
+            image: "/images/vosko.webp",
             specialty: "General and Electrophysiology",
             displayName: "A/Prof Alex Voskoboinik (Electrophysiology)"
           },
           { 
             name: "Dr Shane Nanayakkara", 
-            image: "/images/nanayakkara.png",
+            image: "/images/nanayakkara.webp",
             specialty: "General, Intervention, Structural, and Heart Failure",
             displayName: "Dr Shane Nanayakkara (Interventional/Structural/Heart Failure)"
           },
           { 
             name: "Dr Kate Rowe", 
-            image: "/images/kate2png.png",
+            image: "/images/kate2png.webp",
             specialty: "General Cardiology",
             displayName: "Dr Kate Rowe (General)"
           },
@@ -192,25 +192,25 @@ Provider Number: ${formData.providerNumber}`;
         return [
           { 
             name: "Dr Mark Freilich", 
-            image: "/images/freilich.png",
+            image: "/images/freilich.webp",
             specialty: "Interventional Cardiology",
             displayName: "Dr Mark Freilich (Interventional)"
           },
           { 
             name: "Associate Professor Alex Voskoboinik", 
-            image: "/images/vosko.png",
+            image: "/images/vosko.webp",
             specialty: "Electrophysiology",
             displayName: "A/Prof Alex Voskoboinik (Electrophysiology)"
           },
           { 
             name: "Dr Phillip Ngu", 
-            image: "/images/ngu.png",
+            image: "/images/ngu.webp",
             specialty: "General and Non-Invasive Imaging",
             displayName: "Dr Phillip Ngu (Imaging/General)"
           },
           { 
             name: "Dr Kate Rowe", 
-            image: "/images/kate2png.png",
+            image: "/images/kate2png.webp",
             specialty: "General Cardiology",
             displayName: "Dr Kate Rowe (General)"
           },
@@ -225,7 +225,7 @@ Provider Number: ${formData.providerNumber}`;
         return [
           { 
             name: "Dr Phillip Ngu", 
-            image: "/images/ngu.png",
+            image: "/images/ngu.webp",
             specialty: "General and Non-Invasive Imaging",
             displayName: "Dr Phillip Ngu (Imaging/General)"
           },
@@ -359,27 +359,27 @@ Provider Number: ${formData.providerNumber}`;
     {
       value: "Cardiology Consult",
       label: "Cardiology Consult",
-      image: "/images/consult.png"
+      image: "/images/consult.webp"
     },
     {
       value: "Resting Echocardiogram", 
       label: "Resting Echo",
-      image: "/images/echo.png"
+      image: "/images/echo.webp"
     },
     {
       value: "Stress Echocardiogram",
       label: "Stress Echo",
-      image: "/images/stressecho.png"
+      image: "/images/stressecho.webp"
     },
     {
       value: "Holter Monitor",
       label: "Holter Monitor",
-      image: "/images/holter.png"
+      image: "/images/holter.webp"
     },
     {
       value: "Pacemaker/Device Review",
       label: "Device Review",
-      image: "/images/pacemaker.png"
+      image: "/images/pacemaker.webp"
     }
   ];
 
@@ -395,7 +395,7 @@ Provider Number: ${formData.providerNumber}`;
             <div className="flex justify-between items-center border-b pb-6 mb-8">
               <div className="flex items-center space-x-3">
                 <img 
-                  src="/images/hcm3d2.png" 
+                  src="/images/hcm3d2.webp" 
                   alt="Heart Clinic Melbourne Logo" 
                   className="h-10 w-10"
                 />
@@ -506,7 +506,7 @@ Provider Number: ${formData.providerNumber}`;
                   <ChevronDown className="w-5 h-5 rotate-90 text-gray-600" />
                 </button>
                 <img 
-                  src="/images/hcm3d2.png" 
+                  src="/images/hcm3d2.webp" 
                   alt="Heart Clinic Melbourne Logo" 
                   className="h-8 w-8"
                 />
@@ -650,7 +650,7 @@ Provider Number: ${formData.providerNumber}`;
               <div 
                 className="mt-4 p-3 border border-gray-300 rounded-lg hover:border-blue-300 hover:shadow-md transition-all duration-300 relative overflow-hidden cursor-pointer animate-pulse"
                 style={{
-                  backgroundImage: "url(/images/consult.png)",
+                  backgroundImage: "url(/images/consult.webp)",
                   backgroundSize: 'cover',
                   backgroundPosition: 'center'
                 }}

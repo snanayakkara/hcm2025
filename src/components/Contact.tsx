@@ -331,6 +331,8 @@ const Contact: React.FC = () => {
                         src={hospital.icon}
                         alt={`${hospital.name} logo`}
                         className="max-w-20 max-h-20 object-contain"
+                        loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <div className="bg-primary-100 w-16 h-16 flex items-center justify-center rounded-xl">

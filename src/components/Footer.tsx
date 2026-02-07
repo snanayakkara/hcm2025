@@ -3,6 +3,7 @@ import { useMobileDetection } from '../hooks/useMobileDetection';
 
 const Footer: React.FC = () => {
   const { isMobile } = useMobileDetection();
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-gray-50 border-t border-gray-200 py-12 mt-16 relative z-20 min-h-[300px]">
@@ -46,7 +47,7 @@ const Footer: React.FC = () => {
 
         <div className={`border-t border-gray-200 mt-8 pt-8 ${isMobile ? 'text-center' : 'flex flex-col md:flex-row justify-between items-center'}`}>
           <p className="text-sm text-gray-500">
-            © 2025 Heart Clinic Melbourne. Website created by Dr. Shane Nanayakkara. All rights reserved.
+            © {currentYear} Heart Clinic Melbourne. Website created by Dr. Shane Nanayakkara. All rights reserved.
           </p>
           <div className={`flex ${isMobile ? 'justify-center' : 'space-x-6'} mt-4 md:mt-0`}>
             <a href="tel:+61395095009" className="text-sm text-gray-500 hover:text-primary-600 transition-colors">
