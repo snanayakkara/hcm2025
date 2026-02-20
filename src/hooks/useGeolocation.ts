@@ -137,7 +137,7 @@ const useGeolocation = (options: UseGeolocationOptions = {}) => {
         navigator.geolocation.clearWatch(watchId);
       }
     };
-  }, []); // Only run on mount
+  }, [watchPosition, startWatching, getCurrentPosition, watchId]);
 
   return {
     ...state,

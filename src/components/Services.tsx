@@ -1,9 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, Search, Mail } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import Button from './ui/Button';
 import { DEFAULT_VIEWPORT } from '../lib/motion';
+
+const SERVICE_IDS = [
+  'consultation',
+  'echocardiography',
+  'holter',
+  'angiography',
+  'stress-echo',
+  'toe',
+  'toe-dcr',
+  'af-ablation',
+  'tavi',
+  'mteer',
+  'pacemaker',
+];
 
 const Services: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string | null>('consultation');
@@ -21,9 +35,9 @@ const Services: React.FC = () => {
 
     const interval = setInterval(() => {
       setSelectedService(current => {
-        const currentIndex = services.findIndex(s => s.id === current);
-        const nextIndex = (currentIndex + 1) % services.length;
-        return services[nextIndex].id;
+        const currentIndex = SERVICE_IDS.findIndex((id) => id === current);
+        const nextIndex = (currentIndex + 1) % SERVICE_IDS.length;
+        return SERVICE_IDS[nextIndex];
       });
     }, 5000);
 
@@ -55,7 +69,7 @@ const Services: React.FC = () => {
     </div>
   );
 
-  const services = [
+  const services = useMemo(() => [
     {
       id: 'consultation',
       name: "Consultation",
@@ -199,7 +213,7 @@ const Services: React.FC = () => {
       cost: "Performed at The Alfred (public); private health insurance recommended for Cabrini",
       image: "/images/pacemaker.webp"
     }
-  ];
+  ], []);
 
   return (
     <section id="services" className="py-32 bg-gradient-to-b from-primary-50/30 via-white to-cream-50/20">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, FileText, Search, Video } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -13,6 +13,9 @@ interface SearchResult {
   keywords: string[];
 }
 
+const OPEN_REFERRAL_FORM_EVENT = 'hcm:open-referral-form';
+const DOCTOR_ACTIVE_EVENT = 'hcm:doctor-active';
+
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -24,6 +27,7 @@ const Header: React.FC = () => {
   const [showSearchPopover, setShowSearchPopover] = useState(false);
   const [selectedResultIndex, setSelectedResultIndex] = useState(-1);
   const [isReferralFormOpen, setIsReferralFormOpen] = useState(false);
+  const [isAFMode, setIsAFMode] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isMobile } = useMobileDetection();
@@ -47,7 +51,7 @@ const Header: React.FC = () => {
     { type: 'doctor', title: 'Dr Mark Freilich', description: 'Interventional Cardiologist', section: 'doctors', keywords: ['freilich', 'interventional', 'cardiologist', 'angioplasty'] },
     { type: 'doctor', title: 'Dr Phillip Ngu', description: 'Non-Invasive Imaging Cardiologist', section: 'doctors', keywords: ['ngu', 'general', 'cardiologist', 'heart failure'] },
     { type: 'doctor', title: 'A/Prof Alex Voskoboinik', description: 'Electrophysiologist', section: 'doctors', keywords: ['voskoboinik', 'electrophysiology', 'arrhythmia', 'ablation'] },
-    { type: 'doctor', title: 'Dr Shane Nanayakkara', description: 'Interventional, Structural and Heart Failure Cardiologist', section: 'doctors', keywords: ['nanayakkara', 'heart failure', 'cardiomyopathy'] },
+    { type: 'doctor', title: 'A/Prof Shane Nanayakkara', description: 'Interventional, Structural and Heart Failure Cardiologist', section: 'doctors', keywords: ['nanayakkara', 'heart failure', 'cardiomyopathy'] },
     
     // Locations
     { type: 'location', title: 'Cabrini Hospital, Malvern', description: 'Main clinic location', section: 'contact', keywords: ['malvern', 'cabrini', 'location', 'address', 'clinic'] },
@@ -56,7 +60,7 @@ const Header: React.FC = () => {
     
     // General pages
     { type: 'page', title: 'About Us', description: 'Learn about Heart Clinic Melbourne', section: 'about', keywords: ['about', 'history', 'team', 'mission'] },
-    { type: 'page', title: 'Book Appointment', description: 'Schedule your consultation', section: 'contact', keywords: ['book', 'appointment', 'schedule', 'consultation'] },
+    { type: 'page', title: 'Book Appointment', description: 'Schedule your consultation', section: 'patients', keywords: ['book', 'appointment', 'schedule', 'consultation'] },
     { type: 'page', title: 'Patient Information', description: 'Important information for patients', section: 'patients', keywords: ['patient', 'information', 'preparation', 'what to bring'] },
     { type: 'page', title: 'Emergency Contact', description: 'Emergency cardiac care information', section: 'patients', keywords: ['emergency', 'urgent', 'after hours', 'contact'] },
     { type: 'page', title: 'Telehealth', description: 'Virtual consultations', section: 'services', keywords: ['telehealth', 'video', 'online', 'virtual', 'remote'] },
@@ -108,15 +112,15 @@ const Header: React.FC = () => {
   };
 
   // Handle search input
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
     performSearch(query);
     setSelectedResultIndex(-1); // Reset selection when query changes
-  }, []);
+  };
 
   // Handle keyboard navigation in search
-  const handleSearchKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       setSelectedResultIndex(prev => 
@@ -136,10 +140,10 @@ const Header: React.FC = () => {
     } else if (e.key === 'Escape') {
       handleSearchPopoverClose();
     }
-  }, [selectedResultIndex, searchResults]);
+  };
 
   // Handle search result click
-  const handleSearchResultClick = (result: SearchResult) => {
+  function handleSearchResultClick(result: SearchResult) {
     try {
       // Handle regular homepage sections
       scrollToSection(result.section);
@@ -149,7 +153,7 @@ const Header: React.FC = () => {
     } catch (error) {
       console.error('Error handling search result click:', error);
     }
-  };
+  }
 
   // Handle search input focus/blur
   const handleSearchFocus = () => {
@@ -170,11 +174,11 @@ const Header: React.FC = () => {
     setShowSearchPopover(true);
   };
 
-  const handleSearchPopoverClose = () => {
+  function handleSearchPopoverClose() {
     setShowSearchPopover(false);
     setSearchQuery('');
     setShowSearchResults(false);
-  };
+  }
 
   // Get icon for search result type
   const getResultIcon = (type: string) => {
@@ -218,6 +222,29 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location.pathname, hasScrolled]);
+
+  useEffect(() => {
+    const handleOpenReferralForm = () => {
+      setIsReferralFormOpen(true);
+    };
+
+    window.addEventListener(OPEN_REFERRAL_FORM_EVENT, handleOpenReferralForm);
+
+    return () => {
+      window.removeEventListener(OPEN_REFERRAL_FORM_EVENT, handleOpenReferralForm);
+    };
+  }, []);
+
+  // Easter egg: irregular heartbeat when Voskoboinik is the active doctor
+  useEffect(() => {
+    const handleDoctorActive = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      setIsAFMode(detail?.doctorId === 'voskoboinik');
+    };
+
+    window.addEventListener(DOCTOR_ACTIVE_EVENT, handleDoctorActive);
+    return () => window.removeEventListener(DOCTOR_ACTIVE_EVENT, handleDoctorActive);
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     try {
@@ -293,12 +320,21 @@ const Header: React.FC = () => {
             src="/images/hcm3d2.webp"
             alt="Heart Clinic Melbourne Logo"
             className="w-28 h-28 object-contain"
-            animate={hasScrolled ? {
+            animate={isAFMode ? {
+              // Atrial fibrillation: irregularly irregular rhythm
+              scale: [1, 1.4, 1, 1.1, 1, 1.35, 1, 1, 1.25, 1, 1.5, 1],
+              rotate: [0, -2, 0, 1, 0, -1.5, 0, 0, 2, 0, -1, 0],
+            } : hasScrolled ? {
               scale: [1, 1.3, 1],
             } : {
               scale: 1
             }}
-            transition={hasScrolled ? {
+            transition={isAFMode ? {
+              duration: 3.5,
+              repeat: Infinity,
+              times: [0, 0.06, 0.12, 0.22, 0.28, 0.38, 0.45, 0.58, 0.68, 0.75, 0.88, 1],
+              ease: "easeInOut"
+            } : hasScrolled ? {
               duration: 1.2, // 50 pulses per minute = 1.2 seconds per pulse
               repeat: Infinity,
               ease: "easeInOut"
@@ -351,7 +387,7 @@ const Header: React.FC = () => {
                   <motion.button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
-                    className={`flex items-center space-x-1 px-2 py-2 rounded-xl text-xs font-medium transition-all duration-200 relative whitespace-nowrap ${
+                    className={`group flex items-center space-x-1 px-2 py-2 rounded-xl text-xs font-medium transition-all duration-200 relative whitespace-nowrap ${
                       activeSection === item.id && location.pathname === '/'
                         ? 'text-primary-600 bg-primary-50/80'
                         : 'text-secondary-600 hover:text-primary-600 hover:bg-primary-50/50'
@@ -360,6 +396,17 @@ const Header: React.FC = () => {
                     whileTap={{ scale: 0.98 }}
                   >
                     <span>{item.label}</span>
+                    {/* Sliding underline */}
+                    <motion.span
+                      className="absolute bottom-0.5 left-2 right-2 h-[2px] rounded-full bg-primary-500 origin-left"
+                      initial={false}
+                      animate={{
+                        scaleX: activeSection === item.id && location.pathname === '/' ? 1 : 0,
+                        opacity: activeSection === item.id && location.pathname === '/' ? 1 : 0,
+                      }}
+                      whileHover={{ scaleX: 1, opacity: 0.5 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                    />
                   </motion.button>
                 ))}
 

@@ -39,5 +39,11 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
     },
+  },
+  {
+    files: ['src/components/ui/Toast.tsx', 'src/test-utils/index.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
   }
 );
