@@ -47,12 +47,12 @@ export const simulateScroll = (scrollY: number) => {
 }
 
 // Utility to trigger intersection observer
-export const triggerIntersectionObserver = (entries: any[]) => {
+export const triggerIntersectionObserver = (entries: IntersectionObserverEntry[]) => {
   const calls = vi.mocked(window.IntersectionObserver).mock.calls
   if (calls.length > 0) {
     const callback = calls[calls.length - 1][0] // Get the latest callback
     if (callback) {
-      callback(entries, {} as any)
+      callback(entries, {} as IntersectionObserver)
     }
   }
 }

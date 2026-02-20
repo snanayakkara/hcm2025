@@ -12,6 +12,11 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
 }
 
+interface NavigatorWithStandalone extends Navigator {
+  standalone?: boolean;
+  getInstalledRelatedApps?: () => Promise<unknown[]>;
+}
+
 const PWAInstallBanner: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showBanner, setShowBanner] = useState(false);
@@ -22,7 +27,8 @@ const PWAInstallBanner: React.FC = () => {
   // Detect iOS device
   useEffect(() => {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isInStandaloneMode = 'standalone' in (navigator as any) && (navigator as any).standalone;
+    const enhancedNavigator = navigator as NavigatorWithStandalone;
+    const isInStandaloneMode = enhancedNavigator.standalone === true;
     
     setIsIOSDevice(isIOS);
     setIsInstalled(isInStandaloneMode);
@@ -58,8 +64,9 @@ const PWAInstallBanner: React.FC = () => {
 
   // Check if app is already installed
   useEffect(() => {
-    if ('getInstalledRelatedApps' in navigator) {
-      (navigator as any).getInstalledRelatedApps().then((relatedApps: any[]) => {
+    const enhancedNavigator = navigator as NavigatorWithStandalone;
+    if (typeof enhancedNavigator.getInstalledRelatedApps === 'function') {
+      enhancedNavigator.getInstalledRelatedApps().then((relatedApps) => {
         if (relatedApps.length > 0) {
           setIsInstalled(true);
         }

@@ -32,8 +32,7 @@ const MobileReferralForm: React.FC<MobileReferralFormProps> = ({ isOpen, onClose
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     
     // Create email content
     const subject = encodeURIComponent('Mobile Referral - Heart Clinic Melbourne');
@@ -332,7 +331,7 @@ Thank you for your assistance.`;
         {/* Progress Bar */}
         <div className="px-4 py-3 bg-gray-50 border-b">
           <div className="flex space-x-2">
-            {steps.map((step, index) => (
+            {steps.map((_, index) => (
               <div
                 key={index}
                 className={`flex-1 h-2 rounded-full transition-all duration-300 ${

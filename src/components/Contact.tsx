@@ -2,11 +2,20 @@ import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Car, Train, Printer, ExternalLink, Search, Building2 } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import Button from './ui/Button';
+import { useToast } from './ui/Toast';
+
+interface Hospital {
+  name: string;
+  address: string;
+  description: string;
+  icon?: string;
+}
 
 const Contact: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState(0);
   const [userAddress, setUserAddress] = useState('');
   const { isMobile } = useMobileDetection();
+  const { showToast } = useToast();
 
   const locations = [
     {
@@ -32,7 +41,7 @@ const Contact: React.FC = () => {
     },
     {
       name: "Casey Specialist Centre, Clyde",
-      address: "1s Morison Rd, Clyde VIC 3978",
+      address: "1 Morison Rd, Clyde VIC 3978",
       phone: "(03) 9509 5009", 
       hours: ["Mon-Fri: 8:30 AM - 5:00 PM", "Sat: By appointment"],
       services: ["Cardiac Consultation", "Echocardiography (resting and stress echo)", "24 Hour Holter Monitoring"],
@@ -42,30 +51,26 @@ const Contact: React.FC = () => {
     },
   ];
 
-  const hospitals = [
+  const hospitals: Hospital[] = [
     {
       name: "The Alfred",
       address: "55 Commercial Rd, Melbourne VIC 3004",
-      description: "Public procedural services",
-      icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYED9TXRJ2hBE9BHlrjdbbaT6E8UM7cgIWwQ&s"
+      description: "Public procedural services"
     },
     {
       name: "Cabrini Malvern",
       address: "183 Wattletree Rd, Malvern VIC 3144", 
-      description: "Private procedural services",
-      icon: "https://gandelfoundation.org.au/wp-content/uploads/2017/07/Cabrini.jpg"
+      description: "Private procedural services"
     },
     {
       name: "Epworth Richmond",
       address: "89 Bridge Rd, Richmond VIC 3121",
-      description: "Private procedural services",
-      icon: "https://upload.wikimedia.org/wikipedia/en/5/5e/Epworth_HealthCare_logo.png"
+      description: "Private procedural services"
     },
     {
       name: "SJOG Berwick",
       address: "75 Kangan Dr, Berwick VIC 3806",
-      description: "Private procedural services",
-      icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0RQpP2eNsJYr7osMZpUpgRYhdkXNgo8-Mfw&s"
+      description: "Private procedural services"
     }
   ];
 
@@ -78,7 +83,7 @@ const Contact: React.FC = () => {
       const directionsUrl = `https://www.google.com/maps/dir/${origin}/${destination}`;
       window.open(directionsUrl, '_blank');
     } else {
-      alert('Please enter your address to get directions');
+      showToast('Please enter your address to get directions', 'warning');
     }
   };
 
@@ -91,12 +96,12 @@ const Contact: React.FC = () => {
       const ptUrl = `https://www.google.com/maps/dir/${origin}/${destination}/@${locations[selectedLocation].coordinates.lat},${locations[selectedLocation].coordinates.lng},15z/data=!3m1!4b1!4m2!4m1!3e3`;
       window.open(ptUrl, '_blank');
     } else {
-      alert('Please enter your address to get public transport directions');
+      showToast('Please enter your address to get public transport directions', 'warning');
     }
   };
 
   return (
-    <section id="contact" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20">
+    <section id="contact" className="py-32 bg-gradient-to-b from-primary-50/20 via-white to-cream-50/20">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
         <div className="text-center mb-20">

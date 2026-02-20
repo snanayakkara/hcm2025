@@ -16,17 +16,13 @@ Heart Clinic Melbourne website built with React + TypeScript + Vite.
 ```bash
 npm install
 npm run dev
+npm run typecheck
 npm run lint
 npm run test
 npm run test:run
 npm run test:coverage
 npm run build
 npm run preview
-```
-
-Optional explicit type check (no script currently defined):
-```bash
-npx tsc -p tsconfig.app.json --noEmit
 ```
 
 ## Repository Layout

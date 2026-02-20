@@ -1,6 +1,7 @@
-import React, { useState, lazy, Suspense } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useMobileDetection } from './hooks/useMobileDetection';
+import { ToastProvider } from './components/ui/Toast';
 import Header from './components/Header';
 import MinimalistHero from './components/MinimalistHero';
 import MinimalistHeroAlternate from './components/MinimalistHeroAlternate';
@@ -53,7 +54,7 @@ function HomePage() {
   });
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
+    <div className="min-h-screen relative overflow-x-hidden bg-white">
       <main className="relative z-10">
         {useRemotionHero ? <MinimalistHeroAlternate /> : <MinimalistHero />}
         <Suspense fallback={<SectionFallback />}>
@@ -90,35 +91,39 @@ function App() {
   // If mobile, use MobileLayout exclusively
   if (isMobile) {
     return (
-      <Router>
-        <Routes>
-          <Route path="/" element={
-            <Suspense fallback={<PageFallback mobile />}>
-              <MobileLayout 
-                currentPage={currentPage} 
-                onPageChange={setCurrentPage} 
-              />
-            </Suspense>
-          } />
-        </Routes>
-      </Router>
+      <ToastProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={
+              <Suspense fallback={<PageFallback mobile />}>
+                <MobileLayout 
+                  currentPage={currentPage} 
+                  onPageChange={setCurrentPage} 
+                />
+              </Suspense>
+            } />
+          </Routes>
+        </Router>
+      </ToastProvider>
     );
   }
 
   // Desktop layout
   return (
-    <Router>
-      <div className="min-h-screen relative overflow-x-hidden">
-        <div className="fixed inset-0 z-0 bg-gradient-to-br from-cream-50 via-white to-primary-50/20" />
-        
-        <div className="relative z-10">
-          <Header />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-          </Routes>
+    <ToastProvider>
+      <Router>
+        <div className="min-h-screen relative overflow-x-hidden">
+          <div className="fixed inset-0 z-0 bg-gradient-to-br from-cream-50 via-white to-primary-50/20" />
+          
+          <div className="relative z-10">
+            <Header />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </ToastProvider>
   );
 }
 

@@ -14,6 +14,7 @@ import {
 
 import { useIntake } from '../../hooks/useIntake';
 import Button from '../ui/Button';
+import { useToast } from '../ui/Toast';
 import { IntakeSchema, IntakeForm, CARD_TEST_DESCRIPTIONS } from '../../types/intake';
 import Stepper from './Stepper';
 import ToggleCard from '../fields/ToggleCard';
@@ -26,6 +27,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
   const { state, updateData, nextStep, prevStep, cleanup } = useIntake();
   const [isGenerating, setIsGenerating] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const { showToast } = useToast();
   
   const {
     control,
@@ -89,7 +91,7 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
     } catch (error) {
       console.error('PDF generation failed:', error);
       // Show user-friendly error message
-      alert('PDF generation failed. This may be due to special characters in your form data. Please review your entries and try again.');
+      showToast('PDF generation failed. Please review your entries and try again.', 'error');
     } finally {
       setIsGenerating(false);
     }
@@ -404,7 +406,11 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                                 render={({ field: locationField }) => (
                                   <input
                                     type="text"
-                                    {...locationField}
+                                    name={locationField.name}
+                                    ref={locationField.ref}
+                                    onBlur={locationField.onBlur}
+                                    value={typeof locationField.value === 'string' ? locationField.value : ''}
+                                    onChange={(e) => locationField.onChange(e.target.value)}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                                     placeholder="e.g., Alfred Hospital, Cabrini Malvern"
                                   />
@@ -422,7 +428,11 @@ const Wizard: React.FC<WizardProps> = ({ onClose }) => {
                                 render={({ field: dateField }) => (
                                   <input
                                     type="text"
-                                    {...dateField}
+                                    name={dateField.name}
+                                    ref={dateField.ref}
+                                    onBlur={dateField.onBlur}
+                                    value={typeof dateField.value === 'string' ? dateField.value : ''}
+                                    onChange={(e) => dateField.onChange(e.target.value)}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"
                                     placeholder="e.g., March 2023"
                                   />

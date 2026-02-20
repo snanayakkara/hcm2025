@@ -3,7 +3,7 @@ import { vi } from 'vitest'
 
 // Mock IntersectionObserver
 const mockIntersectionObserver = vi.fn()
-mockIntersectionObserver.mockImplementation((callback, options) => {
+mockIntersectionObserver.mockImplementation((_callback: IntersectionObserverCallback, options?: IntersectionObserverInit) => {
   return {
     observe: vi.fn(),
     unobserve: vi.fn(),
@@ -34,7 +34,7 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
 }))
 
 // Mock requestAnimationFrame
-global.requestAnimationFrame = vi.fn((cb) => setTimeout(cb, 0))
+global.requestAnimationFrame = vi.fn((cb: FrameRequestCallback) => window.setTimeout(() => cb(performance.now()), 0))
 global.cancelAnimationFrame = vi.fn()
 
 // Mock matchMedia
@@ -89,7 +89,7 @@ Object.defineProperty(CSS, 'supports', {
 
 // Console warnings suppression for testing
 const originalConsoleError = console.error
-console.error = (...args: any[]) => {
+console.error = (...args: unknown[]) => {
   if (
     typeof args[0] === 'string' &&
     args[0].includes('Warning: ReactDOM.render is no longer supported')

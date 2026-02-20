@@ -12,6 +12,7 @@ Instructions for AI coding agents working in this repository.
 ```bash
 npm install
 npm run dev
+npm run typecheck
 npm run lint
 npm run test:run
 npm run build
@@ -49,6 +50,6 @@ npm run build
 
 ## Handoff Checklist
 Before finishing, confirm:
-1. Lint/build/tests relevant to the change pass locally.
+1. Typecheck/lint/build/tests relevant to the change pass locally.
 2. Updated docs if workflow or commands changed.
 3. File-level summary includes what changed and why.

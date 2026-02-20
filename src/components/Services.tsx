@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Activity, Stethoscope, Zap, MapPin, Phone, Clock, FileText, Search, Mail } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import Button from './ui/Button';
-import { ServiceItem } from '../types/common';
 import { DEFAULT_VIEWPORT } from '../lib/motion';
 
 const Services: React.FC = () => {
@@ -45,7 +44,7 @@ const Services: React.FC = () => {
     title,
     value,
   }: {
-    icon: React.ComponentType<{ className?: string; size?: number }>;
+    icon: React.ComponentType<{ className?: string; size?: number | string }>;
     title: string;
     value: string;
   }) => (
@@ -203,7 +202,7 @@ const Services: React.FC = () => {
   ];
 
   return (
-    <section id="services" className="py-32 bg-gradient-to-br from-white via-cream-25 to-primary-25/10">
+    <section id="services" className="py-32 bg-gradient-to-b from-primary-50/30 via-white to-cream-50/20">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
         <div className="text-center mb-20">
@@ -249,17 +248,30 @@ const Services: React.FC = () => {
                     whileTap={{ scale: prefersReducedMotion ? 1 : 0.98 }}
                   >
                     <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-lg ${
-                        selectedService === service.id 
-                          ? isMobile
-                            ? 'bg-primary-50/90 text-primary-700 shadow-md'
-                            : 'bg-primary-100/80 text-primary-600'
-                          : isMobile
-                            ? 'bg-white/90 text-primary-600 shadow-sm'
-                            : 'bg-primary-50/80 text-primary-500'
-                      }`}>
+                      <motion.div
+                        className={`p-2 rounded-lg ${
+                          selectedService === service.id 
+                            ? isMobile
+                              ? 'bg-primary-50/90 text-primary-700 shadow-md'
+                              : 'bg-primary-100/80 text-primary-600'
+                            : isMobile
+                              ? 'bg-white/90 text-primary-600 shadow-sm'
+                              : 'bg-primary-50/80 text-primary-500'
+                        }`}
+                        animate={
+                          selectedService === service.id
+                            ? { scale: [1, 1.3, 1], rotate: [0, -8, 8, 0] }
+                            : { scale: 1, rotate: 0 }
+                        }
+                        transition={{
+                          type: 'spring',
+                          stiffness: 400,
+                          damping: 12,
+                          duration: 0.4,
+                        }}
+                      >
                         {service.icon}
-                      </div>
+                      </motion.div>
                       <div className="flex-1">
                         <h4 className="font-semibold text-secondary-800 text-sm leading-tight">
                           {service.name}
@@ -291,21 +303,41 @@ const Services: React.FC = () => {
                       >
                       {/* Header */}
                       <div className="flex items-start space-x-4 mb-6">
-                        <div className="p-3 rounded-xl bg-primary-50/80 text-primary-600 shadow-sm">
+                        <motion.div
+                          className="p-3 rounded-xl bg-primary-50/80 text-primary-600 shadow-sm"
+                          initial={{ scale: 0.5, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ type: 'spring', stiffness: 400, damping: 12, delay: 0.1 }}
+                        >
                           {s.icon}
-                        </div>
+                        </motion.div>
                         <div className="flex-1">
                           <h3 className="text-2xl font-bold text-secondary-800 mb-2">{s.name}</h3>
                           <p className="text-secondary-600 text-sm">{s.shortDescription}</p>
                         </div>
                       </div>
 
-                      {/* Image */}
-                      <div className={`w-full ${isMobile ? 'h-72' : 'h-[28rem]'} rounded-2xl overflow-hidden mb-6`}>
-                        <img
+                      {/* Image with Ken Burns effect + shimmer skeleton */}
+                      <div className={`relative w-full ${isMobile ? 'h-72' : 'h-[28rem]'} rounded-2xl overflow-hidden mb-6`}>
+                        {/* Shimmer skeleton */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-secondary-100 via-secondary-50 to-secondary-100 animate-shimmer bg-[length:200%_100%]" aria-hidden />
+                        <motion.img
                           src={s.image}
                           alt={s.name}
-                          className="w-full h-full object-cover"
+                          className="relative w-full h-full object-cover"
+                          initial={{ scale: 1.0, opacity: 0 }}
+                          animate={{
+                            scale: 1.08,
+                            opacity: 1,
+                            x: [0, 8, -4, 0],
+                            y: [0, -6, 4, 0],
+                          }}
+                          transition={{
+                            opacity: { duration: 0.5, ease: 'easeOut' },
+                            scale: { duration: 20, ease: 'linear' },
+                            x: { duration: 25, repeat: Infinity, ease: 'easeInOut' },
+                            y: { duration: 30, repeat: Infinity, ease: 'easeInOut' },
+                          }}
                         />
                       </div>
 

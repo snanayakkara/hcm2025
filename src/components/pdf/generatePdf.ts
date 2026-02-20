@@ -97,7 +97,7 @@ export async function generateIntakePDF(data: IntakeForm): Promise<Uint8Array> {
     let textToDraw = cleanText(text); // Clean text to handle special characters
 
     // Additional fallback to remove any remaining problematic characters
-    textToDraw = textToDraw.replace(/[^\x00-\x7F]/g, "?"); // Replace any non-ASCII with ?
+    textToDraw = textToDraw.replace(/[^\u0020-\u007E]/g, "?"); // Replace non-printable/non-ASCII with ?
 
     // Simple text wrapping if maxWidth is specified
     if (options.maxWidth && font) {
@@ -731,7 +731,6 @@ export async function generateLearningLibraryPDF(
   const lightTeal = rgb(0.89, 0.97, 0.95);
   const darkGray = rgb(0.2, 0.2, 0.2);
   const lightGray = rgb(0.6, 0.6, 0.6);
-  const veryLightGray = rgb(0.95, 0.95, 0.95);
 
   // Helper functions
   const drawText = (

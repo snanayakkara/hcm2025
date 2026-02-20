@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-interface DeviceOrientationData {
-  alpha: number | null; // Z-axis rotation (0-360 degrees)
-  beta: number | null;  // X-axis rotation (-180 to 180 degrees)
-  gamma: number | null; // Y-axis rotation (-90 to 90 degrees)
+interface DeviceOrientationEventWithPermission {
+  requestPermission?: () => Promise<'granted' | 'denied'>;
 }
 
 interface ParallaxTransform {
@@ -49,7 +47,6 @@ const useParallaxHero = (options: UseParallaxHeroOptions = {}) => {
   useEffect(() => {
     const checkSupport = () => {
       const hasDeviceOrientation = 'DeviceOrientationEvent' in window;
-      const hasPermissionAPI = 'permissions' in navigator;
       setIsSupported(hasDeviceOrientation);
       return hasDeviceOrientation;
     };
@@ -114,8 +111,9 @@ const useParallaxHero = (options: UseParallaxHeroOptions = {}) => {
 
     try {
       // Check if permission is needed (iOS 13+)
-      if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
-        const permission = await (DeviceOrientationEvent as any).requestPermission();
+      const orientationEvent = DeviceOrientationEvent as unknown as DeviceOrientationEventWithPermission;
+      if (typeof orientationEvent.requestPermission === 'function') {
+        const permission = await orientationEvent.requestPermission();
         setPermissionState(permission);
         
         if (permission !== 'granted') {
@@ -127,8 +125,8 @@ const useParallaxHero = (options: UseParallaxHeroOptions = {}) => {
       }
 
       return true;
-    } catch (err) {
-      setError(`Permission request failed: ${err}`);
+    } catch (err: unknown) {
+      setError(`Permission request failed: ${String(err)}`);
       setPermissionState('denied');
       return false;
     }
