@@ -74,7 +74,7 @@ const About: React.FC = () => {
   };
 
   return (
-    <section id="about" className="py-32 bg-white" ref={sectionRef}>
+    <section id="about" className="py-32 bg-gradient-to-b from-white via-white to-primary-50/30" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Centred Header */}
         <motion.div 

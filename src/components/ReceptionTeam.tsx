@@ -191,7 +191,7 @@ const ReceptionTeam: React.FC = () => {
   }, [isMobile, executiveAssistants.length, receptionTeam.length, technologists.length]);
 
   return (
-    <section id="reception-team" className="py-32 bg-gradient-to-br from-cream-50 via-white to-primary-50/20" ref={sectionRef}>
+    <section id="reception-team" className="py-32 bg-gradient-to-b from-primary-50/20 via-white to-cream-50/20" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
         <div className={`text-center mb-20 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>

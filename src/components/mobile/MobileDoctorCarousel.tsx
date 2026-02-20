@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Calendar, ChevronRight, Award } from 'lucide-react';
 import { doctors } from '../../data/doctors';
 import { DEFAULT_VIEWPORT } from '../../lib/motion';
 import { normalizeClinicLocation } from '../../utils/locationMapping';
 
+const DOCTOR_ACTIVE_EVENT = 'hcm:doctor-active';
+
 const MobileDoctorCarousel: React.FC = () => {
   const [selectedDoctorId, setSelectedDoctorId] = useState('freilich');
 
   const selectedDoctor = doctors.find(d => d.id === selectedDoctorId) || doctors[0];
+
+  // Dispatch event when active doctor changes (for header easter egg)
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent(DOCTOR_ACTIVE_EVENT, {
+        detail: { doctorId: selectedDoctorId },
+      })
+    );
+  }, [selectedDoctorId]);
 
   const handleBookAppointment = (doctor: typeof doctors[0]) => {
     const normalizedLocation = normalizeClinicLocation(doctor.locations?.[0]);

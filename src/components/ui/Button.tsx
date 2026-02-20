@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useCallback } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
 
 interface ButtonProps {
@@ -13,6 +13,8 @@ interface ButtonProps {
   className?: string;
   type?: 'button' | 'submit' | 'reset';
   isMobile?: boolean;
+  /** Enable magnetic pull-toward-cursor effect on hover */
+  magnetic?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -25,8 +27,33 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   className = '',
   type = 'button',
-  isMobile = false
+  isMobile = false,
+  magnetic = false
 }) => {
+  const buttonRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
+  const springY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!magnetic || isMobile || disabled || !buttonRef.current) return;
+      const rect = buttonRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const distX = e.clientX - centerX;
+      const distY = e.clientY - centerY;
+      x.set(distX * 0.3);
+      y.set(distY * 0.3);
+    },
+    [magnetic, isMobile, disabled, x, y]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    x.set(0);
+    y.set(0);
+  }, [x, y]);
   // Base styles
   const baseStyles = "inline-flex items-center justify-center transition-all duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2";
   
@@ -64,12 +91,20 @@ const Button: React.FC<ButtonProps> = ({
     transition: { duration: 0.2 }
   };
 
+  const magneticStyle = magnetic && !isMobile
+    ? { x: springX, y: springY }
+    : undefined;
+
   // Render as link if href is provided
   if (href) {
     return (
       <motion.a
+        ref={buttonRef as React.Ref<HTMLAnchorElement>}
         href={href}
         className={buttonStyles}
+        style={magneticStyle}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         {...animationProps}
         onClick={onClick}
       >
@@ -82,8 +117,12 @@ const Button: React.FC<ButtonProps> = ({
   // Render as button
   return (
     <motion.button
+      ref={buttonRef as React.Ref<HTMLButtonElement>}
       type={type}
       className={buttonStyles}
+      style={magneticStyle}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       onClick={onClick}
       disabled={disabled}
       {...animationProps}

@@ -70,7 +70,7 @@ export const doctors: Doctor[] = [
   },
   {
     id: 'nanayakkara',
-    name: "Dr Shane Nanayakkara",
+    name: "A/Prof Shane Nanayakkara",
     title: "General Cardiologist, Interventional & Structural Cardiologist and Heart Failure Specialist",
     specialty: "Interventional/Structural and Heart Failure Cardiologist",
     specialisation: "Coronary and Structural Heart Interventions, Heart Failure",
@@ -80,7 +80,7 @@ export const doctors: Doctor[] = [
     expertise: ["Coronary angiography", "Coronary stenting", "Transcatheter valve procedures", "Structural heart interventions"],
     image: "/images/nanayakkara.webp",
     locations: ["The Alfred Hospital", "Cabrini Hospital Malvern", "Epworth Hospital"],
-    description: "Dr Nanayakkara is an interventional and structural cardiologist with expertise in advanced procedures including transcatheter valve interventions. He combines clinical excellence with research innovation and has a passion for both face-to-face and telemedicine care.",
+    description: "Associate Professor Nanayakkara is an interventional and structural cardiologist with expertise in advanced procedures including transcatheter valve interventions. He combines clinical excellence with research innovation and has a passion for both face-to-face and telemedicine care.",
     color: '#79e7e1',
     mobileColor: 'from-cream-700 to-cream-800',
     experience: '14+ years',

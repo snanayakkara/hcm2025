@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { FileText, Clock, Shield, CreditCard, Phone, Mail, ArrowRight, CheckCircle, ChevronLeft, ChevronRight, HelpCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { faqData } from '../data/faqData';
+import SuccessCelebration from './ui/SuccessCelebration';
 const Wizard = lazy(() => import('./Wizard/Wizard'));
 const PATIENT_RESOURCE_COUNT = 4;
 
@@ -25,6 +26,7 @@ const PatientInfo: React.FC = () => {
   const [calendarDate, setCalendarDate] = useState(new Date());
   const [doctorPreSelected, setDoctorPreSelected] = useState(false);
   const [showIntakeWizard, setShowIntakeWizard] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -103,6 +105,8 @@ ${formData.name}`;
     // Open email client
     window.location.href = mailtoLink;
     
+    // Show success celebration
+    setShowSuccess(true);
   };
 
   useEffect(() => {
@@ -248,7 +252,7 @@ ${formData.name}`;
             specialty: "General and Electrophysiology"
           },
           { 
-            name: "Dr Shane Nanayakkara", 
+            name: "Associate Professor Shane Nanayakkara", 
             image: "/images/nanayakkara.webp",
             specialty: "General, Intervention, Structural, and Heart Failure"
           },
@@ -312,7 +316,7 @@ ${formData.name}`;
   const availableDoctors = getDoctorsByLocation(formData.preferredLocation);
 
   return (
-    <section id="patients" className={`${isMobile ? 'py-16' : 'py-32'} bg-white`} ref={sectionRef}>
+    <section id="patients" className={`${isMobile ? 'py-16' : 'py-32'} bg-gradient-to-b from-cream-50/20 via-white to-primary-50/20`} ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
         <div className={`text-center ${isMobile ? 'mb-12' : 'mb-16'} transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
@@ -1193,6 +1197,14 @@ ${formData.name}`;
           </Suspense>
         )}
       </AnimatePresence>
+
+      {/* Success celebration overlay */}
+      <SuccessCelebration
+        show={showSuccess}
+        message="Appointment Request Sent!"
+        subMessage="Your email client will open with the pre-filled request."
+        onComplete={() => setShowSuccess(false)}
+      />
     </section>
   );
 };

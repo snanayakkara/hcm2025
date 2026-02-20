@@ -1,20 +1,41 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import SplitText from './SplitText';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import Button from './ui/Button';
-import { Calendar, MapPin } from 'lucide-react';
+import { Calendar, MapPin, FileText } from 'lucide-react';
+
+const OPEN_REFERRAL_FORM_EVENT = 'hcm:open-referral-form';
 
 const MinimalistHeroAlternate: React.FC = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isHeroInView, setIsHeroInView] = useState(true);
   const heroRef = useRef<HTMLDivElement>(null);
   const { isMobile } = useMobileDetection();
+  const shouldReduceMotion = useReducedMotion();
+  const enableAmbientMotion = !shouldReduceMotion && isHeroInView;
 
   // Preload the background image
   useEffect(() => {
     const img = new Image();
     img.onload = () => setImageLoaded(true);
     img.src = '/images/hcmheartback.webp';
+  }, []);
+
+  useEffect(() => {
+    if (!heroRef.current || typeof IntersectionObserver === 'undefined') {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroInView(entry.isIntersecting);
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(heroRef.current);
+    return () => observer.disconnect();
   }, []);
 
   const scrollToNext = () => {
@@ -32,10 +53,14 @@ const MinimalistHeroAlternate: React.FC = () => {
   };
 
   const scrollToConsultation = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
+    const patientSection = document.getElementById('patients');
+    if (patientSection) {
+      patientSection.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const openReferralForm = () => {
+    window.dispatchEvent(new Event(OPEN_REFERRAL_FORM_EVENT));
   };
 
   const containerVariants = {
@@ -75,8 +100,13 @@ const MinimalistHeroAlternate: React.FC = () => {
   );
 
   // Enhanced floating particles with dust and bokeh
-  const LightFloatingParticles = () => (
-    <div className="absolute inset-0 pointer-events-none">
+  const LightFloatingParticles = () => {
+    if (!enableAmbientMotion) {
+      return null;
+    }
+
+    return (
+      <div className="absolute inset-0 pointer-events-none">
       {/* Main visible particles */}
       <div className="opacity-40">
         <motion.div 
@@ -188,8 +218,9 @@ const MinimalistHeroAlternate: React.FC = () => {
           }}
         />
       </div>
-    </div>
-  );
+      </div>
+    );
+  };
 
 
 
@@ -214,7 +245,7 @@ const MinimalistHeroAlternate: React.FC = () => {
           {/* Main Headline */}
           <motion.div className="space-y-12" variants={itemVariants}>
             <h1 className={`${isMobile ? 'text-4xl' : 'text-6xl sm:text-7xl lg:text-8xl'} font-bold text-secondary-800 leading-[0.9] tracking-tight`}>
-              Welcome to
+              Cardiology specialists across
               <span className="block relative">
                 {/* Image background container for text */}
                 <div 
@@ -231,22 +262,17 @@ const MinimalistHeroAlternate: React.FC = () => {
                     filter: 'drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3))',
                   }}
                 >
-                  {/* Animated headline with no internal break in "Melbourne" */}
+                  {/* Animated headline with no internal break in "southeast" */}
                   <SplitText delay={0.3} duration={0.03} disableInitialAnimation>
-                    Heart Clinic&nbsp;
+                    Melbourne&apos;s southeast.
                   </SplitText>
-                  <span className="whitespace-nowrap inline-block">
-                    <SplitText delay={0.3} duration={0.03} disableInitialAnimation>
-                      Melbourne.
-                    </SplitText>
-                  </span>
                 </div>
               </span>
             </h1>
             
             {/* Value Proposition */}
             <p className={`${isMobile ? 'text-lg' : 'text-xl lg:text-2xl'} text-secondary-500 max-w-3xl mx-auto leading-relaxed font-light`}>
-              Comprehensive cardiovascular services across Melbourne's South East with a focus on personalised, compassionate care
+              Heart Clinic Melbourne provides consultations, diagnostics, and advanced procedures with personalised, compassionate care.
             </p>
           </motion.div>
 
@@ -255,7 +281,7 @@ const MinimalistHeroAlternate: React.FC = () => {
             className="space-y-8"
             variants={itemVariants}
           >
-            <div className={`flex flex-col ${isMobile ? 'gap-4' : 'sm:flex-row gap-6'} justify-center relative z-10`}>
+            <div className={`flex flex-col ${isMobile ? 'gap-4' : 'sm:flex-row sm:flex-wrap gap-4 sm:gap-6'} justify-center items-center relative z-10`}>
               <Button 
                 variant="primary"
                 size="large"
@@ -264,15 +290,25 @@ const MinimalistHeroAlternate: React.FC = () => {
                 isMobile={isMobile}
                 className="bg-secondary-800 text-white hover:bg-secondary-900 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
-                Book An Appointment
+                Book Appointment
               </Button>
               <Button 
                 variant="secondary"
                 size="large"
+                icon={FileText}
+                onClick={openReferralForm}
+                isMobile={isMobile}
+                className="border-2 border-accent-200 text-accent-700 hover:border-accent-300 hover:bg-accent-50/50 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+              >
+                Send Referral
+              </Button>
+              <Button 
+                variant="tertiary"
+                size="large"
                 icon={MapPin}
                 onClick={scrollToLocations}
                 isMobile={isMobile}
-                className="border-2 border-secondary-200 text-secondary-600 hover:border-secondary-300 hover:bg-secondary-50/50 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                className="text-secondary-600 hover:bg-secondary-50/50 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
               >
                 View Locations
               </Button>
@@ -290,11 +326,11 @@ const MinimalistHeroAlternate: React.FC = () => {
           <motion.button
             onClick={scrollToNext}
             className="group flex flex-col items-center space-y-2 text-secondary-400 hover:text-secondary-600 transition-all duration-300"
-            whileHover={{ y: -3 }}
-            animate={{ y: [0, -3, 0] }}
+            whileHover={enableAmbientMotion ? { y: -3 } : undefined}
+            animate={enableAmbientMotion ? { y: [0, -3, 0] } : { y: 0 }}
             transition={{ 
-              duration: 2,
-              repeat: Infinity,
+              duration: enableAmbientMotion ? 2 : 0,
+              repeat: enableAmbientMotion ? Infinity : 0,
               ease: "easeInOut"
             }}
           >
@@ -302,10 +338,10 @@ const MinimalistHeroAlternate: React.FC = () => {
             <div className="w-6 h-10 border border-secondary-300 group-hover:border-secondary-400 rounded-full flex justify-center transition-colors duration-300">
               <motion.div 
                 className="w-1 h-3 bg-secondary-300 group-hover:bg-secondary-400 rounded-full mt-2 transition-colors duration-300"
-                animate={{ y: [0, 8, 0] }}
+                animate={enableAmbientMotion ? { y: [0, 8, 0] } : { y: 0 }}
                 transition={{ 
-                  duration: 1.5,
-                  repeat: Infinity,
+                  duration: enableAmbientMotion ? 1.5 : 0,
+                  repeat: enableAmbientMotion ? Infinity : 0,
                   ease: "easeInOut"
                 }}
               />

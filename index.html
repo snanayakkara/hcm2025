@@ -9,9 +9,9 @@
     <meta name="format-detection" content="telephone=no" />
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Heart Clinic Melbourne - Expert cardiovascular specialists across four locations in Melbourne's southeast. Comprehensive cardiac care including consultations, diagnostics, and advanced procedures." />
+    <meta name="description" content="Heart Clinic Melbourne - Cardiology specialists across three locations in Melbourne's southeast. Comprehensive cardiac care including consultations, diagnostics, and advanced procedures." />
     <meta name="keywords" content="cardiology, heart specialist, Melbourne, cardiovascular, cardiologist, heart health, cardiac care, Malvern, Pakenham, Clyde, echocardiography, holter monitoring, angiography, Freilich, Ngu, Voskoboinik, Nanayakkara, Rowe" />
-    <title>Heart Clinic Melbourne - Expert Cardiac Care Across Melbourne's Southeast</title>
+    <title>Heart Clinic Melbourne | Cardiology Specialists Across Melbourne's Southeast</title>
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.webmanifest" />
@@ -42,64 +42,154 @@
     <meta name="msapplication-TileImage" content="/images/icons/icon-144x144.png" />
     <meta name="msapplication-config" content="none" />
     
+    <!-- Preload hero image for first paint -->
+    <link rel="preload" as="image" href="/images/hcmheartback.webp" type="image/webp" fetchpriority="high" />
+
     <!-- Preconnect to external domains for better performance -->
-    <link rel="preconnect" href="https://images.pexels.com">
-    <link rel="dns-prefetch" href="https://images.pexels.com">
     <link rel="preconnect" href="https://doxy.me">
     <link rel="dns-prefetch" href="https://doxy.me">
     
     <!-- Open Graph meta tags for social sharing -->
-    <meta property="og:title" content="Heart Clinic Melbourne - Expert Cardiac Care Across Melbourne's Southeast" />
-    <meta property="og:description" content="Comprehensive cardiovascular services across three convenient locations: Malvern, Pakenham, and Clyde. Expert cardiac care close to home." />
+    <meta property="og:title" content="Heart Clinic Melbourne | Cardiology Specialists Across Melbourne's Southeast" />
+    <meta property="og:description" content="Comprehensive cardiovascular services across three convenient locations: Malvern, Pakenham, and Clyde." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/images/table_land.png" />
-    <meta property="og:url" content="https://heartclinicmelbourne.com.au" />
+    <meta property="og:image" content="https://heartclinicmelbourne.com.au/images/table_land.png" />
+    <meta property="og:image:alt" content="Heart Clinic Melbourne cardiology team" />
+    <meta property="og:url" content="https://heartclinicmelbourne.com.au/" />
     <meta property="og:site_name" content="Heart Clinic Melbourne" />
+    <meta property="og:locale" content="en_AU" />
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Heart Clinic Melbourne" />
-    <meta name="twitter:description" content="Expert cardiac care across Melbourne's southeast" />
-    <meta name="twitter:image" content="/images/table_land.png" />
+    <meta name="twitter:title" content="Heart Clinic Melbourne | Cardiology Specialists" />
+    <meta name="twitter:description" content="Comprehensive cardiovascular services across Malvern, Pakenham, and Clyde." />
+    <meta name="twitter:image" content="https://heartclinicmelbourne.com.au/images/table_land.png" />
     
     <!-- Additional SEO and accessibility -->
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://heartclinicmelbourne.com.au" />
+    <link rel="canonical" href="https://heartclinicmelbourne.com.au/" />
     
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "MedicalOrganization",
-      "name": "Heart Clinic Melbourne",
-      "url": "https://heartclinicmelbourne.com.au",
-      "logo": "/images/icons/icon-512x512.png",
-      "description": "Expert cardiovascular specialists providing comprehensive cardiac care across Melbourne's southeast",
-      "telephone": "+61395081800",
-      "email": "admin@heartclinicmelbourne.com.au",
-      "address": [
+      "@graph": [
         {
-          "@type": "PostalAddress",
-          "streetAddress": "183 Wattletree Rd",
-          "addressLocality": "Malvern",
-          "addressRegion": "VIC",
-          "postalCode": "3144",
-          "addressCountry": "AU"
-        }
-      ],
-      "medicalSpecialty": "Cardiology",
-      "availableService": [
-        {
-          "@type": "MedicalProcedure",
-          "name": "Cardiac Consultation"
+          "@type": "MedicalClinic",
+          "@id": "https://heartclinicmelbourne.com.au/#clinic",
+          "name": "Heart Clinic Melbourne",
+          "url": "https://heartclinicmelbourne.com.au/",
+          "logo": "https://heartclinicmelbourne.com.au/images/icons/icon-512x512.png",
+          "image": "https://heartclinicmelbourne.com.au/images/table_land.png",
+          "description": "Cardiology specialists across three locations in Melbourne's southeast.",
+          "telephone": "+61 3 9509 5009",
+          "email": "reception@heartclinicmelbourne.com.au",
+          "medicalSpecialty": "Cardiology",
+          "areaServed": "Melbourne's Southeast",
+          "department": [
+            {
+              "@type": "MedicalClinic",
+              "name": "Cabrini Hospital, Malvern",
+              "telephone": "+61 3 9509 5009",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Suite 21/183 Wattletree Rd",
+                "addressLocality": "Malvern",
+                "addressRegion": "VIC",
+                "postalCode": "3144",
+                "addressCountry": "AU"
+              },
+              "openingHoursSpecification": [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                  "opens": "08:30",
+                  "closes": "17:00"
+                }
+              ]
+            },
+            {
+              "@type": "MedicalClinic",
+              "name": "Heart Clinic Pakenham",
+              "telephone": "+61 3 9509 5009",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "44 Main Street",
+                "addressLocality": "Pakenham",
+                "addressRegion": "VIC",
+                "postalCode": "3810",
+                "addressCountry": "AU"
+              },
+              "openingHoursSpecification": [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                  "opens": "09:00",
+                  "closes": "17:00"
+                },
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": "Saturday",
+                  "opens": "09:00",
+                  "closes": "13:00"
+                }
+              ]
+            },
+            {
+              "@type": "MedicalClinic",
+              "name": "Casey Specialist Centre, Clyde",
+              "telephone": "+61 3 9509 5009",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "1 Morison Rd",
+                "addressLocality": "Clyde",
+                "addressRegion": "VIC",
+                "postalCode": "3978",
+                "addressCountry": "AU"
+              },
+              "openingHoursSpecification": [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                  "opens": "08:30",
+                  "closes": "17:00"
+                }
+              ]
+            }
+          ],
+          "physician": [
+            {
+              "@type": "Physician",
+              "name": "Dr Mark Freilich",
+              "medicalSpecialty": "Interventional Cardiology"
+            },
+            {
+              "@type": "Physician",
+              "name": "Dr Phillip Ngu",
+              "medicalSpecialty": "Cardiology"
+            },
+            {
+              "@type": "Physician",
+              "name": "A/Prof Alex Voskoboinik",
+              "medicalSpecialty": "Cardiac Electrophysiology"
+            },
+            {
+              "@type": "Physician",
+              "name": "A/Prof Shane Nanayakkara",
+              "medicalSpecialty": "Interventional Cardiology"
+            },
+            {
+              "@type": "Physician",
+              "name": "Dr Kate Rowe",
+              "medicalSpecialty": "Cardiology"
+            }
+          ]
         },
         {
-          "@type": "MedicalProcedure", 
-          "name": "Echocardiography"
-        },
-        {
-          "@type": "MedicalProcedure",
-          "name": "Coronary Angiography"
+          "@type": "WebSite",
+          "@id": "https://heartclinicmelbourne.com.au/#website",
+          "url": "https://heartclinicmelbourne.com.au/",
+          "name": "Heart Clinic Melbourne"
         }
       ]
     }

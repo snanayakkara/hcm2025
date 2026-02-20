@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ChevronDown, FileText, Search, Phone, Mail } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FileText, Search, Phone, Mail, Plus, Minus } from 'lucide-react';
 import { useMobileDetection } from '../hooks/useMobileDetection';
 import { faqData } from '../data/faqData';
 import Button from './ui/Button';
@@ -129,9 +129,33 @@ const FAQ: React.FC = () => {
                 className={`w-full ${isMobile ? 'p-6 min-h-[44px]' : 'p-8'} text-left flex items-center justify-between hover:bg-secondary-50/50 transition-colors duration-200`}
               >
                 <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-secondary-800 pr-4`}>{faq.question}</h3>
-                <ChevronDown className={`w-5 h-5 text-secondary-500 transition-transform duration-200 flex-shrink-0 ${
-                  expandedFAQ === index ? 'rotate-180' : ''
-                }`} />
+                <div className="relative w-5 h-5 flex-shrink-0">
+                  <AnimatePresence mode="wait" initial={false}>
+                    {expandedFAQ === index ? (
+                      <motion.div
+                        key="minus"
+                        initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                        animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                        exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 20, duration: 0.2 }}
+                        className="absolute inset-0"
+                      >
+                        <Minus className="w-5 h-5 text-primary-500" />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="plus"
+                        initial={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                        animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                        exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 20, duration: 0.2 }}
+                        className="absolute inset-0"
+                      >
+                        <Plus className="w-5 h-5 text-secondary-500" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </button>
               {expandedFAQ === index && (
                 <motion.div 

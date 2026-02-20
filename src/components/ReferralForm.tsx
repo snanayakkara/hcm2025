@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Send, FileText, Download, Printer, ChevronDown } from 'lucide-react';
 import Button from './ui/Button';
+import SuccessCelebration from './ui/SuccessCelebration';
 
 interface ReferralFormProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface ReferralFormProps {
 
 const ReferralForm: React.FC<ReferralFormProps> = ({ isOpen, onClose }) => {
   const [showForm, setShowForm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [formData, setFormData] = useState({
     // Referral Types
     referralTypes: [] as string[],
@@ -143,8 +145,8 @@ Provider Number: ${formData.providerNumber}`;
     // Open email client
     window.location.href = mailtoLink;
     
-    // Close form
-    onClose();
+    // Show success celebration before closing
+    setShowSuccess(true);
   };
 
   const locations = [
@@ -170,10 +172,10 @@ Provider Number: ${formData.providerNumber}`;
             displayName: "A/Prof Alex Voskoboinik (Electrophysiology)"
           },
           { 
-            name: "Dr Shane Nanayakkara", 
+            name: "Associate Professor Shane Nanayakkara", 
             image: "/images/nanayakkara.webp",
             specialty: "General, Intervention, Structural, and Heart Failure",
-            displayName: "Dr Shane Nanayakkara (Interventional/Structural/Heart Failure)"
+            displayName: "A/Prof Shane Nanayakkara (Interventional/Structural/Heart Failure)"
           },
           { 
             name: "Dr Kate Rowe", 
@@ -1022,6 +1024,17 @@ Provider Number: ${formData.providerNumber}`;
         </>
         )}
       </div>
+
+      {/* Success celebration overlay */}
+      <SuccessCelebration
+        show={showSuccess}
+        message="Referral Sent!"
+        subMessage="Your email client will open with the pre-filled referral."
+        onComplete={() => {
+          setShowSuccess(false);
+          onClose();
+        }}
+      />
     </div>
   ) : null;
 };

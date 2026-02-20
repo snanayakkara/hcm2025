@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, MapPin, Video, Menu } from 'lucide-react';
 import { SCROLL_THRESHOLD } from '../../constants';
 
+const DOCTOR_ACTIVE_EVENT = 'hcm:doctor-active';
+
 interface MobileHeaderProps {
   onNavigate: (section: string) => void;
   currentSection: string;
@@ -19,6 +21,18 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [isAFMode, setIsAFMode] = useState(false);
+
+  // Easter egg: irregular heartbeat when Voskoboinik is the active doctor
+  useEffect(() => {
+    const handleDoctorActive = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      setIsAFMode(detail?.doctorId === 'voskoboinik');
+    };
+
+    window.addEventListener(DOCTOR_ACTIVE_EVENT, handleDoctorActive);
+    return () => window.removeEventListener(DOCTOR_ACTIVE_EVENT, handleDoctorActive);
+  }, []);
 
   useEffect(() => {
     let ticking = false;
@@ -163,10 +177,18 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                     src="/images/hcm3d2.webp"
                     alt="Heart Clinic Melbourne Logo"
                     className="w-6 h-6 object-contain"
-                    animate={{
+                    animate={isAFMode ? {
+                      scale: [1, 1.4, 1, 1.1, 1, 1.35, 1, 1, 1.25, 1, 1.5, 1],
+                      rotate: [0, -2, 0, 1, 0, -1.5, 0, 0, 2, 0, -1, 0],
+                    } : {
                       scale: [1, 1.1, 1],
                     }}
-                    transition={{
+                    transition={isAFMode ? {
+                      duration: 3.5,
+                      repeat: Infinity,
+                      times: [0, 0.06, 0.12, 0.22, 0.28, 0.38, 0.45, 0.58, 0.68, 0.75, 0.88, 1],
+                      ease: "easeInOut"
+                    } : {
                       duration: 2,
                       repeat: Infinity,
                       ease: "easeInOut"
@@ -232,10 +254,18 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                     src="/images/hcm3d2.webp"
                     alt="Heart Clinic Melbourne Logo"
                     className="w-5 h-5 mb-0.5"
-                    animate={{
+                    animate={isAFMode ? {
+                      scale: [1, 1.4, 1, 1.1, 1, 1.35, 1, 1, 1.25, 1, 1.5, 1],
+                      rotate: [0, -2, 0, 1, 0, -1.5, 0, 0, 2, 0, -1, 0],
+                    } : {
                       scale: [1, 1.1, 1],
                     }}
-                    transition={{
+                    transition={isAFMode ? {
+                      duration: 3.5,
+                      repeat: Infinity,
+                      times: [0, 0.06, 0.12, 0.22, 0.28, 0.38, 0.45, 0.58, 0.68, 0.75, 0.88, 1],
+                      ease: "easeInOut"
+                    } : {
                       duration: 2,
                       repeat: Infinity,
                       ease: "easeInOut"

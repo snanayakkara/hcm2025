@@ -3,6 +3,8 @@ import { GraduationCap, MapPin, Stethoscope, Star, LucideIcon } from 'lucide-rea
 import { doctors } from '../data/doctors';
 import { normalizeClinicLocation } from '../utils/locationMapping';
 
+const DOCTOR_ACTIVE_EVENT = 'hcm:doctor-active';
+
 const Doctors: React.FC = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -10,13 +12,22 @@ const Doctors: React.FC = () => {
 
   const currentDoctor = doctors[selectedDoctor];
 
+  // Dispatch event when active doctor changes (for header easter egg)
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent(DOCTOR_ACTIVE_EVENT, {
+        detail: { doctorId: doctors[selectedDoctor].id },
+      })
+    );
+  }, [selectedDoctor]);
+
   const InfoSection = ({ icon: Icon, title, children }: { icon: LucideIcon; title: string; children: React.ReactNode }) => (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <Icon className="w-5 h-5 text-gray-600" />
-        <h4 className="font-semibold text-gray-900">{title}</h4>
+        <Icon className="w-5 h-5 text-secondary-600" />
+        <h4 className="text-xl font-semibold text-secondary-800">{title}</h4>
       </div>
-      <div className="text-gray-700 text-sm leading-relaxed">
+      <div className="text-secondary-700 text-lg leading-relaxed">
         {children}
       </div>
     </div>
@@ -32,7 +43,7 @@ const Doctors: React.FC = () => {
   }, [isAutoPlaying]);
 
   return (
-    <section id="doctors" className="py-32 bg-gradient-to-br from-white via-cream-25 to-primary-25/10">
+    <section id="doctors" className="py-32 bg-gradient-to-b from-cream-50/20 via-white to-primary-50/20">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         
         {/* Header */}
@@ -52,106 +63,82 @@ const Doctors: React.FC = () => {
           </p>
         </div>
 
-        {/* Doctor Selection Tabs */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {doctors.map((doctor, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                setSelectedDoctor(index);
-                setIsAutoPlaying(false);
-              }}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
-                selectedDoctor === index
-                  ? 'bg-white text-gray-900 shadow-md'
-                  : 'bg-transparent text-gray-600 hover:bg-white hover:shadow-sm'
-              }`}
-            >
-              <img
-                src={doctor.image}
-                alt={doctor.name}
-                className="w-8 h-8 rounded-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="text-left">
-                <div className="font-semibold">{doctor.name}</div>
-                <div className="text-xs text-gray-500">{doctor.degrees}</div>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        {/* Doctor Details Card */}
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="grid md:grid-cols-2 gap-0 h-[770px]">
-            
-            {/* Doctor Image */}
-            <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 p-8 flex items-center justify-center">
-              <div className="relative group">
-                <img
-                  src={currentDoctor.image}
-                  alt={currentDoctor.name}
-                  className="w-96 h-96 object-cover rounded-full shadow-xl transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div 
-                  className="absolute inset-0 rounded-full border-4 opacity-20 transition-opacity duration-300 group-hover:opacity-40"
-                  style={{ borderColor: currentDoctor.color }}
-                />
-              </div>
-            </div>
-
-            {/* Doctor Information */}
-            <div className="p-8 flex flex-col justify-between h-[770px]">
-              <div className="space-y-6 flex-grow">
-                {/* Name and Title */}
-                <div className="min-h-[140px]">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                    {currentDoctor.name}
-                  </h3>
-                  <p className="text-lg font-medium mb-2 min-h-[28px]" style={{ color: currentDoctor.color }}>
-                    {currentDoctor.title}
-                  </p>
-                  <p className="text-gray-600 text-sm leading-relaxed min-h-[80px]">
-                    {currentDoctor.description}
-                  </p>
-                </div>
-
-                {/* Education */}
-                <div className="min-h-[100px]">
-                  <InfoSection icon={GraduationCap} title="Education & Training">
-                    <p className="min-h-[60px] overflow-hidden line-clamp-3">{currentDoctor.education}</p>
-                  </InfoSection>
-                </div>
-
-                {/* Expertise */}
-                <div className="min-h-[100px]">
-                  <InfoSection icon={Star} title="Areas of Expertise">
-                    <div className="flex flex-wrap gap-2 min-h-[60px] overflow-hidden max-h-[60px]">
-                      {currentDoctor.expertise.map((item, idx) => (
-                        <span
-                          key={idx}
-                          className="bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700 whitespace-nowrap"
-                        >
-                          {item}
-                        </span>
-                      ))}
+        <div className="grid lg:grid-cols-[380px,1fr] gap-8 items-stretch lg:h-[820px]">
+          {/* Doctor Selection List */}
+          <div className="h-full lg:h-[820px] flex border-r border-secondary-100 pr-5">
+            <div className="flex flex-col gap-2 h-full w-full">
+              {doctors.map((doctor, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setSelectedDoctor(index);
+                    setIsAutoPlaying(false);
+                  }}
+                  className={`group flex w-full gap-4 px-4 rounded-xl font-medium transition-all duration-300 transform overflow-hidden ${
+                    selectedDoctor === index
+                      ? 'bg-primary-50 text-secondary-800 shadow-sm border border-primary-200 flex-1 py-6 items-center justify-start'
+                      : 'bg-transparent text-secondary-600 hover:bg-secondary-50 hover:translate-x-1 py-3.5 flex-none items-center'
+                  }`}
+                >
+                  <img
+                    src={doctor.image}
+                    alt={doctor.name}
+                    className={`rounded-full object-cover flex-shrink-0 transition-all duration-300 group-hover:scale-105 ${
+                      selectedDoctor === index ? 'w-24 h-24' : 'w-14 h-14'
+                    }`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="text-left min-w-0">
+                    <div className={`font-semibold leading-tight transition-colors duration-200 group-hover:text-secondary-800 ${
+                      selectedDoctor === index ? 'text-2xl' : 'text-lg'
+                    }`}>{doctor.name}</div>
+                    <div className={`text-secondary-500 leading-tight mt-1 ${
+                      selectedDoctor === index ? 'text-base' : 'text-sm'
+                    }`}>{doctor.degrees}</div>
+                    <div className={`leading-tight mt-1 ${
+                      selectedDoctor === index ? 'text-base text-accent-700 font-medium' : 'text-sm text-secondary-500'
+                    }`}>
+                      {doctor.title}
                     </div>
-                  </InfoSection>
-                </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
 
-                {/* Locations */}
-                <div className="min-h-[100px]">
-                  <InfoSection icon={MapPin} title="Locations">
-                    <ul className="space-y-1 min-h-[80px] max-h-[80px] overflow-hidden">
-                      {currentDoctor.locations.map((location, idx) => (
-                        <li key={idx} className="text-sm">• {location}</li>
-                      ))}
-                    </ul>
-                  </InfoSection>
-                </div>
+          {/* Doctor Details Card */}
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-full lg:h-[820px] flex flex-col">
+            <div className="px-8 py-8 flex flex-col flex-1 min-h-0">
+              <div className="space-y-5">
+                <p className="text-secondary-600 text-xl leading-relaxed">
+                  {currentDoctor.description}
+                </p>
+
+                <InfoSection icon={GraduationCap} title="Education & Training">
+                  <p>{currentDoctor.education}</p>
+                </InfoSection>
+
+                <InfoSection icon={Star} title="Areas of Expertise">
+                  <div className="flex flex-wrap gap-2">
+                    {currentDoctor.expertise.map((item, idx) => (
+                      <span
+                        key={idx}
+                        className="bg-primary-50 px-3 py-1.5 rounded-full text-sm font-medium text-secondary-700 whitespace-nowrap"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </InfoSection>
+
+                <InfoSection icon={MapPin} title="Locations">
+                  <ul className="space-y-1">
+                    {currentDoctor.locations.map((location, idx) => (
+                      <li key={idx} className="text-base">• {location}</li>
+                    ))}
+                  </ul>
+                </InfoSection>
               </div>
 
               {/* Book Button */}
@@ -175,7 +162,7 @@ const Doctors: React.FC = () => {
                     element.scrollIntoView({ behavior: 'smooth' });
                   }
                 }}
-                className="w-full py-4 rounded-xl font-bold text-white transition-all duration-200 hover:shadow-lg mt-6"
+                className="w-full py-4 rounded-xl font-bold text-white transition-all duration-200 hover:shadow-lg mt-auto"
                 style={{ backgroundColor: currentDoctor.color }}
               >
                 Book with {currentDoctor.name.split(' ')[1]}
@@ -189,6 +176,8 @@ const Doctors: React.FC = () => {
           {doctors.map((_, index) => (
             <button
               key={index}
+              aria-label={`View ${doctors[index].name}`}
+              title={doctors[index].name}
               onClick={() => {
                 setSelectedDoctor(index);
                 setIsAutoPlaying(false);
@@ -196,10 +185,10 @@ const Doctors: React.FC = () => {
               className={`w-3 h-3 rounded-full transition-all duration-200 ${
                 selectedDoctor === index
                   ? 'w-8 h-3'
-                  : 'hover:bg-gray-400'
+                  : 'hover:bg-secondary-400'
               }`}
               style={{
-                backgroundColor: selectedDoctor === index ? doctors[index].color : '#d1d5db'
+                backgroundColor: selectedDoctor === index ? doctors[index].color : '#b1c9cb'
               }}
             />
           ))}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Calendar, FileText, MapPin } from 'lucide-react';
 import MobileHeader from './MobileHeader';
 import AddToCalendar from './AddToCalendar';
 import PWAInstallBanner from './PWAInstallBanner';
@@ -7,6 +8,7 @@ import QuickActionsCard from './QuickActionsCard';
 import LocationOverlay from './LocationOverlay';
 import CallModal from './CallModal';
 import MobileReferralForm from './MobileReferralForm';
+import Button from '../ui/Button';
 import { MOBILE_VIEWPORT } from '../../lib/motion';
 
 const MobileServiceCardsSection = lazy(() => import('./MobileServiceCards'));
@@ -96,7 +98,11 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const [showMobileReferralForm, setShowMobileReferralForm] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [isHomeHeroInView, setIsHomeHeroInView] = useState(true);
+  const homeHeroRef = useRef<HTMLElement | null>(null);
   const [calendarEvent] = useState<CalendarEvent | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const enableHeroMotion = !shouldReduceMotion && isHomeHeroInView;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -118,6 +124,22 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!homeHeroRef.current || typeof IntersectionObserver === 'undefined') {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHomeHeroInView(entry.isIntersecting);
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(homeHeroRef.current);
+    return () => observer.disconnect();
   }, []);
 
   const handleTelehealthClick = () => {
@@ -158,6 +180,18 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
     }
   };
 
+  const handleBookAppointmentClick = () => {
+    handleNavigate('patients');
+  };
+
+  const handleSendReferralClick = () => {
+    setShowMobileReferralForm(true);
+  };
+
+  const handleViewLocationsClick = () => {
+    handleNavigate('contact');
+  };
+
   const renderPageContent = () => {
     const revealMotionProps = {
       initial: { opacity: 0, y: 20 },
@@ -170,80 +204,86 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
       case 'home':
         return (
           <div className="pb-8">
-            <section id="home" className="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cream-50 via-white to-primary-50/20">
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="opacity-60">
-                  <motion.div
-                    className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary-400/70 rounded-full shadow-sm"
-                    animate={{
-                      y: [0, -15, 0],
-                      x: [0, 8, 0],
-                      opacity: [0.5, 0.8, 0.5],
-                    }}
-                    transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
-                  />
-                  <motion.div
-                    className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-accent-400/60 rounded-full shadow-sm"
-                    animate={{
-                      y: [0, 12, 0],
-                      x: [0, -6, 0],
-                      opacity: [0.4, 0.7, 0.4],
-                    }}
-                    transition={{
-                      duration: 5,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                      delay: 1,
-                    }}
-                  />
-                  <motion.div
-                    className="absolute bottom-1/3 right-1/4 w-2.5 h-2.5 bg-sage-400/50 rounded-full shadow-sm"
-                    animate={{
-                      y: [0, -10, 0],
-                      x: [0, 5, 0],
-                      opacity: [0.3, 0.6, 0.3],
-                    }}
-                    transition={{
-                      duration: 7,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                      delay: 2,
-                    }}
-                  />
-                </div>
+            <section
+              id="home"
+              ref={homeHeroRef}
+              className="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cream-50 via-white to-primary-50/20"
+            >
+              {enableHeroMotion && (
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="opacity-60">
+                    <motion.div
+                      className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary-400/70 rounded-full shadow-sm"
+                      animate={{
+                        y: [0, -15, 0],
+                        x: [0, 8, 0],
+                        opacity: [0.5, 0.8, 0.5],
+                      }}
+                      transition={{
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                    />
+                    <motion.div
+                      className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-accent-400/60 rounded-full shadow-sm"
+                      animate={{
+                        y: [0, 12, 0],
+                        x: [0, -6, 0],
+                        opacity: [0.4, 0.7, 0.4],
+                      }}
+                      transition={{
+                        duration: 5,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                        delay: 1,
+                      }}
+                    />
+                    <motion.div
+                      className="absolute bottom-1/3 right-1/4 w-2.5 h-2.5 bg-sage-400/50 rounded-full shadow-sm"
+                      animate={{
+                        y: [0, -10, 0],
+                        x: [0, 5, 0],
+                        opacity: [0.3, 0.6, 0.3],
+                      }}
+                      transition={{
+                        duration: 7,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                        delay: 2,
+                      }}
+                    />
+                  </div>
 
-                <div className="opacity-20">
-                  <motion.div
-                    className="absolute top-1/3 right-1/4 w-16 h-16 bg-gradient-to-r from-primary-200/40 to-accent-200/30 rounded-full blur-xl"
-                    animate={{
-                      scale: [1, 1.2, 1],
-                      opacity: [0.2, 0.4, 0.2],
-                    }}
-                    transition={{
-                      duration: 12,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
-                  />
-                  <motion.div
-                    className="absolute bottom-1/3 left-1/4 w-12 h-12 bg-gradient-to-r from-sage-200/30 to-primary-200/25 rounded-full blur-xl"
-                    animate={{
-                      scale: [1, 1.3, 1],
-                      opacity: [0.15, 0.35, 0.15],
-                    }}
-                    transition={{
-                      duration: 15,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                      delay: 4,
-                    }}
-                  />
+                  <div className="opacity-20">
+                    <motion.div
+                      className="absolute top-1/3 right-1/4 w-16 h-16 bg-gradient-to-r from-primary-200/40 to-accent-200/30 rounded-full blur-xl"
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.2, 0.4, 0.2],
+                      }}
+                      transition={{
+                        duration: 12,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                    />
+                    <motion.div
+                      className="absolute bottom-1/3 left-1/4 w-12 h-12 bg-gradient-to-r from-sage-200/30 to-primary-200/25 rounded-full blur-xl"
+                      animate={{
+                        scale: [1, 1.3, 1],
+                        opacity: [0.15, 0.35, 0.15],
+                      }}
+                      transition={{
+                        duration: 15,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                        delay: 4,
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="relative z-10 text-center px-4 pb-8">
                 <motion.div className="space-y-6 max-w-md mx-auto">
@@ -256,7 +296,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
                     <motion.img
                       src="/images/hcm3d2.webp"
                       alt="Heart Clinic Melbourne Logo"
-                      className="w-16 h-16 object-contain animate-heartbeat"
+                      className={`w-16 h-16 object-contain ${enableHeroMotion ? 'animate-heartbeat' : ''}`}
                       style={{
                         filter: 'hue-rotate(160deg) saturate(1.2) brightness(1.1)',
                       }}
@@ -269,7 +309,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15, duration: 0.45 }}
                   >
-                    Welcome to Heart Clinic Melbourne
+                    Cardiology specialists across Melbourne&apos;s southeast
                   </motion.h1>
 
                   <motion.p
@@ -278,8 +318,48 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.25, duration: 0.45 }}
                   >
-                    Expert Cardiac Care in Melbourne
+                    Heart Clinic Melbourne provides consultations, diagnostics, and advanced procedures with compassionate care.
                   </motion.p>
+
+                  <motion.div
+                    className="pt-2 space-y-3"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.32, duration: 0.45 }}
+                  >
+                    <Button
+                      variant="primary"
+                      size="medium"
+                      icon={Calendar}
+                      onClick={handleBookAppointmentClick}
+                      isMobile
+                      className="w-full"
+                    >
+                      Book Appointment
+                    </Button>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button
+                        variant="secondary"
+                        size="medium"
+                        icon={FileText}
+                        onClick={handleSendReferralClick}
+                        isMobile
+                        className="w-full text-sm px-3 py-3"
+                      >
+                        Send Referral
+                      </Button>
+                      <Button
+                        variant="tertiary"
+                        size="medium"
+                        icon={MapPin}
+                        onClick={handleViewLocationsClick}
+                        isMobile
+                        className="w-full text-sm px-3 py-3 bg-white/70 border border-secondary-200"
+                      >
+                        Locations
+                      </Button>
+                    </div>
+                  </motion.div>
                 </motion.div>
               </div>
 
@@ -306,23 +386,26 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ currentPage }) => {
                     boxShadow: '0 0 30px rgba(20, 184, 166, 0.4)',
                   }}
                   whileTap={{ scale: 0.95 }}
-                  animate={{
+                  animate={enableHeroMotion ? {
                     y: [0, 8, 0],
                     boxShadow: [
                       '0 8px 32px rgba(0, 0, 0, 0.15)',
                       '0 12px 40px rgba(20, 184, 166, 0.2)',
                       '0 8px 32px rgba(0, 0, 0, 0.15)',
                     ],
+                  } : {
+                    y: 0,
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                   }}
                   transition={{
-                    duration: 2,
-                    repeat: Infinity,
+                    duration: enableHeroMotion ? 2 : 0,
+                    repeat: enableHeroMotion ? Infinity : 0,
                     ease: 'easeInOut',
                   }}
                 >
                   <motion.div
-                    animate={{ y: [0, 4, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                    animate={enableHeroMotion ? { y: [0, 4, 0] } : { y: 0 }}
+                    transition={{ duration: enableHeroMotion ? 1.5 : 0, repeat: enableHeroMotion ? Infinity : 0, ease: 'easeInOut' }}
                   >
                     <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
